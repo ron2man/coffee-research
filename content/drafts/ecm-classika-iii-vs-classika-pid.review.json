@@ -4,27 +4,25 @@
   "verdict": "pass",
   "scores": {
     "topicSelection": {
-      "score": 3,
-      "reason": "The brief compares three plausible topics and makes a defensible case for helping UK buyers identify the exact machine and decide whether faster cold starts justify the premium. One buyer thread and retail listings provide weak demand evidence. Traffic potential remains unknown."
+      "score": 4,
+      "reason": "The brief compares three plausible topics and identifies a specific gap for UK buyers between separate product listings and a decision about the warm-up premium. One buyer thread gives weak qualitative demand evidence. Traffic and ranking potential remain unmeasured."
     },
     "evidence": {
       "score": 4,
-      "reason": "ECM confirms the advertised 6.5- and 11-minute figures, model numbers, and boiler capacities. The PID manual confirms the UK rating and flush cue. The III manual remained inaccessible, leaving its exact startup sequence and official UK electrical rating unverified. The draft also makes clear that comparable first-shot and milk-drink timings remain unknown. [ECM Classika III](https://www.ecm.de/en/products/classika-iii/) · [ECM Classika PID](https://www.ecm.de/en/products/classika-pid/) · [ECM PID manual](https://www.ecm.de/wp-content/uploads/2025/04/BA_Classika_-PID_2412-web.pdf)"
+      "reason": "ECM’s catalogues confirm the advertised 6.5- and 11-minute figures, model numbers and boiler sizes. The PID manual confirms the flush cue and UK electrical rating. The III manual was inaccessible in this review, leaving its exact cold-start sequence and official UK rating unverified. Comparable first-shot times also remain unknown, and the draft handles that uncertainty with a seller demonstration. [Classika III catalogue](https://www.ecm.de/en/products/classika-iii/) · [Classika PID catalogue](https://www.ecm.de/en/products/classika-pid/) · [PID manual](https://www.ecm.de/wp-content/uploads/2025/04/BA_Classika_-PID_2412-web.pdf)"
     },
     "readerValue": {
-      "score": 4,
-      "reason": "The opening gives a usable buying rule on its own. Choose the III if waiting from cold regularly affects when you make espresso. Consider a discounted PID if breakfast prep already absorbs the wait. The seller checks help readers apply that rule to the actual unit without assuming a fixed price gap or time saving."
+      "score": 5,
+      "reason": "The opening stands on its own. It picks the III at similar prices, flips to a meaningfully cheaper, well-kept PID when warm-up fits into breakfast, and explains when a quicker cold start would justify the premium. The seller demonstration gives buyers a concrete way to test that benefit."
     },
     "onPageSeo": {
-      "score": 3,
-      "reason": "The descriptive title, first-paragraph answer, and question-led headings fit the comparison intent. The brief lacks a proposed page title, slug, and meta description. The listed existing drafts offer no obvious internal-link fit."
+      "score": 5,
+      "reason": "The descriptive title uses the primary query naturally, the first paragraph answers it, and the headings follow the buyer’s decisions. The brief supplies a title, slug and UK-focused meta description and identifies why the existing drafts offer no relevant internal link."
     }
   },
   "actions": [],
   "optionalImprovements": [
-    "Give the brief a clean primary query such as “ECM Classika III vs Classika PID” and list UK availability and warm-up wording as related queries.",
-    "Add a proposed page title, stable slug, and meta description that reflects the conditional buying recommendation.",
-    "Name the PID’s `rdY/Go` cue so a used buyer knows what to look for during a cold-start demonstration. [ECM PID manual, §6.1](https://www.ecm.de/wp-content/uploads/2025/04/BA_Classika_-PID_2412-web.pdf#page=26)"
+    "Introduce the PID flush instructions with “In Fast Heat-Up mode” so readers can immediately see when the display cues apply."
   ],
   "history": [
     {
@@ -79,6 +77,33 @@
         "Record “ECM Classika III vs Classika PID” as the primary query in the brief and list the UK availability and warm-up phrases separately.",
         "Add a proposed slug such as `ecm-classika-iii-vs-classika-pid` and a meta description that mentions advertised warm-up times and what UK buyers should check on a used PID.",
         "Name `rdY/Go` as the ready cue so shoppers know what to look for in the seller’s demonstration. [Classika PID manual, §6.1](https://www.ecm.de/wp-content/uploads/2025/04/BA_Classika_-PID_2412-web.pdf#page=26)"
+      ]
+    },
+    {
+      "verdict": "pass",
+      "scores": {
+        "topicSelection": {
+          "score": 3,
+          "reason": "The brief compares three plausible topics and makes a defensible case for helping UK buyers identify the exact machine and decide whether faster cold starts justify the premium. One buyer thread and retail listings provide weak demand evidence. Traffic potential remains unknown."
+        },
+        "evidence": {
+          "score": 4,
+          "reason": "ECM confirms the advertised 6.5- and 11-minute figures, model numbers, and boiler capacities. The PID manual confirms the UK rating and flush cue. The III manual remained inaccessible, leaving its exact startup sequence and official UK electrical rating unverified. The draft also makes clear that comparable first-shot and milk-drink timings remain unknown. [ECM Classika III](https://www.ecm.de/en/products/classika-iii/) · [ECM Classika PID](https://www.ecm.de/en/products/classika-pid/) · [ECM PID manual](https://www.ecm.de/wp-content/uploads/2025/04/BA_Classika_-PID_2412-web.pdf)"
+        },
+        "readerValue": {
+          "score": 4,
+          "reason": "The opening gives a usable buying rule on its own. Choose the III if waiting from cold regularly affects when you make espresso. Consider a discounted PID if breakfast prep already absorbs the wait. The seller checks help readers apply that rule to the actual unit without assuming a fixed price gap or time saving."
+        },
+        "onPageSeo": {
+          "score": 3,
+          "reason": "The descriptive title, first-paragraph answer, and question-led headings fit the comparison intent. The brief lacks a proposed page title, slug, and meta description. The listed existing drafts offer no obvious internal-link fit."
+        }
+      },
+      "actions": [],
+      "optionalImprovements": [
+        "Give the brief a clean primary query such as “ECM Classika III vs Classika PID” and list UK availability and warm-up wording as related queries.",
+        "Add a proposed page title, stable slug, and meta description that reflects the conditional buying recommendation.",
+        "Name the PID’s `rdY/Go` cue so a used buyer knows what to look for during a cold-start demonstration. [ECM PID manual, §6.1](https://www.ecm.de/wp-content/uploads/2025/04/BA_Classika_-PID_2412-web.pdf#page=26)"
       ]
     }
   ]

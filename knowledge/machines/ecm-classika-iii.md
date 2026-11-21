@@ -49,13 +49,13 @@
     },
     {
       "id": "core-heat-and-brew-readiness",
-      "statement": "ECM advertises 6.5 minutes to brew readiness and attributes the faster warm-up to the ECM-61 Core Heat group with integrated heating cartridges.",
+      "statement": "ECM advertises 6.5 minutes to brew readiness and attributes the faster warm-up to the ECM-61 Core Heat group with integrated heating cartridges. ECM also lists Fast Heat-Up mode.",
       "status": "supported",
       "verifiedAt": "2026-11-21",
       "evidence": [
         {
           "sourceId": "manufacturer-product",
-          "locator": "Details opening paragraph and Technical data — Hardware"
+          "locator": "Details opening paragraph and Technical data — Hardware and Software"
         }
       ]
     },
