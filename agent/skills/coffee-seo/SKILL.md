@@ -15,6 +15,10 @@ Inspect competing results for the reader query. Identify what they already answe
 
 ## Write and hand off
 
+For a buying comparison, put the recommendation in the first paragraph. Say which option you would choose for the typical reader, who should choose differently, and what would change your mind. For a “worth paying more?” question, identify what the premium buys in daily use and when that benefit is worth paying for. If the price gap is unknown, give a conditional buying rule based on the reader’s routine or the actual quotes they receive. Avoid inventing a price threshold or measuring a benefit the research has only documented as a manufacturer claim.
+
+Use the rest of the article to explain that recommendation. Translate relevant specs into consequences the reader can picture, such as whether a faster cold start changes their morning routine. Put model identifiers, seller checks, and other supporting details where they help verify the decision. Before handoff, read the opening on its own. A reader should know what you would buy in their situation and why.
+
 - Give the article one descriptive main heading and answer the primary question early. Use H2 sections in the order a reader makes decisions and H3s to subdivide them where needed.
 - Include the reader's terms naturally. Use exact product variants where relevant and avoid repeated keywords or headings that restate the title.
 - Make the contribution concrete through a decision table, model distinction, or steps backed by evidence. Keep citations close to the claims.
