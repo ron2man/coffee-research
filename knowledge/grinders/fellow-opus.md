@@ -14,6 +14,12 @@
       "url": "https://cdn.shopify.com/s/files/1/0057/6235/1219/files/Opus_GTKYG_789-00025_B.pdf?v=1676342072",
       "type": "manufacturer",
       "accessedAt": "2026-11-21"
+    },
+    {
+      "id": "opus-1-inner-ring-help",
+      "url": "https://help.fellowproducts.com/hc/en-us/articles/12697812844315-What-does-the-Opus-1-inner-adjustment-ring-do-and-how-do-I-use-it",
+      "type": "manufacturer",
+      "accessedAt": "2026-11-21"
     }
   ],
   "claims": [
@@ -50,6 +56,30 @@
         {
           "sourceId": "manufacturer-reference",
           "locator": "Your Guide to Grind — Espresso — portafilter dosing cup, PDF page 4"
+        }
+      ]
+    },
+    {
+      "id": "inner-ring-finer-range",
+      "statement": "Opus 1 has a numbered outer ring and a blue inner ring. Moving the inner scale toward minus shifts the range finer, up to six notches, equivalent to one full numbered setting beyond the outer ring's normal fine limit of 1.",
+      "status": "supported",
+      "verifiedAt": "2026-11-21",
+      "evidence": [
+        {
+          "sourceId": "opus-1-inner-ring-help",
+          "locator": "Opening model note, How does the Inner Ring work? — numbered items 1–2, and How to Adjust the Inner Ring — direction and notch bullets"
+        }
+      ]
+    },
+    {
+      "id": "inner-ring-adjustment-procedure",
+      "statement": "Fellow directs users to empty the load bin, set the outer ring to 6, remove the bin, press both inner-ring tabs evenly, turn the outer ring while holding the tabs down, release and check re-engagement, then fully reseat the load bin.",
+      "status": "supported",
+      "verifiedAt": "2026-11-21",
+      "evidence": [
+        {
+          "sourceId": "opus-1-inner-ring-help",
+          "locator": "How to Adjust the Inner Ring — complete bullet sequence"
         }
       ]
     }
