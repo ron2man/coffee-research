@@ -69,7 +69,7 @@ async function commission(seoSkill) {
   const decision = assessTopic(proposal, evidence);
   if (decision.outcome !== 'research' && !evidence.length) throw new Error('Commission needs supported claims');
   const slug = path.split('/').pop().slice(0, -3);
-  const draft = 'content/drafts/' + slug + '.md';
+  const draft = 'content/archive/drafts/' + slug + '.md';
   const brief = draft.replace(/\.md$/, '.brief.md');
   const decisionPath = path.replace(/\.md$/, '.json');
   const priorDecision = existsSync(decisionPath) ? JSON.parse(readFileSync(decisionPath, 'utf8')) : null;
@@ -119,7 +119,7 @@ function reviseDraft({ draft, brief }, review, seoSkill, feedback) {
 function savedRevision(slug, feedback) {
   if (slug === undefined) return null;
   if (!/^[a-z0-9-]+$/.test(slug)) throw new Error('Provide a draft slug without its extension');
-  const base = `content/drafts/${slug}`;
+  const base = `content/archive/drafts/${slug}`;
   const draft = `${base}.md`;
   const brief = `${base}.brief.md`;
   const path = `${base}.review.json`;

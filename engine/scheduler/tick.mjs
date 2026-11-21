@@ -2,9 +2,11 @@
 // One scheduler tick: pick the highest-priority runnable agent, run it once,
 // validate its output, apply status changes and log every change. No AI here.
 //
-//   node engine/scheduler/tick.mjs [--dry-run] [--root <dir>] [--niche <id>]
+//   node engine/scheduler/tick.mjs [--dry-run] [--commit] [--root <dir>] [--niche <id>]
 //
-// Git branch/commit/PR handling is not part of M1 (see docs/learnings.md open questions).
+// --commit: require the main branch, sync first, then commit and push the files this tick
+// wrote. Reader-facing paths (git-policy.json) are never committed here; they need a PR.
+// Only one tick runs per checkout at a time (.backoffice/tick.lock).
 import { existsSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { parseArgs } from 'node:util';
@@ -15,6 +17,9 @@ import { defaultNicheId, loadNiche, repoRoot } from '../state/niche.mjs';
 import { appendRun, loadItems, readJson, readRuns, saveItem, writeJsonAtomic } from '../state/store.mjs';
 import { assertValid } from '../state/validate.mjs';
 import { RunnerUnavailableError, runnerFor } from '../runner/index.mjs';
+import { commitInternal, commitMessage, syncMain } from './git.mjs';
+import { LockedError, acquireLock } from './lock.mjs';
+import { changedSince, snapshot } from './workspace.mjs';
 
 export const MAX_ATTEMPTS = 2;
 const hourMs = 3_600_000;
@@ -26,12 +31,42 @@ class OutputError extends Error {
   }
 }
 
+/** Repo-relative path of an item file. */
+const itemPath = (item) => `data/items/${item.id}.json`;
+
+/**
+ * Committed scheduler state: when each scheduled agent last ran. Lives in git (not only in the
+ * gitignored run log) so moving the system to another machine keeps the schedule.
+ */
+export const SCHEDULE_PATH = 'data/scheduler/state.json';
+
+export function readSchedule(root) {
+  const path = join(root, SCHEDULE_PATH);
+  return existsSync(path) ? readJson(path) : { schemaVersion: 1, agents: {} };
+}
+
+function recordScheduledRun(root, agent, at, outcome, written) {
+  if (!agent.schedule) return;
+  const state = readSchedule(root);
+  state.agents[agent.name] = { lastRunAt: at, outcome };
+  writeJsonAtomic(join(root, SCHEDULE_PATH), state);
+  written.push(SCHEDULE_PATH);
+}
+
+/** Last time an agent really ran: the later of the committed state and the local run log. */
+function lastRunAt(agent, runs, schedule) {
+  const logged = runs.filter((run) => run.agent === agent.name && !run.runnerUnavailable).at(-1)?.timestamp;
+  const committed = schedule?.agents?.[agent.name]?.lastRunAt;
+  const times = [logged, committed].filter(Boolean).map((t) => Date.parse(t));
+  return times.length ? Math.max(...times) : null;
+}
+
 function byAge(a, b) {
   return a.updatedAt.localeCompare(b.updatedAt) || a.id.localeCompare(b.id);
 }
 
 /** Decide what runs this tick. Pure: no I/O. */
-export function planTick({ agents, items, runs, now = new Date() }) {
+export function planTick({ agents, items, runs, schedule = null, now = new Date() }) {
   const skipped = [];
   for (const agent of agents) {
     if (agent.mode === 'generate') {
@@ -44,8 +79,8 @@ export function planTick({ agents, items, runs, now = new Date() }) {
       }
       if (agent.schedule) {
         // A run the runner never started (missing CLI, signed out) does not use up the interval.
-        const last = runs.filter((run) => run.agent === agent.name && !run.runnerUnavailable).at(-1);
-        const since = last ? now.getTime() - Date.parse(last.timestamp) : Infinity;
+        const last = lastRunAt(agent, runs, schedule);
+        const since = last === null ? Infinity : now.getTime() - last;
         if (since < agent.schedule.minIntervalHours * hourMs) {
           skipped.push({ agent: agent.name, reason: `ran ${(since / hourMs).toFixed(1)}h ago (interval ${agent.schedule.minIntervalHours}h)` });
           continue;
@@ -125,20 +160,44 @@ function checkOutput(agent, output, chosenItems, allItems) {
   if (seen.size !== expected.size) {
     throw new OutputError(`${agent.name} must decide on every input item (${seen.size}/${expected.size})`);
   }
-  if (agent.maxAdvance) {
-    const advanced = decisions.filter((d) => d.outcome === agent.maxAdvance.outcome).length;
-    if (advanced > agent.maxAdvance.max) {
-      throw new OutputError(`${agent.name} advanced ${advanced} items (max ${agent.maxAdvance.max})`);
-    }
-  }
+  if (agent.maxAdvance) return capAdvances(agent, decisions);
   return decisions;
 }
 
-function applyGenerated(root, niche, agent, artifacts, meta) {
+function rankScore(artifact, key) {
+  if (!key) return 0;
+  return Object.values(artifact?.[key] ?? {}).reduce((sum, entry) => sum + (Number(entry?.score) || 0), 0);
+}
+
+/**
+ * Enforce maxAdvance. Without `overflow` an excess fails the run. With it, the lowest-ranked
+ * extra advances (by `rankBy` score, then the agent's own order) become the overflow outcome.
+ */
+export function capAdvances(agent, decisions) {
+  const { outcome, max, overflow, rankBy } = agent.maxAdvance;
+  const advanced = decisions.map((d, index) => ({ d, index })).filter(({ d }) => d.outcome === outcome);
+  if (advanced.length <= max) return decisions;
+  if (!overflow) throw new OutputError(`${agent.name} advanced ${advanced.length} items (max ${max})`);
+  const keep = new Set(
+    advanced
+      .sort((a, b) => rankScore(b.d.artifact, rankBy) - rankScore(a.d.artifact, rankBy) || a.index - b.index)
+      .slice(0, max)
+      .map(({ d }) => d.itemId),
+  );
+  return decisions.map((d) => (d.outcome !== outcome || keep.has(d.itemId) ? d : {
+    ...d,
+    outcome: overflow,
+    reason: `Over the ${outcome} cap (${max}); ranked below the kept items. Judge's reason: ${d.reason}`,
+    capped: true,
+  }));
+}
+
+function applyGenerated(root, niche, agent, artifacts, meta, written) {
   const created = [];
   for (const artifact of artifacts) {
     const path = `${agent.artifactDir}/${artifact.id}.json`;
     writeJsonAtomic(join(root, path), artifact);
+    written.push(path, itemPath(artifact));
     const item = newItem({ id: artifact.id, niche: niche.id, by: agent.name, reason: 'generated' });
     item.artifacts[agent.name] = path;
     saveItem(root, item);
@@ -149,12 +208,13 @@ function applyGenerated(root, niche, agent, artifacts, meta) {
   return created;
 }
 
-function applyDecisions(root, agent, decisions, chosenItems, meta) {
+function applyDecisions(root, agent, decisions, chosenItems, meta, written) {
   const results = [];
   for (const decision of decisions) {
     let item = chosenItems.find((candidate) => candidate.id === decision.itemId);
     const path = `${agent.artifactDir}/${item.id}.json`;
     writeJsonAtomic(join(root, path), decision.artifact);
+    written.push(path, itemPath(item));
     item = { ...item, artifacts: { ...item.artifacts, [agent.name]: path } };
     let to = agent.outcomes[decision.outcome];
     let reason = decision.reason;
@@ -174,7 +234,7 @@ function applyDecisions(root, agent, decisions, chosenItems, meta) {
   return results;
 }
 
-function recordFailure(root, agent, chosenItems, error, meta, maxAttempts) {
+function recordFailure(root, agent, chosenItems, error, meta, maxAttempts, written) {
   if (!chosenItems.length) {
     appendRun(root, { ...meta, itemId: null, status: 'failed', error: error.message });
     return [];
@@ -187,6 +247,7 @@ function recordFailure(root, agent, chosenItems, error, meta, maxAttempts) {
       item.lastError = error.message;
     }
     saveItem(root, item);
+    written.push(itemPath(item));
     appendRun(root, {
       ...meta, itemId: item.id, status: 'failed', error: error.message, attempts: item.attempts,
       ...(blocked ? { from: original.status, to: 'blocked' } : {}),
@@ -199,22 +260,39 @@ function recordFailure(root, agent, chosenItems, error, meta, maxAttempts) {
  * Run one tick. `runner` overrides per-agent runners (tests and simulation).
  * Returns a summary; throws only for store/config problems, never for agent failures.
  */
-export async function tick({ root = repoRoot, runner, now = new Date(), nicheId, agents = loadAgents(), dryRun = false, maxAttempts = MAX_ATTEMPTS } = {}) {
+export async function tick({ root = repoRoot, runner, now = new Date(), nicheId, agents = loadAgents(), dryRun = false, maxAttempts = MAX_ATTEMPTS, lock = true } = {}) {
+  if (lock && !dryRun) {
+    let release;
+    try {
+      release = acquireLock(root);
+    } catch (error) {
+      if (error instanceof LockedError) return { ran: null, locked: true, error: error.message, changedFiles: [] };
+      throw error;
+    }
+    try {
+      return await tick({ root, runner, now, nicheId, agents, dryRun, maxAttempts, lock: false });
+    } finally {
+      release();
+    }
+  }
   const niche = loadNiche(nicheId ?? defaultNicheId(root), root);
   const { items, errors } = loadItems(root);
   if (errors.length) throw new Error(`Item store is invalid; fix before scheduling:\n${errors.join('\n')}`);
-  const plan = planTick({ agents, items, runs: readRuns(root), now });
+  const plan = planTick({ agents, items, runs: readRuns(root), schedule: readSchedule(root), now });
   if (!plan.chosen) return { ran: null, skipped: plan.skipped };
   const { agent, items: chosenItems } = plan.chosen;
-  const summary = { ran: agent.name, itemIds: chosenItems.map((item) => item.id), skipped: plan.skipped };
+  const written = [];
+  const summary = { ran: agent.name, itemIds: chosenItems.map((item) => item.id), skipped: plan.skipped, changedFiles: written };
   if (dryRun) return { ...summary, dryRun: true };
 
   const started = Date.now();
   const meta = () => ({ workflow: `agent:${agent.name}`, agent: agent.name, durationMs: Date.now() - started });
   let response;
+  const before = snapshot(root);
   try {
     const request = {
       agent,
+      root,
       input: buildInput(root, niche, agent, chosenItems, items),
       tools: agent.runner.tools ?? [],
       permissions: agent.runner.permissions ?? {},
@@ -225,27 +303,67 @@ export async function tick({ root = repoRoot, runner, now = new Date(), nicheId,
       appendRun(root, { ...meta(), itemId: null, status: 'failed', error: error.message, runnerUnavailable: true });
       return { ...summary, error: error.message, runnerUnavailable: true };
     }
-    return { ...summary, error: error.message, failures: recordFailure(root, agent, chosenItems, error, meta(), maxAttempts) };
+    recordScheduledRun(root, agent, new Date().toISOString(), 'failed', written);
+    return { ...summary, error: error.message, failures: recordFailure(root, agent, chosenItems, error, meta(), maxAttempts, written) };
   }
+  recordScheduledRun(root, agent, new Date().toISOString(), 'completed', written);
 
   let checked;
   try {
+    // Agents only return output. Any file that changed during the run was not written by the tick.
+    const strays = changedSince(before, snapshot(root)).filter((path) => !written.includes(path));
+    if (strays.length) {
+      throw new OutputError(`${agent.name} changed files outside its output (left in place for review; a human may also have edited them during the run): ${strays.join(', ')}`);
+    }
     checked = checkOutput(agent, response.output, chosenItems, items);
   } catch (error) {
     if (!(error instanceof OutputError)) throw error;
-    return { ...summary, error: error.message, failures: recordFailure(root, agent, chosenItems, error, meta(), maxAttempts) };
+    return { ...summary, error: error.message, failures: recordFailure(root, agent, chosenItems, error, meta(), maxAttempts, written) };
   }
   const eventMeta = { ...meta(), usage: response.usage ?? null };
-  if (agent.mode === 'generate') return { ...summary, created: applyGenerated(root, niche, agent, checked, eventMeta) };
-  return { ...summary, results: applyDecisions(root, agent, checked, chosenItems, eventMeta) };
+  if (agent.mode === 'generate') return { ...summary, created: applyGenerated(root, niche, agent, checked, eventMeta, written) };
+  const capped = checked.filter((d) => d.capped).map((d) => d.itemId);
+  return {
+    ...summary,
+    results: applyDecisions(root, agent, checked, chosenItems, eventMeta, written),
+    ...(capped.length ? { warnings: [`${agent.name} advanced more than allowed; converted to ${agent.maxAdvance.overflow}: ${capped.join(', ')}`] } : {}),
+  };
 }
 
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   try {
     const { values } = parseArgs({
-      options: { 'dry-run': { type: 'boolean' }, root: { type: 'string' }, niche: { type: 'string' } },
+      options: {
+        'dry-run': { type: 'boolean' }, commit: { type: 'boolean' },
+        root: { type: 'string' }, niche: { type: 'string' },
+      },
     });
-    const result = await tick({ root: values.root ? resolve(values.root) : repoRoot, dryRun: values["dry-run"], nicheId: values.niche });
+    const root = values.root ? resolve(values.root) : repoRoot;
+    const commit = values.commit && !values['dry-run'];
+    const run = async () => {
+      if (commit) syncMain(root);
+      const result = await tick({ root, dryRun: values['dry-run'], nicheId: values.niche, lock: false });
+      if (commit && result.changedFiles?.length) result.commit = commitInternal(root, result.changedFiles, commitMessage(result));
+      return result;
+    };
+    let result;
+    if (values['dry-run']) result = await run();
+    else {
+      // The lock covers sync, tick and commit, so two scheduled runs never interleave.
+      let release;
+      try {
+        release = acquireLock(root);
+      } catch (error) {
+        if (!(error instanceof LockedError)) throw error;
+        console.log(JSON.stringify({ ran: null, locked: true, reason: error.message }, null, 2));
+        process.exit(0); // not a failure: the other tick is doing the work
+      }
+      try {
+        result = await run();
+      } finally {
+        release();
+      }
+    }
     console.log(JSON.stringify(result, null, 2));
     if (result.error) process.exitCode = 1;
   } catch (error) {

@@ -25,7 +25,13 @@
     "batchSize": { "type": "integer", "minimum": 1 },
     "maxAdvance": {
       "type": "object", "additionalProperties": false, "required": ["outcome", "max"],
-      "properties": { "outcome": { "type": "string" }, "max": { "type": "integer", "minimum": 0 } }
+      "description": "At most `max` decisions may use `outcome`. With `overflow`, extra ones are converted to that outcome (lowest `rankBy` score first) instead of failing the whole run.",
+      "properties": {
+        "outcome": { "type": "string" },
+        "max": { "type": "integer", "minimum": 0 },
+        "overflow": { "type": "string" },
+        "rankBy": { "type": "string", "pattern": "^[A-Za-z][A-Za-z0-9]*$", "description": "Artifact property whose values each carry a numeric `score`; their sum ranks decisions." }
+      }
     },
     "queueCap": {
       "type": "object", "additionalProperties": false, "required": ["statuses", "max"],
@@ -55,8 +61,15 @@
       "type": "object", "additionalProperties": false, "required": ["type"],
       "properties": {
         "type": { "enum": ["claude", "fake"] },
-        "tools": { "type": "array", "items": { "type": "string" } },
-        "permissions": { "type": "object" }
+        "tools": {
+          "type": "array", "uniqueItems": true,
+          "description": "Read-only tools only. Agents never write files; the tick writes everything from their validated output.",
+          "items": { "enum": ["Read", "Grep", "Glob", "WebSearch", "WebFetch"] }
+        },
+        "permissions": { "type": "object" },
+        "model": { "type": "string", "minLength": 1 },
+        "maxTurns": { "type": "integer", "minimum": 1 },
+        "timeoutMinutes": { "type": "number", "exclusiveMinimum": 0 }
       }
     },
     "status": { "enum": ["draft", "active"], "description": "draft = contract defined, prompt not yet written." }

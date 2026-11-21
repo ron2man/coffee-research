@@ -6,12 +6,13 @@ This repo is being rebuilt per [rebuild-spec.md](rebuild-spec.md). It's an auton
 
 - `engine/` is niche-agnostic code. **No coffee strings** (a test enforces this; fixtures and tests are exempt).
   - `state/`: item store (`data/items/<id>.json`), status machine, JSON Schema validation, niche loader.
-  - `scheduler/tick.mjs`: one deterministic tick. Picks the highest-priority runnable agent, runs it once, validates, applies status changes and logs them to `.backoffice/runs.jsonl`.
-  - `runner/`: runner abstraction (`fake` for tests; `claude -p` lands in M0).
-  - `agents/<name>/`: `agent.json` (mode, input status, outcomes → statuses, caps), `artifact.schema.json`, `fixtures/valid.json` + `fixtures/invalid.json`, and `prompt.md` once written.
+  - `scheduler/tick.mjs`: one deterministic tick. Picks the highest-priority runnable agent, runs it once, validates, applies status changes and logs them to `.backoffice/runs.jsonl`. One tick per checkout at a time (`.backoffice/tick.lock`). Schedule state is committed in `data/scheduler/state.json`.
+  - `runner/`: runner abstraction (`fake` for tests; `claude.mjs` runs `claude -p` with read-only tools, a JSON Schema for the output, and refuses API-key auth).
+  - `state/item-cli.mjs`: human actions on items (resume, reject, park, reopen).
+  - `agents/<name>/`: `agent.json` (mode, input status, outcomes → statuses, caps), `artifact.schema.json`, `fixtures/valid.json` + `fixtures/invalid.json`, and `prompt.md` once written. Agents get read-only tools only; the tick writes every file from their validated output, and any file an agent changes itself fails the run.
 - `niches/coffee/`: `niche.json` (categories, markets, sellers, disclosures), `style.md`.
 - `knowledge/<category>/<product>.md`: product cards (evidence layer, schemaVersion 1, see `knowledge/README.md`).
-- `data/`: agent artifacts (`ideas/`, `idea-scores/`, `research/`, `briefs/`, `reviews/`, …). `content/drafts/`: writer output.
+- `data/`: agent artifacts (`ideas/`, `idea-scores/`, `research/`, `briefs/`, `reviews/`, …). `content/drafts/`: writer output. `content/archive/drafts/`: legacy pipeline drafts (Bambino grinder guide is the quality reference).
 - `agent/`: legacy Codex editorial pipeline. Being replaced (spec section 11), so don't extend it.
 - `backoffice/`: loopback dashboard. `site/`: current preview renderer.
 
@@ -22,6 +23,8 @@ npm install
 npm test                                   # all tests (engine + legacy)
 npm run validate                           # niche, agents, items, artifacts, knowledge cards
 npm run tick -- --dry-run                  # show what the scheduler would run next
+npm run tick -- --commit                   # run one tick, commit + push internal changes to main
+npm run item -- list                       # items and status; also show|resume|reject|park|reopen <id> --reason "..."
 node backoffice/server.mjs                 # dashboard
 ```
 
@@ -33,7 +36,7 @@ node backoffice/server.mjs                 # dashboard
 4. "Don't buy" is a valid output. Every recommendation has a keep-what-you-have path.
 5. State lives in files. No hidden memory.
 6. Scheduling is deterministic; AI is used only for judgement work.
-7. Humans approve what ships. Agents open PRs; never push to `main`.
+7. Humans approve what ships. Internal changes (items, research, briefs, drafts, knowledge) are committed straight to `main`. Anything that can reach a reader (`content/published/`, `site/`, `data/offers/`) needs its own PR. The list lives in `engine/scheduler/git-policy.json`. The idea judge's picks are final.
 8. Measure before optimizing (60–90 days of data).
 
 ## Style rules (spec section 7; full guide in `niches/coffee/style.md`)

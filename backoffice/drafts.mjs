@@ -2,7 +2,7 @@ import { readFile, readdir } from 'node:fs/promises';
 
 import { loadCards, matchesReview, reviewInputs } from '../agent/review-inputs.mjs';
 
-const directory = new URL('../content/drafts/', import.meta.url);
+const directory = new URL('../content/archive/drafts/', import.meta.url);
 
 async function optionalFile(filename) {
   try {
@@ -26,7 +26,7 @@ export async function readDrafts(runs, repositoryUrl, cards) {
   const files = new Set(entries.filter((entry) => entry.isFile()).map((entry) => entry.name));
   const drafts = await Promise.all(draftFiles.map(async ({ name }) => {
     const id = name.slice(0, -3);
-    const path = `content/drafts/${name}`;
+    const path = `content/archive/drafts/${name}`;
     const briefName = `${id}.brief.md`;
     const reviewName = `${id}.review.json`;
     const [article, brief, reviewText] = await Promise.all([

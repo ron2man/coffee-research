@@ -9,7 +9,7 @@ import { repoRoot } from '../state/niche.mjs';
 import { loadItems, readRuns, saveItem } from '../state/store.mjs';
 import { validateRepo } from '../state/validate-repo.mjs';
 import { fakeRunner } from '../runner/index.mjs';
-import { planTick, tick } from '../scheduler/tick.mjs';
+import { SCHEDULE_PATH, planTick, readSchedule, tick } from '../scheduler/tick.mjs';
 
 const agents = loadAgents();
 const fixture = (name, kind = 'valid') =>
@@ -156,26 +156,43 @@ test('later pipeline stages run before earlier ones', () => {
   assert.equal(planTick({ agents, items, runs: [] }).chosen.agent.name, 'post-judge');
 });
 
-test('idea judge may advance at most 3 and must decide on every idea', async (t) => {
+test('idea judge: extra advances are converted to reject by score; every idea needs a decision', async (t) => {
   const root = sandbox(t);
-  for (const id of ['a', 'b', 'c', 'd']) saveItem(root, newItem({ id, niche: 'coffee', by: 'test' }));
+  const ids = ['a', 'b', 'c', 'd'];
+  for (const id of ids) saveItem(root, newItem({ id, niche: 'coffee', by: 'test' }));
+  const scored = (total) => {
+    const artifact = structuredClone(fixture('idea-judge').decisions[0].artifact);
+    for (const entry of Object.values(artifact.scores)) entry.score = 1;
+    artifact.scores.demandEvidence.score = total;
+    return artifact;
+  };
+  const scores = { a: 2, b: 5, c: 4, d: 5 };
   const decide = (outcome) => (input) => ({
-    decisions: input.items.map(({ item }) => ({ itemId: item.id, outcome, reason: 'r', artifact: fixture('idea-judge').decisions[0].artifact })),
+    decisions: input.items.map(({ item }) => ({ itemId: item.id, outcome, reason: 'r', artifact: scored(scores[item.id]) })),
   });
-  // The idea agent is capped out of the way by schedule.
   const now = new Date();
   const onlyJudge = agents.filter((agent) => agent.name === 'idea-judge');
 
   const tooMany = await tick({ root, runner: fakeRunner(handlers({ 'idea-judge': decide('advance') })), agents: onlyJudge, now });
-  assert.match(tooMany.error, /advanced 4 items \(max 3\)/);
-  assert.ok(loadItems(root).items.every((item) => item.status === 'idea' && item.attempts === 1));
+  assert.equal(tooMany.error, undefined);
+  assert.match(tooMany.warnings[0], /converted to reject: a/);
+  assert.deepEqual(statuses(root), { a: 'rejected', b: 'idea_approved', c: 'idea_approved', d: 'idea_approved' });
+  const a = loadItems(root).items.find((item) => item.id === 'a');
+  assert.match(a.history.at(-1).reason, /Over the advance cap \(3\)/);
+
+  // A judge without an overflow outcome still fails the whole run.
+  const strict = onlyJudge.map((agent) => ({ ...agent, maxAdvance: { outcome: 'advance', max: 3 } }));
+  const root2 = sandbox(t);
+  for (const id of ids) saveItem(root2, newItem({ id, niche: 'coffee', by: 'test' }));
+  const failed = await tick({ root: root2, runner: fakeRunner(handlers({ 'idea-judge': decide('advance') })), agents: strict, now });
+  assert.match(failed.error, /advanced 4 items \(max 3\)/);
 
   const partial = await tick({
-    root, agents: onlyJudge, now,
+    root: root2, agents: onlyJudge, now,
     runner: fakeRunner(handlers({ 'idea-judge': (input) => ({ decisions: decide('reject')(input).decisions.slice(1) }) })),
   });
   assert.match(partial.error, /every input item/);
-  assert.ok(loadItems(root).items.every((item) => item.status === 'blocked'));
+  assert.ok(loadItems(root2).items.every((item) => item.status === 'blocked'));
 });
 
 test('a second revise sends the draft to needs_human', async (t) => {
@@ -206,4 +223,16 @@ test('a corrupt item file stops the tick instead of being skipped', async (t) =>
   const { writeJsonAtomic } = await import('../state/store.mjs');
   writeJsonAtomic(join(root, 'data/items/bad.json'), bad);
   await assert.rejects(tick({ root, runner: fakeRunner(handlers()) }), /Item store is invalid/);
+});
+
+test('the schedule is kept in a committed state file, so a fresh checkout respects it', async (t) => {
+  const root = sandbox(t);
+  const result = await tick({ root, runner: fakeRunner(handlers()) });
+  assert.equal(result.ran, 'idea');
+  assert.ok(result.changedFiles.includes(SCHEDULE_PATH));
+  assert.ok(readSchedule(root).agents.idea.lastRunAt);
+  // Lose the local run log (new machine): the committed state still holds the interval.
+  const onlyIdea = agents.filter((agent) => agent.name === 'idea');
+  assert.equal(planTick({ agents: onlyIdea, items: [], runs: [], schedule: readSchedule(root) }).chosen, null);
+  assert.equal(planTick({ agents: onlyIdea, items: [], runs: [], schedule: readSchedule(root), now: later(25) }).chosen.agent.name, 'idea');
 });

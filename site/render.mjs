@@ -4,7 +4,7 @@ import { loadCards, matchesReview, reviewInputs } from '../agent/review-inputs.m
 import { readFile } from 'node:fs/promises';
 
 const manifest = new URL('./articles.json', import.meta.url);
-const drafts = new URL('../content/drafts/', import.meta.url);
+const drafts = new URL('../content/archive/drafts/', import.meta.url);
 const slugPattern = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 
 function home(articles) {

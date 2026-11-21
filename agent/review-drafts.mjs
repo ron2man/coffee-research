@@ -3,7 +3,7 @@ import { parseArgs } from 'node:util';
 import { judgeEditorial } from './judge-editorial.mjs';
 import { loadCards, matchesReview, reviewInputs } from './review-inputs.mjs';
 
-const directory = 'content/drafts';
+const directory = 'content/archive/drafts';
 try {
   const { values, positionals: requested } = parseArgs({
     options: { rejudge: { type: 'boolean' } },

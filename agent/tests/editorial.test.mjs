@@ -13,7 +13,7 @@ const slug = 'bambino-plus-cleaning-vs-descaling';
 test('only supported, cited evidence can carry approval forward', async () => {
   const cards = await loadCards();
   const inputs = reviewInputs(slug, cards);
-  const review = { draft: 'content/drafts/' + slug + '.md', brief: 'content/drafts/' + slug + '.brief.md',
+  const review = { draft: 'content/archive/drafts/' + slug + '.md', brief: 'content/archive/drafts/' + slug + '.brief.md',
     fingerprint: inputs.fingerprint };
   assert.ok(matchesReview(slug, review, inputs));
   const card = cards.get('bambino-plus');
@@ -32,7 +32,7 @@ test('manual runner commits research, commissions a narrower draft and invalidat
   mkdirSync(cwd);
   for (const name of ['agent', 'engine', 'niches', 'knowledge', 'site']) cpSync(join(root, name), join(cwd, name), {recursive:true});
   symlinkSync(join(root, 'node_modules'), join(cwd, 'node_modules'));
-  mkdirSync(join(cwd, 'content/drafts'), {recursive:true});
+  mkdirSync(join(cwd, 'content/archive/drafts'), {recursive:true});
   writeFileSync(join(cwd, '.gitignore'), '.backoffice/\nnode_modules\n');
   const bin = join(directory, 'bin');
   mkdirSync(bin);
@@ -52,8 +52,8 @@ if (args.includes('--output-schema')) {
   else result = {verdict:'pass', scores:Object.fromEntries(['topicSelection','evidence','readerValue','onPageSeo'].map(k=>[k,{score:4,reason:'Supported'}])), actions:[],optionalImprovements:[]};
   fs.writeFileSync(args[args.indexOf('-o')+1], JSON.stringify(result));
 } else if (prompt.includes('Write the commissioned article')) {
-  fs.writeFileSync('content/drafts/' + slug + '.md', '# Which cycle?\\n\\nUse the cleaning cycle.\\n');
-  fs.writeFileSync('content/drafts/' + slug + '.brief.md', brief);
+  fs.writeFileSync('content/archive/drafts/' + slug + '.md', '# Which cycle?\\n\\nUse the cleaning cycle.\\n');
+  fs.writeFileSync('content/archive/drafts/' + slug + '.brief.md', brief);
 } else fs.writeFileSync('content/opportunities/' + slug + '.md', brief);
 `, {mode:0o755});
   const env = { ...process.env, PATH: bin + delimiter + process.env.PATH, TEST_OUTCOME:'research' };
@@ -69,7 +69,7 @@ if (args.includes('--output-schema')) {
   git('commit','-qm','Fixture');
   const node = (...args) => run(process.execPath, args);
   node('agent/run-editorial.mjs');
-  assert.equal(git('ls-files','content/drafts'), '');
+  assert.equal(git('ls-files','content/archive/drafts'), '');
   env.TEST_OUTCOME = 'narrow';
   node('agent/run-editorial.mjs');
   const plan = JSON.parse(node('agent/research-plan.mjs'));
@@ -83,7 +83,7 @@ if (args.includes('--output-schema')) {
   assert.ok(aged.batch.some(product => product.id === 'ecm-classika-iii' && product.status === 'refresh'));
   const routes = () => node('--input-type=module','-e',"import { renderSite } from './site/render.mjs';console.log([...(await renderSite()).keys()].join(' '))").trim();
   assert.match(routes(), /guides\/test-narrow/);
-  const articlePath = join(cwd,'content/drafts/test-narrow.md');
+  const articlePath = join(cwd,'content/archive/drafts/test-narrow.md');
   writeFileSync(articlePath,readFileSync(articlePath,'utf8') + '\nEdited copy.\n');
   assert.equal(routes(), '/');
   node('agent/review-drafts.mjs','test-narrow');

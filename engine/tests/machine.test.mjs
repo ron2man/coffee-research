@@ -37,3 +37,13 @@ test('rejected ideas can be re-scored; measured is terminal', () => {
   const rejected = transition(newItem({ id: 'x', niche: 'coffee', by }), 'rejected', { by });
   assert.deepEqual(allowedTransitions(rejected), ['idea']);
 });
+
+test('reopening a rejected item keeps only the generator artifact and resets revisions', () => {
+  let item = newItem({ id: 'x', niche: 'coffee', by: 'idea' });
+  item = { ...item, revisions: 1, artifacts: { idea: 'data/ideas/x.json', 'idea-judge': 'data/idea-scores/x.json', 'post-judge': 'data/reviews/x.json' } };
+  item = transition(item, 'rejected', { by: 'idea-judge' });
+  assert.equal(Object.keys(item.artifacts).length, 3, 'rejecting keeps the record');
+  item = transition(item, 'idea', { by: 'human', reason: 'new demand data' });
+  assert.deepEqual(item.artifacts, { idea: 'data/ideas/x.json' });
+  assert.equal(item.revisions, 0);
+});
