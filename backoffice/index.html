@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Coffee Backoffice</title>
+  <link rel="stylesheet" href="/style.css">
+  <script type="module" src="/app.js"></script>
+</head>
+<body>
+  <aside class="sidebar">
+    <strong>Coffee Research<span>Backoffice</span></strong>
+    <nav aria-label="Sections">
+      <a href="#overview">Overview</a>
+      <a href="#queue">Research queue</a>
+      <a href="#knowledge">Product knowledge</a>
+      <a href="#roadmap">Roadmap</a>
+      <a href="#runs">Run history</a>
+      <a href="#lessons">Learning log</a>
+    </nav>
+  </aside>
+  <main>
+    <header id="overview">
+      <h1>Research operations</h1>
+      <button id="reload" type="button">Refresh data</button>
+    </header>
+    <p id="status" role="status">Loading project data…</p>
+    <div id="metrics" class="metrics"></div>
+    <section aria-labelledby="attention-title">
+      <h2 id="attention-title">Needs attention</h2>
+      <div id="attention"></div>
+    </section>
+    <section aria-labelledby="next-title">
+      <h2 id="next-title">Suggested next batch</h2>
+      <div id="next"></div>
+    </section>
+    <section id="queue" aria-labelledby="queue-title">
+      <h2 id="queue-title">Research queue</h2>
+      <label>Filter by name, category or status <input id="filter" type="search"></label>
+      <div id="queue-list" class="table-wrap"></div>
+    </section>
+    <section id="knowledge" aria-labelledby="knowledge-title">
+      <h2 id="knowledge-title">Product knowledge</h2>
+      <div id="cards"></div>
+    </section>
+    <section id="roadmap" aria-labelledby="roadmap-title">
+      <h2 id="roadmap-title">Roadmap</h2>
+      <div id="milestones"></div>
+    </section>
+    <section id="runs" aria-labelledby="runs-title">
+      <h2 id="runs-title">Run history</h2>
+      <div id="history"></div>
+    </section>
+    <section id="lessons" aria-labelledby="lessons-title">
+      <h2 id="lessons-title">Learning log</h2>
+      <div id="learning"></div>
+    </section>
+  </main>
+</body>
+</html>
