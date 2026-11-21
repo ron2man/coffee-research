@@ -1,6 +1,7 @@
 import { spawnSync } from 'node:child_process';
-import { appendFileSync, mkdirSync, readFileSync } from 'node:fs';
+import { appendFileSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { scanKnowledge } from './knowledge.mjs';
+import { judgeEditorial } from './judge-editorial.mjs';
 
 const start = Date.now();
 
@@ -35,7 +36,8 @@ try {
   run('git', ['remote', 'get-url', 'origin'], true);
   if (workingChanges().length) throw new Error('Start the editorial workflow with a clean checkout');
 
-  const prompt = readFileSync('agent/editorial-workflow.md', 'utf8');
+  const seoSkill = readFileSync('agent/skills/coffee-seo/SKILL.md', 'utf8');
+  const prompt = [readFileSync('agent/editorial-workflow.md', 'utf8'), seoSkill].join('\n\n');
   run('codex', ['exec', '-s', 'workspace-write', prompt]);
   run(process.execPath, ['agent/validate-knowledge.mjs']);
 
@@ -55,12 +57,16 @@ try {
 
     const { cards } = await scanKnowledge('knowledge');
     const briefs = paths.filter((path) => path.endsWith('.brief.md'));
-    for (const draft of paths.filter((path) => path.startsWith('content/drafts/') && !path.endsWith('.brief.md'))) {
+    const drafts = paths.filter((path) => path.startsWith('content/drafts/') && !path.endsWith('.brief.md'));
+    for (const draft of drafts) {
       if (!briefs.includes(draft.replace(/\.md$/, '.brief.md'))) {
         throw new Error(`Missing changed brief for ${draft}`);
       }
     }
+    const reviews = [];
     for (const brief of briefs) {
+      const draft = brief.replace(/\.brief\.md$/, '.md');
+      if (!drafts.includes(draft)) throw new Error(`Missing changed draft for ${brief}`);
       const markdown = readFileSync(brief, 'utf8');
       const links = [...markdown.matchAll(/`([a-z0-9-]+)\/([a-z0-9-]+)`/g)];
       if (!links.length) throw new Error(`No claim references in ${brief}`);
@@ -69,12 +75,24 @@ try {
           throw new Error(`Unresolved or unsupported claim ${product}/${claim} in ${brief}`);
         }
       }
+      const evidence = [...new Set(links.map(([, product]) => product))].map((id) => cards.get(id));
+      reviews.push({ draft, brief, review: judgeEditorial(readFileSync(draft, 'utf8'), markdown, evidence, seoSkill) });
     }
+
+    if (JSON.stringify(workingChanges()) !== JSON.stringify(changes)) {
+      throw new Error('Repository changes appeared during editorial judging');
+    }
+    const verdicts = reviews.map(({ draft, brief, review }) => {
+      const path = draft.replace(/\.md$/, '.review.json');
+      writeFileSync(path, JSON.stringify({ draft, brief, ...review }, null, 2) + '\n', { flag: 'wx' });
+      paths.push(path);
+      return { draft, verdict: review.verdict, review: path };
+    });
     run('git', ['add', '--', ...paths]);
     run('git', ['diff', '--cached', '--check']);
     run('git', ['commit', '-m', 'Run coffee editorial research workflow']);
     run('git', ['push', 'origin', `HEAD:refs/heads/${branch}`]);
-    record('completed', { changedFiles: paths, branch, commit: run('git', ['rev-parse', 'HEAD'], true).trim() });
+    record('completed', { changedFiles: paths, verdicts, branch, commit: run('git', ['rev-parse', 'HEAD'], true).trim() });
   }
 } catch (error) {
   try {

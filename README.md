@@ -35,3 +35,5 @@ Run `node agent/discover-baratza.mjs` to preview candidates from Baratza's offic
 ## Run one editorial cycle
 
 From a clean checkout, run `node agent/run-editorial.mjs`. Use the same command for a manual pilot or a local scheduler. The host needs Node.js, Git, a signed-in Codex CLI on its PATH, network access, and permission to push the current branch to `origin`. The workflow selects its own topic, validates knowledge and draft claim references, pushes accepted changes, and records the run locally. Files in `content/drafts/` are editorial drafts.
+
+The editorial runner explicitly loads the repository's [coffee SEO skill](agent/skills/coffee-seo/SKILL.md). A separate read-only Codex invocation evaluates each draft against its brief and product evidence. Its `.review.json` is saved beside the draft, and the verdict appears in the backoffice run history. Pass, revise, and defer drafts are all retained in Git for review. Only a pass qualifies for a future website handoff. The runner stops before committing if a draft cannot be validated or the judge cannot return a valid review.
