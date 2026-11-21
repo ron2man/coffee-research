@@ -1,0 +1,101 @@
+{
+  "id": "2026-11-21T19-43-12-943Z-critic",
+  "agent": "idea",
+  "source": "critic",
+  "at": "2026-11-21T19:43:12.943Z",
+  "itemIds": [
+    "breville-builtin-grinder-wont-grind-fine-enough",
+    "sage-bambino-descale-cycle-fails-tank-empty",
+    "uk-hard-water-espresso-machine-water-and-descale",
+    "df64-worn-burrs-cant-reach-espresso"
+  ],
+  "findings": [
+    {
+      "severity": "major",
+      "problem": "Cards are labelled `demand.kind: qualitative` with only one signal. The prompt requires at least two independent signals for that label; one signal means `unmeasured`, or dropping the card.",
+      "evidence": "sage-bambino-descale-cycle-fails-tank-empty, uk-hard-water-espresso-machine-water-and-descale and df64-worn-burrs-cant-reach-espresso each have exactly one entry in `signals` but are marked \"qualitative\".",
+      "itemIds": [
+        "sage-bambino-descale-cycle-fails-tank-empty",
+        "uk-hard-water-espresso-machine-water-and-descale",
+        "df64-worn-burrs-cant-reach-espresso"
+      ],
+      "suggestion": "Before returning, count each card's signals that are recent and independent. If there are fewer than two, search further (r/espresso, Home-Barista, Coffee Forums UK), downgrade the card to `unmeasured`, or drop it."
+    },
+    {
+      "severity": "major",
+      "problem": "The same signal is reused across two cards, which the prompt forbids. Both cards come from one thread about descaling and maintenance, so they are probably one idea or need their own evidence.",
+      "evidence": "Both Bambino cards cite https://singletrackworld.com/forum/off-topic/espresso-machines-not-bean-to-cup-pod (2025-03-26). I opened it: the Bambino tank-error complaint and the Brita, Ashbeck and boiler discussion are all in that one thread.",
+      "itemIds": [
+        "sage-bambino-descale-cycle-fails-tank-empty",
+        "uk-hard-water-espresso-machine-water-and-descale"
+      ],
+      "suggestion": "Treat a URL that appears on more than one card as a merge signal: merge the cards or find separate evidence for each."
+    },
+    {
+      "severity": "major",
+      "problem": "Most signals come from an off-topic board of an unrelated community, the exact example the prompt says to avoid. No note says so, and the sources the niche guidance ranks first (r/espresso, Home-Barista, CoffeeGeek, Coffee Forums UK) don't appear once. The prompt asks for the same question from different people, and three of the four cards rest on one person each.",
+      "evidence": "3 of 7 signals are singletrackworld.com/forum/off-topic/..., 2 are lemmy.world and 1 is coffeeforums.com. There are no Reddit or Home-Barista URLs.",
+      "itemIds": [
+        "breville-builtin-grinder-wont-grind-fine-enough",
+        "sage-bambino-descale-cycle-fails-tank-empty",
+        "uk-hard-water-espresso-machine-water-and-descale",
+        "df64-worn-burrs-cant-reach-espresso"
+      ],
+      "suggestion": "Search the guidance's priority communities first, using old.reddit.com as the fallback for Reddit. Use an off-topic board only when nothing better exists, and say so in the note."
+    },
+    {
+      "severity": "major",
+      "problem": "The Barista Express/Pro card's main evidence is too old. Only one of its three signals is within 24 months. The 2023 and 2018 threads are main support but aren't marked \"older\".",
+      "evidence": "Signal dates are 2026-08-30, 2023-09-25 (about 26 months before today, 2026-11-21) and 2018-08-24. Neither older note contains \"older\".",
+      "itemIds": [
+        "breville-builtin-grinder-wont-grind-fine-enough"
+      ],
+      "suggestion": "Compare each signal date with `today`. Mark anything over 24 months as \"older\", and don't count it toward the two-signal minimum."
+    },
+    {
+      "severity": "minor",
+      "problem": "A signal note overstates what the thread says. It claims a Breville replacement burr fixed the problem, but in the thread Breville only offered to send one. What worked was dropping the internal burr to 1 after cleaning.",
+      "evidence": "The note reads \"Moving the upper burr to 1 plus a Breville replacement burr fixed it.\" On https://singletrackworld.com/forum/off-topic/sage-breville-barista-pro-grinder/, Breville offered a new upper burr, but nobody confirms it solved the problem.",
+      "itemIds": [
+        "breville-builtin-grinder-wont-grind-fine-enough"
+      ],
+      "suggestion": "Paraphrase only what the poster said, and separate offers or suggestions from confirmed fixes."
+    },
+    {
+      "severity": "minor",
+      "problem": "Overlap with existing coverage isn't declared. The niche guidance lists 'Bambino Plus cleaning vs descaling' as covered, and the Bambino descale-failure card doesn't list it in `overlapsWith` or explain what is new.",
+      "evidence": "The sage-bambino-descale-cycle-fails-tank-empty artifact has no `overlapsWith` field, although its pain and decision are about Bambino descale and clean cycles.",
+      "itemIds": [
+        "sage-bambino-descale-cycle-fails-tank-empty"
+      ],
+      "suggestion": "Check each card against the coverage list in the niche guidance and the `existingContent` slugs. List the overlapping slug in `overlapsWith`, and use `competitorGap` to say how the card differs (here, a fault-recovery angle rather than routine descaling)."
+    },
+    {
+      "severity": "minor",
+      "problem": "The DF64 signal is a finished upgrade report, not a person asking the question. The price-doubling remark in the note came from a commenter, not the poster.",
+      "evidence": "https://lemmy.world/post/46736915 is titled 'DF64 cleanup and SSP HU burrs upgrade'. Commenter Coelacanth said the grinder looks 'almost twice as expensive'.",
+      "itemIds": [
+        "df64-worn-burrs-cant-reach-espresso"
+      ],
+      "suggestion": "Prefer threads where someone asks the question or describes the problem as unresolved, and attribute each claim in the note to the poster or to a reply."
+    }
+  ],
+  "addressedBy": null,
+  "summary": "Problem framing is strong: each card has a specific owner, a real decision, a free keep-yours path and a no-testing value add. The evidence breaks the prompt's own rules, though. Three of the four cards rest on one signal but are labelled `qualitative`. One forum thread backs two cards. Most signals come from an off-topic board on a cycling forum, and none come from the sources the niche guidance ranks first. The fix that matters most is to apply the two-signal rule and the no-reuse rule before a card is returned, and to search the priority communities first.",
+  "keep": [
+    "Questions are written in the owner's voice, about one named product and one concrete decision (fix, adjust or replace).",
+    "Every `valueAdd` is a diagnosis order or decision rule that needs no hands-on testing, and it states a free keep-yours path.",
+    "`competitorGap` entries name what was checked (coffeeblog.co.uk walkthrough, a Breville support page that didn't load, the manufacturer's grind guide) and report failed loads honestly.",
+    "`commercialPath` stays modest and plausible.",
+    "Sage/Breville naming and the GB/US market choice follow the niche guidance.",
+    "Few, distinct cards (four) instead of padding."
+  ],
+  "promptChanges": [
+    "Add a final self-check before output: 'For each card, count signals that are dated within 24 months of `today`, come from different people, and are used on no other card. If there are fewer than two, set `demand.kind` to `unmeasured` or drop the card. Don't label it `qualitative`.'",
+    "Add: 'If the same URL would appear on two cards, merge the cards or find separate evidence for one. Never return a card set with a repeated URL.'",
+    "Add: 'A signal note may only state what the poster or a named reply actually said. Write offers, suggestions and guesses as such, and don't present them as confirmed fixes.'",
+    "Add: 'Prefer threads where someone asks the question or describes an unresolved problem. A finished how-I-fixed-it report is supporting evidence, not demand.'",
+    "[niche] Strengthen the coffee guidance: 'Search r/espresso (via old.reddit.com if needed), Home-Barista and Coffee Forums UK before any general forum. Signals from general-interest forums' off-topic boards (for example singletrackworld.com/forum/off-topic) count only if the note says no better source was found.'",
+    "[niche] Add: 'Bambino or Bambino Plus descaling and cleaning ideas overlap with the existing Bambino Plus cleaning vs descaling draft. Always list it in `overlapsWith` and explain the new angle.'"
+  ]
+}
