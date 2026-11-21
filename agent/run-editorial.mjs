@@ -79,7 +79,7 @@ async function reviewDraft({ draft, brief }, seoSkill) {
 
 function reviseDraft({ draft, brief }, review, seoSkill) {
   const prompt = [
-    'Revise the existing draft and brief named below. Apply the independent judge’s feedback as editorial evidence. Preserve the chosen topic and the same paths. Verify factual corrections against cited sources. Update affected product cards and claim references as needed. If evidence is insufficient, narrow or remove the unsupported material and explain the limitation in the brief. Keep the draft useful and readable. Change only the named draft, its brief, and relevant product cards. Do not write verdict files, commit, or push.',
+    'Revise the existing draft and brief named below. Resolve the independent judge’s blocking actions. Use score comments as context. Preserve the chosen topic and the same paths. Verify factual corrections against cited sources. Update affected product cards and claim references as needed. If evidence is insufficient, narrow or remove the unsupported material and explain the limitation in the brief. Keep the draft useful and readable. Change only the named draft, its brief, and relevant product cards. Do not write verdict files, commit, or push.',
     seoSkill,
     JSON.stringify({ draft, brief, verdict: review.verdict, scores: review.scores, actions: review.actions }),
   ].join('\n\n');
@@ -131,7 +131,8 @@ try {
     const path = draft.replace(/\.md$/, '.review.json');
     const history = previous ? [
       ...(Array.isArray(previous.history) ? previous.history : []),
-      { verdict: previous.verdict, scores: previous.scores, actions: previous.actions },
+      { verdict: previous.verdict, scores: previous.scores, actions: previous.actions,
+        optionalImprovements: previous.optionalImprovements },
     ] : [];
     writeFileSync(path, JSON.stringify({ draft, brief, ...final, history }, null, 2) + '\n',
       { flag: saved ? 'w' : 'wx' });

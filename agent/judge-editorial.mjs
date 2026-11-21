@@ -17,7 +17,7 @@ const scoreSchema = {
 const schema = {
   type: 'object',
   additionalProperties: false,
-  required: ['verdict', 'scores', 'actions'],
+  required: ['verdict', 'scores', 'actions', 'optionalImprovements'],
   properties: {
     verdict: { type: 'string', enum: verdicts },
     scores: {
@@ -27,6 +27,7 @@ const schema = {
       properties: Object.fromEntries(dimensions.map((dimension) => [dimension, scoreSchema])),
     },
     actions: { type: 'array', items: { type: 'string' } },
+    optionalImprovements: { type: 'array', items: { type: 'string' } },
   },
 };
 
@@ -34,11 +35,18 @@ function nonempty(value) {
   return typeof value === 'string' && value.trim().length > 0;
 }
 
+function validFeedback(items) {
+  return Array.isArray(items) && items.length <= 5 && items.every(nonempty);
+}
+
 function readVerdict(outputPath) {
   const review = JSON.parse(readFileSync(outputPath, 'utf8'));
   if (!verdicts.includes(review?.verdict) ||
-      !Array.isArray(review.actions) || review.actions.length > 5 || !review.actions.every(nonempty)) {
+      !validFeedback(review.actions) || !validFeedback(review.optionalImprovements)) {
     throw new Error('Invalid editorial verdict');
+  }
+  if ((review.verdict === 'pass') !== (review.actions.length === 0)) {
+    throw new Error('A pass must have no blocking actions, and revise or defer must identify a blocker');
   }
   for (const dimension of dimensions) {
     const result = review.scores?.[dimension];

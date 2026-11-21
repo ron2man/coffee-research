@@ -131,6 +131,13 @@ function preview(label, markdown) {
   return details;
 }
 
+function appendFeedback(container, label, entries) {
+  if (!Array.isArray(entries) || !entries.length) return;
+  const list = element('ol');
+  for (const entry of entries) list.append(formatText(element('li'), String(entry)));
+  container.append(element('h4', label), list);
+}
+
 function renderDraft(draft) {
   const card = element('article', undefined, 'draft-card');
   card.id = `draft-${draft.id}`;
@@ -156,11 +163,8 @@ function renderDraft(draft) {
           formatText(element('p'), String(score.reason ?? '')));
       }
     }
-    if (actions.length) {
-      const list = element('ol');
-      for (const action of actions) list.append(formatText(element('li'), action));
-      review.append(element('h4', 'Revision actions'), list);
-    }
+    appendFeedback(review, Array.isArray(draft.review.optionalImprovements) ? 'Blocking actions' : 'Revision actions', actions);
+    appendFeedback(review, 'Optional improvements', draft.review.optionalImprovements);
     card.append(review);
     if (Array.isArray(draft.review.history) && draft.review.history.length) {
       const history = element('details', undefined, 'draft-preview');
@@ -171,11 +175,8 @@ function renderDraft(draft) {
           const score = prior.scores?.[key];
           if (score) history.append(formatText(element('p'), `**${label} · ${score.score}/5** · ${score.reason}`));
         }
-        if (Array.isArray(prior.actions)) {
-          const list = element('ol');
-          for (const action of prior.actions) list.append(formatText(element('li'), String(action)));
-          history.append(list);
-        }
+        appendFeedback(history, Array.isArray(prior.optionalImprovements) ? 'Blocking actions' : 'Revision actions', prior.actions);
+        appendFeedback(history, 'Optional improvements', prior.optionalImprovements);
       }
       card.append(history);
     }

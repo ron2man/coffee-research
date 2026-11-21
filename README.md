@@ -40,6 +40,6 @@ The editorial runner explicitly loads the repository's [coffee SEO skill](agent/
 
 To judge drafts already in the repository, run `node agent/review-drafts.mjs`. Pass a draft slug to review a specific draft. Existing verdicts are skipped. The command writes local review files for the backoffice without rerunning discovery, drafting, or Git sync.
 
-When the judge returns `revise`, the editorial runner gives the draft, brief, and judge feedback to a fresh writer pass. It validates the revised evidence and runs the independent judge again. The second verdict is the current status. The first remains in review history. Each invocation makes at most one revision pass.
+The judge uses `revise` only for material, fixable blockers. A draft that clears the handoff standard can pass with optional improvements. When the judge returns `revise`, the editorial runner gives the draft, brief, and blocking actions to a fresh writer pass. It validates the revised evidence and runs the independent judge again. The second verdict is the current status. The first remains in review history. Each invocation makes at most one revision pass.
 
 To apply that loop to an existing draft with a saved `revise` verdict, start from a clean checkout and run `node agent/run-editorial.mjs --revise linea-micra-cup-clearance` (replace the slug with the one you want). This mode uses the saved feedback and revisits the selected draft without searching for a new topic.
