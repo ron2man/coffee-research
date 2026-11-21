@@ -1,0 +1,46 @@
+{
+  "outcome": "brief",
+  "reason": "Distinct diagnosis no competitor offers.",
+  "artifact": {
+    "thesis": "Most sour Bambino shots are fixed by basket and dose before you touch the grinder.",
+    "reader": "New Bambino owner",
+    "readerDecision": "What to change first",
+    "whatCompetitorsMiss": [
+      "Bambino basket differences"
+    ],
+    "ourContribution": "diagnosis",
+    "contributionDetail": "A three-question diagnosis from shot time, basket and roast date.",
+    "mustInclude": [
+      "adjacent-setting test"
+    ],
+    "leaveOut": [
+      "spec table"
+    ],
+    "assets": [
+      "picker"
+    ],
+    "offerTouchpoints": [
+      {
+        "role": "dont-buy"
+      },
+      {
+        "productId": "baratza-encore-esp-pro",
+        "role": "primary"
+      }
+    ],
+    "claimIds": [
+      "bambino-plus/us-cleaning-alert"
+    ],
+    "competitorsReviewed": [
+      {
+        "url": "https://example.com/sour-espresso",
+        "summary": "Generic advice"
+      }
+    ],
+    "titleOptions": [
+      "Why your Bambino espresso is sour"
+    ],
+    "slug": "bambino-sour-shots",
+    "metaDescription": "Fix sour Bambino shots in order."
+  }
+}

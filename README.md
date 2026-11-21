@@ -1,5 +1,7 @@
 # Coffee Research
 
+> **Rebuild in progress.** See [rebuild-spec.md](rebuild-spec.md) and [CLAUDE.md](CLAUDE.md). The new engine lives in `engine/` (`npm install`, `npm test`, `npm run validate`, `npm run tick -- --dry-run`). The `agent/` editorial pipeline below is legacy and is being replaced.
+
 A workflow for coffee product research, editorial content, site publishing, and measurement.
 
 - [Implementation plan](docs/planning-spec.md)

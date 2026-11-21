@@ -6,7 +6,7 @@ import addFormats from 'ajv-formats';
 const compiled = new Map();
 
 function createAjv() {
-  const ajv = new Ajv2020({ allErrors: true, strict: true });
+  const ajv = new Ajv2020({ allErrors: true, strict: true, strictRequired: false });
   addFormats(ajv);
   return ajv;
 }

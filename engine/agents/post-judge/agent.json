@@ -1,0 +1,31 @@
+{
+  "name": "post-judge",
+  "description": "Reads the draft as a reader against the top 3 competitors for the primary query. Returns pass, revise (at most 3 blocking actions, one loop) or reject.",
+  "mode": "item",
+  "priority": 60,
+  "inputStatus": "drafted",
+  "outcomes": {
+    "pass": "passed",
+    "revise": "briefed",
+    "reject": "rejected"
+  },
+  "loop": {
+    "outcome": "revise",
+    "limit": 1,
+    "exceeded": "needs_human"
+  },
+  "inputArtifacts": [
+    "idea",
+    "angle",
+    "writer"
+  ],
+  "artifactDir": "data/reviews",
+  "runner": {
+    "type": "claude",
+    "tools": [
+      "WebSearch",
+      "WebFetch"
+    ]
+  },
+  "status": "draft"
+}

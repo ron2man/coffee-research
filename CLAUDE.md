@@ -1,0 +1,52 @@
+# CLAUDE.md
+
+This repo is being rebuilt per [rebuild-spec.md](rebuild-spec.md). It's an autonomous research and content system: it finds what coffee lovers struggle with, researches it, and publishes content a person would send to a friend. Read the spec before structural changes. Work milestone by milestone (spec section 12). At the end of each milestone, run the checks, update `docs/learnings.md`, and summarise what changed and what is still uncertain.
+
+## Layout
+
+- `engine/` is niche-agnostic code. **No coffee strings** (a test enforces this; fixtures and tests are exempt).
+  - `state/`: item store (`data/items/<id>.json`), status machine, JSON Schema validation, niche loader.
+  - `scheduler/tick.mjs`: one deterministic tick. Picks the highest-priority runnable agent, runs it once, validates, applies status changes and logs them to `.backoffice/runs.jsonl`.
+  - `runner/`: runner abstraction (`fake` for tests; `claude -p` lands in M0).
+  - `agents/<name>/`: `agent.json` (mode, input status, outcomes → statuses, caps), `artifact.schema.json`, `fixtures/valid.json` + `fixtures/invalid.json`, and `prompt.md` once written.
+- `niches/coffee/`: `niche.json` (categories, markets, sellers, disclosures), `style.md`.
+- `knowledge/<category>/<product>.md`: product cards (evidence layer, schemaVersion 1, see `knowledge/README.md`).
+- `data/`: agent artifacts (`ideas/`, `idea-scores/`, `research/`, `briefs/`, `reviews/`, …). `content/drafts/`: writer output.
+- `agent/`: legacy Codex editorial pipeline. Being replaced (spec section 11), so don't extend it.
+- `backoffice/`: loopback dashboard. `site/`: current preview renderer.
+
+## Commands
+
+```sh
+npm install
+npm test                                   # all tests (engine + legacy)
+npm run validate                           # niche, agents, items, artifacts, knowledge cards
+npm run tick -- --dry-run                  # show what the scheduler would run next
+node backoffice/server.mjs                 # dashboard
+```
+
+## Principles (spec section 2, these override convenience)
+
+1. Two layers: a strict internal evidence layer, and a published reader layer that is opinionated, plain and has few links.
+2. Problem first: ideas come from reader questions, not the product catalog.
+3. No fake experience: never claim "we tested" without human-supplied data.
+4. "Don't buy" is a valid output. Every recommendation has a keep-what-you-have path.
+5. State lives in files. No hidden memory.
+6. Scheduling is deterministic; AI is used only for judgement work.
+7. Humans approve what ships. Agents open PRs; never push to `main`.
+8. Measure before optimizing (60–90 days of data).
+
+## Style rules (spec section 7; full guide in `niches/coffee/style.md`)
+
+- Recommendation in the first paragraph, human voice, one clear opinion, a "When I'd choose differently" section, a "don't buy / keep yours" path.
+- At most 2 inline links. Sources go in a collapsed "How this guide was put together" section.
+- No "we tested / hands-on / we measured" without human data that has an author and a date.
+- Prefer a tool, decision rule or diagnosis over a spec table. No hedging chains, no "In conclusion".
+
+## Working rules
+
+- Every agent output has a JSON Schema and a failing-case fixture (tested in `engine/tests/contracts.test.mjs`).
+- Status only changes through `engine/state/machine.mjs`. Item writes go through `saveItem` (validated, atomic).
+- No secrets in the repo; affiliate IDs live in environment config.
+- When a requirement depends on external terms (billing, affiliate programs, consent), stop and record an open question in `docs/learnings.md` instead of guessing.
+- The system runs on the project lead's Mac first, then another machine or the cloud, so don't assume Linux or systemd.

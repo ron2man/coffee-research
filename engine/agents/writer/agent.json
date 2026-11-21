@@ -1,0 +1,25 @@
+{
+  "name": "writer",
+  "description": "Writes the draft from the angle brief, knowledge cards and niche style guide. Factual statements map to claim IDs in `claims`; evidence lives there, not in the prose.",
+  "mode": "item",
+  "priority": 50,
+  "inputStatus": "briefed",
+  "outcomes": {
+    "draft": "drafted",
+    "needs_human": "needs_human"
+  },
+  "inputArtifacts": [
+    "idea",
+    "research",
+    "angle",
+    "post-judge"
+  ],
+  "artifactDir": "content/drafts",
+  "runner": {
+    "type": "claude",
+    "tools": [
+      "Read"
+    ]
+  },
+  "status": "draft"
+}

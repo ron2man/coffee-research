@@ -1,0 +1,140 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "idea-judge.artifact.schema.json",
+  "title": "Idea judge scores (rebuild-spec 5.2)",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "scores"
+  ],
+  "properties": {
+    "scores": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "demandEvidence",
+        "competitorGap",
+        "valueAddWithoutExperience",
+        "evidenceFeasibility",
+        "commercialFit",
+        "overlap"
+      ],
+      "properties": {
+        "demandEvidence": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "score",
+            "reason"
+          ],
+          "properties": {
+            "score": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 5
+            },
+            "reason": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "competitorGap": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "score",
+            "reason"
+          ],
+          "properties": {
+            "score": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 5
+            },
+            "reason": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "valueAddWithoutExperience": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "score",
+            "reason"
+          ],
+          "properties": {
+            "score": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 5
+            },
+            "reason": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "evidenceFeasibility": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "score",
+            "reason"
+          ],
+          "properties": {
+            "score": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 5
+            },
+            "reason": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "commercialFit": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "score",
+            "reason"
+          ],
+          "properties": {
+            "score": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 5
+            },
+            "reason": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "overlap": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "score",
+            "reason"
+          ],
+          "properties": {
+            "score": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 5
+            },
+            "reason": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        }
+      }
+    }
+  }
+}

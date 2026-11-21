@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "item.schema.json",
+  "title": "Work item (data/items/<id>.json)",
+  "description": "The item file is the single owner of status. Agent outputs live in their own folders and are referenced from `artifacts`.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "id", "type", "niche", "status", "attempts", "revisions", "createdAt", "updatedAt", "artifacts", "history"],
+  "$defs": {
+    "slug": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$", "maxLength": 80 },
+    "status": {
+      "enum": ["idea", "idea_approved", "researched", "briefed", "drafted", "passed", "published", "measured", "rejected", "blocked", "needs_human"]
+    }
+  },
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "id": { "$ref": "#/$defs/slug" },
+    "type": { "enum": ["new-post"] },
+    "niche": { "$ref": "#/$defs/slug" },
+    "status": { "$ref": "#/$defs/status" },
+    "attempts": { "type": "integer", "minimum": 0 },
+    "revisions": { "type": "integer", "minimum": 0 },
+    "createdAt": { "type": "string", "format": "date-time" },
+    "updatedAt": { "type": "string", "format": "date-time" },
+    "artifacts": {
+      "type": "object",
+      "propertyNames": { "$ref": "#/$defs/slug" },
+      "additionalProperties": { "type": "string", "pattern": "^(data|content)/[a-z0-9/-]+\\.json$" }
+    },
+    "resumeStatus": { "$ref": "#/$defs/status" },
+    "blockedReason": { "type": "string", "minLength": 1 },
+    "lastError": { "type": "string" },
+    "history": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["at", "from", "to", "by", "reason"],
+        "properties": {
+          "at": { "type": "string", "format": "date-time" },
+          "from": { "anyOf": [{ "$ref": "#/$defs/status" }, { "type": "null" }] },
+          "to": { "$ref": "#/$defs/status" },
+          "by": { "type": "string", "minLength": 1 },
+          "reason": { "type": "string" }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "name": "research",
+  "description": "Researches an approved idea: updates knowledge cards, writes a research note (learned, unknown, what competitors say) and fills product-fit matrix cells.",
+  "mode": "item",
+  "priority": 30,
+  "inputStatus": "idea_approved",
+  "outcomes": {
+    "done": "researched",
+    "needs_human": "needs_human",
+    "reject": "rejected"
+  },
+  "inputArtifacts": [
+    "idea"
+  ],
+  "artifactDir": "data/research",
+  "runner": {
+    "type": "claude",
+    "tools": [
+      "WebSearch",
+      "WebFetch",
+      "Read",
+      "Edit"
+    ]
+  },
+  "status": "draft"
+}

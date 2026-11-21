@@ -1,0 +1,94 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "research.artifact.schema.json",
+  "title": "Research note (rebuild-spec 5.3)",
+  "description": "v0 contract. M3 adds knowledge-card writes and matrix cell values; card edits are checked by agent/validate-knowledge.mjs.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "learned",
+    "unknowns",
+    "competitors",
+    "claimIds"
+  ],
+  "properties": {
+    "learned": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1
+    },
+    "unknowns": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "competitors": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "url",
+          "says"
+        ],
+        "properties": {
+          "url": {
+            "type": "string",
+            "format": "uri"
+          },
+          "says": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "claimIds": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z0-9-]+/[a-z0-9-]+$",
+        "description": "productId/claimId"
+      }
+    },
+    "matrixCells": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "matrix",
+          "row",
+          "column",
+          "field"
+        ],
+        "properties": {
+          "matrix": {
+            "type": "string",
+            "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+            "maxLength": 80
+          },
+          "row": {
+            "type": "string",
+            "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+            "maxLength": 80
+          },
+          "column": {
+            "type": "string",
+            "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+            "maxLength": 80
+          },
+          "field": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    }
+  }
+}

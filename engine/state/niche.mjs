@@ -1,5 +1,5 @@
 // Loads niches/<id>/niche.json. The engine never hard-codes niche values.
-import { readFileSync } from 'node:fs';
+import { readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { assertValid, compileFile } from './validate.mjs';
@@ -7,8 +7,12 @@ import { assertValid, compileFile } from './validate.mjs';
 export const repoRoot = fileURLToPath(new URL('../../', import.meta.url));
 const schemaPath = fileURLToPath(new URL('./schemas/niche.schema.json', import.meta.url));
 
-export function defaultNicheId() {
-  return process.env.NICHE ?? 'coffee';
+/** NICHE env var, or the only folder in niches/. Ambiguity is an error, not a guess. */
+export function defaultNicheId(root = repoRoot) {
+  if (process.env.NICHE) return process.env.NICHE;
+  const niches = readdirSync(join(root, 'niches'), { withFileTypes: true }).filter((entry) => entry.isDirectory());
+  if (niches.length !== 1) throw new Error(`Set NICHE: found ${niches.length} folders in niches/`);
+  return niches[0].name;
 }
 
 export function loadNiche(id = defaultNicheId(), root = repoRoot) {

@@ -1,0 +1,12 @@
+{
+  "outcome": "done",
+  "reason": "Missing note",
+  "artifact": {
+    "learned": [],
+    "unknowns": [],
+    "competitors": [],
+    "claimIds": [
+      "not a claim ref"
+    ]
+  }
+}
