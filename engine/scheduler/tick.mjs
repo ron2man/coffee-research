@@ -2,9 +2,10 @@
 // One scheduler tick: pick the highest-priority runnable agent, run it once,
 // validate its output, apply status changes and log every change. No AI here.
 //
-//   node engine/scheduler/tick.mjs [--dry-run] [--root <dir>] [--niche <id>]
+//   node engine/scheduler/tick.mjs [--dry-run] [--commit] [--root <dir>] [--niche <id>]
 //
-// Git branch/commit/PR handling is not part of M1 (see docs/learnings.md open questions).
+// --commit: require the main branch, fast-forward first, then commit and push the files
+// this tick wrote. Reader-facing paths (git-policy.json) are never committed here; they need a PR.
 import { existsSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { parseArgs } from 'node:util';
@@ -15,6 +16,7 @@ import { defaultNicheId, loadNiche, repoRoot } from '../state/niche.mjs';
 import { appendRun, loadItems, readJson, readRuns, saveItem, writeJsonAtomic } from '../state/store.mjs';
 import { assertValid } from '../state/validate.mjs';
 import { RunnerUnavailableError, runnerFor } from '../runner/index.mjs';
+import { commitInternal, commitMessage, syncMain } from './git.mjs';
 
 export const MAX_ATTEMPTS = 2;
 const hourMs = 3_600_000;
@@ -25,6 +27,9 @@ class OutputError extends Error {
     this.name = 'OutputError';
   }
 }
+
+/** Repo-relative path of an item file. */
+const itemPath = (item) => `data/items/${item.id}.json`;
 
 function byAge(a, b) {
   return a.updatedAt.localeCompare(b.updatedAt) || a.id.localeCompare(b.id);
@@ -134,11 +139,12 @@ function checkOutput(agent, output, chosenItems, allItems) {
   return decisions;
 }
 
-function applyGenerated(root, niche, agent, artifacts, meta) {
+function applyGenerated(root, niche, agent, artifacts, meta, written) {
   const created = [];
   for (const artifact of artifacts) {
     const path = `${agent.artifactDir}/${artifact.id}.json`;
     writeJsonAtomic(join(root, path), artifact);
+    written.push(path, itemPath(artifact));
     const item = newItem({ id: artifact.id, niche: niche.id, by: agent.name, reason: 'generated' });
     item.artifacts[agent.name] = path;
     saveItem(root, item);
@@ -149,12 +155,13 @@ function applyGenerated(root, niche, agent, artifacts, meta) {
   return created;
 }
 
-function applyDecisions(root, agent, decisions, chosenItems, meta) {
+function applyDecisions(root, agent, decisions, chosenItems, meta, written) {
   const results = [];
   for (const decision of decisions) {
     let item = chosenItems.find((candidate) => candidate.id === decision.itemId);
     const path = `${agent.artifactDir}/${item.id}.json`;
     writeJsonAtomic(join(root, path), decision.artifact);
+    written.push(path, itemPath(item));
     item = { ...item, artifacts: { ...item.artifacts, [agent.name]: path } };
     let to = agent.outcomes[decision.outcome];
     let reason = decision.reason;
@@ -174,7 +181,7 @@ function applyDecisions(root, agent, decisions, chosenItems, meta) {
   return results;
 }
 
-function recordFailure(root, agent, chosenItems, error, meta, maxAttempts) {
+function recordFailure(root, agent, chosenItems, error, meta, maxAttempts, written) {
   if (!chosenItems.length) {
     appendRun(root, { ...meta, itemId: null, status: 'failed', error: error.message });
     return [];
@@ -187,6 +194,7 @@ function recordFailure(root, agent, chosenItems, error, meta, maxAttempts) {
       item.lastError = error.message;
     }
     saveItem(root, item);
+    written.push(itemPath(item));
     appendRun(root, {
       ...meta, itemId: item.id, status: 'failed', error: error.message, attempts: item.attempts,
       ...(blocked ? { from: original.status, to: 'blocked' } : {}),
@@ -206,7 +214,8 @@ export async function tick({ root = repoRoot, runner, now = new Date(), nicheId,
   const plan = planTick({ agents, items, runs: readRuns(root), now });
   if (!plan.chosen) return { ran: null, skipped: plan.skipped };
   const { agent, items: chosenItems } = plan.chosen;
-  const summary = { ran: agent.name, itemIds: chosenItems.map((item) => item.id), skipped: plan.skipped };
+  const written = [];
+  const summary = { ran: agent.name, itemIds: chosenItems.map((item) => item.id), skipped: plan.skipped, changedFiles: written };
   if (dryRun) return { ...summary, dryRun: true };
 
   const started = Date.now();
@@ -225,7 +234,7 @@ export async function tick({ root = repoRoot, runner, now = new Date(), nicheId,
       appendRun(root, { ...meta(), itemId: null, status: 'failed', error: error.message, runnerUnavailable: true });
       return { ...summary, error: error.message, runnerUnavailable: true };
     }
-    return { ...summary, error: error.message, failures: recordFailure(root, agent, chosenItems, error, meta(), maxAttempts) };
+    return { ...summary, error: error.message, failures: recordFailure(root, agent, chosenItems, error, meta(), maxAttempts, written) };
   }
 
   let checked;
@@ -233,19 +242,26 @@ export async function tick({ root = repoRoot, runner, now = new Date(), nicheId,
     checked = checkOutput(agent, response.output, chosenItems, items);
   } catch (error) {
     if (!(error instanceof OutputError)) throw error;
-    return { ...summary, error: error.message, failures: recordFailure(root, agent, chosenItems, error, meta(), maxAttempts) };
+    return { ...summary, error: error.message, failures: recordFailure(root, agent, chosenItems, error, meta(), maxAttempts, written) };
   }
   const eventMeta = { ...meta(), usage: response.usage ?? null };
-  if (agent.mode === 'generate') return { ...summary, created: applyGenerated(root, niche, agent, checked, eventMeta) };
-  return { ...summary, results: applyDecisions(root, agent, checked, chosenItems, eventMeta) };
+  if (agent.mode === 'generate') return { ...summary, created: applyGenerated(root, niche, agent, checked, eventMeta, written) };
+  return { ...summary, results: applyDecisions(root, agent, checked, chosenItems, eventMeta, written) };
 }
 
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   try {
     const { values } = parseArgs({
-      options: { 'dry-run': { type: 'boolean' }, root: { type: 'string' }, niche: { type: 'string' } },
+      options: {
+        'dry-run': { type: 'boolean' }, commit: { type: 'boolean' },
+        root: { type: 'string' }, niche: { type: 'string' },
+      },
     });
-    const result = await tick({ root: values.root ? resolve(values.root) : repoRoot, dryRun: values["dry-run"], nicheId: values.niche });
+    const root = values.root ? resolve(values.root) : repoRoot;
+    const commit = values.commit && !values['dry-run'];
+    if (commit) syncMain(root);
+    const result = await tick({ root, dryRun: values['dry-run'], nicheId: values.niche });
+    if (commit && result.changedFiles?.length) result.commit = commitInternal(root, result.changedFiles, commitMessage(result));
     console.log(JSON.stringify(result, null, 2));
     if (result.error) process.exitCode = 1;
   } catch (error) {

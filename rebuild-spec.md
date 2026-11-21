@@ -24,7 +24,7 @@ The goal is a machine that does real good for coffee lovers: it finds what peopl
 4. **"Don't buy" is a valid output.** Every recommendation has a "keep what you have" path.
 5. **State lives in files.** No hidden memory. Everything is inspectable and diffable in Git.
 6. **Deterministic scheduling, AI only for judgement work.** No LLM orchestrator.
-7. **Humans approve what ships.** Agents open PRs; a human merges.
+7. **Humans approve what ships.** Internal changes (items, research, briefs, drafts, knowledge cards) are committed straight to `main` with no approval, so the pipeline never waits on a merge. Anything that can reach a reader (published posts, site code, offers shown on the site) goes through its own PR that a human merges. The boundary is `engine/scheduler/git-policy.json`. *(Decision 2026-11-21.)*
 8. **Measure before optimizing.** No SEO changes on fewer than 60 to 90 days of data.
 
 ## 3. Scope
@@ -77,7 +77,7 @@ Rules:
 A small Node script (`engine/scheduler/tick.mjs`, no AI) run by `systemd` timer or cron on the always-on Linux machine:
 1. Read the item store and per-agent schedule config.
 2. Pick the highest-priority runnable agent (one at a time, to control usage).
-3. Run it through the runner; validate output against schema; commit to a branch; open a PR (never push to `main`).
+3. Run it through the runner; validate output against schema; commit internal changes to `main` and push. A change touching a public path is never committed by the tick; it goes through a separate PR (principle 7).
 
 ### 4.3 Runner abstraction
 
@@ -96,7 +96,7 @@ All agents use structured JSON output validated by schema. All prompts live in `
 
 ### 5.2 Idea judge (separate run, separate prompt)
 - Scores each idea 1 to 5 on: demand evidence, competitor gap, value-add without personal experience, evidence feasibility, commercial fit (honest), overlap with existing content.
-- Selects at most 3 to advance, rejects the rest with a reason. Rejected ideas stay in the store (ideas can be re-scored when analytics arrives).
+- Selects at most 3 to advance, rejects the rest with a reason. The judge's decision is final; no human confirmation (decision 2026-11-21). Rejected ideas stay in the store (ideas can be re-scored when analytics arrives).
 
 ### 5.3 Research agent
 - **Input:** approved idea. **Output:** updated/new knowledge cards, a research note (what we learned, what is unknown, what competitors say), and filled cells in the product-fit matrix.
@@ -217,9 +217,9 @@ Judge rubric (replaces `agent/editorial-judge.md` dimensions): `readerValue vs c
 Principle: the dashboard answers **"what needs me today, and is this making money?"** It is not a data dump. Build on the existing `backoffice/` (loopback server, `server.mjs`, `app.js`). Read-only first; actions (approve/reject/merge) added in M6 by writing files and opening PRs, never by direct state edits.
 
 Views:
-1. **Today** (home): human action inbox: ideas awaiting approval, drafts awaiting review, blocked items, stale offers needing a match decision, broken links, analyst recommendations. Each row has one button and one-line reason.
+1. **Today** (home): human action inbox: drafts awaiting review (content PRs), blocked items, stale offers needing a match decision, broken links, analyst recommendations. Each row has one button and one-line reason.
 2. **Pipeline**: kanban by status with item age, attempts, and which agent runs next. Queue cap indicators.
-3. **Idea inbox**: card details, demand evidence, judge scores, approve / reject / re-score. Show why rejected ideas were rejected.
+3. **Idea inbox**: card details, demand evidence, judge scores and decisions (informational; the judge's picks stand), with optional override / re-score. Show why rejected ideas were rejected.
 4. **Draft review**: rendered post, side-by-side with judge scores, lint failures, claims map, and top-3 competitor comparison summary. Approve opens/merges the PR.
 5. **Performance**: per post: impressions, clicks, CTR, average position (Search Console), engaged sessions and scroll (GA4), with 7/28/90-day windows and a "too early to judge" badge for young pages. Query-level table to spot "impressions, no clicks".
 6. **Money**: affiliate link clicks by page, button position, market, seller; click-through from visit to merchant; conversion/revenue when affiliate reports are importable (manual CSV import first). Top pages by clicks, pages with traffic but no clicks.
@@ -280,6 +280,6 @@ Gate rule: do not start M5 if M4 posts do not pass the "would you send it to a f
 - Read this spec, `docs/planning-spec.md`, `knowledge/README.md` and the files listed in section 11 before changing anything.
 - Work milestone by milestone. At the end of each: run validators and tests, update `docs/learnings.md`, and summarise what changed and what remains uncertain.
 - Add a `CLAUDE.md` at the repo root with: repo layout, how to run validators, the principles in section 2, and the style rules in section 7.
-- Do not hard-code "coffee" in `engine/`. Do not write secrets to the repo. Do not push to `main`; open PRs.
+- Do not hard-code "coffee" in `engine/`. Do not write secrets to the repo. Internal changes may go to `main`; anything reader-facing needs its own PR (principle 7).
 - Prefer small, tested modules. Every agent output has a JSON Schema and a failing-case test.
 - When a requirement is ambiguous or depends on external terms (billing, affiliate, consent), stop and record an open question instead of guessing.

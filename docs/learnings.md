@@ -26,10 +26,14 @@ We built the engine skeleton from [rebuild-spec.md](../rebuild-spec.md): `data/i
 
 [Scheduler tests](../engine/tests/scheduler.test.mjs) · [Agent contracts](../engine/agents/)
 
+## Decisions
+
+- **2026-11-21 · Git flow.** Internal changes (items, research, briefs, drafts, knowledge cards) are committed straight to `main` by `npm run tick -- --commit`, with no approval, so the pipeline never waits on a merge. Reader-facing paths (`content/published/`, `site/`, `data/offers/`) are never committed by a tick and need their own PR. The boundary is [git-policy.json](../engine/scheduler/git-policy.json). The publish step that opens content PRs arrives with M4/M5.
+- **2026-11-21 · Idea approval.** The idea judge's picks are final. The dashboard shows its decisions for information, with an optional override.
+
 ## Open questions
 
+- **Offers as public paths:** `data/offers/` is treated as reader-facing because prices appear on the site, which would mean a PR for every daily price refresh. Revisit at M7: one option is to have the site read offers at build time from an internal file.
 - **M0 billing (blocking M2):** do `claude -p` runs draw from the subscription or a separate pool? Run one agent on this Mac, inspect `/usage`, and confirm `ANTHROPIC_API_KEY` is unset in the job environment.
-- **PR granularity:** if every agent run opens a PR and the scheduler reads state from `main`, the pipeline stalls until each PR merges (about 6 PRs per post). Options: (a) a long-lived `pipeline` branch where agents commit, with PRs to `main` only at human gates; (b) one PR per item that collects every stage. Git and PR handling is not yet wired into the tick.
-- **Who approves ideas:** the spec lets the idea judge advance up to 3 ideas, but the dashboard "Today" view lists "ideas awaiting approval". Is the judge's advance final, or does a human confirm?
 - **Niche-aware checks:** `market` and `contentType` in artifacts are not yet checked against `niche.json`.
 - **Affiliate terms and consent:** sellers and disclosure text in `niche.json` stay empty until program terms are verified per market.
