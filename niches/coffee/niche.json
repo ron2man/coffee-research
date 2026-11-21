@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "id": "coffee",
+  "name": "Coffee Fieldnotes",
+  "categories": [
+    { "id": "machines", "label": "Home espresso machines" },
+    { "id": "grinders", "label": "Grinders" },
+    { "id": "accessories", "label": "Accessories" }
+  ],
+  "markets": [
+    { "id": "US", "language": "en", "locale": "en-us", "currency": "USD", "status": "primary" },
+    { "id": "GB", "language": "en", "locale": "en-gb", "currency": "GBP", "status": "secondary" }
+  ],
+  "contentTypes": ["troubleshooter-tool", "buying-decision", "compatibility-check", "maintenance-guide"],
+  "commercialRoles": ["primary", "alternative", "dont-buy"],
+  "sellers": [],
+  "disclosures": {},
+  "openQuestions": [
+    "Sellers and disclosure text are empty until affiliate program terms are verified per market (rebuild-spec section 13)."
+  ]
+}

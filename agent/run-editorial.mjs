@@ -4,6 +4,7 @@ import { parseArgs } from 'node:util';
 import { claimEvidence, loadCards, reviewInputs } from './review-inputs.mjs';
 import { assessTopic } from './topic-gate.mjs';
 import { judgeEditorial } from './judge-editorial.mjs';
+import { categories } from './knowledge.mjs';
 
 const start = Date.now();
 const opportunityFiles = new Map();
@@ -43,7 +44,7 @@ function changedPaths(revision) {
       if (readFileSync(path, 'utf8') !== opportunityFiles.get(path)) throw new Error('Commissioning input changed: ' + path);
       return path;
     }
-    const knowledge = /^knowledge\/(?:grinders|machines)\/[a-z0-9-]+\.md$/.test(path);
+    const knowledge = new RegExp(`^knowledge/(?:${categories.join('|')})/[a-z0-9-]+\\.md$`).test(path);
     const editorial = revision && [revision.draft, revision.brief].includes(path);
     if (!knowledge && !editorial) throw new Error('Unexpected workflow change: ' + change);
     return path;

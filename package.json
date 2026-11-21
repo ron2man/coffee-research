@@ -1,0 +1,17 @@
+{
+  "name": "coffee-research",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "test": "node --test",
+    "validate": "node engine/state/validate-repo.mjs && node agent/validate-knowledge.mjs",
+    "tick": "node engine/scheduler/tick.mjs"
+  },
+  "dependencies": {
+    "ajv": "^8.20.0",
+    "ajv-formats": "^3.0.1"
+  }
+}

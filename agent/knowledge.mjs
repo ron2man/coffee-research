@@ -1,7 +1,9 @@
 import { readFile, readdir } from 'node:fs/promises';
 import { basename, join } from 'node:path';
+import { categoryIds, loadNiche } from '../engine/state/niche.mjs';
 
-export const categories = ['machines', 'grinders'];
+// Categories come from niches/<niche>/niche.json (NICHE env var, default coffee).
+export const categories = categoryIds(loadNiche());
 const sourceTypes = ['manufacturer', 'professional-test', 'owner-report', 'merchant'];
 
 function requireCondition(condition, message) {
@@ -101,12 +103,18 @@ function validateCard(markdown, category, filename) {
   return card;
 }
 
-export async function scanKnowledge(root) {
+export async function scanKnowledge(root, categoryList = categories) {
   const cards = new Map();
   const errors = [];
-  for (const category of categories) {
+  for (const category of categoryList) {
     const directory = join(root, category);
-    const entries = await readdir(directory, { withFileTypes: true });
+    let entries;
+    try {
+      entries = await readdir(directory, { withFileTypes: true });
+    } catch (error) {
+      if (error.code === 'ENOENT') continue; // A configured category may have no cards yet.
+      throw error;
+    }
     for (const entry of entries.sort((a, b) => a.name.localeCompare(b.name))) {
       if (!entry.isFile() || !entry.name.endsWith('.md')) continue;
       const path = join(directory, entry.name);

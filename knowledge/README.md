@@ -1,6 +1,6 @@
 # Product knowledge base
 
-Store machines in `machines/` and grinders in `grinders/`. Name each card after its product ID with a `.md` extension. A card contains one fenced JSON block and can include a Markdown heading and summary. Use `YYYY-MM-DD` for dates.
+Store each card in the folder for its category. Categories are listed in `niches/coffee/niche.json` (currently `machines/`, `grinders/` and `accessories/`). Name each card after its product ID with a `.md` extension. A card contains one fenced JSON block and can include a Markdown heading and summary. Use `YYYY-MM-DD` for dates.
 
 This example uses placeholder data.
 

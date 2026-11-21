@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
-import { mkdtempSync, cpSync, mkdirSync, writeFileSync, readFileSync, rmSync } from 'node:fs';
+import { mkdtempSync, cpSync, symlinkSync, mkdirSync, writeFileSync, readFileSync, rmSync } from 'node:fs';
 import { join, delimiter } from 'node:path';
 import { tmpdir } from 'node:os';
 import { fileURLToPath } from 'node:url';
@@ -30,9 +30,10 @@ test('manual runner commits research, commissions a narrower draft and invalidat
   t.after(() => rmSync(directory, { recursive: true, force: true }));
   const cwd = join(directory, 'work');
   mkdirSync(cwd);
-  for (const name of ['agent', 'knowledge', 'site']) cpSync(join(root, name), join(cwd, name), {recursive:true});
+  for (const name of ['agent', 'engine', 'niches', 'knowledge', 'site']) cpSync(join(root, name), join(cwd, name), {recursive:true});
+  symlinkSync(join(root, 'node_modules'), join(cwd, 'node_modules'));
   mkdirSync(join(cwd, 'content/drafts'), {recursive:true});
-  writeFileSync(join(cwd, '.gitignore'), '.backoffice/\n');
+  writeFileSync(join(cwd, '.gitignore'), '.backoffice/\nnode_modules\n');
   const bin = join(directory, 'bin');
   mkdirSync(bin);
   const fixture = join(bin, 'codex');
