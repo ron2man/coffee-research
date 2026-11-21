@@ -1,0 +1,28 @@
+{
+  "scores": {
+    "demandEvidence": {
+      "score": 2,
+      "reason": "The Singletrack thread (Mar 2025) is real, but it is the only signal, and the poster had moved on to replacing the machine."
+    },
+    "competitorGap": {
+      "score": 3,
+      "reason": "Breville support pages list the empty-tank and not-seated causes and the rinse-refill step, and coffeeblog covers the normal cycle. A combined fault tree is only partly missing."
+    },
+    "valueAddWithoutExperience": {
+      "score": 3,
+      "reason": "A light-pattern fault tree is possible, but the recurring post-repair fault probably needs hardware diagnosis we can't do."
+    },
+    "evidenceFeasibility": {
+      "score": 3,
+      "reason": "The Breville manual and support articles cover the cycle steps, but evidence on the float sensor and recurring faults is anecdotal."
+    },
+    "commercialFit": {
+      "score": 3,
+      "reason": "Repair vs replace is a real decision, but descaler and replacement machine are weak links to the actual fault."
+    },
+    "overlap": {
+      "score": 2,
+      "reason": "It overlaps heavily with the archived 'Bambino Plus cleaning vs descaling: which cycle do the lights mean?' post."
+    }
+  }
+}

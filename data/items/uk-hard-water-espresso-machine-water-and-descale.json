@@ -3,13 +3,14 @@
   "id": "uk-hard-water-espresso-machine-water-and-descale",
   "type": "new-post",
   "niche": "coffee",
-  "status": "idea",
+  "status": "rejected",
   "attempts": 0,
   "revisions": 0,
   "createdAt": "2026-11-21T17:35:36.171Z",
-  "updatedAt": "2026-11-21T17:35:36.171Z",
+  "updatedAt": "2026-11-21T20:53:48.395Z",
   "artifacts": {
-    "idea": "data/ideas/uk-hard-water-espresso-machine-water-and-descale.json"
+    "idea": "data/ideas/uk-hard-water-espresso-machine-water-and-descale.json",
+    "idea-judge": "data/idea-scores/uk-hard-water-espresso-machine-water-and-descale.json"
   },
   "history": [
     {
@@ -18,6 +19,13 @@
       "to": "idea",
       "by": "idea",
       "reason": "generated"
+    },
+    {
+      "at": "2026-11-21T20:53:48.395Z",
+      "from": "idea",
+      "to": "rejected",
+      "by": "idea-judge",
+      "reason": "This is a promising angle (postcode hardness plus machine type gives a water choice and a descale interval), but demand rests on side comments in the same single Singletrack thread. Re-score it once there are independent UK signals, such as coffeeforums.co.uk 'do I need a descale' threads."
     }
   ]
 }

@@ -3,13 +3,14 @@
   "id": "breville-builtin-grinder-wont-grind-fine-enough",
   "type": "new-post",
   "niche": "coffee",
-  "status": "idea",
+  "status": "idea_approved",
   "attempts": 0,
   "revisions": 0,
   "createdAt": "2026-11-21T17:35:36.159Z",
-  "updatedAt": "2026-11-21T17:35:36.159Z",
+  "updatedAt": "2026-11-21T20:53:48.391Z",
   "artifacts": {
-    "idea": "data/ideas/breville-builtin-grinder-wont-grind-fine-enough.json"
+    "idea": "data/ideas/breville-builtin-grinder-wont-grind-fine-enough.json",
+    "idea-judge": "data/idea-scores/breville-builtin-grinder-wont-grind-fine-enough.json"
   },
   "history": [
     {
@@ -18,6 +19,13 @@
       "to": "idea",
       "by": "idea",
       "reason": "generated"
+    },
+    {
+      "at": "2026-11-21T20:53:48.391Z",
+      "from": "idea",
+      "to": "idea_approved",
+      "by": "idea-judge",
+      "reason": "I checked the Singletrack thread (Aug 2026) and it is what the card says. Search turns up many Home-Barista threads asking the same thing. Current answers give conflicting tips but no diagnosis order, so a step-by-step fault tree that lets readers keep the machine adds real value."
     }
   ]
 }

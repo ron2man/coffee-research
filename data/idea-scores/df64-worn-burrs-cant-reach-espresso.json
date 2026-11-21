@@ -1,0 +1,28 @@
+{
+  "scores": {
+    "demandEvidence": {
+      "score": 2,
+      "reason": "The Lemmy post exists and is on topic, but it is one undated ('6 months ago') post written as a burr-upgrade report rather than a question."
+    },
+    "competitorGap": {
+      "score": 4,
+      "reason": "The answers are scattered across 150-page Home-Barista DF64 megathreads, with no standalone drift-vs-wear diagnosis."
+    },
+    "valueAddWithoutExperience": {
+      "score": 3,
+      "reason": "The zero-reset and alignment steps can be written up, but telling burr wear apart from other causes without measuring is weakly supported."
+    },
+    "evidenceFeasibility": {
+      "score": 3,
+      "reason": "The manufacturer's zeroing guide exists, but burr lifespan and wear signs for DF64 stock burrs are anecdotal and disputed."
+    },
+    "commercialFit": {
+      "score": 4,
+      "reason": "A free fix versus replacement burrs is an honest buy-or-keep decision."
+    },
+    "overlap": {
+      "score": 5,
+      "reason": "No existing post or item covers DF64 or burr wear."
+    }
+  }
+}

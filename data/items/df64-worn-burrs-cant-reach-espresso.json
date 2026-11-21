@@ -3,13 +3,14 @@
   "id": "df64-worn-burrs-cant-reach-espresso",
   "type": "new-post",
   "niche": "coffee",
-  "status": "idea",
+  "status": "rejected",
   "attempts": 0,
   "revisions": 0,
   "createdAt": "2026-11-21T17:35:36.172Z",
-  "updatedAt": "2026-11-21T17:35:36.172Z",
+  "updatedAt": "2026-11-21T20:53:48.398Z",
   "artifacts": {
-    "idea": "data/ideas/df64-worn-burrs-cant-reach-espresso.json"
+    "idea": "data/ideas/df64-worn-burrs-cant-reach-espresso.json",
+    "idea-judge": "data/idea-scores/df64-worn-burrs-cant-reach-espresso.json"
   },
   "history": [
     {
@@ -18,6 +19,13 @@
       "to": "idea",
       "by": "idea",
       "reason": "generated"
+    },
+    {
+      "at": "2026-11-21T20:53:48.398Z",
+      "from": "idea",
+      "to": "rejected",
+      "by": "idea-judge",
+      "reason": "The single Lemmy signal is an owner happily reporting a finished SSP burr upgrade, not someone asking for a diagnosis. The forum material that search turned up points to alignment and zero drift more than wear. Find posts where owners actually ask 'drift or wear?' before re-scoring."
     }
   ]
 }

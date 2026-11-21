@@ -3,13 +3,14 @@
   "id": "sage-bambino-descale-cycle-fails-tank-empty",
   "type": "new-post",
   "niche": "coffee",
-  "status": "idea",
+  "status": "rejected",
   "attempts": 0,
   "revisions": 0,
   "createdAt": "2026-11-21T17:35:36.171Z",
-  "updatedAt": "2026-11-21T17:35:36.171Z",
+  "updatedAt": "2026-11-21T20:53:48.393Z",
   "artifacts": {
-    "idea": "data/ideas/sage-bambino-descale-cycle-fails-tank-empty.json"
+    "idea": "data/ideas/sage-bambino-descale-cycle-fails-tank-empty.json",
+    "idea-judge": "data/idea-scores/sage-bambino-descale-cycle-fails-tank-empty.json"
   },
   "history": [
     {
@@ -18,6 +19,13 @@
       "to": "idea",
       "by": "idea",
       "reason": "generated"
+    },
+    {
+      "at": "2026-11-21T20:53:48.393Z",
+      "from": "idea",
+      "to": "rejected",
+      "by": "idea-judge",
+      "reason": "The only demand is one Singletrack opener, and the poster had already decided to replace the machine. The float-sensor tip there was a generic guess, not Bambino-specific. The topic also overlaps heavily with the archived Bambino Plus cleaning-vs-descaling post."
     }
   ]
 }

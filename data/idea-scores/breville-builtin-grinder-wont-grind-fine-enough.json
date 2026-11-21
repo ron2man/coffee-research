@@ -1,0 +1,28 @@
+{
+  "scores": {
+    "demandEvidence": {
+      "score": 4,
+      "reason": "The Singletrack Barista Pro thread (30 Aug 2026) matches the card, and search shows many independent Home-Barista threads on Barista Express/Pro grinders that won't go fine enough."
+    },
+    "competitorGap": {
+      "score": 3,
+      "reason": "Seattle Coffee Gear has a top-burr adjustment guide and forums cover pieces of the fix, but the advice disagrees (don't touch the burr, shim it, replace it) and nobody gives a beans → basket → burr → wear → new grinder order."
+    },
+    "valueAddWithoutExperience": {
+      "score": 4,
+      "reason": "A diagnosis order with a stopping rule (burr contact, wear, older units with no internal adjustment) can be built from manuals and owner reports without hands-on testing."
+    },
+    "evidenceFeasibility": {
+      "score": 4,
+      "reason": "Breville manuals and support pages document the upper-burr adjustment and replacement burrs, and owner reports are plentiful. Model-year differences need care."
+    },
+    "commercialFit": {
+      "score": 4,
+      "reason": "There is an honest choice between a free fix, a cheap replacement burr and a standalone grinder, and keeping the machine is the default path."
+    },
+    "overlap": {
+      "score": 4,
+      "reason": "The archived Bambino grinder guide is about a different machine and a buying decision, not fixing a built-in grinder."
+    }
+  }
+}

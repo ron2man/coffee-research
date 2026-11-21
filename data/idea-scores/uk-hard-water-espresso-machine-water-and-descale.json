@@ -1,0 +1,28 @@
+{
+  "scores": {
+    "demandEvidence": {
+      "score": 2,
+      "reason": "The only signal is replies in one Singletrack thread (Mar 2025) whose main topic is a broken Bambino. It is verified, but it is one source and incidental."
+    },
+    "competitorGap": {
+      "score": 3,
+      "reason": "Top results are generic vendor intervals (Harvey, Nespresso, De'Longhi, Bella Barista), but Decent's water doc and Bella Barista already address bottled and filter water reasonably well."
+    },
+    "valueAddWithoutExperience": {
+      "score": 4,
+      "reason": "A rule keyed to the reader's supplier hardness and machine type, with published bottled-water mineral data, can beat generic intervals without testing."
+    },
+    "evidenceFeasibility": {
+      "score": 4,
+      "reason": "UK water supplier hardness lookups, bottled-water labels, Brita specs and manufacturer descale guidance are all published."
+    },
+    "commercialFit": {
+      "score": 3,
+      "reason": "The honest path is often 'change nothing, descale on schedule', and filter jug and descaler are low-stakes purchases."
+    },
+    "overlap": {
+      "score": 4,
+      "reason": "It only slightly touches the archived Bambino descaling post and is otherwise distinct."
+    }
+  }
+}
