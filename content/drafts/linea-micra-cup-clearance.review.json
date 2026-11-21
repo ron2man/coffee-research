@@ -1,0 +1,28 @@
+{
+  "draft": "content/drafts/linea-micra-cup-clearance.md",
+  "brief": "content/drafts/linea-micra-cup-clearance.brief.md",
+  "verdict": "revise",
+  "scores": {
+    "topicSelection": {
+      "score": 3,
+      "reason": "Recurring owner questions and the comparison with the Encore ESP upgrade justify a US editorial experiment. The primary query reads like a research prompt, and existing coverage already covers measuring clearance and going bottomless. Traffic and ranking potential remain unmeasured. The Home-Barista review was available only through indexed excerpts. [Owner discussion](https://www.reddit.com/r/LaMarzocco/comments/1syosjz/micra_cup_clearance/) · [Home-Barista review](https://www.home-barista.com/blog/la-marzocco-linea-micra-espresso-machine-review-t83283.html) · [noto studio guide](https://noto-studio.de/blogs/news/linea-micra-cup-clearance)"
+    },
+    "evidence": {
+      "score": 4,
+      "reason": "La Marzocco’s US documentation confirms the included kit, three configurations, fitting instructions, and cleaning advice. The video could not be verified directly. The practical fit test avoids unsupported universal dimensions, but the evidence provides no measured clearance for shoppers to use before purchase. [US product listing](https://home.lamarzoccousa.com/product/linea-micra/) · [Workflow guide](https://home.lamarzoccousa.com/?p=292461) · [Maintenance guide](https://home.lamarzoccousa.com/?p=397148)"
+    },
+    "readerValue": {
+      "score": 4,
+      "reason": "The decision table and level insertion and removal test give owners a concrete way to check their setup. Shoppers get less help because the draft leaves them to work out how to request a measurement they can compare with their cup and scale."
+    },
+    "onPageSeo": {
+      "score": 4,
+      "reason": "The title, early answer, decision-ordered headings, slug, and meta description suit the intent. The brief explains why no internal link fits. State the stock-tray scope up front so readers immediately know which setup the guide covers."
+    }
+  },
+  "actions": [
+    "Add a buyer-facing measurement request for the distance from the stock tray grate to the lowest obstruction along the cup’s path in the intended portafilter configuration. Explain how to compare it with the combined height of the scale, mat, and cup while allowing room to slide the cup out level.",
+    "Use La Marzocco’s written workflow guide as the primary fitting reference and paraphrase the orientation and locking motion in the draft. Keep the video as a supplement if playback can be confirmed. [Workflow guide](https://home.lamarzoccousa.com/?p=292461)",
+    "Record “Linea Micra cup clearance” as the primary query, keep cup-and-scale phrasing as related queries, and define the competitive gap around choosing among all three stock configurations and checking the full cup path. Keep the experiment label and the unmeasured traffic and ranking status."
+  ]
+}
