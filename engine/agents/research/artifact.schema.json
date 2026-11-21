@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "research.artifact.schema.json",
   "title": "Research note (rebuild-spec 5.3)",
-  "description": "v0 contract. M3 adds knowledge-card writes and matrix cell values; card edits are checked by agent/validate-knowledge.mjs.",
+  "description": "v0 contract. M3 adds knowledge-card changes as part of this output (the agent has no write tools); the tick validates them with the knowledge validator and writes them.",
   "type": "object",
   "additionalProperties": false,
   "required": [

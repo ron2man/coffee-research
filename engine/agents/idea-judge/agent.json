@@ -11,7 +11,9 @@
   },
   "maxAdvance": {
     "outcome": "advance",
-    "max": 3
+    "max": 3,
+    "overflow": "reject",
+    "rankBy": "scores"
   },
   "inputArtifacts": [
     "idea"

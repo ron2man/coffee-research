@@ -24,11 +24,32 @@ function git(root, args) {
   return result.stdout.trim();
 }
 
-/** Refuse to run unless the checkout is on the main branch; then fast-forward from the remote. */
+function tryGit(root, args) {
+  try {
+    git(root, args);
+    return null;
+  } catch (error) {
+    return error;
+  }
+}
+
+/**
+ * Put local tick commits on top of the remote branch. Tick commits only touch internal data
+ * files, so a rebase is safe; on a conflict the rebase is aborted and the error says so.
+ */
+function rebaseOnto(root, remote, branch) {
+  const failed = tryGit(root, ['pull', '--rebase', '--autostash', '--quiet', remote, branch]);
+  if (!failed) return;
+  tryGit(root, ['rebase', '--abort']);
+  throw new Error(`Could not rebase local ${branch} onto ${remote}/${branch}; resolve by hand, then rerun the tick. ${failed.message}`);
+}
+
+/** Refuse to run unless the checkout is on the main branch; then sync with the remote. */
 export function syncMain(root, { remote = policy.remote, branch = policy.mainBranch } = {}) {
   const current = git(root, ['symbolic-ref', '--short', 'HEAD']);
   if (current !== branch) throw new Error(`Scheduler commits run only on ${branch} (checkout is on ${current})`);
-  git(root, ['pull', '--ff-only', '--quiet', remote, branch]);
+  // Fast-forward normally; if an earlier push failed and someone pushed since, rebase instead.
+  if (tryGit(root, ['pull', '--ff-only', '--quiet', remote, branch])) rebaseOnto(root, remote, branch);
 }
 
 /**
@@ -43,7 +64,11 @@ export function commitInternal(root, paths, message, { remote = policy.remote, b
   if (!internal.length) return null;
   git(root, ['add', '--', ...internal]);
   git(root, ['commit', '--quiet', '-m', message, '--', ...internal]);
-  git(root, ['push', '--quiet', remote, `HEAD:refs/heads/${branch}`]);
+  // Someone may have pushed while the agent ran: rebase once and retry.
+  if (tryGit(root, ['push', '--quiet', remote, `HEAD:refs/heads/${branch}`])) {
+    rebaseOnto(root, remote, branch);
+    git(root, ['push', '--quiet', remote, `HEAD:refs/heads/${branch}`]);
+  }
   return git(root, ['rev-parse', 'HEAD']);
 }
 

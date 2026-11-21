@@ -17,6 +17,13 @@ const FLOWS = {
   },
 };
 
+/** The status a new item of this type starts in (the first state of its flow). */
+export function initialStatus(type = 'new-post') {
+  const flow = FLOWS[type];
+  if (!flow) throw new Error(`Unknown item type: ${type}`);
+  return Object.keys(flow)[0];
+}
+
 export function allowedTransitions(item) {
   const flow = FLOWS[item.type];
   if (!flow) throw new Error(`Unknown item type: ${item.type}`);
@@ -34,6 +41,8 @@ export function allowedTransitions(item) {
  * Return a new item moved to `to`. Throws on an illegal move.
  * Entering a side state remembers where to resume; leaving it clears that.
  * Attempts reset on every move except into `blocked`.
+ * Reopening a rejected item (rejected → initial status) starts it over: revisions reset and
+ * only the generating agent's artifact is kept, so later agents never see stale reviews.
  */
 export function transition(item, to, { by, reason = '', at = new Date().toISOString() }) {
   if (!by) throw new Error('transition requires `by`');
@@ -55,6 +64,11 @@ export function transition(item, to, { by, reason = '', at = new Date().toISOStr
     delete next.lastError;
   }
   if (to !== 'blocked') next.attempts = 0;
+  if (item.status === 'rejected' && to === initialStatus(item.type)) {
+    const generator = item.history[0]?.by;
+    next.artifacts = generator && item.artifacts[generator] ? { [generator]: item.artifacts[generator] } : {};
+    next.revisions = 0;
+  }
   return next;
 }
 

@@ -36,6 +36,25 @@ function envelopeSchema(agent) {
   };
 }
 
+/** Strip keywords that only make sense at a schema's root, so it can be inlined. */
+function inlineable(schema) {
+  const { $schema, $id, ...rest } = schema;
+  return rest;
+}
+
+/**
+ * The full output contract (envelope with the artifact schema inlined). Passed to the runner
+ * so the model gets one schema; the tick still validates envelope and artifact separately.
+ */
+export function outputSchema(agent, artifactSchema) {
+  const envelope = structuredClone(envelopeSchema(agent));
+  const artifact = inlineable(artifactSchema);
+  if (agent.mode === 'generate') envelope.properties.items.items = artifact;
+  else if (agent.mode === 'item') envelope.properties.artifact = artifact;
+  else envelope.properties.decisions.items.properties.artifact = artifact;
+  return envelope;
+}
+
 function checkTargets(agent) {
   if (agent.mode === 'generate') return;
   // Every outcome must map to a status reachable from the input status.
@@ -52,6 +71,9 @@ function checkTargets(agent) {
   if (agent.maxAdvance && !(agent.maxAdvance.outcome in agent.outcomes)) {
     throw new Error(`Agent ${agent.name}: maxAdvance outcome is not an outcome`);
   }
+  if (agent.maxAdvance?.overflow && !(agent.maxAdvance.overflow in agent.outcomes)) {
+    throw new Error(`Agent ${agent.name}: maxAdvance overflow outcome is not an outcome`);
+  }
 }
 
 export function loadAgent(name, dir = agentsDir) {
@@ -60,12 +82,14 @@ export function loadAgent(name, dir = agentsDir) {
   if (agent.name !== name) throw new Error(`${name}/agent.json: name must match folder`);
   checkTargets(agent);
   const promptPath = join(base, 'prompt.md');
+  const artifactSchemaPath = join(base, 'artifact.schema.json');
   return {
     ...agent,
     dir: base,
     promptPath: existsSync(promptPath) ? promptPath : null,
     validateEnvelope: compile(envelopeSchema(agent)),
-    validateArtifact: compileFile(join(base, 'artifact.schema.json')),
+    validateArtifact: compileFile(artifactSchemaPath),
+    outputSchema: outputSchema(agent, readJson(artifactSchemaPath)),
   };
 }
 

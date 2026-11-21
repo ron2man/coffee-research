@@ -1,6 +1,6 @@
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
 
-export function openResearchTasks(directory = 'content/opportunities', drafts = 'content/drafts') {
+export function openResearchTasks(directory = 'content/opportunities', drafts = 'content/archive/drafts') {
   const tasks = [];
   const files = existsSync(directory) ? readdirSync(directory).sort() : [];
   for (const name of files.filter(name => name.endsWith('.json'))) {

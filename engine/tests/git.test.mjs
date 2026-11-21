@@ -77,3 +77,49 @@ test('scheduler commits refuse to run off the main branch', (t) => {
   git('switch', '-q', '-c', 'feature');
   assert.throws(() => syncMain(root), /only on main \(checkout is on feature\)/);
 });
+
+test('a push rejected because main moved is rebased and retried', async (t) => {
+  const { root, git, remoteGit } = repo(t);
+  // Someone else pushes to main while the agent is running.
+  const other = join(root, '..', 'other');
+  execFileSync('git', ['clone', '-q', join(root, '..', 'remote.git'), other]);
+  const otherGit = (...args) => execFileSync('git', args, { cwd: other, encoding: 'utf8' }).trim();
+  otherGit('config', 'user.email', 'human@example.test');
+  otherGit('config', 'user.name', 'Human');
+  writeFileSync(join(other, 'README.md'), 'human edit\n');
+  otherGit('add', 'README.md');
+  otherGit('commit', '-qm', 'Human edit');
+  otherGit('push', '-q', 'origin', 'main');
+
+  saveItem(root, newItem({ id: 'sour-shots', niche: 'coffee', status: 'idea_approved', by: 'test' }));
+  const sha = commitInternal(root, ['data/items/sour-shots.json'], 'tick(test): seed');
+  assert.equal(remoteGit('rev-parse', 'main'), sha);
+  assert.deepEqual(remoteGit('log', '--format=%s', 'main').split('\n').slice(0, 2), ['tick(test): seed', 'Human edit']);
+
+  // A later sync after a diverged history also recovers instead of stopping the scheduler.
+  git('reset', '-q', '--hard', 'HEAD~2');
+  writeFileSync(join(root, 'local.json'), '{}\n');
+  git('add', 'local.json');
+  git('commit', '-qm', 'Unpushed tick commit');
+  syncMain(root);
+  assert.equal(git('log', '-1', '--format=%s'), 'Unpushed tick commit');
+  assert.equal(git('rev-parse', 'HEAD~1'), sha);
+});
+
+test('an agent that writes files itself fails the run and nothing is committed for it', async (t) => {
+  const { root, git } = repo(t);
+  saveItem(root, newItem({ id: 'sour-shots', niche: 'coffee', status: 'idea_approved', by: 'test' }));
+  git('add', 'data/items/sour-shots.json');
+  git('commit', '-qm', 'Seed item');
+  writeFileSync(join(root, 'human-notes.txt'), 'already dirty before the run');
+  const sneaky = (input, request) => {
+    mkdirSync(join(request.root, 'knowledge/grinders'), { recursive: true });
+    writeFileSync(join(request.root, 'knowledge/grinders/x.md'), 'unvalidated');
+    return research();
+  };
+  const result = await tick({ root, runner: fakeRunner({ research: sneaky }) });
+  assert.match(result.error, /changed files outside its output.*knowledge\/grinders\/x\.md/);
+  assert.doesNotMatch(result.error, /human-notes/);
+  assert.equal(result.failures[0].attempts, 1);
+  assert.ok(!result.changedFiles.includes('knowledge/grinders/x.md'));
+});

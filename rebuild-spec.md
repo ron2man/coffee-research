@@ -74,10 +74,11 @@ Rules:
 
 ### 4.2 Scheduler
 
-A small Node script (`engine/scheduler/tick.mjs`, no AI) run by `systemd` timer or cron on the always-on Linux machine:
+A small Node script (`engine/scheduler/tick.mjs`, no AI) run on a timer: `launchd` on the project lead's Mac first, then cron or `systemd` on another always-on machine or in the cloud. Do not assume Linux. Only one tick runs per checkout (lock file in `.backoffice/`); when the scheduler moves machines, the committed `data/scheduler/state.json` carries the schedule:
 1. Read the item store and per-agent schedule config.
 2. Pick the highest-priority runnable agent (one at a time, to control usage).
-3. Run it through the runner; validate output against schema; commit internal changes to `main` and push. A change touching a public path is never committed by the tick; it goes through a separate PR (principle 7).
+3. Run it through the runner; validate output against schema; commit internal changes to `main` and push (rebasing once if `main` moved during the run). A change touching a public path is never committed by the tick; it goes through a separate PR (principle 7).
+4. Agents never write files. They get read-only tools and return everything (including knowledge-card changes) as output; the tick validates it and writes the files. A file that changes during a run without the tick writing it fails the run.
 
 ### 4.3 Runner abstraction
 
@@ -245,13 +246,13 @@ Rewrite: `agent/editorial-workflow.md`, `agent/editorial-judge.md`, `agent/skill
 
 Remove hard-coding: `categories = ['machines', 'grinders']` in `agent/knowledge.mjs` and category paths in `research-plan.mjs` and `discover-baratza.mjs` should read `niches/coffee/niche.json`.
 
-Existing drafts: archive in `content/archive/`; the rewritten Bambino grinder guide (with picker) is the quality reference for new posts.
+Existing drafts: archive in `content/archive/` (done 2026-11-21: `content/archive/drafts/`; the legacy pipeline, backoffice and preview read from there); the rewritten Bambino grinder guide (with picker) is the quality reference for new posts.
 
 ## 12. Milestones and acceptance tests
 
 | M | Deliverable | Acceptance |
 |---|---|---|
-| M0 | Runner + billing check on Linux box | One headless agent run completes; `/usage` shows what it consumed; learnings entry written; no API key in job env |
+| M0 | Runner + billing check on the project lead's Mac | One headless agent run completes; `/usage` shows what it consumed; learnings entry written; no API key in job env |
 | M1 | Item store, status machine, schemas, scheduler tick, run logging | Simulated items advance through states; invalid output rejected; queue caps and 2-failure `blocked` work |
 | M2 | Idea agent + idea judge | 10 real coffee idea cards generated; judge advances ≤3; project lead agrees at least 2 are worth writing |
 | M3 | Research agent + product-fit matrix (grinder × Bambino first) | Matrix cells each have value+source or `unknown`; research task list generated from gaps |
@@ -278,6 +279,7 @@ Gate rule: do not start M5 if M4 posts do not pass the "would you send it to a f
 ## 14. Working instructions for Claude Code
 
 - Read this spec, `docs/planning-spec.md`, `knowledge/README.md` and the files listed in section 11 before changing anything.
+- Human actions on items go through `npm run item` (resume, reject, park, reopen), never by editing item files.
 - Work milestone by milestone. At the end of each: run validators and tests, update `docs/learnings.md`, and summarise what changed and what remains uncertain.
 - Add a `CLAUDE.md` at the repo root with: repo layout, how to run validators, the principles in section 2, and the style rules in section 7.
 - Do not hard-code "coffee" in `engine/`. Do not write secrets to the repo. Internal changes may go to `main`; anything reader-facing needs its own PR (principle 7).

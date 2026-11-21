@@ -28,8 +28,8 @@ export function claimEvidence(brief, cards, required = true) {
 
 export function reviewInputs(slug, cards) {
   if (!/^[a-z0-9-]+$/.test(slug)) throw new Error('Invalid slug');
-  const draft = read('content/drafts/' + slug + '.md');
-  const brief = read('content/drafts/' + slug + '.brief.md');
+  const draft = read('content/archive/drafts/' + slug + '.md');
+  const brief = read('content/archive/drafts/' + slug + '.brief.md');
   const evidence = claimEvidence(brief, cards);
   const decisionPath = 'content/opportunities/' + slug + '.json';
   const commission = existsSync(new URL(decisionPath, root)) ? JSON.parse(read(decisionPath)) : null;
@@ -42,6 +42,6 @@ export function reviewInputs(slug, cards) {
 }
 
 export function matchesReview(slug, review, inputs) {
-  return review?.draft === 'content/drafts/' + slug + '.md' &&
-    review.brief === 'content/drafts/' + slug + '.brief.md' && review.fingerprint === inputs.fingerprint;
+  return review?.draft === 'content/archive/drafts/' + slug + '.md' &&
+    review.brief === 'content/archive/drafts/' + slug + '.brief.md' && review.fingerprint === inputs.fingerprint;
 }
