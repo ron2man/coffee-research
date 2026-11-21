@@ -1,0 +1,15 @@
+# ECM Classika III vs Classika PID: Is the faster warm-up worth paying for?
+
+Choose the **Classika III** if you frequently start from cold and a shorter wait would change when you make espresso. A discounted **Classika PID** is worth considering if you already turn the machine on while you get the rest of breakfast ready. ECM advertises **6.5 minutes** to brew readiness for the III and **11 minutes** for the currently listed PID. Use those figures to judge whether the difference matters to your routine. Your own warm-up time may vary. [ECM Classika III](https://www.ecm.de/en/products/classika-iii/) · [ECM Classika PID](https://www.ecm.de/en/products/classika-pid/)
+
+## How can I tell which Classika a seller is offering?
+
+ECM calls the Classika III the successor to the Classika PID. If the listing just says “Classika”, ask for the full model and a photo of the controls or rating plate. ECM’s English catalogue lists the III as **CM100024-00**, with an OLED display and a dial you turn to browse settings and press to select. It lists the PID as **CM100003-00**. For a UK purchase, confirm the voltage and plug on the exact unit. ECM’s Classika PID manual lists the UK version at 230 V, 50 Hz. [ECM successor announcement](https://www.ecm.de/en/ecm-classika-iii-single-boiler-espresso-machine/) · [Classika III catalogue](https://www.ecm.de/en/products/classika-iii/) · [Classika PID catalogue](https://www.ecm.de/en/products/classika-pid/) · [Classika PID manual, §3.2](https://www.ecm.de/wp-content/uploads/2025/04/BA_Classika_-PID_2412-web.pdf#page=24)
+
+## What do the warm-up times tell me?
+
+The III uses a brew group with built-in heating cartridges. The currently listed PID also has Fast Heat-Up, and its manual describes a flush when the screen shows `FLU`, followed by a ready cue. If you’re looking at a used PID, ask which manual applies and whether its display has that sequence before assuming the current catalogue’s timing applies. For the III, ask the seller to show the full cold-start sequence if the time to your first shot is the deciding factor. The published figures leave open how much time you’ll save under the same conditions in your kitchen. [Classika III catalogue](https://www.ecm.de/en/products/classika-iii/) · [Classika PID catalogue](https://www.ecm.de/en/products/classika-pid/) · [Classika PID manual, §6.1](https://www.ecm.de/wp-content/uploads/2025/04/BA_Classika_-PID_2412-web.pdf#page=26)
+
+## Will the Classika III make back-to-back milk drinks easier?
+
+Both machines use one boiler for brewing and steaming, so plan on switching temperatures between those jobs. ECM lists a 0.5 L boiler on the III and a 0.75 L boiler on the PID. If you mostly make milk drinks, ask for a demonstration from the first shot through steaming and back to the next shot. The cold-start figures don’t tell you how long that sequence takes. [Classika III catalogue](https://www.ecm.de/en/products/classika-iii/) · [Classika PID catalogue](https://www.ecm.de/en/products/classika-pid/)
