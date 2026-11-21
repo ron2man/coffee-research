@@ -11,7 +11,7 @@ Repeat a shot with the same coffee, basket, dose and target yield. Check that yo
 | What you see | Which guide to use |
 |---|---|
 | A numbered ring around the top and a blue inner ring under the bean bin | [Original Opus (Opus 1)](https://help.fellowproducts.com/hc/en-us/articles/12697812844315-What-does-the-Opus-1-inner-adjustment-ring-do-and-how-do-I-use-it) |
-| A stepless dial on the side | [Opus 2](https://fellowproducts.com/products/opus-2-conical-burr-grinder) |
+| §A stepless dial on the side | [Opus 2](https://fellowproducts.com/products/opus-2-conical-burr-grinder) |
 
 Use your grinder’s own scale. A number from an Opus 1 recipe has no verified equivalent on Opus 2. For Opus 2, Fellow suggests starting around 0–2 for espresso and adjusting for your beans, basket and machine. [Fellow’s Opus 2 espresso settings FAQ](https://fellowproducts.com/products/opus-2-conical-burr-grinder)
 
