@@ -31,3 +31,7 @@ Run `node agent/research-plan.mjs --limit 5 --record` to record a planner run in
 ## Discover products
 
 Run `node agent/discover-baratza.mjs` to preview candidates from Baratza's official US grinder catalog. Use `node agent/discover-baratza.mjs --apply` to add new models directly to the queue and record the run in the backoffice. Listings that match an existing model are skipped. A listing for a market outside a card's recorded variants is reported as a lead for separate verification. Each new candidate carries the manufacturer's catalog and product URLs. Discovery adds candidates for research.
+
+## Run one editorial cycle
+
+From a clean checkout, run `node agent/run-editorial.mjs`. Use the same command for a manual pilot or a local scheduler. The host needs Node.js, Git, a signed-in Codex CLI on its PATH, network access, and permission to push the current branch to `origin`. The workflow selects its own topic, validates knowledge and draft claim references, pushes accepted changes, and records the run locally. Files in `content/drafts/` are editorial drafts.
