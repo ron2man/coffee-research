@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "id": "sage-bambino-descale-cycle-fails-tank-empty",
+  "type": "new-post",
+  "niche": "coffee",
+  "status": "idea",
+  "attempts": 0,
+  "revisions": 0,
+  "createdAt": "2026-11-21T17:35:36.171Z",
+  "updatedAt": "2026-11-21T17:35:36.171Z",
+  "artifacts": {
+    "idea": "data/ideas/sage-bambino-descale-cycle-fails-tank-empty.json"
+  },
+  "history": [
+    {
+      "at": "2026-11-21T17:35:36.171Z",
+      "from": null,
+      "to": "idea",
+      "by": "idea",
+      "reason": "generated"
+    }
+  ]
+}

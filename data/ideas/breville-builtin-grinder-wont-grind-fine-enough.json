@@ -1,0 +1,36 @@
+{
+  "id": "breville-builtin-grinder-wont-grind-fine-enough",
+  "question": "My Breville Barista Express or Pro can't grind fine enough even at setting 1. Do I adjust the upper burr, replace the burr, or give up and buy a separate grinder?",
+  "audience": "Owners of Breville/Sage all-in-one machines with a built-in grinder (Barista Express, Barista Pro), often bought new or refurbished, mostly beginners who already tried the finest dial setting",
+  "market": "US",
+  "language": "en",
+  "pain": "Shots run fast and taste sour or thin even at the finest grind setting, and the owner can't tell whether it's the beans, their technique, a worn or misset upper burr, or the grinder's limits.",
+  "decision": "Fix the built-in grinder (move the upper burr, clean it, replace a worn burr) and keep the machine, or buy a standalone espresso grinder and use the built-in one only as a backup",
+  "contentType": "troubleshooter-tool",
+  "demand": {
+    "kind": "qualitative",
+    "signals": [
+      {
+        "url": "https://singletrackworld.com/forum/off-topic/sage-breville-barista-pro-grinder/",
+        "date": "2026-08-30",
+        "note": "New owner of a refurbished Barista Pro can't grind fine enough and gets gritty, chunky grounds. Asks whether the grinder or the beans are at fault. Replies split between adjusting or shimming the upper burr and buying a separate grinder. Moving the upper burr to 1 plus a Breville replacement burr fixed it."
+      },
+      {
+        "url": "https://lemmy.world/post/5716405",
+        "date": "2023-09-25",
+        "note": "New Barista Express owner gets sour, under-extracted shots and asks if tamping is the cause. One reply points to the undocumented internal burr adjustment as what made the big difference."
+      },
+      {
+        "url": "https://www.coffeeforums.com/threads/help-please-breville-barista-express-grinder-problems-suddenly.18107",
+        "date": "2018-08-24",
+        "note": "Barista Express suddenly needs the finest setting and still under-extracts. Breville support's advice (fresh beans, filtered water) and cleaning the burrs didn't help. Owner asks how the dial moves the burr."
+      }
+    ]
+  },
+  "competitorGap": "The top answers disagree with each other. Some say the internal burr shouldn't be touched until it wears, others say move it straight to the finest position, others say shim it or buy a grinder. None gives a diagnosis order that rules out stale supermarket beans, a pressurised basket and dose first, then upper burr position, then a worn burr (ask Breville for a replacement, as one owner did), and only then a new grinder. Burr-clash risk and warranty implications are mentioned in passing or not at all.",
+  "valueAdd": "A step-by-step diagnosis (beans, basket, dose, upper-burr position, burr wear, burr contact) with a clear stopping point for when the built-in grinder has reached its limit. Every step before the last costs nothing or only a replacement burr, so many readers can keep their machine. For readers who do reach the last step, a decision rule: buy a standalone grinder if they want light roasts or plan to upgrade the machine later, and otherwise stay with the fixed built-in grinder.",
+  "commercialPath": [
+    "replacement upper burr",
+    "standalone espresso grinder"
+  ]
+}

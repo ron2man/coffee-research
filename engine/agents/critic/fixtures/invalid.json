@@ -1,0 +1,8 @@
+{
+  "artifact": {
+    "summary": "",
+    "findings": [{ "severity": "blocker", "problem": "x" }],
+    "keep": [],
+    "promptChanges": []
+  }
+}

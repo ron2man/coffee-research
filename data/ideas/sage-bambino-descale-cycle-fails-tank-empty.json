@@ -1,0 +1,26 @@
+{
+  "id": "sage-bambino-descale-cycle-fails-tank-empty",
+  "question": "My Sage Bambino's descale or clean cycle won't finish and it keeps saying the water tank is empty. Can I fix it, or is it time for a sturdier machine?",
+  "audience": "UK Sage Bambino or Bambino Plus owners just past warranty, espresso-only users in hard-water areas",
+  "market": "GB",
+  "language": "en",
+  "pain": "The descale and clean cycles fail with a no-water-in-tank warning and flashing lights, even after several runs, different descalers and a warranty repair, so the machine is effectively unusable.",
+  "decision": "Fix it themselves (float sensor, finishing the rinse step correctly, scale blocking flow), pay for a repair, or replace it with a more repairable machine",
+  "contentType": "troubleshooter-tool",
+  "demand": {
+    "kind": "qualitative",
+    "signals": [
+      {
+        "url": "https://singletrackworld.com/forum/off-topic/espresso-machines-not-bean-to-cup-pod",
+        "date": "2025-03-26",
+        "note": "Bambino owner says the clean and descale cycles fail with a no-water-in-tank message and flashing lights, and the fault came back after a warranty repair. They want a more robust machine under about £400. One reply suggests the tank float sensor is sticking."
+      }
+    ]
+  },
+  "competitorGap": "The main Bambino Plus descale walkthrough (coffeeblog.co.uk) covers only the normal cycle. It doesn't say what to do if the cycle stalls, the lights keep flashing, or the tank-empty error appears. Breville's support article on descales that won't complete was unavailable when opened. No source puts the float sensor check, the rinse refill step, scale restricting flow, and the repair-vs-replace decision in one place.",
+  "valueAdd": "A fault tree that starts from the light pattern: check the tank float magnet first, then whether the rinse step was completed, then signs of scale blocking flow. It ends with a repair-or-replace rule based on warranty status and repair cost against replacement price. Many readers can keep their Bambino, and the 'replace it' path is only for repeat failures.",
+  "commercialPath": [
+    "descaler",
+    "espresso machine"
+  ]
+}

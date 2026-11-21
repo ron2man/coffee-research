@@ -1,5 +1,5 @@
 // Loads agent definitions and builds the validators for their outputs.
-import { existsSync, readdirSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { readJson } from '../state/store.mjs';
@@ -10,6 +10,9 @@ export const agentsDir = fileURLToPath(new URL('./', import.meta.url));
 const definitionSchema = join(agentsDir, 'agent.schema.json');
 
 function envelopeSchema(agent) {
+  if (agent.mode === 'review' || agent.mode === 'tune') {
+    return { type: 'object', additionalProperties: false, required: ['artifact'], properties: { artifact: { type: 'object' } } };
+  }
   if (agent.mode === 'generate') {
     return {
       type: 'object', additionalProperties: false, required: ['items'],
@@ -50,13 +53,13 @@ export function outputSchema(agent, artifactSchema) {
   const envelope = structuredClone(envelopeSchema(agent));
   const artifact = inlineable(artifactSchema);
   if (agent.mode === 'generate') envelope.properties.items.items = artifact;
-  else if (agent.mode === 'item') envelope.properties.artifact = artifact;
+  else if (['item', 'review', 'tune'].includes(agent.mode)) envelope.properties.artifact = artifact;
   else envelope.properties.decisions.items.properties.artifact = artifact;
   return envelope;
 }
 
 function checkTargets(agent) {
-  if (agent.mode === 'generate') return;
+  if (['generate', 'review', 'tune'].includes(agent.mode)) return;
   // Every outcome must map to a status reachable from the input status.
   const probe = { id: 'probe', type: 'new-post', status: agent.inputStatus };
   const reachable = allowedTransitions(probe);
@@ -92,6 +95,27 @@ export function loadAgent(name, dir = agentsDir) {
     outputSchema: outputSchema(agent, readJson(artifactSchemaPath)),
   };
 }
+
+/**
+ * The full system instructions for a run: the agent's prompt.md, then niche guidance
+ * (niches/<niche>/agents/<agent>.md) and any niche files the agent lists in `nicheFiles`.
+ */
+export function instructionsFor(agent, root, nicheId) {
+  if (!agent.promptPath) return null;
+  const parts = [readFileSync(agent.promptPath, 'utf8')];
+  const nicheDir = join(root, 'niches', nicheId);
+  const guidance = join(nicheDir, 'agents', `${agent.name}.md`);
+  if (existsSync(guidance)) parts.push(`# Niche guidance (${nicheId})\n\n${readFileSync(guidance, 'utf8')}`);
+  for (const file of agent.nicheFiles ?? []) {
+    const path = join(nicheDir, file);
+    if (!existsSync(path)) throw new Error(`Agent ${agent.name}: niche file ${file} not found in ${nicheDir}`);
+    parts.push(`# Niche file: ${file}\n\n${readFileSync(path, 'utf8')}`);
+  }
+  return parts.join('\n\n---\n\n');
+}
+
+/** Agents that produce pipeline output (and so can be reviewed and tuned). */
+export const isPipelineAgent = (agent) => ['generate', 'batch', 'item'].includes(agent.mode);
 
 export function loadAgents(dir = agentsDir) {
   return readdirSync(dir, { withFileTypes: true })

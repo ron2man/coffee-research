@@ -1,2 +1,3 @@
 .backoffice/
 node_modules/
+site/dist/

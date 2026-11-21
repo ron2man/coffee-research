@@ -1,0 +1,10 @@
+{
+  "name": "tuner",
+  "description": "Turns open feedback on one agent (critic findings, check warnings, human notes) into a proposed prompt change. A human applies or rejects it with npm run prompt.",
+  "mode": "tune",
+  "priority": 24,
+  "artifactDir": "data/prompt-proposals",
+  "tune": { "minOpen": 2 },
+  "runner": { "type": "claude", "tools": ["Read"], "maxTurns": 15 },
+  "status": "draft"
+}

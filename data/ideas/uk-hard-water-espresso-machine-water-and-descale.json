@@ -1,0 +1,26 @@
+{
+  "id": "uk-hard-water-espresso-machine-water-and-descale",
+  "question": "I live in a hard-water area of the UK. Should I use a filter jug or bottled water in my espresso machine, and how often do I actually need to descale?",
+  "audience": "UK home espresso owners (Sage, Gaggia Classic, Rancilio Silvia and similar) in hard-water areas who get conflicting advice on water and descaling",
+  "market": "GB",
+  "language": "en",
+  "pain": "Advice ranges from 'never descale if you use a Brita' to people writing off boilers through neglect, and some bottled waters scale more than tap water, so owners don't know what keeps the machine safe.",
+  "decision": "Which water to use (tap, filter jug, a specific soft bottled water) and what descale schedule to follow, or whether to change nothing",
+  "contentType": "maintenance-guide",
+  "demand": {
+    "kind": "qualitative",
+    "signals": [
+      {
+        "url": "https://singletrackworld.com/forum/off-topic/espresso-machines-not-bean-to-cup-pod",
+        "date": "2025-03-26",
+        "note": "UK owners disagree: one uses a Brita and hasn't descaled in about five years, another recommends Tesco Ashbeck as soft bottled water, another warns very pure water is corrosive and some bottled brands scale heavily, and one wrote off a boiler through neglect."
+      }
+    ]
+  },
+  "competitorGap": "Retailer guides give a generic every 1–3 months for hard water and don't look up UK water hardness. They don't say whether a filter jug actually reduces the hardness that causes scale, or which widely sold UK bottled waters are suitable. They treat descaling the same for single-boiler machines and thermoblock or thermojet machines, even though forum owners report very different real-world schedules.",
+  "valueAdd": "A decision rule based on the reader's local water hardness (from their water supplier's postcode lookup) and machine type that gives a water choice and a descale interval. It includes a 'keep using tap water, just descale on this schedule' path that costs nothing, and flags bottled waters to avoid.",
+  "commercialPath": [
+    "water filter jug",
+    "descaler"
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "artifact": {
+    "summary": "Ideas are specific and problem-first, but demand rests on single, off-topic threads.",
+    "findings": [
+      {
+        "severity": "major",
+        "itemIds": ["x-sour-shots"],
+        "problem": "One signal for a qualitative card",
+        "evidence": "demand.signals has one entry from an off-topic board",
+        "suggestion": "Require two independent signals from owner communities"
+      }
+    ],
+    "keep": ["Every card has a keep-what-you-have path"],
+    "promptChanges": ["Require at least two independent signals for qualitative demand"]
+  }
+}

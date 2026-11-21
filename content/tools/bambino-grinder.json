@@ -1,0 +1,25 @@
+{
+  "id": "bambino-grinder",
+  "title": "Your Bambino grinder",
+  "questions": [
+    { "key": "own", "text": "Do you already have a grinder?", "options": [["none", "No"], ["bad", "Yes, but shots jump between settings"], ["ok", "Yes, and it works fine"]] },
+    { "key": "dose", "text": "How do you want to grind?", "options": [["hopper", "Fill a hopper and go"], ["single", "Weigh each dose"]] },
+    { "key": "swap", "text": "Do you swap beans often?", "options": [["y", "Yes"], ["n", "No"]] },
+    { "key": "filter", "text": "Will it also grind pour-over?", "options": [["y", "Yes"], ["n", "No"]] },
+    { "key": "budget", "text": "Budget?", "options": [["low", "Around $200"], ["mid", "Up to $300+"]] }
+  ],
+  "results": {
+    "keep": { "title": "Keep your grinder", "text": "It works. Put your effort into puck prep and the adjacent-setting test above before spending anything." },
+    "pro": { "title": "Baratza Encore ESP Pro", "text": "Stepless adjustment, plus hopper or single-dose and a timer. It’s the best match for a machine where the grind is your only dial.", "productId": "baratza-encore-esp-pro" },
+    "esp": { "title": "Baratza Encore ESP", "text": "A fine pick at this budget, especially if you’ll use the dual-wall basket. Steps are coarser, so expect less fine-tuning.", "productId": "baratza-encore-esp" },
+    "df": { "title": "Turin DF54", "text": "Built for single-dosing and bean swaps. More hands-on per shot, and it’s mainly an espresso grinder. Check the version and burr option before ordering.", "productId": "turin-df54" }
+  },
+  "rules": [
+    { "when": { "own": "ok" }, "result": "keep" },
+    { "when": { "own": "bad", "dose": "single", "filter": "n" }, "result": "df" },
+    { "when": { "own": "bad" }, "result": "pro" },
+    { "when": { "budget": "low" }, "result": "esp" },
+    { "when": { "dose": "single", "swap": "y", "filter": "n" }, "result": "df" }
+  ],
+  "default": "pro"
+}

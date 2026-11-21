@@ -18,7 +18,9 @@
     "tools": [
       "WebSearch",
       "WebFetch",
-      "Read"
+      "Read",
+      "Glob",
+      "Grep"
     ]
   },
   "status": "draft"

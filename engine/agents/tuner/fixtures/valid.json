@@ -1,0 +1,14 @@
+{
+  "artifact": {
+    "summary": "Require two independent signals and stop reusing threads across cards.",
+    "changes": [
+      {
+        "file": "prompt",
+        "newText": "# Idea agent\n\nYou find what real people in this niche are struggling with. Require at least two independent signals.",
+        "why": "Three of four cards rested on one signal."
+      }
+    ],
+    "addresses": ["2026-11-21T18-00-00-000Z-critic"],
+    "notAddressed": []
+  }
+}

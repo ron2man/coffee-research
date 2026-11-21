@@ -1,0 +1,50 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { mkdtempSync, readFileSync, rmSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
+import { buildSite, repoRoot } from '../build.mjs';
+import { offersFor, mockOffers } from '../lib/offers.mjs';
+import { parseMarkdown } from '../lib/markdown.mjs';
+
+function out(t) {
+  const dir = mkdtempSync(join(tmpdir(), 'site-'));
+  t.after(() => rmSync(dir, { recursive: true, force: true }));
+  return dir;
+}
+
+test('preview build renders both markets, the picker, a pricebox and collapsed sources', (t) => {
+  const outDir = out(t);
+  const result = buildSite({ root: repoRoot, outDir });
+  assert.ok(result.pages.includes('/en-us/guides/which-grinder-for-bambino/'));
+  assert.ok(result.pages.includes('/en-gb/guides/which-grinder-for-bambino/'));
+  const us = readFileSync(join(outDir, 'en-us/guides/which-grinder-for-bambino/index.html'), 'utf8');
+  const gb = readFileSync(join(outDir, 'en-gb/guides/which-grinder-for-bambino/index.html'), 'utf8');
+  assert.match(us, /class="picker" data-tool="bambino-grinder"/);
+  assert.match(us, /<details class="sources"><summary>How this guide was put together/);
+  assert.match(us, /\$[\d,]+\.\d\d/, 'US prices in dollars');
+  assert.match(gb, /Written for readers in the United States/);
+  assert.match(gb, /No UK model in our records yet/);
+  assert.match(us, /noindex/);
+  assert.match(us, /Quality reference · not published/);
+});
+
+test('production build refuses to ship without verified disclosures', (t) => {
+  assert.throws(() => buildSite({ root: repoRoot, production: true, outDir: out(t) }), /No disclosure text/);
+});
+
+test('stale prices are hidden but the button stays', () => {
+  const now = Date.parse('2026-11-21T12:00:00Z');
+  const offers = mockOffers(['a', 'b'], [{ id: 'US', currency: 'USD' }, { id: 'GB', currency: 'GBP' }], { now });
+  assert.equal(offersFor(offers, 'a', 'US', { now })[0].showPrice, true);
+  const stale = offersFor(offers, 'b', 'GB', { now })[0];
+  assert.equal(stale.showPrice, false);
+  assert.ok(stale.url);
+});
+
+test('markdown escapes HTML and only allows http links', () => {
+  const { blocks } = parseMarkdown('Hi <script>x</script> [a](javascript:alert(1)) [b](https://ok.test)');
+  assert.doesNotMatch(blocks[0].html, /<script>/);
+  assert.doesNotMatch(blocks[0].html, /href="javascript/);
+  assert.match(blocks[0].html, /href="https:\/\/ok.test"/);
+});

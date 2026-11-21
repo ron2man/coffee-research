@@ -18,8 +18,13 @@
   "runner": {
     "type": "claude",
     "tools": [
-      "Read"
+      "Read",
+      "Glob",
+      "Grep"
     ]
   },
-  "status": "draft"
+  "status": "draft",
+  "nicheFiles": [
+    "style.md"
+  ]
 }

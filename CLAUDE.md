@@ -8,13 +8,15 @@ This repo is being rebuilt per [rebuild-spec.md](rebuild-spec.md). It's an auton
   - `state/`: item store (`data/items/<id>.json`), status machine, JSON Schema validation, niche loader.
   - `scheduler/tick.mjs`: one deterministic tick. Picks the highest-priority runnable agent, runs it once, validates, applies status changes and logs them to `.backoffice/runs.jsonl`. One tick per checkout at a time (`.backoffice/tick.lock`). Schedule state is committed in `data/scheduler/state.json`.
   - `runner/`: runner abstraction (`fake` for tests; `claude.mjs` runs `claude -p` with read-only tools, a JSON Schema for the output, and refuses API-key auth).
-  - `state/item-cli.mjs`: human actions on items (resume, reject, park, reopen).
+  - `state/item-cli.mjs`: human actions on items (resume, reject, park, reopen). `state/knowledge.mjs`: card validation (moved from `agent/`).
+  - `feedback/`: deterministic checks on every output (`checks.mjs`), the feedback store, the critic/tuner loop, and `cli.mjs` (`npm run feedback`, `npm run prompt`). Agents `critic` and `tuner` review outputs and propose prompt changes; a human applies them.
   - `agents/<name>/`: `agent.json` (mode, input status, outcomes → statuses, caps), `artifact.schema.json`, `fixtures/valid.json` + `fixtures/invalid.json`, and `prompt.md` once written. Agents get read-only tools only; the tick writes every file from their validated output, and any file an agent changes itself fails the run.
-- `niches/coffee/`: `niche.json` (categories, markets, sellers, disclosures), `style.md`.
+- `niches/coffee/`: `niche.json` (categories, markets, sellers, disclosures), `style.md`, and `agents/<agent>.md` niche guidance appended to that agent's prompt. Engine prompts stay niche-agnostic; coffee specifics go here.
 - `knowledge/<category>/<product>.md`: product cards (evidence layer, schemaVersion 1, see `knowledge/README.md`).
 - `data/`: agent artifacts (`ideas/`, `idea-scores/`, `research/`, `briefs/`, `reviews/`, …). `content/drafts/`: writer output. `content/archive/drafts/`: legacy pipeline drafts (Bambino grinder guide is the quality reference).
 - `agent/`: legacy Codex editorial pipeline. Being replaced (spec section 11), so don't extend it.
-- `backoffice/`: loopback dashboard. `site/`: current preview renderer.
+- `backoffice/`: loopback dashboard. `site/`: static site (`build.mjs`, `lib/`, `assets/`; legacy `render.mjs`/`preview.mjs` remain for the backoffice). Tools live in `content/tools/<id>.json`.
+- `ops/`: `tick.sh` and the launchd installer (`npm run schedule`). See `docs/operations.md`.
 
 ## Commands
 
@@ -25,6 +27,10 @@ npm run validate                           # niche, agents, items, artifacts, kn
 npm run tick -- --dry-run                  # show what the scheduler would run next
 npm run tick -- --commit                   # run one tick, commit + push internal changes to main
 npm run item -- list                       # items and status; also show|resume|reject|park|reopen <id> --reason "..."
+npm run feedback -- list | add <agent> "note"   # feedback per agent
+npm run prompt -- list | show|apply|reject <id> # prompt proposals from the tuner
+npm run site:preview                       # preview site on http://127.0.0.1:4321 (mock prices)
+npm run schedule -- install|status|logs    # hourly launchd job (run in the scheduler's own clone)
 node backoffice/server.mjs                 # dashboard
 ```
 

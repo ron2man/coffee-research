@@ -19,6 +19,7 @@ function repo(t) {
   const git = (...args) => execFileSync('git', args, { cwd: root, encoding: 'utf8' }).trim();
   mkdirSync(root);
   cpSync(join(repoRoot, 'niches'), join(root, 'niches'), { recursive: true });
+  cpSync(join(repoRoot, 'knowledge'), join(root, 'knowledge'), { recursive: true });
   writeFileSync(join(root, '.gitignore'), '.backoffice/\n');
   execFileSync('git', ['init', '--bare', '-q', '-b', 'main', remote]);
   git('init', '-q', '-b', 'main');

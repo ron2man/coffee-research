@@ -14,6 +14,7 @@ function sandbox(t) {
   const root = mkdtempSync(join(tmpdir(), 'engine-lock-'));
   t.after(() => rmSync(root, { recursive: true, force: true }));
   cpSync(join(repoRoot, 'niches'), join(root, 'niches'), { recursive: true });
+  cpSync(join(repoRoot, 'knowledge'), join(root, 'knowledge'), { recursive: true });
   return root;
 }
 

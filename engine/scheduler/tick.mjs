@@ -7,14 +7,22 @@
 // --commit: require the main branch, sync first, then commit and push the files this tick
 // wrote. Reader-facing paths (git-policy.json) are never committed here; they need a PR.
 // Only one tick runs per checkout at a time (.backoffice/tick.lock).
-import { existsSync } from 'node:fs';
+// --ignore-schedule: run a scheduled agent even if its interval has not passed (manual reruns).
+// Rejected agent output is kept in .backoffice/rejected/ for inspection.
+import { existsSync, readFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { parseArgs } from 'node:util';
 import { fileURLToPath } from 'node:url';
-import { loadAgents } from '../agents/registry.mjs';
+import { instructionsFor, loadAgents } from '../agents/registry.mjs';
+import { contentIndex } from '../state/content.mjs';
+import { categoryIds } from '../state/niche.mjs';
+import { loadCardsSync, validateCard } from '../state/knowledge.mjs';
+import { runChecks } from '../feedback/checks.mjs';
+import { addFeedback, readReviewState } from '../feedback/store.mjs';
+import { applyReview, applyTune, buildReviewInput, buildTuneInput, checkTuneArtifact, reviewCandidates, tuneCandidates } from '../feedback/loop.mjs';
 import { newItem, transition } from '../state/machine.mjs';
 import { defaultNicheId, loadNiche, repoRoot } from '../state/niche.mjs';
-import { appendRun, loadItems, readJson, readRuns, saveItem, writeJsonAtomic } from '../state/store.mjs';
+import { appendRun, loadItems, readJson, readRuns, saveItem, writeJsonAtomic, writeTextAtomic } from '../state/store.mjs';
 import { assertValid } from '../state/validate.mjs';
 import { RunnerUnavailableError, runnerFor } from '../runner/index.mjs';
 import { commitInternal, commitMessage, syncMain } from './git.mjs';
@@ -66,9 +74,16 @@ function byAge(a, b) {
 }
 
 /** Decide what runs this tick. Pure: no I/O. */
-export function planTick({ agents, items, runs, schedule = null, now = new Date() }) {
+export function planTick({ agents, items, runs, schedule = null, now = new Date(), ignoreSchedule = false, loop = {} }) {
   const skipped = [];
   for (const agent of agents) {
+    if (agent.mode === 'review' || agent.mode === 'tune') {
+      const due = (agent.mode === 'review' ? loop.review : loop.tune) ?? [];
+      if (!agent.promptPath) skipped.push({ agent: agent.name, reason: 'no prompt.md yet' });
+      else if (!due.length) skipped.push({ agent: agent.name, reason: agent.mode === 'review' ? 'no outputs due for review' : 'no agent has enough open feedback' });
+      else return { chosen: { agent, items: [], candidate: due[0] }, skipped };
+      continue;
+    }
     if (agent.mode === 'generate') {
       if (agent.queueCap) {
         const queued = items.filter((item) => agent.queueCap.statuses.includes(item.status)).length;
@@ -77,7 +92,7 @@ export function planTick({ agents, items, runs, schedule = null, now = new Date(
           continue;
         }
       }
-      if (agent.schedule) {
+      if (agent.schedule && !ignoreSchedule) {
         // A run the runner never started (missing CLI, signed out) does not use up the interval.
         const last = lastRunAt(agent, runs, schedule);
         const since = last === null ? Infinity : now.getTime() - last;
@@ -112,6 +127,8 @@ function buildInput(root, niche, agent, chosenItems, allItems) {
   if (agent.mode === 'generate') {
     return {
       niche,
+      today: new Date().toISOString().slice(0, 10),
+      existingContent: contentIndex(root),
       existing: allItems.map((item) => ({
         id: item.id,
         status: item.status,
@@ -120,7 +137,9 @@ function buildInput(root, niche, agent, chosenItems, allItems) {
     };
   }
   const entries = chosenItems.map((item) => ({ item, artifacts: loadArtifacts(root, item, agent.inputArtifacts) }));
-  return agent.mode === 'batch' ? { niche, items: entries } : { niche, ...entries[0] };
+  const today = new Date().toISOString().slice(0, 10);
+  const existingContent = contentIndex(root);
+  return agent.mode === 'batch' ? { niche, today, existingContent, items: entries } : { niche, today, existingContent, ...entries[0] };
 }
 
 function validateArtifact(agent, artifact, label) {
@@ -192,6 +211,43 @@ export function capAdvances(agent, decisions) {
   }));
 }
 
+/**
+ * Knowledge-card changes returned by an agent (artifact.cardChanges). Validated with the card
+ * validator before anything is written. Existing claims may be updated but never dropped.
+ */
+function prepareCardChanges(root, niche, outputs) {
+  const changes = [];
+  const categories = categoryIds(niche);
+  for (const { itemId, artifact } of outputs) {
+    for (const change of artifact.cardChanges ?? []) {
+      const match = change.path.match(/^knowledge\/([a-z0-9-]+)\/([a-z0-9-]+)\.md$/);
+      if (!match || !categories.includes(match[1])) throw new OutputError(`${itemId}: card path ${change.path} is not knowledge/<category>/<id>.md for a niche category`);
+      let card;
+      try {
+        card = validateCard(change.content, match[1], `${match[2]}.md`);
+      } catch (error) {
+        throw new OutputError(`${itemId}: invalid card ${change.path}: ${error.message}`);
+      }
+      const existingPath = join(root, change.path);
+      if (existsSync(existingPath)) {
+        const before = validateCard(readFileSync(existingPath, 'utf8'), match[1], `${match[2]}.md`);
+        const kept = new Set(card.claims.map((claim) => claim.id));
+        const dropped = before.claims.filter((claim) => !kept.has(claim.id)).map((claim) => claim.id);
+        if (dropped.length) throw new OutputError(`${itemId}: card ${change.path} drops existing claims: ${dropped.join(', ')}`);
+      }
+      if (changes.some((c) => c.path === change.path)) throw new OutputError(`${itemId}: card ${change.path} changed twice`);
+      changes.push({ path: change.path, content: change.content.endsWith('\n') ? change.content : `${change.content}\n`, card, category: match[1] });
+    }
+  }
+  return changes;
+}
+
+function cardsWith(root, niche, changes) {
+  const { cards } = loadCardsSync(join(root, 'knowledge'), categoryIds(niche));
+  for (const change of changes) cards.set(change.card.id, { card: change.card, category: change.category, path: change.path });
+  return cards;
+}
+
 function applyGenerated(root, niche, agent, artifacts, meta, written) {
   const created = [];
   for (const artifact of artifacts) {
@@ -260,7 +316,7 @@ function recordFailure(root, agent, chosenItems, error, meta, maxAttempts, writt
  * Run one tick. `runner` overrides per-agent runners (tests and simulation).
  * Returns a summary; throws only for store/config problems, never for agent failures.
  */
-export async function tick({ root = repoRoot, runner, now = new Date(), nicheId, agents = loadAgents(), dryRun = false, maxAttempts = MAX_ATTEMPTS, lock = true } = {}) {
+export async function tick({ root = repoRoot, runner, now = new Date(), nicheId, agents = loadAgents(), dryRun = false, maxAttempts = MAX_ATTEMPTS, lock = true, ignoreSchedule = false } = {}) {
   if (lock && !dryRun) {
     let release;
     try {
@@ -270,7 +326,7 @@ export async function tick({ root = repoRoot, runner, now = new Date(), nicheId,
       throw error;
     }
     try {
-      return await tick({ root, runner, now, nicheId, agents, dryRun, maxAttempts, lock: false });
+      return await tick({ root, runner, now, nicheId, agents, dryRun, maxAttempts, lock: false, ignoreSchedule });
     } finally {
       release();
     }
@@ -278,7 +334,13 @@ export async function tick({ root = repoRoot, runner, now = new Date(), nicheId,
   const niche = loadNiche(nicheId ?? defaultNicheId(root), root);
   const { items, errors } = loadItems(root);
   if (errors.length) throw new Error(`Item store is invalid; fix before scheduling:\n${errors.join('\n')}`);
-  const plan = planTick({ agents, items, runs: readRuns(root), schedule: readSchedule(root), now });
+  const critic = agents.find((agent) => agent.mode === 'review');
+  const tuner = agents.find((agent) => agent.mode === 'tune');
+  const loop = {
+    review: critic ? reviewCandidates({ critic, agents, items, state: readReviewState(root), now }) : [],
+    tune: tuner ? tuneCandidates({ tuner, agents, root }) : [],
+  };
+  const plan = planTick({ agents, items, runs: readRuns(root), schedule: readSchedule(root), now, ignoreSchedule, loop });
   if (!plan.chosen) return { ran: null, skipped: plan.skipped };
   const { agent, items: chosenItems } = plan.chosen;
   const written = [];
@@ -286,14 +348,19 @@ export async function tick({ root = repoRoot, runner, now = new Date(), nicheId,
   if (dryRun) return { ...summary, dryRun: true };
 
   const started = Date.now();
+  const candidate = plan.chosen.candidate;
   const meta = () => ({ workflow: `agent:${agent.name}`, agent: agent.name, durationMs: Date.now() - started });
   let response;
+  let request;
   const before = snapshot(root);
   try {
-    const request = {
+    request = {
       agent,
       root,
-      input: buildInput(root, niche, agent, chosenItems, items),
+      instructions: instructionsFor(agent, root, niche.id),
+      input: candidate
+        ? (agent.mode === 'review' ? buildReviewInput : buildTuneInput)({ root, niche, agents, candidate })
+        : buildInput(root, niche, agent, chosenItems, items),
       tools: agent.runner.tools ?? [],
       permissions: agent.runner.permissions ?? {},
     };
@@ -309,25 +376,80 @@ export async function tick({ root = repoRoot, runner, now = new Date(), nicheId,
   recordScheduledRun(root, agent, new Date().toISOString(), 'completed', written);
 
   let checked;
+  let cardChanges = [];
+  let checks = { blocking: [], warnings: [] };
+  let blockingFindings = [];
   try {
     // Agents only return output. Any file that changed during the run was not written by the tick.
     const strays = changedSince(before, snapshot(root)).filter((path) => !written.includes(path));
     if (strays.length) {
       throw new OutputError(`${agent.name} changed files outside its output (left in place for review; a human may also have edited them during the run): ${strays.join(', ')}`);
     }
-    checked = checkOutput(agent, response.output, chosenItems, items);
+    if (candidate) {
+      try {
+        assertValid(agent.validateEnvelope, response.output, `${agent.name} output`);
+      } catch (error) {
+        throw new OutputError(error.message);
+      }
+      validateArtifact(agent, response.output.artifact, `${agent.name} artifact`);
+      const problem = agent.mode === 'tune' ? checkTuneArtifact(response.output.artifact, request.input) : null;
+      if (problem) throw new OutputError(problem);
+      checked = response.output.artifact;
+    } else {
+      checked = checkOutput(agent, response.output, chosenItems, items);
+      const outputs = agent.mode === 'generate'
+        ? checked.map((artifact) => ({ itemId: artifact.id, artifact }))
+        : checked.map((d) => ({ itemId: d.itemId, artifact: d.artifact }));
+      cardChanges = prepareCardChanges(root, niche, outputs);
+      checks = runChecks(agent.name, outputs, {
+        today: new Date().toISOString().slice(0, 10),
+        cards: cardsWith(root, niche, cardChanges),
+        existingContent: contentIndex(root),
+      });
+      if (checks.blocking.length) {
+        blockingFindings = checks.blocking;
+        throw new OutputError(`quality checks failed: ${checks.blocking.join('; ')}`);
+      }
+    }
   } catch (error) {
     if (!(error instanceof OutputError)) throw error;
-    return { ...summary, error: error.message, failures: recordFailure(root, agent, chosenItems, error, meta(), maxAttempts, written) };
+    if (blockingFindings.length) {
+      written.push(addFeedback(root, {
+        agent: agent.name, source: 'check', itemIds: chosenItems.map((item) => item.id),
+        findings: blockingFindings.map((text) => ({ severity: 'major', problem: text, evidence: 'deterministic check (run rejected)', suggestion: 'Fix in the prompt so the agent stops producing this.' })),
+      }));
+    }
+    // Keep what the agent returned (a real run costs usage) so a human can inspect or reuse it.
+    const kept = `.backoffice/rejected/${agent.name}-${new Date().toISOString().replace(/[:.]/g, '-')}.json`;
+    writeJsonAtomic(join(root, kept), { agent: agent.name, error: error.message, usage: response.usage ?? null, output: response.output });
+    const failureMeta = { ...meta(), usage: response.usage ?? null, rejectedOutput: kept };
+    return { ...summary, error: error.message, rejectedOutput: kept, failures: recordFailure(root, agent, chosenItems, error, failureMeta, maxAttempts, written) };
   }
   const eventMeta = { ...meta(), usage: response.usage ?? null };
-  if (agent.mode === 'generate') return { ...summary, created: applyGenerated(root, niche, agent, checked, eventMeta, written) };
-  const capped = checked.filter((d) => d.capped).map((d) => d.itemId);
-  return {
-    ...summary,
-    results: applyDecisions(root, agent, checked, chosenItems, eventMeta, written),
-    ...(capped.length ? { warnings: [`${agent.name} advanced more than allowed; converted to ${agent.maxAdvance.overflow}: ${capped.join(', ')}`] } : {}),
-  };
+  if (candidate) {
+    const result = agent.mode === 'review'
+      ? applyReview({ root, candidate, artifact: checked, written })
+      : applyTune({ root, niche, candidate, input: request.input, artifact: checked, written });
+    appendRun(root, { ...eventMeta, itemId: null, status: 'completed', outcome: agent.mode, target: candidate.target });
+    return { ...summary, [agent.mode]: result };
+  }
+  for (const change of cardChanges) {
+    writeTextAtomic(join(root, change.path), change.content);
+    written.push(change.path);
+  }
+  const warnings = [...checks.warnings];
+  const capped = agent.mode === 'generate' ? [] : checked.filter((d) => d.capped).map((d) => d.itemId);
+  if (capped.length) warnings.push(`${agent.name} advanced more than allowed; converted to ${agent.maxAdvance.overflow}: ${capped.join(', ')}`);
+  if (checks.warnings.length) {
+    written.push(addFeedback(root, {
+      agent: agent.name, source: 'check',
+      itemIds: agent.mode === 'generate' ? checked.map((a) => a.id) : chosenItems.map((item) => item.id),
+      findings: checks.warnings.map((text) => ({ severity: 'minor', problem: text, evidence: 'deterministic check', suggestion: 'Address in the prompt if it recurs.' })),
+    }));
+  }
+  const extra = { ...(warnings.length ? { warnings } : {}), ...(cardChanges.length ? { cardsChanged: cardChanges.map((c) => c.path) } : {}) };
+  if (agent.mode === 'generate') return { ...summary, created: applyGenerated(root, niche, agent, checked, eventMeta, written), ...extra };
+  return { ...summary, results: applyDecisions(root, agent, checked, chosenItems, eventMeta, written), ...extra };
 }
 
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
@@ -336,13 +458,14 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
       options: {
         'dry-run': { type: 'boolean' }, commit: { type: 'boolean' },
         root: { type: 'string' }, niche: { type: 'string' },
+        'ignore-schedule': { type: 'boolean' },
       },
     });
     const root = values.root ? resolve(values.root) : repoRoot;
     const commit = values.commit && !values['dry-run'];
     const run = async () => {
       if (commit) syncMain(root);
-      const result = await tick({ root, dryRun: values['dry-run'], nicheId: values.niche, lock: false });
+      const result = await tick({ root, dryRun: values['dry-run'], nicheId: values.niche, lock: false, ignoreSchedule: values['ignore-schedule'] });
       if (commit && result.changedFiles?.length) result.commit = commitInternal(root, result.changedFiles, commitMessage(result));
       return result;
     };

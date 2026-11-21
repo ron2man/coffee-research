@@ -1,0 +1,7 @@
+{
+  "artifact": {
+    "summary": "x",
+    "changes": [{ "file": "settings", "newText": "short", "why": "" }],
+    "addresses": []
+  }
+}

@@ -18,7 +18,10 @@
     "type": "claude",
     "tools": [
       "WebSearch",
-      "WebFetch"
+      "WebFetch",
+      "Read",
+      "Glob",
+      "Grep"
     ]
   },
   "status": "draft"

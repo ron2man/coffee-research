@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "id": "breville-builtin-grinder-wont-grind-fine-enough",
+  "type": "new-post",
+  "niche": "coffee",
+  "status": "idea",
+  "attempts": 0,
+  "revisions": 0,
+  "createdAt": "2026-11-21T17:35:36.159Z",
+  "updatedAt": "2026-11-21T17:35:36.159Z",
+  "artifacts": {
+    "idea": "data/ideas/breville-builtin-grinder-wont-grind-fine-enough.json"
+  },
+  "history": [
+    {
+      "at": "2026-11-21T17:35:36.159Z",
+      "from": null,
+      "to": "idea",
+      "by": "idea",
+      "reason": "generated"
+    }
+  ]
+}

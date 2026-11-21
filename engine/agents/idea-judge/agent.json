@@ -22,7 +22,8 @@
   "runner": {
     "type": "claude",
     "tools": [
-      "WebSearch"
+      "WebSearch",
+      "WebFetch"
     ]
   },
   "status": "draft"

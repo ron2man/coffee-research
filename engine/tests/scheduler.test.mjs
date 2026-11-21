@@ -7,11 +7,14 @@ import { loadAgents } from '../agents/registry.mjs';
 import { newItem } from '../state/machine.mjs';
 import { repoRoot } from '../state/niche.mjs';
 import { loadItems, readRuns, saveItem } from '../state/store.mjs';
+import { listFeedback } from '../feedback/store.mjs';
 import { validateRepo } from '../state/validate-repo.mjs';
 import { fakeRunner } from '../runner/index.mjs';
 import { SCHEDULE_PATH, planTick, readSchedule, tick } from '../scheduler/tick.mjs';
 
-const agents = loadAgents();
+const allAgents = loadAgents();
+// Pipeline agents only; the feedback loop (critic, tuner) has its own tests.
+const agents = allAgents.filter((agent) => !['review', 'tune'].includes(agent.mode));
 const fixture = (name, kind = 'valid') =>
   JSON.parse(readFileSync(join(repoRoot, 'engine/agents', name, 'fixtures', `${kind}.json`), 'utf8'));
 
@@ -19,6 +22,7 @@ function sandbox(t) {
   const root = mkdtempSync(join(tmpdir(), 'engine-'));
   t.after(() => rmSync(root, { recursive: true, force: true }));
   cpSync(join(repoRoot, 'niches'), join(root, 'niches'), { recursive: true });
+  cpSync(join(repoRoot, 'knowledge'), join(root, 'knowledge'), { recursive: true });
   return root;
 }
 
@@ -68,7 +72,7 @@ test('simulated items advance idea → passed with one revision loop, and every 
 
   const order = [];
   for (let i = 0; i < 10; i += 1) {
-    const result = await tick({ root, runner });
+    const result = await tick({ root, agents, runner, agents });
     if (!result.ran) break;
     assert.equal(result.error, undefined, result.error);
     order.push(result.ran);
@@ -93,7 +97,7 @@ test('invalid output is rejected, counted, and blocks the item after two failure
   saveItem(root, newItem({ id: 'sour-shots', niche: 'coffee', status: 'idea_approved', by: 'test' }));
   const runner = fakeRunner(handlers({ research: () => fixture('research', 'invalid') }));
 
-  const first = await tick({ root, runner });
+  const first = await tick({ root, agents, runner });
   assert.equal(first.ran, 'research');
   assert.match(first.error, /schema validation/);
   let [item] = loadItems(root).items;
@@ -101,7 +105,7 @@ test('invalid output is rejected, counted, and blocks the item after two failure
   assert.equal(item.attempts, 1);
   assert.match(item.lastError, /schema validation/);
 
-  await tick({ root, runner });
+  await tick({ root, agents, runner });
   [item] = loadItems(root).items;
   assert.equal(item.status, 'blocked');
   assert.equal(item.resumeStatus, 'idea_approved');
@@ -117,10 +121,10 @@ test('invalid output is rejected, counted, and blocks the item after two failure
 test('a thrown agent error counts as a failure; an unavailable runner does not', async (t) => {
   const root = sandbox(t);
   saveItem(root, newItem({ id: 'sour-shots', niche: 'coffee', status: 'idea_approved', by: 'test' }));
-  const crash = await tick({ root, runner: fakeRunner(handlers({ research: () => { throw new Error('tool crashed'); } })) });
+  const crash = await tick({ root, agents, runner: fakeRunner(handlers({ research: () => { throw new Error('tool crashed'); } })) });
   assert.equal(crash.failures[0].attempts, 1);
 
-  const unavailable = await tick({ root, runner: fakeRunner({}) });
+  const unavailable = await tick({ root, agents, runner: fakeRunner({}) });
   assert.equal(unavailable.runnerUnavailable, true);
   assert.equal(loadItems(root).items[0].attempts, 1);
   assert.equal(readRuns(root).at(-1).runnerUnavailable, true);
@@ -173,7 +177,7 @@ test('idea judge: extra advances are converted to reject by score; every idea ne
   const now = new Date();
   const onlyJudge = agents.filter((agent) => agent.name === 'idea-judge');
 
-  const tooMany = await tick({ root, runner: fakeRunner(handlers({ 'idea-judge': decide('advance') })), agents: onlyJudge, now });
+  const tooMany = await tick({ root, agents, runner: fakeRunner(handlers({ 'idea-judge': decide('advance') })), agents: onlyJudge, now });
   assert.equal(tooMany.error, undefined);
   assert.match(tooMany.warnings[0], /converted to reject: a/);
   assert.deepEqual(statuses(root), { a: 'rejected', b: 'idea_approved', c: 'idea_approved', d: 'idea_approved' });
@@ -184,7 +188,7 @@ test('idea judge: extra advances are converted to reject by score; every idea ne
   const strict = onlyJudge.map((agent) => ({ ...agent, maxAdvance: { outcome: 'advance', max: 3 } }));
   const root2 = sandbox(t);
   for (const id of ids) saveItem(root2, newItem({ id, niche: 'coffee', by: 'test' }));
-  const failed = await tick({ root: root2, runner: fakeRunner(handlers({ 'idea-judge': decide('advance') })), agents: strict, now });
+  const failed = await tick({ root: root2, agents, runner: fakeRunner(handlers({ 'idea-judge': decide('advance') })), agents: strict, now });
   assert.match(failed.error, /advanced 4 items \(max 3\)/);
 
   const partial = await tick({
@@ -199,7 +203,7 @@ test('a second revise sends the draft to needs_human', async (t) => {
   const root = sandbox(t);
   saveItem(root, { ...newItem({ id: 'sour-shots', niche: 'coffee', status: 'drafted', by: 'test' }), revisions: 1 });
   const revise = { ...fixture('post-judge'), outcome: 'revise', reason: 'Still generic' };
-  const result = await tick({ root, runner: fakeRunner(handlers({ 'post-judge': () => revise })) });
+  const result = await tick({ root, agents, runner: fakeRunner(handlers({ 'post-judge': () => revise })) });
   assert.deepEqual(result.results, [{ id: 'sour-shots', outcome: 'revise', to: 'needs_human' }]);
   const [item] = loadItems(root).items;
   assert.equal(item.resumeStatus, 'drafted');
@@ -209,7 +213,7 @@ test('a second revise sends the draft to needs_human', async (t) => {
 test('the idea agent cannot reuse an existing id', async (t) => {
   const root = sandbox(t);
   saveItem(root, newItem({ id: 'sour-shots', niche: 'coffee', status: 'rejected', by: 'test' }));
-  const result = await tick({ root, runner: fakeRunner(handlers()) });
+  const result = await tick({ root, agents, runner: fakeRunner(handlers()) });
   assert.equal(result.ran, 'idea');
   assert.match(result.error, /duplicate id sour-shots/);
   assert.equal(loadItems(root).items.length, 1);
@@ -222,12 +226,12 @@ test('a corrupt item file stops the tick instead of being skipped', async (t) =>
   const bad = { ...newItem({ id: 'bad', niche: 'coffee', by: 'test' }), status: 'shipped' };
   const { writeJsonAtomic } = await import('../state/store.mjs');
   writeJsonAtomic(join(root, 'data/items/bad.json'), bad);
-  await assert.rejects(tick({ root, runner: fakeRunner(handlers()) }), /Item store is invalid/);
+  await assert.rejects(tick({ root, agents, runner: fakeRunner(handlers()) }), /Item store is invalid/);
 });
 
 test('the schedule is kept in a committed state file, so a fresh checkout respects it', async (t) => {
   const root = sandbox(t);
-  const result = await tick({ root, runner: fakeRunner(handlers()) });
+  const result = await tick({ root, agents, runner: fakeRunner(handlers()) });
   assert.equal(result.ran, 'idea');
   assert.ok(result.changedFiles.includes(SCHEDULE_PATH));
   assert.ok(readSchedule(root).agents.idea.lastRunAt);
@@ -235,4 +239,61 @@ test('the schedule is kept in a committed state file, so a fresh checkout respec
   const onlyIdea = agents.filter((agent) => agent.name === 'idea');
   assert.equal(planTick({ agents: onlyIdea, items: [], runs: [], schedule: readSchedule(root) }).chosen, null);
   assert.equal(planTick({ agents: onlyIdea, items: [], runs: [], schedule: readSchedule(root), now: later(25) }).chosen.agent.name, 'idea');
+});
+
+test('rejected output is kept with its usage, and --ignore-schedule allows a manual rerun', async (t) => {
+  const root = sandbox(t);
+  const runner = { type: 'fake', run: async () => ({ output: { items: [{ id: 'bad' }] }, usage: { costUsd: 0.5 } }) };
+  const result = await tick({ root, agents, runner });
+  assert.match(result.error, /schema validation/);
+  const kept = JSON.parse(readFileSync(join(root, result.rejectedOutput), 'utf8'));
+  assert.deepEqual(kept.usage, { costUsd: 0.5 });
+  assert.equal(readRuns(root).at(-1).usage.costUsd, 0.5);
+  const onlyIdea = agents.filter((agent) => agent.name === 'idea');
+  assert.equal(planTick({ agents: onlyIdea, items: [], runs: readRuns(root), schedule: readSchedule(root) }).chosen, null);
+  assert.equal(planTick({ agents: onlyIdea, items: [], runs: readRuns(root), schedule: readSchedule(root), ignoreSchedule: true }).chosen.agent.name, 'idea');
+});
+
+test('research card changes are validated, cannot drop claims, and make new claims citable', async (t) => {
+  const root = sandbox(t);
+  saveItem(root, newItem({ id: 'sour-shots', niche: 'coffee', status: 'idea_approved', by: 'test' }));
+  const card = (claims) => `# Test Grinder\n\n\`\`\`json\n${JSON.stringify({
+    schemaVersion: 1, id: 'test-grinder', name: 'Test Grinder', category: 'grinders', updatedAt: '2026-11-21',
+    variants: [{ id: 'us', markets: ['US'] }],
+    sources: [{ id: 'manual', url: 'https://example.com/manual', type: 'manufacturer', accessedAt: '2026-11-21' }],
+    claims,
+  }, null, 2)}\n\`\`\`\n`;
+  const claim = (id) => ({ id, statement: `Claim ${id}.`, status: 'supported', verifiedAt: '2026-11-21', evidence: [{ sourceId: 'manual', locator: 'p. 2' }] });
+  const output = (claims, claimIds) => ({ ...fixture('research'), artifact: { ...fixture('research').artifact, claimIds,
+    cardChanges: [{ path: 'knowledge/grinders/test-grinder.md', content: card(claims), summary: 'New card' }] } });
+
+  const onlyResearch = agents.filter((agent) => agent.name === 'research');
+  const ok = await tick({ root, agents: onlyResearch, runner: fakeRunner(handlers({ research: () => output([claim('burr-size'), claim('steps')], ['test-grinder/burr-size']) })) });
+  assert.equal(ok.error, undefined, ok.error);
+  assert.deepEqual(ok.cardsChanged, ['knowledge/grinders/test-grinder.md']);
+  assert.ok(ok.changedFiles.includes('knowledge/grinders/test-grinder.md'));
+
+  // Next item: a change that drops an existing claim is refused, and nothing is written.
+  saveItem(root, newItem({ id: 'next', niche: 'coffee', status: 'idea_approved', by: 'test' }));
+  const dropped = await tick({ root, agents: onlyResearch, runner: fakeRunner(handlers({ research: () => output([claim('burr-size')], []) })) });
+  assert.match(dropped.error, /drops existing claims: steps/);
+  assert.match(readFileSync(join(root, 'knowledge/grinders/test-grinder.md'), 'utf8'), /"steps"/);
+
+  const missing = await tick({ root, agents: onlyResearch, runner: fakeRunner(handlers({ research: () => ({ ...fixture('research'), artifact: { ...fixture('research').artifact, claimIds: ['test-grinder/nope'] } }) })) });
+  assert.match(missing.error, /claim test-grinder\/nope does not exist/);
+  assert.ok(listFeedback(root, 'research').some((entry) => entry.source === 'check'), 'blocking checks are logged as feedback');
+});
+
+test('writer lint: inline links, invented testing and unsupported claims fail the draft', async (t) => {
+  const root = sandbox(t);
+  saveItem(root, newItem({ id: 'sour-shots', niche: 'coffee', status: 'briefed', by: 'test' }));
+  const filler = ' Start with the basket, then the dose, then the grind.'.repeat(6);
+  const draft = (body) => ({ ...fixture('writer'), artifact: { ...fixture('writer').artifact, body: body.replace('{filler}', filler) } });
+  const links = 'Get the [a](https://a.test) and [b](https://b.test) or [c](https://c.test).';
+  const bad = await tick({ root, agents, runner: fakeRunner(handlers({ writer: () => draft(`${links} In our testing it was great.{filler}`) })) });
+  assert.match(bad.error, /3 inline links/);
+  assert.match(bad.error, /first-hand testing/);
+  const sources = '\n\n## When I\'d choose differently\n\nx\n\n## How this guide was put together\n\n[c](https://c.test) [d](https://d.test) [e](https://e.test)';
+  const good = await tick({ root, agents, runner: fakeRunner(handlers({ writer: () => draft(`Get the [a](https://a.test).{filler}${sources}`) })) });
+  assert.equal(good.error, undefined, good.error);
 });

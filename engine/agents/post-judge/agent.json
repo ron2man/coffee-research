@@ -24,8 +24,14 @@
     "type": "claude",
     "tools": [
       "WebSearch",
-      "WebFetch"
+      "WebFetch",
+      "Read",
+      "Glob",
+      "Grep"
     ]
   },
-  "status": "draft"
+  "status": "draft",
+  "nicheFiles": [
+    "style.md"
+  ]
 }

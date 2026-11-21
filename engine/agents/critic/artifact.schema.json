@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "critic.artifact.schema.json",
+  "title": "Critic review of one agent's recent outputs",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["summary", "findings", "keep", "promptChanges"],
+  "properties": {
+    "summary": { "type": "string", "minLength": 1, "description": "Two or three sentences: how good is this batch, and the main thing to fix." },
+    "findings": {
+      "type": "array",
+      "maxItems": 8,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["severity", "problem", "evidence", "suggestion"],
+        "properties": {
+          "severity": { "enum": ["major", "minor"] },
+          "itemIds": { "type": "array", "items": { "type": "string" } },
+          "problem": { "type": "string", "minLength": 1 },
+          "evidence": { "type": "string", "minLength": 1, "description": "What in the output shows it (quote a field, a URL you checked)." },
+          "suggestion": { "type": "string", "minLength": 1, "description": "What the agent should do differently next time." }
+        }
+      }
+    },
+    "keep": { "type": "array", "items": { "type": "string", "minLength": 1 }, "description": "What works and must not be lost when the prompt changes." },
+    "promptChanges": { "type": "array", "items": { "type": "string", "minLength": 1 }, "description": "Concrete instruction changes, one per entry." }
+  }
+}

@@ -48,7 +48,7 @@ export function buildArgs(request) {
     '--tools', tools.join(','), // only these built-in tools exist in the session
     '--disallowedTools', 'mcp__*',
     '--max-turns', String(config.maxTurns),
-    '--append-system-prompt-file', agent.promptPath,
+    '--append-system-prompt', request.instructions,
     '--json-schema', JSON.stringify(agent.outputSchema),
   ];
   if (tools.length) args.push('--allowedTools', ...tools);
@@ -100,7 +100,7 @@ export function claudeRunner({ bin = process.env.CLAUDE_BIN ?? 'claude', env = p
     type: 'claude',
     async run(request) {
       const { agent, root } = request;
-      if (!agent.promptPath) throw new RunnerUnavailableError(`Agent ${agent.name} has no prompt.md yet`);
+      if (!agent.promptPath || !request.instructions) throw new RunnerUnavailableError(`Agent ${agent.name} has no prompt.md yet`);
       const runEnv = childEnv(env);
       checkAuth({ bin, env: runEnv });
       const timeoutMs = (agent.runner.timeoutMinutes ?? DEFAULTS.timeoutMinutes) * 60_000;
@@ -112,6 +112,13 @@ export function claudeRunner({ bin = process.env.CLAUDE_BIN ?? 'claude', env = p
           child.kill('SIGTERM');
           reject(new Error(`claude -p timed out after ${timeoutMs / 60_000} minutes`));
         }, timeoutMs);
+        // Progress on the terminal only (never in cron logs or tests): a real run takes minutes.
+        const started = Date.now();
+        const progress = process.stderr.isTTY
+          ? setInterval(() => process.stderr.write(`  ${agent.name}: still running (${Math.round((Date.now() - started) / 60_000)} min)\n`), 60_000)
+          : null;
+        if (process.stderr.isTTY) process.stderr.write(`Running ${agent.name} with claude -p (timeout ${timeoutMs / 60_000} min). Output appears when it finishes.\n`);
+        child.on('close', () => clearInterval(progress));
         child.stdout.on('data', (chunk) => { out += chunk; });
         child.stderr.on('data', (chunk) => { err += chunk; });
         child.on('error', (error) => {

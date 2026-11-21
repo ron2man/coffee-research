@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { mkdtempSync, readFileSync, realpathSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -21,7 +21,7 @@ function setup(t, extraEnv = {}) {
   const log = join(dir, 'log.json');
   const env = { PATH: process.env.PATH, ANTHROPIC_API_KEY: 'sk-should-not-leak', FAKE_CLAUDE_LOG: log, FAKE_CLAUDE_OUTPUT: JSON.stringify(fixture), ...extraEnv };
   const agent = { ...research, promptPath };
-  const request = { agent, root: dir, input: { item: { id: 'x' } }, tools: agent.runner.tools, permissions: {} };
+  const request = { agent, root: dir, instructions: '# Research agent\n', input: { item: { id: 'x' } }, tools: agent.runner.tools, permissions: {} };
   return { runner: claudeRunner({ bin, env }), request, log: () => JSON.parse(readFileSync(log, 'utf8')), dir };
 }
 
@@ -32,10 +32,12 @@ test('claude runner: read-only tools, schema, no API key, usage returned', async
   assert.equal(usage.costUsd, 0.12);
   const call = log();
   assert.equal(call.apiKey, null, 'ANTHROPIC_API_KEY is removed from the job environment');
-  assert.equal(call.cwd, dir);
+  // macOS tmpdir is a symlink (/var → /private/var); the child reports the resolved path.
+  assert.equal(realpathSync(call.cwd), realpathSync(dir));
   const at = (flag) => call.args[call.args.indexOf(flag) + 1];
-  assert.equal(at('--tools'), 'WebSearch,WebFetch,Read');
+  assert.equal(at('--tools'), 'WebSearch,WebFetch,Read,Glob,Grep');
   assert.equal(at('--permission-mode'), 'dontAsk');
+  assert.equal(at('--append-system-prompt'), '# Research agent\n');
   assert.equal(at('--disallowedTools'), 'mcp__*');
   assert.deepEqual(JSON.parse(at('--json-schema')).properties.artifact.required, ['learned', 'unknowns', 'competitors', 'claimIds']);
   assert.match(call.stdin, /"id": "x"/);
@@ -59,7 +61,7 @@ test('claude runner surfaces an error result as a run failure (counts as an atte
 test('API billing must be opted into explicitly', () => {
   assert.equal(childEnv({ ANTHROPIC_API_KEY: 'k' }).ANTHROPIC_API_KEY, undefined);
   assert.equal(childEnv({ ANTHROPIC_API_KEY: 'k', CLAUDE_RUNNER_ALLOW_API_BILLING: '1' }).ANTHROPIC_API_KEY, 'k');
-  assert.ok(buildArgs({ agent: { ...research, promptPath: 'p.md' }, tools: [] }).includes(''), 'no tools means --tools ""');
+  assert.ok(buildArgs({ agent: { ...research, promptPath: 'p.md' }, instructions: 'x', tools: [] }).includes(''), 'no tools means --tools ""');
 });
 
 test('agent definitions cannot request write tools', () => {

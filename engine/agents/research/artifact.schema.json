@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "research.artifact.schema.json",
   "title": "Research note (rebuild-spec 5.3)",
-  "description": "v0 contract. M3 adds knowledge-card changes as part of this output (the agent has no write tools); the tick validates them with the knowledge validator and writes them.",
+  "description": "Research note. Knowledge-card changes come back in `cardChanges` (the agent has no write tools); the tick validates each card and refuses to drop existing claims, then writes it. `claimIds` must resolve to supported claims after the changes.",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -86,6 +86,35 @@
           "field": {
             "type": "string",
             "minLength": 1
+          }
+        }
+      }
+    },
+    "cardChanges": {
+      "type": "array",
+      "maxItems": 6,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "path",
+          "content",
+          "summary"
+        ],
+        "properties": {
+          "path": {
+            "type": "string",
+            "pattern": "^knowledge/[a-z0-9-]+/[a-z0-9]+(?:-[a-z0-9]+)*\\.md$"
+          },
+          "content": {
+            "type": "string",
+            "minLength": 50,
+            "description": "The complete card file: optional heading and summary plus exactly one fenced json block (knowledge/README.md)."
+          },
+          "summary": {
+            "type": "string",
+            "minLength": 1,
+            "description": "What changed and why."
           }
         }
       }

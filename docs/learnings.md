@@ -41,16 +41,32 @@ A review of the M1 engine found gaps that only show up once real agents run. We 
 
 [Runner](../engine/runner/claude.mjs) · [Lock](../engine/scheduler/lock.mjs) · [Item CLI](../engine/state/item-cli.mjs) · [Tests](../engine/tests/)
 
+### 2026-11-21 · M0/M2 · First real run, the feedback loop and a preview site
+
+The first real idea run took about 4 minutes and 44 turns (CLI estimate $1.01 at API prices; the subscription `/usage` delta is still to be recorded). It produced 4 valid cards that were specific, problem-first and offered a keep-what-you-have path. The evidence was thin: 3 of 4 cards rested on one signal, two cards shared the same off-topic thread, one signal dated from 2018, and one card overlapped an archived post the agent could not see. We tightened the prompt (two independent signals, no reuse, 24-month window, existing content in the input) and moved coffee-specific advice (which communities to search, Breville/Sage naming, existing coverage) into `niches/coffee/agents/idea.md`.
+
+To keep learning from runs without hand reviews, we built a feedback loop. Deterministic checks run after every output and log warnings or block the run. A critic agent reviews each agent's recent outputs against its own prompt and spot-checks sources. A tuner turns open feedback into a prompt proposal, and a human applies or rejects it (`npm run prompt`). The research agent now returns knowledge-card changes, which the tick validates (it never drops claims) before writing. Writer drafts are linted for inline links, invented testing and unsupported claims. Prompts now exist for all agents. Only the idea prompt has run for real; the others are untested.
+
+A local preview site now renders the quality reference, the archived drafts and future writer drafts for US and UK. It includes a data-driven Picker, a PriceBox with mock offers that hides prices older than 48h, a per-market disclosure, and a "How we work" page. The production build refuses to run without verified disclosure text.
+
+[Feedback loop](../engine/feedback/) · [Operations](operations.md) · [Site build](../site/build.mjs) · [Idea prompt](../engine/agents/idea/prompt.md)
+
 ## Decisions
 
 - **2026-11-21 · Git flow.** Internal changes (items, research, briefs, drafts, knowledge cards) are committed straight to `main` by `npm run tick -- --commit`, with no approval, so the pipeline never waits on a merge. Reader-facing paths (`content/published/`, `site/`, `data/offers/`) are never committed by a tick and need their own PR. The boundary is [git-policy.json](../engine/scheduler/git-policy.json). The publish step that opens content PRs arrives with M4/M5.
 - **2026-11-21 · Idea approval.** The idea judge's picks are final. The dashboard shows its decisions for information, with an optional override.
+
+- **2026-11-21 · Prompt changes.** The tuner proposes and a human applies (`npm run prompt -- apply`). Prompts never change unattended.
+- **2026-11-21 · Site before the M4 gate.** The project lead asked for a local preview site now. It stays a preview (noindex, mock prices, no deploy). The M4 "send it to a friend" gate still applies before any public deploy.
+- **2026-11-21 · Scheduler.** Hourly launchd job in a dedicated clone on `main` (`docs/operations.md`).
 
 ## Open questions
 
 - **Offers as public paths:** `data/offers/` is treated as reader-facing because prices appear on the site, which would mean a PR for every daily price refresh. Revisit at M7: one option is to have the site read offers at build time from an internal file.
 - **M0 billing (blocking M2):** do `claude -p` runs draw from the subscription or a separate pool? The runner now strips API keys and refuses non-subscription auth, but that only shows *how* we sign in, not *what is counted*. Still to do on the Mac: write one prompt (idea agent), run `npm run tick` once, inspect `/usage` before and after, and record the result here. Also check that `--json-schema` and `--permission-mode dontAsk` behave as documented on the installed CLI version.
 - **Scheduler on macOS:** a `launchd` plist for the tick has not been written. Decide the interval once M0 shows what a run costs.
-- **Knowledge-card writes (M3):** the research output needs a `cardChanges` contract that the tick validates with `agent/validate-knowledge.mjs` before writing.
+- **Untested prompts:** judge, research, angle, writer, post-judge, critic and tuner have not run for real. Expect the first proposals from the tuner within a day of hourly runs.
+- **Writer output to Markdown:** writer drafts are JSON in `content/drafts/`; the site reads them directly. The publish step (draft → `content/published/<slug>.md` in a PR) is not built yet.
+- **Mock offer prices** are placeholders and don't match real prices; replace with the offers agent (M7) after affiliate terms are verified.
 - **Niche-aware checks:** `market` and `contentType` in artifacts are not yet checked against `niche.json`.
 - **Affiliate terms and consent:** sellers and disclosure text in `niche.json` stay empty until program terms are verified per market.

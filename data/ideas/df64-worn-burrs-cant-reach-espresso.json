@@ -1,0 +1,25 @@
+{
+  "id": "df64-worn-burrs-cant-reach-espresso",
+  "question": "My DF64 used to grind fine enough for espresso and now it doesn't, even near zero. Should I re-zero or realign it, or are the burrs worn and need replacing?",
+  "audience": "DF64 / DF64V owners a year or more in, single-dosing espresso, comfortable with basic grinder maintenance",
+  "market": "US",
+  "language": "en",
+  "pain": "The usable espresso range has shrunk or vanished, and they can't tell whether the dial zero has drifted, the alignment is off, or the stock burrs are worn out.",
+  "decision": "Clean, re-zero and realign the grinder at no cost, or buy replacement burrs (stock or aftermarket) for it",
+  "contentType": "troubleshooter-tool",
+  "demand": {
+    "kind": "qualitative",
+    "signals": [
+      {
+        "url": "https://lemmy.world/post/46736915",
+        "date": "2026-05-12",
+        "note": "DF64 owner's stock burrs wore out so they could no longer grind fine enough for espresso. They replaced them with aftermarket burrs, needed a shim for alignment, and the usable range widened. The thread also discusses DF64 prices nearly doubling."
+      }
+    ]
+  },
+  "competitorGap": "DF64 advice is mostly buried in huge forum megathreads. The manufacturer's grind guide explains the zero point but not how to tell drift from wear. Burr-upgrade posts assume the reader wants a new flavour profile, not a fix for a grinder that has stopped grinding fine enough.",
+  "valueAdd": "A step-by-step check (clean the burrs, find where they touch and reset the dial to that point, inspect alignment and shims, estimate wear from usage) that tells the reader whether the free fix is enough. It ends with a simple rule for when to buy replacement burrs, either like-for-like stock burrs or an aftermarket set, so reaching espresso again doesn't turn into an upgrade spiral.",
+  "commercialPath": [
+    "replacement grinder burrs"
+  ]
+}

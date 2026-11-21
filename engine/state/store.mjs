@@ -12,15 +12,19 @@ export function itemsDir(root) {
   return join(root, 'data', 'items');
 }
 
-export function writeJsonAtomic(path, value) {
+export function writeTextAtomic(path, text) {
   mkdirSync(dirname(path), { recursive: true });
   const temp = `${path}.${randomUUID()}.tmp`;
   try {
-    writeFileSync(temp, JSON.stringify(value, null, 2) + '\n', { flag: 'wx' });
+    writeFileSync(temp, text, { flag: 'wx' });
     renameSync(temp, path);
   } finally {
     rmSync(temp, { force: true });
   }
+}
+
+export function writeJsonAtomic(path, value) {
+  writeTextAtomic(path, JSON.stringify(value, null, 2) + '\n');
 }
 
 export function readJson(path) {
