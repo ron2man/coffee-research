@@ -1,0 +1,26 @@
+{
+  "name": "idea",
+  "description": "Turns demand signals (questions, Search Console queries, questionnaire answers, competitor gaps, market changes) into idea cards. Never starts from the product catalog.",
+  "mode": "generate",
+  "priority": 10,
+  "artifactDir": "data/ideas",
+  "maxItems": 10,
+  "queueCap": {
+    "statuses": [
+      "idea",
+      "idea_approved"
+    ],
+    "max": 10
+  },
+  "schedule": {
+    "minIntervalHours": 24
+  },
+  "runner": {
+    "type": "claude",
+    "tools": [
+      "WebSearch",
+      "WebFetch"
+    ]
+  },
+  "status": "draft"
+}

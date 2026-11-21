@@ -1,0 +1,24 @@
+{
+  "items": [
+    {
+      "id": "bambino-sour-shots",
+      "question": "Why is my Bambino espresso always sour and what do I change first?",
+      "audience": "New Breville Bambino / Bambino Plus owners, US",
+      "market": "US",
+      "language": "en",
+      "pain": "Repeated sour shots despite changing grind",
+      "decision": "What to change, in what order",
+      "contentType": "troubleshooter-tool",
+      "demand": {
+        "kind": "measured",
+        "signals": []
+      },
+      "competitorGap": "Generic guides; none Bambino-specific",
+      "valueAdd": "Interactive diagnosis from shot time, ratio, basket, roast",
+      "commercialPath": [
+        "scale",
+        "grinder"
+      ]
+    }
+  ]
+}

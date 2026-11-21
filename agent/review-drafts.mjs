@@ -1,7 +1,7 @@
 import { existsSync, readdirSync, readFileSync, renameSync, rmSync, writeFileSync } from 'node:fs';
 import { parseArgs } from 'node:util';
 import { judgeEditorial } from './judge-editorial.mjs';
-import { scanKnowledge } from './knowledge.mjs';
+import { loadCards, matchesReview, reviewInputs } from './review-inputs.mjs';
 
 const directory = 'content/drafts';
 try {
@@ -15,38 +15,32 @@ try {
   const slugs = requested.length ? [...new Set(requested)] : readdirSync(directory)
     .filter((name) => /^[a-z0-9-]+\.md$/.test(name))
     .map((name) => name.slice(0, -3));
-  const { cards, errors } = await scanKnowledge('knowledge');
-  if (errors.length) throw new Error(errors.join('\n'));
-  const skill = readFileSync('agent/skills/coffee-seo/SKILL.md', 'utf8');
+  const cards = await loadCards();
 
   for (const slug of slugs) {
     const draft = `${directory}/${slug}.md`;
     const brief = `${directory}/${slug}.brief.md`;
     const reviewPath = `${directory}/${slug}.review.json`;
     const alreadyReviewed = existsSync(reviewPath);
-    if (alreadyReviewed && !values.rejudge) {
-      console.log(`Skipped ${slug}: already reviewed`);
-      continue;
-    }
     try {
       const previousText = alreadyReviewed ? readFileSync(reviewPath, 'utf8') : null;
       const previous = previousText === null ? null : JSON.parse(previousText);
       if (previous && (previous.draft !== draft || previous.brief !== brief)) {
         throw new Error('Saved review does not match the draft and brief');
       }
-      const article = readFileSync(draft, 'utf8');
-      const notes = readFileSync(brief, 'utf8');
-      const references = [...notes.matchAll(/`([a-z0-9-]+)\/([a-z0-9-]+)`/g)];
-      const productIds = new Set(references.map(([, product]) => product));
-      const evidence = [...productIds].map((id) => cards.get(id)).filter(Boolean);
-      const review = judgeEditorial(article, notes, evidence, skill);
-      if (readFileSync(draft, 'utf8') !== article || readFileSync(brief, 'utf8') !== notes) {
-        throw new Error('Draft or brief changed during judging');
+      const inputs = reviewInputs(slug, cards);
+      if (!values.rejudge && matchesReview(slug, previous, inputs)) {
+        console.log('Skipped current review: ' + slug);
+        continue;
+      }
+      const review = judgeEditorial(inputs);
+      if (reviewInputs(slug, await loadCards()).fingerprint !== inputs.fingerprint) {
+        throw new Error('Review inputs changed during judging');
       }
       const saved = { draft, brief, ...review };
       if (previous) {
-        const { verdict, scores, actions, optionalImprovements, history = [] } = previous;
-        saved.history = [...history, { verdict, scores, actions, optionalImprovements }];
+        const { draft: oldDraft, brief: oldBrief, history = [], ...prior } = previous;
+        saved.history = [...history, prior];
         if (readFileSync(reviewPath, 'utf8') !== previousText) {
           throw new Error('Saved review changed during judging');
         }

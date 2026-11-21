@@ -1,0 +1,25 @@
+{
+  "name": "angle",
+  "description": "Writes the angle brief: the one claim the post argues, what we add that the top 3 competitors do not, the tool or decision it produces, and what to leave out. Without a distinct contribution the item goes to needs_human or is rejected.",
+  "mode": "item",
+  "priority": 40,
+  "inputStatus": "researched",
+  "outcomes": {
+    "brief": "briefed",
+    "needs_human": "needs_human",
+    "reject": "rejected"
+  },
+  "inputArtifacts": [
+    "idea",
+    "research"
+  ],
+  "artifactDir": "data/briefs",
+  "runner": {
+    "type": "claude",
+    "tools": [
+      "WebSearch",
+      "WebFetch"
+    ]
+  },
+  "status": "draft"
+}

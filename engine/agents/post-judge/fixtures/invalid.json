@@ -1,0 +1,42 @@
+{
+  "outcome": "revise",
+  "reason": "Too many actions",
+  "artifact": {
+    "scores": {
+      "readerValueVsCompetitors": {
+        "score": 3,
+        "reason": "Fixture"
+      },
+      "distinctivenessVoice": {
+        "score": 3,
+        "reason": "Fixture"
+      },
+      "honestyAboutLimits": {
+        "score": 3,
+        "reason": "Fixture"
+      },
+      "evidenceIntegrity": {
+        "score": 3,
+        "reason": "Fixture"
+      },
+      "topicFit": {
+        "score": 3,
+        "reason": "Fixture"
+      }
+    },
+    "wouldForward": false,
+    "competitorComparison": [
+      {
+        "url": "https://example.com/a",
+        "weGiveThatTheyDont": "x"
+      }
+    ],
+    "blockingActions": [
+      "a",
+      "b",
+      "c",
+      "d"
+    ],
+    "optionalImprovements": []
+  }
+}

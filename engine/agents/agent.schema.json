@@ -1,0 +1,69 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "agent.schema.json",
+  "title": "Agent definition (engine/agents/<name>/agent.json)",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["name", "description", "mode", "priority", "artifactDir", "runner"],
+  "properties": {
+    "name": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+    "description": { "type": "string", "minLength": 1 },
+    "mode": {
+      "description": "generate: creates new items. batch: decides on all items in inputStatus in one run. item: processes one item.",
+      "enum": ["generate", "batch", "item"]
+    },
+    "priority": { "type": "integer", "description": "Higher runs first. Later pipeline stages should outrank earlier ones so work finishes before new work starts." },
+    "inputStatus": { "type": "string" },
+    "outcomes": {
+      "type": "object",
+      "description": "Agent outcome name → item status.",
+      "minProperties": 1,
+      "additionalProperties": { "type": "string" }
+    },
+    "artifactDir": { "type": "string", "pattern": "^(data|content)/[a-z0-9-]+$" },
+    "maxItems": { "type": "integer", "minimum": 1 },
+    "batchSize": { "type": "integer", "minimum": 1 },
+    "maxAdvance": {
+      "type": "object", "additionalProperties": false, "required": ["outcome", "max"],
+      "properties": { "outcome": { "type": "string" }, "max": { "type": "integer", "minimum": 0 } }
+    },
+    "queueCap": {
+      "type": "object", "additionalProperties": false, "required": ["statuses", "max"],
+      "properties": {
+        "statuses": { "type": "array", "items": { "type": "string" }, "minItems": 1 },
+        "max": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "schedule": {
+      "type": "object", "additionalProperties": false, "required": ["minIntervalHours"],
+      "properties": { "minIntervalHours": { "type": "number", "exclusiveMinimum": 0 } }
+    },
+    "loop": {
+      "type": "object", "additionalProperties": false, "required": ["outcome", "limit", "exceeded"],
+      "description": "An outcome that sends the item back (e.g. revise). After `limit` loops it goes to `exceeded` instead.",
+      "properties": {
+        "outcome": { "type": "string" },
+        "limit": { "type": "integer", "minimum": 0 },
+        "exceeded": { "type": "string" }
+      }
+    },
+    "inputArtifacts": {
+      "type": "array", "items": { "type": "string" },
+      "description": "Names of earlier agents whose artifacts are passed as input."
+    },
+    "runner": {
+      "type": "object", "additionalProperties": false, "required": ["type"],
+      "properties": {
+        "type": { "enum": ["claude", "fake"] },
+        "tools": { "type": "array", "items": { "type": "string" } },
+        "permissions": { "type": "object" }
+      }
+    },
+    "status": { "enum": ["draft", "active"], "description": "draft = contract defined, prompt not yet written." }
+  },
+  "allOf": [
+    { "if": { "properties": { "mode": { "const": "generate" } } }, "then": { "required": ["maxItems"] } },
+    { "if": { "properties": { "mode": { "enum": ["batch", "item"] } } }, "then": { "required": ["inputStatus", "outcomes"] } },
+    { "if": { "properties": { "mode": { "const": "batch" } } }, "then": { "required": ["batchSize"] } }
+  ]
+}

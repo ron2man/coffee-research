@@ -1,0 +1,27 @@
+{
+  "name": "idea-judge",
+  "description": "Scores every pending idea on six dimensions and advances at most three. Rejected ideas keep their reason and can be re-scored later.",
+  "mode": "batch",
+  "priority": 20,
+  "inputStatus": "idea",
+  "batchSize": 20,
+  "outcomes": {
+    "advance": "idea_approved",
+    "reject": "rejected"
+  },
+  "maxAdvance": {
+    "outcome": "advance",
+    "max": 3
+  },
+  "inputArtifacts": [
+    "idea"
+  ],
+  "artifactDir": "data/idea-scores",
+  "runner": {
+    "type": "claude",
+    "tools": [
+      "WebSearch"
+    ]
+  },
+  "status": "draft"
+}

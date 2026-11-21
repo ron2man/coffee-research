@@ -1,0 +1,37 @@
+{
+  "outcome": "pass",
+  "reason": "Beats the top results with a Bambino-specific diagnosis.",
+  "artifact": {
+    "scores": {
+      "readerValueVsCompetitors": {
+        "score": 4,
+        "reason": "Fixture"
+      },
+      "distinctivenessVoice": {
+        "score": 4,
+        "reason": "Fixture"
+      },
+      "honestyAboutLimits": {
+        "score": 4,
+        "reason": "Fixture"
+      },
+      "evidenceIntegrity": {
+        "score": 4,
+        "reason": "Fixture"
+      },
+      "topicFit": {
+        "score": 4,
+        "reason": "Fixture"
+      }
+    },
+    "wouldForward": true,
+    "competitorComparison": [
+      {
+        "url": "https://example.com/sour-espresso",
+        "weGiveThatTheyDont": "Basket-first diagnosis"
+      }
+    ],
+    "blockingActions": [],
+    "optionalImprovements": []
+  }
+}

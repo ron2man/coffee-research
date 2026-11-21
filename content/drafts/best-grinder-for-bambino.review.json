@@ -5,26 +5,35 @@
   "scores": {
     "topicSelection": {
       "score": 3,
-      "reason": "The US query and owner intent are clear. The brief cites one owner discussion, leaves demand and ranking potential unmeasured, and gives no comparison with another topic. Competing guides already cover the default pick and much of the workflow. The draft’s narrower contribution is a quick way to decide whether to buy at all or test an existing grinder first. [Preinfuse](https://preinfuse.com/guides/best-grinder-for-breville-bambino/) · [EspressoPilot](https://espressopilot.com/guides/best-grinders-for-breville-bambino)"
+      "reason": "The US query maps to a clear buying decision. Both competing guides already recommend the Encore ESP, but the draft adds a test owners can run before buying. One owner thread confirms the question comes up. The brief leaves search demand and ranking potential unmeasured and gives no comparison with a second topic. [Preinfuse](https://preinfuse.com/guides/best-grinder-for-breville-bambino/) · [EspressoPilot](https://espressopilot.com/guides/best-grinders-for-breville-bambino) · [Owner discussion](https://www.reddit.com/r/espresso/comments/1hom6vy/which_grinder_to_pair_with_bambino_df54/)"
     },
     "evidence": {
       "score": 5,
-      "reason": "Breville documents the basket advice for the covered models, Baratza supports the Encore ESP’s adjustment ranges and dosing cup, and the seller confirms the DF54 v4.1 espresso-burr choice. The draft bases its picks on documented workflow and explicitly discloses the absence of side-by-side taste and retention tests. [Bambino manual](https://assets.breville.com/BES450/BES450_USCM_IB_M26_LR.pdf) · [Bambino Plus specifications](https://www.breville.com/en-us/product/bes500?sku=BES500BSS1BUS1) · [Baratza specifications](https://www.baratza.com/en-us/product/encoretm-esp-zcg495) · [DF54 v4.1 listing](https://espressooutlet.com/products/turin-df54-single-dose-flat-burr-grinder)"
+      "reason": "Public sources support the basket and shot-flow advice, the Encore ESP’s adjustment range and 54 mm cup fit, the US DF54 v4.1’s stepless dial and burr options, and the J-Ultra’s manual operation and fine adjustment. Baratza’s manual confirmed details that were missing from the accessible product-page text. [Bambino manual](https://assets.breville.com/BES450/BES450_USCM_IB_M26_LR.pdf) · [Bambino Plus specifications](https://www.breville.com/en-us/product/bes500?sku=BES500BSS1BUS1) · [Encore ESP manual](https://assets.breville.com/ZCG495/manual-encoreesp-v1-0-en-010923.pdf) · [DF54 v4.1 listing](https://espressooutlet.com/products/turin-df54-single-dose-flat-burr-grinder) · [J-Ultra specifications](https://1zpresso.coffee/j-ultra/)"
     },
     "readerValue": {
       "score": 5,
-      "reason": "The opening stands on its own. It picks the Encore ESP for a first electric setup, tells satisfied dual-wall users they can wait, and gives readers who weigh each dose and want finer control a reason to choose the DF54. The adjacent-setting shot test gives existing owners a concrete way to decide whether to upgrade."
+      "reason": "The hypothetical fast-shot and slow-drip opening earns the recommendation through a test. Hold beans, basket, and dose steady. Keep the current grinder if a good setting repeats. If adjacent settings repeatedly bracket the desired flow, consider the stepless DF54 with espresso burrs if single dosing suits you. The Encore ESP is the first-buy pick for a hopper routine, with numbered settings and a cup sized for the Bambino. The test transfers to other grinders, but swapping in two comparable models would require checking those specific features before keeping the picks."
     },
     "onPageSeo": {
-      "score": 4,
-      "reason": "The descriptive heading names both machines, the opening answers the query directly, and the sections follow the owner’s decision in a logical order. The brief still needs a proposed page title, slug, and meta description. No suitable internal destination was established in the supplied materials."
+      "score": 3,
+      "reason": "The descriptive heading, natural product phrasing, and short sections match the buying intent. The brief lacks a proposed page title, slug, and meta description. The supplied material identifies no relevant internal-link target."
     }
   },
   "actions": [],
   "optionalImprovements": [
-    "Add a proposed page title, stable slug, and meta description that reflects the buy-or-wait decision. Add a contextual internal link if a relevant basket or dialing-in guide exists.",
-    "Frame the topic as an editorial experiment and compare it with a plausible alternative, such as a standalone guide to deciding whether a Bambino owner needs a grinder."
+    "Add a proposed page title, stable slug, and meta description. Link to an existing basket-identification guide if the site has one.",
+    "Use the Encore ESP manual for the adjustment and cup-fit citation. It also explains how to remove the 58 mm adapter for the Bambino. [Encore ESP manual](https://assets.breville.com/ZCG495/manual-encoreesp-v1-0-en-010923.pdf)",
+    "Compare this experiment with a second topic, such as when to switch a Bambino from a dual-wall to a single-wall basket. Record demand and the gap in competing answers for each."
   ],
+  "reader": {
+    "question": "Which grinder should I buy for my first Breville Bambino, and when is it worth choosing one with finer adjustments?",
+    "quote": "When you want to stop halfway between clicks, the ESP asks you to pick one.",
+    "action": "Keep using pre-ground coffee if you’re happy with your dual-wall basket. With fresh beans and a single-wall basket, keep your current grinder if you can find and repeat a setting you like. If you’re buying your first grinder and want to keep beans in a hopper, choose the Baratza Encore ESP. If adjacent settings repeatedly give you a shot that runs too fast and one that barely flows, consider the stepless Turin DF54 with espresso burrs if you’re willing to weigh each dose. Consider the J-Ultra if you’re happy to grind every dose by hand.",
+    "unresolved": "You still have to test how your beans behave in your basket. The page gives you a way to do that and places the practical caveats beside each pick, including the Encore’s fixed steps, the DF54’s single-dose workflow and burr choice, and the J-Ultra’s manual effort.",
+    "solved": true
+  },
+  "fingerprint": "7815668adcf205525bf37b9d598b888ee83360fc3dfd90017b140bbd17b47310",
   "history": [
     {
       "verdict": "revise",
@@ -79,6 +88,67 @@
         "Record one competing topic and explain why this experiment took priority. Use additional independent owner questions or measured query data if available.",
         "Link the Encore ESP settings and dosing-cup claims directly to the operations manual, where readers can find both details. [Baratza Encore ESP operations manual](https://assets.breville.com/ZCG495/manual-encoreesp-v1-0-en-010923.pdf)"
       ]
+    },
+    {
+      "verdict": "pass",
+      "scores": {
+        "topicSelection": {
+          "score": 3,
+          "reason": "The US query and owner intent are clear. The brief cites one owner discussion, leaves demand and ranking potential unmeasured, and gives no comparison with another topic. Competing guides already cover the default pick and much of the workflow. The draft’s narrower contribution is a quick way to decide whether to buy at all or test an existing grinder first. [Preinfuse](https://preinfuse.com/guides/best-grinder-for-breville-bambino/) · [EspressoPilot](https://espressopilot.com/guides/best-grinders-for-breville-bambino)"
+        },
+        "evidence": {
+          "score": 5,
+          "reason": "Breville documents the basket advice for the covered models, Baratza supports the Encore ESP’s adjustment ranges and dosing cup, and the seller confirms the DF54 v4.1 espresso-burr choice. The draft bases its picks on documented workflow and explicitly discloses the absence of side-by-side taste and retention tests. [Bambino manual](https://assets.breville.com/BES450/BES450_USCM_IB_M26_LR.pdf) · [Bambino Plus specifications](https://www.breville.com/en-us/product/bes500?sku=BES500BSS1BUS1) · [Baratza specifications](https://www.baratza.com/en-us/product/encoretm-esp-zcg495) · [DF54 v4.1 listing](https://espressooutlet.com/products/turin-df54-single-dose-flat-burr-grinder)"
+        },
+        "readerValue": {
+          "score": 5,
+          "reason": "The opening stands on its own. It picks the Encore ESP for a first electric setup, tells satisfied dual-wall users they can wait, and gives readers who weigh each dose and want finer control a reason to choose the DF54. The adjacent-setting shot test gives existing owners a concrete way to decide whether to upgrade."
+        },
+        "onPageSeo": {
+          "score": 4,
+          "reason": "The descriptive heading names both machines, the opening answers the query directly, and the sections follow the owner’s decision in a logical order. The brief still needs a proposed page title, slug, and meta description. No suitable internal destination was established in the supplied materials."
+        }
+      },
+      "actions": [],
+      "optionalImprovements": [
+        "Add a proposed page title, stable slug, and meta description that reflects the buy-or-wait decision. Add a contextual internal link if a relevant basket or dialing-in guide exists.",
+        "Frame the topic as an editorial experiment and compare it with a plausible alternative, such as a standalone guide to deciding whether a Bambino owner needs a grinder."
+      ]
+    },
+    {
+      "verdict": "pass",
+      "scores": {
+        "topicSelection": {
+          "score": 3,
+          "reason": "The primary query fits a clear US owner decision. One owner thread illustrates the intent, while both competing guides already cover much of the buying advice. The check-before-upgrading angle justifies an editorial experiment. The brief offers no comparison with alternative topics, and expected traffic remains unknown. [Owner discussion](https://www.reddit.com/r/espresso/comments/1hom6vy/which_grinder_to_pair_with_bambino_df54/) · [Preinfuse](https://preinfuse.com/guides/best-grinder-for-breville-bambino/) · [EspressoPilot](https://espressopilot.com/guides/best-grinders-for-breville-bambino)"
+        },
+        "evidence": {
+          "score": 5,
+          "reason": "Public sources support the US basket guidance and the model-specific features behind each recommendation. The draft identifies the exact DF54 listing and discloses that taste and retention were untested. [Breville Bambino manual](https://assets.breville.com/BES450/BES450_USCM_IB_M26_LR.pdf) · [Bambino Plus accessories](https://www.breville.com/en-us/product/bes500?sku=BES500BSS1BUS1) · [Baratza Encore ESP](https://www.baratza.com/en-us/product/encoretm-esp-zcg495) · [Espresso Outlet DF54](https://espressooutlet.com/products/turin-df54-single-dose-flat-burr-grinder) · [1Zpresso J-Ultra](https://1zpresso.coffee/j-ultra/)"
+        },
+        "readerValue": {
+          "score": 5,
+          "reason": "The opening answers the supplied reader’s question on its own. Keep using pre-ground coffee if the dual-wall results satisfy you, choose the Encore ESP for a first electric setup, or choose the DF54 if weighing each dose and adjusting between clicks suits your routine. The article turns grind-flow guidance into a purchase test. With beans, basket, and dose held steady, keep a grinder that produces the shot you want. If adjacent settings repeatedly jump from fast to barely flowing, shop for finer adjustment. Swapping the two electric models would break the advice because the Encore ESP’s 54 mm transfer cup and stepped hopper serve a different routine from the DF54’s stepless single-dose workflow."
+        },
+        "onPageSeo": {
+          "score": 4,
+          "reason": "The H1 names both machines in natural search language, the first paragraph answers the query, and the headings follow the reader’s decision. The brief lacks proposed metadata and identifies no applicable internal link targets."
+        }
+      },
+      "actions": [],
+      "optionalImprovements": [
+        "Record why this topic was chosen over another plausible article idea and keep the traffic outlook labeled unmeasured.",
+        "Add a proposed page title, stable slug, and meta description to the brief. Suggest internal links with descriptive anchor text where relevant pages exist.",
+        "Make the existing-grinder test easier to repeat by telling readers to keep puck preparation consistent and change only the grind setting."
+      ],
+      "reader": {
+        "question": "I’m new to the Bambino and use pre-ground coffee in the dual-wall basket. Do I need a grinder now, and which one should I buy if I switch to fresh beans?",
+        "quote": "Get the Baratza Encore ESP if you want a straightforward first electric grinder for your Bambino. If you're happy making espresso with pre-ground coffee in your dual-wall basket, you can start with what you have. If you already know you want to weigh every dose and make adjustments between numbered settings, consider the Turin DF54 with espresso burrs.",
+        "action": "Keep using pre-ground coffee in the dual-wall basket while you enjoy the results. If you switch to fresh beans in the single-wall basket and want a straightforward electric setup, choose the Encore ESP. The opening puts both the reason to wait and the specific workflow that favors the DF54 beside its recommendation.",
+        "unresolved": "You’ll need to dial in the grind setting for your beans and basket. The page leaves comparative taste and retention untested, and its opening bases the choice on workflow.",
+        "solved": true
+      },
+      "fingerprint": "a6d099d100fe003dac22bb0668b43bb6bb878379c09c62fc75d6d3d8324bf100"
     }
   ]
 }

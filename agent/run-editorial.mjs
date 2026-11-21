@@ -1,10 +1,13 @@
 import { spawnSync } from 'node:child_process';
-import { appendFileSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { appendFileSync, existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { parseArgs } from 'node:util';
-import { scanKnowledge } from './knowledge.mjs';
+import { claimEvidence, loadCards, reviewInputs } from './review-inputs.mjs';
+import { assessTopic } from './topic-gate.mjs';
 import { judgeEditorial } from './judge-editorial.mjs';
+import { categories } from './knowledge.mjs';
 
 const start = Date.now();
+const opportunityFiles = new Map();
 
 function record(status, details) {
   mkdirSync('.backoffice', { recursive: true });
@@ -35,45 +38,70 @@ function workingChanges() {
 function changedPaths(revision) {
   return workingChanges().map((change) => {
     const path = change.slice(3);
-    const knowledge = /^knowledge\/(?:grinders|machines)\/[a-z0-9-]+\.md$/.test(path);
-    const editorial = revision
-      ? [revision.draft, revision.brief].includes(path)
-      : /^content\/drafts\/[a-z0-9-]+(?:\.brief)?\.md$/.test(path);
-    if (![' M', '??'].includes(change.slice(0, 2)) || !(knowledge || editorial)) {
-      throw new Error(`Unexpected workflow change: ${change}`);
+    const status = change.slice(0, 2);
+    if (![' M', '??'].includes(status)) throw new Error('Unexpected workflow change: ' + change);
+    if (opportunityFiles.has(path)) {
+      if (readFileSync(path, 'utf8') !== opportunityFiles.get(path)) throw new Error('Commissioning input changed: ' + path);
+      return path;
     }
+    const knowledge = new RegExp(`^knowledge/(?:${categories.join('|')})/[a-z0-9-]+\\.md$`).test(path);
+    const editorial = revision && [revision.draft, revision.brief].includes(path);
+    if (!knowledge && !editorial) throw new Error('Unexpected workflow change: ' + change);
     return path;
   });
 }
 
-function newDraft(paths) {
-  const editorial = paths.filter((path) => path.startsWith('content/drafts/'));
-  if (!editorial.length) return null;
-  const draft = editorial.find((path) => !path.endsWith('.brief.md'));
-  const brief = draft?.replace(/\.md$/, '.brief.md');
-  if (editorial.length !== 2 || !editorial.includes(brief)) {
-    throw new Error('Expected one changed draft and its matching brief');
+async function commission(seoSkill) {
+  mkdirSync('content/opportunities', { recursive: true });
+  run('codex', ['exec', '-s', 'workspace-write', readFileSync('agent/editorial-workflow.md', 'utf8') + '\n' + seoSkill]);
+  const proposals = workingChanges().filter(change => /^(?: M|\?\?) content\/opportunities\/[a-z0-9-]+\.md$/.test(change));
+  if (!proposals.length) {
+    changedPaths();
+    return null;
   }
-  return { draft, brief };
+  if (proposals.length !== 1) throw new Error('Research must produce one new or updated proposal');
+  const path = proposals[0].slice(3);
+  const proposal = readFileSync(path, 'utf8');
+  opportunityFiles.set(path, proposal);
+  changedPaths();
+  const cards = await loadCards();
+  const evidence = claimEvidence(proposal, cards, false);
+  const decision = assessTopic(proposal, evidence);
+  if (decision.outcome !== 'research' && !evidence.length) throw new Error('Commission needs supported claims');
+  const slug = path.split('/').pop().slice(0, -3);
+  const draft = 'content/drafts/' + slug + '.md';
+  const brief = draft.replace(/\.md$/, '.brief.md');
+  const decisionPath = path.replace(/\.md$/, '.json');
+  const priorDecision = existsSync(decisionPath) ? JSON.parse(readFileSync(decisionPath, 'utf8')) : null;
+  const reviewPath = draft.replace(/\.md$/, '.review.json');
+  const previousReview = existsSync(reviewPath) ? JSON.parse(readFileSync(reviewPath, 'utf8')) : null;
+  const revisiting = existsSync(draft) && previousReview &&
+    (['research', 'narrow'].includes(priorDecision?.outcome) || previousReview.verdict === 'defer');
+  if (revisiting && previousReview.verdict !== 'defer' && decision.outcome !== 'proceed') {
+    // Keep the existing narrow commission valid while research on its broader question continues.
+    return null;
+  }
+  if (!revisiting && [draft, brief, draft.replace(/\.md$/, '.review.json')].some(file => existsSync(file))) {
+    throw new Error('Commission collides with an existing draft: ' + slug);
+  }
+  const decisionText = JSON.stringify(decision, null, 2) + '\n';
+  writeFileSync(decisionPath, decisionText);
+  opportunityFiles.set(decisionPath, decisionText);
+  if (decision.outcome === 'research') return null;
+  run('codex', ['exec', '-s', 'workspace-write', [
+    'Write the commissioned article and matching brief at the exact paths below. Answer only the commissioned question. Carry over the research, sources, alternatives, and backticked claim dependencies from the proposal. For a narrowed commission, explicitly narrow the headline and opening. Preserve the research proposal and decision files. Leave git to the runner.',
+    seoSkill, JSON.stringify({ draft, brief, proposal, decision }),
+  ].join('\n')]);
+  changedPaths({ draft, brief });
+  if (![draft, brief].every(file => existsSync(file))) throw new Error('Missing commissioned draft or brief');
+  return { draft, brief, previousReview };
 }
 
-async function reviewDraft({ draft, brief }, seoSkill) {
-  const { cards, errors } = await scanKnowledge('knowledge');
-  if (errors.length) throw new Error(errors.join('\n'));
-  const markdown = readFileSync(brief, 'utf8');
-  const links = [...markdown.matchAll(/`([a-z0-9-]+)\/([a-z0-9-]+)`/g)];
-  if (!links.length) throw new Error(`No claim references in ${brief}`);
-  for (const [, product, claim] of links) {
-    if (!cards.get(product)?.claims.some((entry) => entry.id === claim && entry.status === 'supported')) {
-      throw new Error(`Unresolved or unsupported claim ${product}/${claim} in ${brief}`);
-    }
-  }
-  const evidence = [...new Set(links.map(([, product]) => product))].map((id) => cards.get(id));
-  const before = workingChanges();
-  const review = judgeEditorial(readFileSync(draft, 'utf8'), markdown, evidence, seoSkill);
-  if (JSON.stringify(workingChanges()) !== JSON.stringify(before)) {
-    throw new Error('Repository changes appeared during editorial judging');
-  }
+async function reviewDraft({ draft }) {
+  const slug = draft.split('/').pop().slice(0, -3);
+  const inputs = reviewInputs(slug, await loadCards());
+  const review = judgeEditorial(inputs);
+  if (reviewInputs(slug, await loadCards()).fingerprint !== inputs.fingerprint) throw new Error('Review inputs changed during judging');
   return review;
 }
 
@@ -117,32 +145,27 @@ try {
 
   const seoSkill = readFileSync('agent/skills/coffee-seo/SKILL.md', 'utf8');
   const saved = savedRevision(values.revise, feedback);
-  let article = saved;
-  if (!saved) {
-    const prompt = [readFileSync('agent/editorial-workflow.md', 'utf8'), seoSkill].join('\n\n');
-    run('codex', ['exec', '-s', 'workspace-write', prompt]);
-    run(process.execPath, ['agent/validate-knowledge.mjs']);
-    article = newDraft(changedPaths());
-  }
+  const article = saved ?? await commission(seoSkill);
+  run(process.execPath, ['agent/validate-knowledge.mjs']);
 
   const verdicts = [];
   let files = changedPaths(article);
   if (article) {
     const { draft, brief } = article;
-    const initial = saved?.review ?? await reviewDraft(article, seoSkill);
+    const initial = saved?.review ?? await reviewDraft(article);
     const previous = initial.verdict === 'revise' || feedback ? initial : null;
     if (previous) reviseDraft(article, previous, seoSkill, feedback);
 
-    const final = previous ? await reviewDraft(article, seoSkill) : initial;
+    const final = previous ? await reviewDraft(article) : initial;
     files = changedPaths(article);
     const path = draft.replace(/\.md$/, '.review.json');
-    const history = previous ? [
-      ...(Array.isArray(previous.history) ? previous.history : []),
-      { verdict: previous.verdict, scores: previous.scores, actions: previous.actions,
-        optionalImprovements: previous.optionalImprovements },
-    ] : [];
+    const history = [];
+    for (const record of [article.previousReview, previous].filter(Boolean)) {
+      const { draft: priorDraft, brief: priorBrief, history: older = [], ...prior } = record;
+      history.push(...older, prior);
+    }
     writeFileSync(path, JSON.stringify({ draft, brief, ...final, history }, null, 2) + '\n',
-      { flag: saved ? 'w' : 'wx' });
+      { flag: saved || article.previousReview ? 'w' : 'wx' });
     files.push(path);
     verdicts.push({ draft, verdict: final.verdict, initialVerdict: initial.verdict, review: path });
   }

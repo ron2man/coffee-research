@@ -1,0 +1,21 @@
+{
+  "outcome": "done",
+  "reason": "Basket and grind guidance verified in the Breville manual.",
+  "artifact": {
+    "learned": [
+      "Breville recommends the single-wall basket for freshly ground beans."
+    ],
+    "unknowns": [
+      "Shot-to-shot variance of the Bambino thermocoil."
+    ],
+    "competitors": [
+      {
+        "url": "https://example.com/sour-espresso",
+        "says": "Generic grind-finer advice."
+      }
+    ],
+    "claimIds": [
+      "bambino-plus/us-cleaning-alert"
+    ]
+  }
+}

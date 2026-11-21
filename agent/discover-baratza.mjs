@@ -1,12 +1,14 @@
 import { appendFile, mkdir, readFile, rename, rm, writeFile } from 'node:fs/promises';
 import { randomUUID } from 'node:crypto';
 import { parseArgs } from 'node:util';
-import { indexIds, scanKnowledge } from './knowledge.mjs';
+import { categories, indexIds, scanKnowledge } from './knowledge.mjs';
 
 const catalogUrl = 'https://www.baratza.com/en-us/shop/grinders';
 const queuePath = 'agent/research-queue.json';
 const origin = 'baratza-us-catalog';
 const market = 'US';
+const category = 'grinders';
+if (!categories.includes(category)) throw new Error(`Niche config has no "${category}" category`);
 const started = Date.now();
 
 function modelId(name) {
@@ -38,7 +40,7 @@ function readCatalog(html) {
     return {
       id: modelId(name),
       name: 'Baratza ' + name.replace(/[™®]/g, '').trim(),
-      category: 'grinders',
+      category,
       origin,
       discovery: { catalogUrl, productUrl: link.href, market },
     };

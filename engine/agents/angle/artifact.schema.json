@@ -1,0 +1,165 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "angle.artifact.schema.json",
+  "title": "Angle brief (rebuild-spec 6.3)",
+  "description": "Every brief must include a dont-buy / keep-yours touchpoint (principle 4).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "thesis",
+    "reader",
+    "readerDecision",
+    "whatCompetitorsMiss",
+    "ourContribution",
+    "contributionDetail",
+    "mustInclude",
+    "leaveOut",
+    "assets",
+    "offerTouchpoints",
+    "claimIds",
+    "competitorsReviewed",
+    "titleOptions",
+    "slug",
+    "metaDescription"
+  ],
+  "properties": {
+    "thesis": {
+      "type": "string",
+      "minLength": 1
+    },
+    "reader": {
+      "type": "string",
+      "minLength": 1
+    },
+    "readerDecision": {
+      "type": "string",
+      "minLength": 1
+    },
+    "whatCompetitorsMiss": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1
+    },
+    "ourContribution": {
+      "enum": [
+        "tool",
+        "decision-rule",
+        "diagnosis",
+        "tracker"
+      ]
+    },
+    "contributionDetail": {
+      "type": "string",
+      "minLength": 1
+    },
+    "mustInclude": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "leaveOut": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "assets": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+        "maxLength": 80
+      }
+    },
+    "offerTouchpoints": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "role"
+        ],
+        "properties": {
+          "productId": {
+            "type": "string",
+            "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+            "maxLength": 80
+          },
+          "role": {
+            "enum": [
+              "primary",
+              "alternative",
+              "dont-buy"
+            ]
+          }
+        }
+      },
+      "contains": {
+        "type": "object",
+        "required": [
+          "role"
+        ],
+        "properties": {
+          "role": {
+            "const": "dont-buy"
+          }
+        }
+      }
+    },
+    "claimIds": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z0-9-]+/[a-z0-9-]+$",
+        "description": "productId/claimId"
+      }
+    },
+    "competitorsReviewed": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 3,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "url",
+          "summary"
+        ],
+        "properties": {
+          "url": {
+            "type": "string",
+            "format": "uri"
+          },
+          "summary": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "titleOptions": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1
+    },
+    "slug": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+      "maxLength": 80
+    },
+    "metaDescription": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 160
+    }
+  }
+}

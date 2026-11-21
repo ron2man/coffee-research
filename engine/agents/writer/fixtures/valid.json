@@ -1,0 +1,28 @@
+{
+  "outcome": "draft",
+  "reason": "Draft follows brief.",
+  "artifact": {
+    "title": "Why your Bambino espresso is sour",
+    "slug": "bambino-sour-shots",
+    "description": "Fix sour Bambino shots in order.",
+    "market": "US",
+    "language": "en",
+    "primaryQuery": "bambino espresso sour",
+    "relatedQueries": [],
+    "productIds": [
+      "bambino-plus"
+    ],
+    "tools": [
+      "picker"
+    ],
+    "body": "Start with the basket, not the grinder. Start with the basket, not the grinder. Start with the basket, not the grinder. Start with the basket, not the grinder. Start with the basket, not the grinder. Start with the basket, not the grinder. Start with the basket, not the grinder. Start with the basket, not the grinder. Start with the basket, not the grinder. Start with the basket, not the grinder. Start with the basket, not the grinder. Start with the basket, not the grinder. ",
+    "claims": [
+      {
+        "statement": "Breville recommends the single-wall basket for fresh beans.",
+        "claimIds": [
+          "bambino-plus/us-cleaning-alert"
+        ]
+      }
+    ]
+  }
+}

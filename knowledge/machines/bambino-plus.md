@@ -39,7 +39,13 @@ Initial research covers the Breville US brushed stainless steel SKU.
     },
     {
       "id": "breville-us-older-manual",
-      "url": "https://www.breville.com/content/dam/breville/us/assets/miscellaneous/instruction-manual/espresso/BES500-instruction-manual.pdf",
+      "url": "https://www.williams-sonoma.com/netstorage/pdf/142739-Breville-Bambino-Plus-Manual.pdf",
+      "type": "merchant",
+      "accessedAt": "2026-11-21"
+    },
+    {
+      "id": "breville-us-q21-manual",
+      "url": "https://assets.breville.com/Instruction-Booklets/USCM/BES500_USCM_IB_Q21_FA_WEB.pdf",
       "type": "manufacturer",
       "accessedAt": "2026-11-21"
     }
@@ -139,7 +145,7 @@ Initial research covers the Breville US brushed stainless steel SKU.
     {
       "id": "us-descale-setup",
       "variantId": "bes500bss1bus1",
-      "statement": "The Y25 booklet describes descaling for internal mineral buildup. It instructs users to remove the water filter before adding descaling powder, use the DESCALE fill line and a 2 L waste container, and let the machine cool fully. From off, hold 1 CUP and STEAM for five seconds and press either once both are steady.",
+      "statement": "Y25 directs owners to empty and reinstall the drip tray, remove the water filter before adding descaler, fill to the DESCALE line and add descaler, and place a 2 L container under the portafilter and steam wand. With the machine off and fully cooled, hold 1 CUP and STEAM for five seconds, then press either once both are steady.",
       "status": "supported",
       "verifiedAt": "2026-11-21",
       "evidence": [
@@ -152,10 +158,14 @@ Initial research covers the Breville US brushed stainless steel SKU.
     {
       "id": "us-descale-rinse-and-finish",
       "variantId": "bes500bss1bus1",
-      "statement": "During descaling the 1 CUP and STEAM buttons alternate. The machine pauses after using the solution. At that pause, refill with fresh water to MAX and empty the waste container. Once 1 CUP and STEAM are steady, press either to resume. Alternating lights followed by standby indicate completion.",
+      "statement": "Keep the tank installed during active flow and do not drain it manually. At the automatic pause after the solution phase, refill the tank with fresh water to MAX and reinstall it. Empty the waste container and return it under both outlets. When 1 CUP and STEAM are steady, press either to start the rinse. Alternating 1 CUP and STEAM lights followed by standby signal completion.",
       "status": "supported",
       "verifiedAt": "2026-11-21",
       "evidence": [
+        {
+          "sourceId": "breville-us-manual",
+          "locator": "English p. 17, Descaling warning"
+        },
         {
           "sourceId": "breville-us-manual",
           "locator": "English p. 18, To Descale, steps 7–11"
@@ -178,7 +188,7 @@ Initial research covers the Breville US brushed stainless steel SKU.
     {
       "id": "us-early-cleaning-coverage",
       "variantId": "bes500bss1bus1",
-      "statement": "The older US BES500 booklet omits the pre-alert cleaning shortcut documented in Y25.",
+      "statement": "The Y25 and US/Canada Q21 booklets document the pre-alert cleaning shortcut. The Cleaning Cycle section of the older Breville booklet hosted by Williams Sonoma omits it.",
       "status": "supported",
       "verifiedAt": "2026-11-21",
       "evidence": [
@@ -189,6 +199,10 @@ Initial research covers the Breville US brushed stainless steel SKU.
         {
           "sourceId": "breville-us-manual",
           "locator": "English p. 17, note after To Perform a Cleaning Cycle"
+        },
+        {
+          "sourceId": "breville-us-q21-manual",
+          "locator": "English p. 16, note after To Perform a Cleaning Cycle"
         }
       ],
       "note": "A difference in documentation does not establish hardware or firmware applicability across production runs."

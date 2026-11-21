@@ -1,0 +1,22 @@
+{
+  "outcome": "draft",
+  "reason": "Unmapped claim",
+  "artifact": {
+    "title": "x",
+    "slug": "bambino-sour-shots",
+    "description": "x",
+    "market": "US",
+    "language": "en",
+    "primaryQuery": "x",
+    "relatedQueries": [],
+    "productIds": [],
+    "tools": [],
+    "body": "too short",
+    "claims": [
+      {
+        "statement": "x",
+        "claimIds": []
+      }
+    ]
+  }
+}
