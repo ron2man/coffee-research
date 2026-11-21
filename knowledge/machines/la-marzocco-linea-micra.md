@@ -29,12 +29,6 @@
       "accessedAt": "2026-11-21"
     },
     {
-      "id": "manufacturer-spout-video",
-      "url": "https://www.youtube.com/watch?v=DV6r-65--ow",
-      "type": "manufacturer",
-      "accessedAt": "2026-11-21"
-    },
-    {
       "id": "manufacturer-maintenance",
       "url": "https://home.lamarzoccousa.com/?p=397148",
       "type": "manufacturer",
@@ -101,17 +95,13 @@
     {
       "id": "us-spout-attachment",
       "variantId": "linea-micra-us",
-      "statement": "La Marzocco Home documents positioning the spout toward and to the right of the handle and twisting it down to lock. Its demonstration shows the removable spout setups and bottomless configuration.",
+      "statement": "La Marzocco Home’s written workflow says to start with the spout facing toward the handle and offset to its right, then turn the spout downward to lock it.",
       "status": "supported",
       "verifiedAt": "2026-11-21",
       "evidence": [
         {
           "sourceId": "manufacturer-workflow",
           "locator": "Convertible Portafilter — Connect the spout"
-        },
-        {
-          "sourceId": "manufacturer-spout-video",
-          "locator": "Manufacturer video — convertible portafilter demonstration and description"
         }
       ]
     },
