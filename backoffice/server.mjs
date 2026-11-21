@@ -3,6 +3,7 @@ import { readFile } from 'node:fs/promises';
 import { createServer } from 'node:http';
 import { fileURLToPath } from 'node:url';
 import { promisify } from 'node:util';
+import { readDrafts } from './drafts.mjs';
 import { scanKnowledge } from '../agent/knowledge.mjs';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
@@ -29,13 +30,24 @@ async function readRuns() {
   return log.trim().split('\n').filter(Boolean).slice(-100).reverse().map((line) => JSON.parse(line));
 }
 
+async function githubRepositoryUrl() {
+  try {
+    const { stdout } = await exec('git', ['remote', 'get-url', 'origin'], { cwd: root });
+    const match = stdout.trim().match(/^(?:https:\/\/github\.com\/|git@github\.com:)([\w.-]+\/[\w.-]+)$/);
+    return match ? `https://github.com/${match[1].replace(/\.git$/, '')}` : null;
+  } catch {
+    return null;
+  }
+}
+
 async function dashboardData() {
-  const [knowledge, queueText, lessons, spec, runs] = await Promise.all([
+  const [knowledge, queueText, lessons, spec, runs, repositoryUrl] = await Promise.all([
     scanKnowledge(fileURLToPath(new URL('../knowledge', import.meta.url))),
     read('../agent/research-queue.json'),
     read('../docs/learnings.md'),
     read('../docs/planning-spec.md'),
     readRuns(),
+    githubRepositoryUrl(),
   ]);
 
   const queue = JSON.parse(queueText);
@@ -66,6 +78,7 @@ async function dashboardData() {
     milestones,
     lessons,
     runs,
+    drafts: await readDrafts(runs, repositoryUrl),
   };
 }
 

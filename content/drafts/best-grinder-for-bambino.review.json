@@ -1,0 +1,29 @@
+{
+  "draft": "content/drafts/best-grinder-for-bambino.md",
+  "brief": "content/drafts/best-grinder-for-bambino.brief.md",
+  "verdict": "revise",
+  "scores": {
+    "topicSelection": {
+      "score": 3,
+      "reason": "The primary query fits US Bambino owners, and one owner thread illustrates the decision. Search demand remains unmeasured and future ranking is unknown. Both competing guides already address the main buying decision, and the brief does not show why this topic beat another candidate. [Preinfuse](https://preinfuse.com/guides/best-grinder-for-breville-bambino/) · [EspressoPilot](https://espressopilot.com/guides/best-grinders-for-breville-bambino)"
+    },
+    "evidence": {
+      "score": 4,
+      "reason": "Breville documents the basket guidance, Baratza’s manual confirms 54 mm cup transfer, and Espresso Outlet confirms the US DF54 v4.1 and its burr choices. The draft discloses the limits of its testing. The cited Baratza product page did not expose the cup or adjustment-range details in this run, and the DF54 recommendation could identify the specific burr option the seller recommends. [Bambino manual](https://assets.breville.com/BES450/BES450_USCM_IB_M26_LR.pdf) · [Encore ESP manual](https://assets.breville.com/ZCG495/manual-encoreesp-v1-0-en-010923.pdf) · [DF54 listing](https://espressooutlet.com/products/turin-df54-single-dose-flat-burr-grinder)"
+    },
+    "readerValue": {
+      "score": 4,
+      "reason": "The workflow table gives owners a concrete choice, and the adjacent-setting test helps them decide whether to keep their current grinder. That test is the clearest contribution. Controlling puck preparation and comparing flow at a consistent output weight would make it more reliable."
+    },
+    "onPageSeo": {
+      "score": 3,
+      "reason": "The title names both machines, the recommendation appears immediately, and the headings follow the owner’s decision. The brief lacks a proposed page title, stable slug, meta description, and an assessment of relevant internal links."
+    }
+  },
+  "actions": [
+    "Make the existing-grinder test the centerpiece of the owner-first angle. Tell readers to keep beans, basket, dose, puck preparation, and target output weight consistent, then repeat shots at adjacent settings before treating step size as the likely bottleneck.",
+    "Complete the brief with a proposed page title, slug, and meta description. Check existing site pages or drafts for useful internal links and record the targets and anchor text where they fit.",
+    "Compare this topic with a distinct candidate such as whether Bambino owners need a grinder at all. Record intent overlap, demand evidence, competing answers, and which decision each draft can improve. Keep the selected topic framed as an editorial experiment while demand remains unmeasured.",
+    "Cite the Encore ESP manual for 54 mm transfer and mention removal of the adapter ring. Use an accessible Baratza source for both adjustment ranges or omit the coarser range. Name Stainless Steel Espresso as the specific DF54 configuration recommended by the seller. [Encore ESP manual](https://assets.breville.com/ZCG495/manual-encoreesp-v1-0-en-010923.pdf) · [DF54 burr options](https://espressooutlet.com/products/turin-df54-single-dose-flat-burr-grinder)"
+  ]
+}

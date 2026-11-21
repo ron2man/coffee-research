@@ -1,0 +1,29 @@
+{
+  "draft": "content/drafts/ecm-classika-iii-vs-classika-pid.md",
+  "brief": "content/drafts/ecm-classika-iii-vs-classika-pid.brief.md",
+  "verdict": "revise",
+  "scores": {
+    "topicSelection": {
+      "score": 3,
+      "reason": "The brief compares three plausible topics and makes a credible case for a UK buying guide focused on used PID revisions and cold-start checks. An English-language retailer already compares the models, so the gap is narrower than the brief suggests. One directly relevant shopper thread offers a weak qualitative signal. UK demand remains unmeasured, and future traffic and ranking are unknown. [Retailer comparison](https://coffeecoachingclub.ch/en/products/ecm-classika-iii) · [Buyer discussion](https://www.reddit.com/r/ECM_Espresso/comments/1w01tig/worth_waiting_for_a_potential_ecm_classika_ii/)"
+    },
+    "evidence": {
+      "score": 4,
+      "reason": "ECM confirms the advertised 6.5- and 11-minute figures, and the current PID manual confirms the flush cue and UK electrical rating. The III manual remained inaccessible, leaving its exact cold-start sequence and official UK rating unverified. Comparable cold-start and milk-drink timings and older PID revision coverage remain open. [III catalogue](https://www.ecm.de/en/products/classika-iii/) · [PID catalogue](https://www.ecm.de/en/products/classika-pid/) · [PID manual](https://www.ecm.de/wp-content/uploads/2025/04/BA_Classika_-PID_2412-web.pdf)"
+    },
+    "readerValue": {
+      "score": 3,
+      "reason": "The early recommendation, model numbers, and seller-demo prompts help buyers avoid applying the current PID figure to an unknown used unit. The title asks whether the III is worth the premium, but the draft gives readers no way to weigh their actual price difference against how often the shorter wait would matter."
+    },
+    "onPageSeo": {
+      "score": 3,
+      "reason": "One descriptive H1, a direct opening answer, and decision-led H2s fit the comparison intent. The brief omits the proposed page title, slug, and meta description. The draft inventory mentions grinder selection as a possible internal link but supplies no confirmed target."
+    }
+  },
+  "actions": [
+    "Add a compact buying table that helps readers weigh the actual UK price difference, how often they start from cold, and the condition and warranty of the exact PID. Label the 4.5-minute gap as the difference between ECM’s advertised figures.",
+    "Give readers a seller checklist covering the rating plate, the manual that matches the unit, and a timed power-on-to-ready demonstration with any required flush. Name the documented PID cues `FLU` and `rdY/Go`, and keep the III sequence and UK electrical rating explicitly open until verified.",
+    "Record “ECM Classika III vs Classika PID” as the primary query and list related searches separately. Update the competitor review to account for existing direct comparisons and frame the UK used-unit checks as the contribution. Keep the article positioned as an editorial experiment with unmeasured demand.",
+    "Supply a proposed page title, stable slug, and concise meta description in the brief. Add a descriptive internal link if the grinder-selection draft has a relevant, confirmed destination."
+  ]
+}

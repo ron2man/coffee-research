@@ -38,3 +38,16 @@ pre { white-space: pre-wrap; overflow-wrap: anywhere; }
   nav { display: flex; flex-wrap: wrap; margin-top: .5rem; }
   nav a { padding: .25rem .45rem; }
 }
+
+#draft-filter { font: inherit; background: white; color: inherit; border: 1px solid #9bb4aa; border-radius: .35rem; padding: .4rem .6rem; margin-left: .4rem; }
+.draft-card { border-top: 1px solid #dce6e0; margin-top: 1rem; padding: 1rem 0 .35rem; }
+.draft-header { display: flex; flex-wrap: wrap; align-items: baseline; gap: .5rem 1rem; }
+.draft-header h3 { margin: 0; font-size: 1.125rem; }
+.verdict { border-radius: .35rem; padding: .2rem .5rem; font-size: .875rem; font-weight: 650; background: #eef2f0; color: #324b43; }
+.verdict-revise { background: #f8ebd3; color: #684409; }
+.verdict-pass { background: #dcefe5; color: #175139; }
+.verdict-defer { background: #efe8f6; color: #52356b; }
+.draft-card p { margin: .55rem 0; }
+.draft-preview { margin-top: .45rem; }
+.preview-body { overflow-wrap: anywhere; }
+.draft-commit { display: inline-block; margin-top: .5rem; }

@@ -1,0 +1,29 @@
+{
+  "draft": "content/drafts/bambino-plus-cleaning-vs-descaling.md",
+  "brief": "content/drafts/bambino-plus-cleaning-vs-descaling.brief.md",
+  "verdict": "revise",
+  "scores": {
+    "topicSelection": {
+      "score": 3,
+      "reason": "The brief identifies a clear US owner decision, compares it with Encore ESP shimming, and checks for overlap with the earlier Bambino brief. Recurring owner questions support an editorial experiment. Search volume, future traffic, and ranking potential remain unmeasured. Competing guides already cover much of the proposed workflow. [Owner discussion](https://www.reddit.com/r/espresso/comments/19931nc/run_bambino_plus_cleaning_cycle_early/) · [Kitchen Watcher](https://kitchenwatcher.com/guides/breville-bambino-plus-flashing-lights/) · [EspressoAnswers](https://espressoanswers.com/breville-bambino-plus-cleaning-cycle-or-descale-lights-stuck/)"
+    },
+    "evidence": {
+      "score": 3,
+      "reason": "The US SKU links to Y25, which supports the alert patterns, controls, and completion cues. The cited older PDF returned 404, and Breville’s older Q21 US/Canada booklet explicitly documents the early-cleaning shortcut. The claimed omission in the cited edition remains unverified, and compatibility by production run remains unknown. [US SKU](https://www.breville.com/en-us/product/bes500?sku=BES500BSS1BUS1) · [Y25 booklet](https://assets.breville.com/BES500/BES500_USCM_IB_Y25_LR.pdf#page=17) · [Q21 booklet](https://assets.breville.com/Instruction-Booklets/USCM/BES500_USCM_IB_Q21_FA_WEB.pdf)"
+    },
+    "readerValue": {
+      "score": 4,
+      "reason": "The opening lets an owner identify the cycle at the machine, and the draft explains the descale pause and both endpoints. Its strongest contribution is gathering the US-documented early-cleaning shortcut and both workflows in one focused page. The descale setup is less usable on its own because it leaves container placement and drip-tray preparation to the booklet."
+    },
+    "onPageSeo": {
+      "score": 3,
+      "reason": "The descriptive H1, immediate answer, and question-led headings match the reader’s task. The brief lacks a proposed page title, stable slug, meta description, and an assessment of relevant internal-link targets. The recorded queries are research strings and leave the primary reader query unclear."
+    }
+  },
+  "actions": [
+    "Correct the early-cleaning history in the draft, brief, and product card. Replace the broken citation, acknowledge that Q21 and Y25 both document the shortcut, and retain the uncertainty about individual units. [Q21 booklet](https://assets.breville.com/Instruction-Booklets/USCM/BES500_USCM_IB_Q21_FA_WEB.pdf) · [Y25 booklet](https://assets.breville.com/BES500/BES500_USCM_IB_Y25_LR.pdf#page=17)",
+    "Make the descale setup usable at the machine. Include the reinstalled drip tray, the container under both outlets, and the instruction to leave the tank in place during active flow and refill at the documented pause. Clarify that a flashing descale-alert button dismisses the reminder. [Breville Y25 booklet, pp. 17–18](https://assets.breville.com/BES500/BES500_USCM_IB_Y25_LR.pdf#page=17)",
+    "Reframe the competitive gap around a quick US maintenance reference. Put each alert pattern, required supplies, start controls, and completion cue in a compact comparison near the top. [Kitchen Watcher](https://kitchenwatcher.com/guides/breville-bambino-plus-flashing-lights/) · [EspressoAnswers](https://espressoanswers.com/breville-bambino-plus-cleaning-cycle-or-descale-lights-stuck/)",
+    "Complete the brief with a short primary query such as “Breville Bambino Plus cleaning vs descaling lights,” a proposed page title, slug, meta description, and relevant internal-link targets with anchor text where a suitable page exists."
+  ]
+}

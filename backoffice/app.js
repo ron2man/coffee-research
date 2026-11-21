@@ -3,6 +3,14 @@ const statusNames = {
   new: 'Queued', refresh: 'Refresh due', current: 'Current', unavailable: 'Unknown',
 };
 let queue = [];
+let drafts = [];
+const verdictLabels = {
+  pass: 'Passed review', revise: 'Needs revision', defer: 'Deferred', unjudged: 'Not yet judged',
+};
+const scoreLabels = {
+  topicSelection: 'Topic selection', evidence: 'Evidence',
+  readerValue: 'Reader value', onPageSeo: 'On-page SEO',
+};
 
 function element(tag, text, className) {
   const node = document.createElement(tag);
@@ -67,10 +75,134 @@ function renderCard(card) {
   return details;
 }
 
+function formatText(node, text) {
+  let cursor = 0;
+  for (const match of text.matchAll(/\[([^\]\n]+)\]\((https?:\/\/[^\s)]+)\)|\*\*([^*]+)\*\*/g)) {
+    node.append(text.slice(cursor, match.index));
+    if (match[3]) {
+      node.append(element('strong', match[3]));
+    } else {
+      const link = element('a', match[1]);
+      link.href = match[2];
+      link.target = '_blank';
+      link.rel = 'noopener noreferrer';
+      node.append(link);
+    }
+    cursor = match.index + match[0].length;
+  }
+  node.append(text.slice(cursor));
+  return node;
+}
+
+function preview(label, markdown) {
+  const details = element('details', undefined, 'draft-preview');
+  details.append(element('summary', label));
+  const body = element('div', undefined, 'preview-body');
+  for (const block of markdown.trim().split(/\n\s*\n/)) {
+    if (/^#{1,6} /.test(block)) {
+      body.append(formatText(element('h4'), block.replace(/^#{1,6} /, '')));
+    } else if (block.startsWith('|')) {
+      const [headers, separator, ...rows] = block.split('\n')
+        .map((line) => line.trim().slice(1, -1).split('|').map((cell) => cell.trim()));
+      if (separator?.every((cell) => /^:?-+:?$/.test(cell))) {
+        const wrap = element('div', undefined, 'table-wrap');
+        const grid = table(headers, rows);
+        for (const cell of grid.querySelectorAll('td')) {
+          const text = cell.textContent;
+          cell.replaceChildren();
+          formatText(cell, text);
+        }
+        wrap.append(grid);
+        body.append(wrap);
+      } else {
+        body.append(element('pre', block));
+      }
+    } else if (block.startsWith('- ')) {
+      const list = element('ul');
+      for (const line of block.split('\n')) {
+        list.append(formatText(element('li'), line.replace(/^- /, '')));
+      }
+      body.append(list);
+    } else {
+      body.append(formatText(element('p'), block));
+    }
+  }
+  details.append(body);
+  return details;
+}
+
+function renderDraft(draft) {
+  const card = element('article', undefined, 'draft-card');
+  card.id = `draft-${draft.id}`;
+  const verdict = draft.review?.verdict ?? 'unjudged';
+  const label = draft.reviewError ? 'Review unavailable' : verdictLabels[verdict];
+  const header = element('div', undefined, 'draft-header');
+  header.append(element('h3', draft.title), element('span', label, `verdict verdict-${verdict}`));
+  card.append(header);
+  if (draft.query) card.append(element('p', `Target query · ${draft.query}`, 'muted'));
+  if (draft.audience) card.append(element('p', draft.audience, 'muted'));
+  if (draft.reviewError) card.append(element('p', draft.reviewError));
+  const actions = Array.isArray(draft.review?.actions) ? draft.review.actions.filter((action) => typeof action === 'string') : [];
+  if (actions.length) card.append(formatText(element('p'), `**Top action** · ${actions[0]}`));
+  card.append(preview('Read article', draft.article));
+  if (draft.brief) card.append(preview('Read editorial brief', draft.brief));
+  if (draft.review) {
+    const review = element('details', undefined, 'draft-preview');
+    review.append(element('summary', 'Read judge review'));
+    for (const [key, label] of Object.entries(scoreLabels)) {
+      const score = draft.review.scores?.[key];
+      if (score) {
+        review.append(element('h4', `${label} · ${score.score}/5`),
+          formatText(element('p'), String(score.reason ?? '')));
+      }
+    }
+    if (actions.length) {
+      const list = element('ol');
+      for (const action of actions) list.append(formatText(element('li'), action));
+      review.append(element('h4', 'Revision actions'), list);
+    }
+    card.append(review);
+    if (Array.isArray(draft.review.history) && draft.review.history.length) {
+      const history = element('details', undefined, 'draft-preview');
+      history.append(element('summary', 'Earlier reviews'));
+      for (const prior of draft.review.history) {
+        history.append(element('h4', verdictLabels[prior.verdict] ?? prior.verdict));
+        for (const [key, label] of Object.entries(scoreLabels)) {
+          const score = prior.scores?.[key];
+          if (score) history.append(formatText(element('p'), `**${label} · ${score.score}/5** · ${score.reason}`));
+        }
+        if (Array.isArray(prior.actions)) {
+          const list = element('ol');
+          for (const action of prior.actions) list.append(formatText(element('li'), String(action)));
+          history.append(list);
+        }
+      }
+      card.append(history);
+    }
+  }
+  if (draft.commitUrl) {
+    const link = element('a', 'View GitHub commit', 'draft-commit');
+    link.href = draft.commitUrl;
+    card.append(link);
+  }
+  return card;
+}
+
+function updateDrafts() {
+  const filter = get('draft-filter').value;
+  const visible = drafts.filter((draft) => filter === 'all' ||
+    (draft.review?.verdict ?? 'unjudged') === filter);
+  show('draft-list', visible.map(renderDraft), 'No drafts match this review status.');
+}
+
 function render(data) {
   queue = data.queue;
+  drafts = data.drafts ?? [];
+  updateDrafts();
   const summary = data.plan?.summary;
   const metrics = [
+    ['Editorial drafts', drafts.length],
+    ['Drafts needing revision', drafts.filter((draft) => draft.review?.verdict === 'revise').length],
     ['Product cards', data.cards.length],
     ['Queued for research', summary?.new ?? '—'],
     ['Due for refresh', summary?.refresh ?? '—'],
@@ -105,7 +237,10 @@ function render(data) {
   show('history', data.runs.map((run) => {
     const details = element('details');
     const timestamp = new Date(run.timestamp).toLocaleString();
-    details.append(element('summary', `${timestamp} · ${run.workflow} · ${run.status}`));
+    const verdicts = Array.isArray(run.details?.verdicts) ? run.details.verdicts : [];
+    const reviewStatus = verdicts.map(({ verdict }) => verdictLabels[verdict]).filter(Boolean).join(', ');
+    const status = reviewStatus ? `${run.status} · ${reviewStatus}` : run.status;
+    details.append(element('summary', `${timestamp} · ${run.workflow} · ${status}`));
     details.append(element('p', `${run.durationMs} ms`, 'muted'));
     details.append(element('pre', typeof run.details === 'string' ? run.details :
       JSON.stringify(run.details, null, 2)));
@@ -136,6 +271,7 @@ async function refresh() {
   }
 }
 
+get('draft-filter').addEventListener('change', updateDrafts);
 get('filter').addEventListener('input', updateQueue);
 get('reload').addEventListener('click', refresh);
 refresh();
