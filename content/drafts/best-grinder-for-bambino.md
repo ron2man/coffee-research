@@ -1,29 +1,19 @@
-# What grinder should I get for my Breville Bambino or Bambino Plus?
+# Choosing a grinder for the Breville Bambino, one shot at a time
 
-**Get the Baratza Encore ESP if you want a straightforward first electric grinder for your Bambino.** If you're happy making espresso with pre-ground coffee in your dual-wall basket, you can start with what you have. If you already know you want to weigh every dose and make adjustments between numbered settings, consider the Turin DF54 with espresso burrs. [Baratza Encore ESP](https://www.baratza.com/en-us/product/zcg495?sku=ZCG495BLK1AUC1A) · [Breville Bambino manual](https://assets.breville.com/BES450/BES450_USCM_IB_M26_LR.pdf) · [Turin DF54 US listing](https://espressooutlet.com/products/turin-df54-single-dose-flat-burr-grinder)
+Say your Bambino pours a shot faster than you’d like. You turn the grinder one click finer. This time the coffee barely drips. Somewhere between those two clicks is the shot you wanted to make.
 
-## Start with the basket you use
+Before you spend money chasing it, pull the basket out of your portafilter. The US Bambino and Bambino Plus come with single-wall and dual-wall baskets. If yours came secondhand, check which one you have. Breville pairs its dual-wall basket with pre-ground coffee. If that’s what you use and you like your morning flat white, keep your money. The grinder question gets interesting when you switch to fresh beans and the single-wall basket. Now you can change how quickly the shot flows by changing the grind. [Bambino Plus basket options](https://www.breville.com/en-us/product/bes500?sku=BES500BSS1BUS1) · [Breville’s Bambino instruction book](https://assets.breville.com/BES450/BES450_USCM_IB_M26_LR.pdf)
 
-Breville lists both single-wall and dual-wall baskets for the US Bambino and Bambino Plus models covered here. Its Bambino manual recommends the dual-wall basket for pre-ground coffee and the single-wall basket when you grind fresh beans. Check what came with your machine, especially if you bought it used or in another market. [Bambino manual](https://assets.breville.com/BES450/BES450_USCM_IB_M26_LR.pdf) · [Bambino Plus accessories](https://www.breville.com/en-us/product/bes500?sku=BES500BSS1BUS1)
+If you already own a grinder, give it another morning. Keep the beans, basket and dose the same. Go a little finer on a fast shot, a little coarser on one that barely flows. Can you find a setting you like and get back to it? I’d keep that grinder. If you keep landing either side of it, you’ve learned something worth taking shopping. You want a smaller adjustment.
 
-If you’re getting drinks you enjoy from the dual-wall basket, a grinder can wait. If you want to use fresh beans and adjust the flow of your shots in the single-wall basket, look for a grinder with adjustment designed for espresso.
+## The grinder I’d put beside a first Bambino
 
-## Pick the workflow you’ll want every morning
+For someone opening one bag of beans at a time and making an espresso before work, I’d choose the **Baratza Encore ESP**. Turn the hopper and you can feel each numbered step. Baratza gives settings 1–20 to espresso, so you have a stretch of the dial to explore while finding your shot. The included dosing cup fits a 54 mm portafilter. Grind into the cup, tip the grounds into the Bambino basket, and you’re ready to tamp. [Baratza’s Encore ESP specifications](https://www.baratza.com/en-us/product/zcg495?sku=ZCG495BLK1AUC1A)
 
-| If this sounds like you | What I’d choose | What you’ll do |
-|---|---|---|
-| I use one bag of beans at a time and want an easy electric setup. | **Baratza Encore ESP** | Turn the numbered hopper to adjust. Transfer grounds with the included cup designed for 54 mm portafilters. |
-| I already weigh each dose and want to adjust between clicks. | **Turin DF54 v4.1 with espresso burrs** | Weigh the beans for each drink, adjust the stepless dial, and transfer from the cup. |
-| I’m happy grinding by hand and mainly make espresso. | **1Zpresso J-Ultra** | Turn the external adjustment dial and grind each dose by hand. |
+What I like about that arrangement for a beginner is being able to undo a change. If this morning’s shot ran better one click back, you know exactly where to go tomorrow. The compromise is familiar from our first two shots. When you want to stop halfway between clicks, the ESP asks you to pick one.
 
-The Encore ESP is the first one I’d choose for a new owner who wants electric convenience. Baratza designates settings 1–20 for espresso and 21–40 for coarser brewing. These are ranges to experiment within. Your beans and basket determine the setting that works. [Baratza Encore ESP](https://www.baratza.com/en-us/product/zcg495?sku=ZCG495BLK1AUC1A)
+## When half a click is exactly what you want
 
-The DF54 is worth considering if that single-dose routine already appeals to you. The stepless dial lets you make an adjustment between two positions. Check the exact version and burr option when ordering. This guide uses Espresso Outlet’s US v4.1 listing, which offers separate espresso and brew burr choices. [Espresso Outlet DF54 specifications and workflow](https://espressooutlet.com/products/turin-df54-single-dose-flat-burr-grinder)
+That’s where I’d consider the **Turin DF54**. Its stepless dial lets you stop between two positions. It also asks something of you every morning. You weigh the beans for that drink, feed them into the grinder, then transfer the grounds from the cup. If the scale already comes out with the portafilter, that’s a small ask. If you want to leave your usual beans in a hopper and make coffee, I’d stick with the Encore. For the US model covered here, check the burr option before ordering. The v4.1 listing offers a choice of espresso or brew burrs. I’d choose the espresso set for the Bambino. [DF54 versions and burr options](https://espressooutlet.com/products/turin-df54-single-dose-flat-burr-grinder)
 
-The J-Ultra suits someone who is happy to grind each shot by hand. Its external dial gives you a way to make small adjustments between shots. [1Zpresso J-Ultra](https://1zpresso.coffee/j-ultra/)
-
-## Already have a grinder? Try this before replacing it
-
-Use the same beans, single-wall basket, and dose for a few shots. If the shot runs fast, try a finer setting. If it barely flows, try coarser. If the grinder repeatedly jumps from fast to barely flowing between adjacent settings, finer adjustment is a concrete feature to shop for. If you can already get the shot you want, keep your grinder and decide what else would make the routine easier. [Breville Bambino manual, The Grind](https://assets.breville.com/BES450/BES450_USCM_IB_M26_LR.pdf)
-
-The recommendations above are based on documented specifications and workflow. We haven’t run a side-by-side taste or retention test.
+There’s one other choice I’d make on quite different grounds. The **1Zpresso J-Ultra** gives you fine adjustments on an external dial, and your hand supplies the power for every dose. Picture making a second espresso immediately after the first. If grinding another dose by hand sounds like part of the pleasure, the J-Ultra belongs on your shortlist. If it sounds like the bit you’d skip, buy the electric grinder. [1Zpresso’s J-Ultra guide](https://1zpresso.coffee/j-ultra/)

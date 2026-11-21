@@ -5,36 +5,36 @@
   "scores": {
     "topicSelection": {
       "score": 3,
-      "reason": "The brief identifies a concrete troubleshooting need for US Opus owners and makes a credible case for choosing it over Ode Gen 2 ionizer cleaning. The search phrases are research strings, and one owner report gives limited evidence of recurring demand. Traffic and ranking potential remain unmeasured."
+      "reason": "The brief makes a credible case for choosing Opus troubleshooting over Ode ionizer cleaning. The two Opus generations require different fixes for the same symptom. Search demand remains unmeasured, and the logged queries are research prompts rather than a clearly defined primary query."
     },
     "evidence": {
       "score": 4,
-      "reason": "Fellow’s US product page and support guides confirm the controls, starting range, and separate adjustment procedures. The draft avoids promising a calibration outcome, but its pre-calibration checklist blurs target yield and target shot time. [Opus 1 ring guide](https://help.fellowproducts.com/hc/en-us/articles/12697812844315-What-does-the-Opus-1-inner-adjustment-ring-do-and-how-do-I-use-it) · [Opus 2 product page](https://fellowproducts.com/products/opus-2-conical-burr-grinder) · [Opus 2 calibration guide](https://help.fellowproducts.com/hc/en-us/articles/56361337841691-What-to-Do-if-Your-Opus-2-Can-t-Grind-Fine-Enough-for-Espresso)"
+      "reason": "Fellow’s US sources verify the two adjustment methods and the Opus 2 starting range. The draft loses a material distinction in the calibration guide when it substitutes reaching the target yield for allowing enough time to reach the target shot duration. [Opus 1 ring guide](https://help.fellowproducts.com/hc/en-us/articles/12697812844315-What-does-the-Opus-1-inner-adjustment-ring-do-and-how-do-I-use-it) · [Opus 2 calibration guide](https://help.fellowproducts.com/hc/en-us/articles/56361337841691-What-to-Do-if-Your-Opus-2-Can-t-Grind-Fine-Enough-for-Espresso) · [Opus 2 product FAQ](https://fellowproducts.com/products/opus-2-conical-burr-grinder)"
     },
     "readerValue": {
       "score": 4,
-      "reason": "The opening gives the reader an immediate next step. The article adds a model-specific decision rule across Fellow’s separate guides: identify the grinder by its controls, repeat the same recipe, then use the Opus 1 blue ring or the Opus 2 calibration guide if the shot still runs fast at the fine limit. The timing check needs to be clearer for the Opus 2 reader deciding whether to recalibrate."
+      "reason": "The draft gives readers a model-specific decision rule across two separate support pages. A blue inner ring means the owner can extend the Opus 1’s range, while a side dial at 0 points an Opus 2 owner to the calibration guide after setup checks. The reader test found that route. The remaining gap is how to tell whether the shot program itself ended the shot early."
     },
     "onPageSeo": {
-      "score": 4,
-      "reason": "The descriptive H1 names the symptom, the opening answers it promptly, and the headings follow the troubleshooting sequence. The brief lacks a proposed slug and meta description. It identifies no closely relevant internal link target."
+      "score": 3,
+      "reason": "The descriptive headline names the symptom, the opening gives the first action promptly, and the headings follow the troubleshooting sequence. The brief lacks a proposed slug and meta description. It identifies no clearly relevant internal link."
     }
   },
   "actions": [
-    "Clarify the pre-calibration checklist. The preceding reference to target yield makes “allows enough time to reach the target” read as a yield check, which could send a reader to recalibration even when the machine is programmed to end the shot before the intended shot time. Explicitly check expected yield and target shot time separately, include insufficient tamping, and tell readers to correct any failed check and retest before recalibrating. [Fellow’s pre-calibration checks](https://help.fellowproducts.com/hc/en-us/articles/56361337841691-What-to-Do-if-Your-Opus-2-Can-t-Grind-Fine-Enough-for-Espresso)"
+    "Fix the pre-calibration check. A machine program can cut a shot short even when the target yield is reached, so the current wording can send an Opus 2 owner to screwdriver calibration prematurely. Tell readers to confirm the program allows the intended shot duration, correct any early cutoff, and repeat the same recipe before opening the grinder. [Fellow’s pre-calibration checks](https://help.fellowproducts.com/hc/en-us/articles/56361337841691-What-to-Do-if-Your-Opus-2-Can-t-Grind-Fine-Enough-for-Espresso)"
   ],
   "optionalImprovements": [
-    "Remove the stray § from the Opus 2 row.",
-    "Record a natural primary query such as “Fellow Opus espresso too fast at finest setting” and add a proposed page title, slug, and meta description to the brief."
+    "Remove the stray § from the Opus 2 table row.",
+    "Record a reader-phrased primary query such as “Fellow Opus espresso too fast at finest setting” and add a proposed slug and meta description to the brief."
   ],
   "reader": {
-    "question": "My Opus 2 is already at 0 and my espresso still runs fast. What should I check before recalibrating it?",
-    "quote": "A fast shot by itself leaves the cause open. If the shot still runs fast at the finest setting after those checks, use the instructions for your model.",
-    "action": "Repeat the shot with the same coffee, basket, dose, and target yield. Check the tamp, water delivery, and shot program. If the shot still runs fast at 0, unplug the grinder and follow Fellow’s linked Opus 2 calibration guide, then retest with the same recipe. The opening puts the recipe and tamp checks beside its takeaway and distinguishes everyday dial adjustments from calibration at the fine limit.",
-    "unresolved": "The cause of the fast shot and the setting that works for this setup are determined by the checks and retest. The detailed screwdriver steps are in Fellow’s linked guide.",
+    "question": "My Opus 2 is already at 0 and my espresso still runs too fast. What should I check before recalibrating it?",
+    "quote": "If the shot still runs too fast after the setup checks, follow Fellow’s Opus 2 finer-calibration guide. It starts by unplugging the grinder and setting the dial to 0.",
+    "action": "Repeat the shot with the same coffee, basket, dose, and target yield. Check the tamp, water delivery, and shot program. If the shot still runs fast, unplug the Opus 2, set the dial to 0, and follow Fellow’s linked screwdriver calibration procedure. Retest with the same recipe. The article places the setup checks and unplugging instruction alongside the calibration recommendation.",
+    "unresolved": "The article leaves the final grind setting to a test shot and refers readers to Fellow’s linked guide for the screw adjustments.",
     "solved": true
   },
-  "fingerprint": "481fb2ead7bacc69dae66abc737adfa22bc0e0e8cf936d02c412f7f67e54df19",
+  "fingerprint": "4e5901f7ff8f43889885a46ffd4d2ef1ca4af46a55f4e6c192ca5c11e430e8ae",
   "history": [
     {
       "verdict": "revise",
@@ -116,6 +116,42 @@
         "Remove the stray § from the Opus 2 row.",
         "Clarify that Fellow’s Opus 2 procedure loosens the screws and uses the dial to shift calibration. The linked guide gives the adjustment limit to avoid burr contact. [Fellow’s calibration guide](https://help.fellowproducts.com/hc/en-us/articles/56361337841691-What-to-Do-if-Your-Opus-2-Can-t-Grind-Fine-Enough-for-Espresso)"
       ]
+    },
+    {
+      "verdict": "revise",
+      "scores": {
+        "topicSelection": {
+          "score": 3,
+          "reason": "The brief identifies a concrete troubleshooting need for US Opus owners and makes a credible case for choosing it over Ode Gen 2 ionizer cleaning. The search phrases are research strings, and one owner report gives limited evidence of recurring demand. Traffic and ranking potential remain unmeasured."
+        },
+        "evidence": {
+          "score": 4,
+          "reason": "Fellow’s US product page and support guides confirm the controls, starting range, and separate adjustment procedures. The draft avoids promising a calibration outcome, but its pre-calibration checklist blurs target yield and target shot time. [Opus 1 ring guide](https://help.fellowproducts.com/hc/en-us/articles/12697812844315-What-does-the-Opus-1-inner-adjustment-ring-do-and-how-do-I-use-it) · [Opus 2 product page](https://fellowproducts.com/products/opus-2-conical-burr-grinder) · [Opus 2 calibration guide](https://help.fellowproducts.com/hc/en-us/articles/56361337841691-What-to-Do-if-Your-Opus-2-Can-t-Grind-Fine-Enough-for-Espresso)"
+        },
+        "readerValue": {
+          "score": 4,
+          "reason": "The opening gives the reader an immediate next step. The article adds a model-specific decision rule across Fellow’s separate guides: identify the grinder by its controls, repeat the same recipe, then use the Opus 1 blue ring or the Opus 2 calibration guide if the shot still runs fast at the fine limit. The timing check needs to be clearer for the Opus 2 reader deciding whether to recalibrate."
+        },
+        "onPageSeo": {
+          "score": 4,
+          "reason": "The descriptive H1 names the symptom, the opening answers it promptly, and the headings follow the troubleshooting sequence. The brief lacks a proposed slug and meta description. It identifies no closely relevant internal link target."
+        }
+      },
+      "actions": [
+        "Clarify the pre-calibration checklist. The preceding reference to target yield makes “allows enough time to reach the target” read as a yield check, which could send a reader to recalibration even when the machine is programmed to end the shot before the intended shot time. Explicitly check expected yield and target shot time separately, include insufficient tamping, and tell readers to correct any failed check and retest before recalibrating. [Fellow’s pre-calibration checks](https://help.fellowproducts.com/hc/en-us/articles/56361337841691-What-to-Do-if-Your-Opus-2-Can-t-Grind-Fine-Enough-for-Espresso)"
+      ],
+      "optionalImprovements": [
+        "Remove the stray § from the Opus 2 row.",
+        "Record a natural primary query such as “Fellow Opus espresso too fast at finest setting” and add a proposed page title, slug, and meta description to the brief."
+      ],
+      "reader": {
+        "question": "My Opus 2 is already at 0 and my espresso still runs fast. What should I check before recalibrating it?",
+        "quote": "A fast shot by itself leaves the cause open. If the shot still runs fast at the finest setting after those checks, use the instructions for your model.",
+        "action": "Repeat the shot with the same coffee, basket, dose, and target yield. Check the tamp, water delivery, and shot program. If the shot still runs fast at 0, unplug the grinder and follow Fellow’s linked Opus 2 calibration guide, then retest with the same recipe. The opening puts the recipe and tamp checks beside its takeaway and distinguishes everyday dial adjustments from calibration at the fine limit.",
+        "unresolved": "The cause of the fast shot and the setting that works for this setup are determined by the checks and retest. The detailed screwdriver steps are in Fellow’s linked guide.",
+        "solved": true
+      },
+      "fingerprint": "481fb2ead7bacc69dae66abc737adfa22bc0e0e8cf936d02c412f7f67e54df19"
     }
   ]
 }

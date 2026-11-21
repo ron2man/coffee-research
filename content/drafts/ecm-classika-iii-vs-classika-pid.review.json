@@ -5,34 +5,33 @@
   "scores": {
     "topicSelection": {
       "score": 3,
-      "reason": "The brief identifies a specific UK shopping question and explains why it chose this comparison over the Puristika and Sette alternatives. The gap is a seller test for the exact used unit. One buyer thread gives a weak demand signal, and expected traffic and ranking remain unknown."
+      "reason": "The brief compares three opportunities and gives a concrete reason to choose this UK query. Existing coverage explains the model differences, leaving room for a used-unit verification guide. One buyer thread is a weak demand signal, and traffic potential remains unmeasured."
     },
     "evidence": {
       "score": 5,
-      "reason": "ECM’s catalogues and manuals confirm the current item numbers, III controls, advertised readiness times, UK electrical ratings and flush instructions. The draft makes clear that first-shot times depend on a seller demonstration and that older PID units need the manual matched to the machine. [III catalogue](https://www.ecm.de/en/products/classika-iii/) · [PID catalogue](https://www.ecm.de/en/products/classika-pid/) · [III manual](https://www.ecm.de/wp-content/uploads/2026/08/BA_Classika-III-web.pdf) · [PID manual](https://www.ecm.de/wp-content/uploads/2025/04/BA_Classika_-PID_2412-web.pdf)"
+      "reason": "ECM’s catalogues and manuals confirm the identifiers, controls, UK ratings, flush cues and advertised readiness figures. Older PID revisions and actual first-shot times remain unverified, and the draft accounts for both by matching the manual to the unit and asking for a timed demonstration. [III catalogue](https://www.ecm.de/en/products/classika-iii/) · [PID catalogue](https://www.ecm.de/en/products/classika-pid/) · [III manual](https://www.ecm.de/wp-content/uploads/2026/08/BA_Classika-III-web.pdf) · [PID manual](https://www.ecm.de/wp-content/uploads/2025/04/BA_Classika_-PID_2412-web.pdf)"
     },
     "readerValue": {
       "score": 5,
-      "reason": "The opening gives a usable default. Choose the cheaper used PID if that exact unit can complete the first shot within your morning window. If it misses, ask the III seller to run the same test before paying more. The article adds a procedure beyond the listings by pairing model identifiers and controls with the applicable PID flush cues and timing the run through espresso in the cup."
+      "reason": "The ambiguous listing gives the reader a recognizable starting point. The draft pairs exact model identifiers with a seller test that includes the PID’s FLU-to-rdY/Go sequence and times the run through the first espresso. Choose the used PID if it meets the morning window. If it misses, ask for the same test on the III before paying more. The identifiers and display cues make this procedure specific to these machines."
     },
     "onPageSeo": {
       "score": 5,
-      "reason": "The title uses both model names and states the narrowed task. The opening answers it, the headings follow the shopper’s steps, and the brief supplies a slug and a matching meta description. The brief identifies no relevant internal-link target among the existing drafts."
+      "reason": "The headline matches the comparison query and the narrowed commission. The opening gives the decision rule, and the headings lead from identification to demonstration to interpretation. The brief supplies a page title, slug and meta description, and identifies no relevant internal-link target."
     }
   },
   "actions": [],
   "optionalImprovements": [
-    "Add the ten-minute example from the reader check to show how a shopper can apply the cutoff.",
-    "Use ‘currently listed Classika PID’ in the opening to carry the catalogue scope through to shoppers looking at older units."
+    "Add the III manual’s 60-second window alongside the five-second flush so the seller can reproduce the prompted sequence more precisely."
   ],
   "reader": {
-    "question": "A used listing just says “Classika.” How do I tell which model it is, and how can I check whether it’ll make my first espresso within ten minutes of switching it on?",
+    "question": "A used listing just says “Classika.” How can I tell which model it is and check whether it can make my first espresso before I leave for work?",
     "quote": "I’d buy the cheaper used PID if the seller can show that the exact machine makes its first espresso within the time I normally have. If it misses that window, I’d ask for the same cold-start demonstration on the III before paying more.",
-    "action": "Ask for the item number and a photo of the front controls. The Classika PID is CM100003-00, and the III is CM100024-00 and has an OLED display and a dial you turn and press. Ask the seller to start with the machine fully cold, follow the manual for that unit, and show a continuous demonstration from switch-on to espresso in the cup. If the PID misses ten minutes, request the same test on the III before paying more.",
-    "unresolved": "The opening puts the decisive caveat beside its recommendation: buying the cheaper PID depends on a timed first shot from that exact unit. The actual times still require seller demonstrations. The advertised figures later in the page measure brew readiness, so they don’t establish how much sooner the III would put espresso in the cup.",
+    "action": "Ask for the item number and a photo of the front controls. CM100003-00 identifies the PID, and CM100024-00 identifies the III. Have the seller start with the exact machine fully cold, follow its manual, and time from switch-on until the first espresso is in the cup. Buy the cheaper PID if it meets your morning window. If it misses, request the same test on the III before paying more. The opening puts these conditions beside the recommendation.",
+    "unresolved": "The exact machine’s first-shot time remains unknown until the seller demonstrates it. The advertised figures measure brew readiness, so they cannot establish how much time the III would save through the first shot.",
     "solved": true
   },
-  "fingerprint": "4c29223ece7739475f0f02ada19bce0528d6f2e542db9dda43d2b46e42e0d835",
+  "fingerprint": "bef942f2b1a9be5a0a6183776f84fef043223534e2b0ab69700fb1bc6f36e57a",
   "history": [
     {
       "verdict": "revise",
@@ -172,6 +171,40 @@
         "solved": false
       },
       "fingerprint": "ff9609d9359e1dc718e96593db8f24b99a9ba64672f3b8e9d61552b80ae2e85c"
+    },
+    {
+      "verdict": "pass",
+      "scores": {
+        "topicSelection": {
+          "score": 3,
+          "reason": "The brief identifies a specific UK shopping question and explains why it chose this comparison over the Puristika and Sette alternatives. The gap is a seller test for the exact used unit. One buyer thread gives a weak demand signal, and expected traffic and ranking remain unknown."
+        },
+        "evidence": {
+          "score": 5,
+          "reason": "ECM’s catalogues and manuals confirm the current item numbers, III controls, advertised readiness times, UK electrical ratings and flush instructions. The draft makes clear that first-shot times depend on a seller demonstration and that older PID units need the manual matched to the machine. [III catalogue](https://www.ecm.de/en/products/classika-iii/) · [PID catalogue](https://www.ecm.de/en/products/classika-pid/) · [III manual](https://www.ecm.de/wp-content/uploads/2026/08/BA_Classika-III-web.pdf) · [PID manual](https://www.ecm.de/wp-content/uploads/2025/04/BA_Classika_-PID_2412-web.pdf)"
+        },
+        "readerValue": {
+          "score": 5,
+          "reason": "The opening gives a usable default. Choose the cheaper used PID if that exact unit can complete the first shot within your morning window. If it misses, ask the III seller to run the same test before paying more. The article adds a procedure beyond the listings by pairing model identifiers and controls with the applicable PID flush cues and timing the run through espresso in the cup."
+        },
+        "onPageSeo": {
+          "score": 5,
+          "reason": "The title uses both model names and states the narrowed task. The opening answers it, the headings follow the shopper’s steps, and the brief supplies a slug and a matching meta description. The brief identifies no relevant internal-link target among the existing drafts."
+        }
+      },
+      "actions": [],
+      "optionalImprovements": [
+        "Add the ten-minute example from the reader check to show how a shopper can apply the cutoff.",
+        "Use ‘currently listed Classika PID’ in the opening to carry the catalogue scope through to shoppers looking at older units."
+      ],
+      "reader": {
+        "question": "A used listing just says “Classika.” How do I tell which model it is, and how can I check whether it’ll make my first espresso within ten minutes of switching it on?",
+        "quote": "I’d buy the cheaper used PID if the seller can show that the exact machine makes its first espresso within the time I normally have. If it misses that window, I’d ask for the same cold-start demonstration on the III before paying more.",
+        "action": "Ask for the item number and a photo of the front controls. The Classika PID is CM100003-00, and the III is CM100024-00 and has an OLED display and a dial you turn and press. Ask the seller to start with the machine fully cold, follow the manual for that unit, and show a continuous demonstration from switch-on to espresso in the cup. If the PID misses ten minutes, request the same test on the III before paying more.",
+        "unresolved": "The opening puts the decisive caveat beside its recommendation: buying the cheaper PID depends on a timed first shot from that exact unit. The actual times still require seller demonstrations. The advertised figures later in the page measure brew readiness, so they don’t establish how much sooner the III would put espresso in the cup.",
+        "solved": true
+      },
+      "fingerprint": "4c29223ece7739475f0f02ada19bce0528d6f2e542db9dda43d2b46e42e0d835"
     }
   ]
 }
