@@ -1,28 +1,85 @@
 {
   "draft": "content/drafts/fellow-opus-espresso-too-fast.md",
   "brief": "content/drafts/fellow-opus-espresso-too-fast.brief.md",
-  "verdict": "revise",
+  "verdict": "pass",
   "scores": {
     "topicSelection": {
       "score": 3,
-      "reason": "The brief makes a credible case for choosing the Opus guide over Ode cleaning. A symptom-led search found separate answers for each generation and [multiple](https://www.reddit.com/r/FellowProducts/comments/1u1nbke/finished_setupfor_now/) [owner reports](https://www.reddit.com/r/FellowProducts/comments/1ubtf64/having_trouble_dialing_in_with_opus_2/), supporting an editorial experiment. The brief lacks a natural primary query. Search demand remains unmeasured, and future traffic and rankings are unknown."
+      "reason": "The brief makes a defensible choice over the Ode cleaning topic. The Opus guide brings two model-specific procedures into one symptom-led path, and an owner thread illustrates the risk of mixing them up. The recorded searches use long research phrases, with no short primary query or measured demand. Traffic and ranking remain uncertain. [Owner discussion](https://www.reddit.com/r/FellowProducts/comments/1vpg7vw/opus_2_calibration_help/)"
     },
     "evidence": {
-      "score": 4,
-      "reason": "Fellow’s US-facing sources confirm the model-specific controls, the Opus 1 adjustment, the Opus 2 starting range and the calibration procedure. The draft preserves uncertainty about outcomes, but its tamp check omits Fellow’s point that insufficient tamping can also be a factor. [Opus 1 guide](https://help.fellowproducts.com/hc/en-us/articles/12697812844315-What-does-the-Opus-1-inner-adjustment-ring-do-and-how-do-I-use-it) · [Opus 2 calibration guide](https://help.fellowproducts.com/hc/en-us/articles/56361337841691-What-to-Do-if-Your-Opus-2-Can-t-Grind-Fine-Enough-for-Espresso) · [Opus 2 product FAQ](https://fellowproducts.com/products/opus-2-conical-burr-grinder)"
+      "score": 5,
+      "reason": "Fellow’s US-facing sources support the Opus 1 ring procedure and finer range, the Opus 2 side dial and 0–2 starting range, and the checks before calibration. The draft keeps the procedures model-specific and makes no promises about calibration outcomes. [Opus 1 ring guide](https://help.fellowproducts.com/hc/en-us/articles/12697812844315-What-does-the-Opus-1-inner-adjustment-ring-do-and-how-do-I-use-it) · [Opus 2 product FAQ](https://fellowproducts.com/products/opus-2-conical-burr-grinder) · [Opus 2 calibration guide](https://help.fellowproducts.com/hc/en-us/articles/56361337841691-What-to-Do-if-Your-Opus-2-Can-t-Grind-Fine-Enough-for-Espresso)"
     },
     "readerValue": {
-      "score": 4,
-      "reason": "The visual identifier table and same-recipe retest connect setup checks to the right procedure for either generation. That fills a practical gap between Fellow’s Opus 2 guide and Seattle Coffee Gear’s original Opus troubleshooting. The draft leaves readers without a next step if the documented adjustment still fails. [Fellow’s Opus 2 guide](https://help.fellowproducts.com/hc/en-us/articles/56361337841691-What-to-Do-if-Your-Opus-2-Can-t-Grind-Fine-Enough-for-Espresso) · [Seattle Coffee Gear’s Opus guide](https://www.seattlecoffeegear.com/pages/product-resources/fellow-opus-coffee-and-espresso-grinder-product-guide)"
+      "score": 5,
+      "reason": "The opening gives owners a decision they can act on immediately. Check the shot setup first, then use the blue ring on Opus 1 or follow Fellow’s calibration guide if Opus 2 is already at zero. The visual model cues and same-recipe retest make that decision practical."
     },
     "onPageSeo": {
       "score": 3,
-      "reason": "The descriptive H1, early answer and decision-ordered H2s match the reader’s language. The brief lacks a proposed page title, slug and meta description. It establishes no relevant internal-link target, and the model table contains a stray §."
+      "reason": "The descriptive heading names the symptom, the opening answers it, and the sections follow the troubleshooting sequence. The brief lacks a proposed page title, slug and meta description. It mentions a Bambino buying draft but establishes no closely related internal link target."
     }
   },
-  "actions": [
-    "Make the pre-calibration check concrete. Ask readers to verify a firm tamp and confirm that the shot program can run long enough to reach their timing target. Give readers a Fellow support route if the documented adjustment and same-recipe retest still leave the shot too fast.",
-    "Record a natural US-English primary query such as “Fellow Opus espresso shot too fast at finest setting.” Update the brief with the symptom-led results, including Fellow’s Opus 2 guide and Seattle Coffee Gear’s original Opus answer. Frame the two-model guide as an editorial experiment with unmeasured demand.",
-    "Complete the handoff with a proposed page title, stable slug and concise meta description. Include an internal link if a relevant espresso troubleshooting page exists, and remove the stray § from the model table."
+  "actions": [],
+  "optionalImprovements": [
+    "Record a short primary query such as “Fellow Opus espresso runs too fast at finest setting” and add a proposed page title, slug and meta description to the brief.",
+    "Remove the stray § from the Opus 2 row.",
+    "Clarify that Fellow’s Opus 2 procedure loosens the screws and uses the dial to shift calibration. The linked guide gives the adjustment limit to avoid burr contact. [Fellow’s calibration guide](https://help.fellowproducts.com/hc/en-us/articles/56361337841691-What-to-Do-if-Your-Opus-2-Can-t-Grind-Fine-Enough-for-Espresso)"
+  ],
+  "history": [
+    {
+      "verdict": "revise",
+      "scores": {
+        "topicSelection": {
+          "score": 3,
+          "reason": "The brief makes a credible case for choosing the Opus guide over Ode cleaning. A symptom-led search found separate answers for each generation and [multiple](https://www.reddit.com/r/FellowProducts/comments/1u1nbke/finished_setupfor_now/) [owner reports](https://www.reddit.com/r/FellowProducts/comments/1ubtf64/having_trouble_dialing_in_with_opus_2/), supporting an editorial experiment. The brief lacks a natural primary query. Search demand remains unmeasured, and future traffic and rankings are unknown."
+        },
+        "evidence": {
+          "score": 4,
+          "reason": "Fellow’s US-facing sources confirm the model-specific controls, the Opus 1 adjustment, the Opus 2 starting range and the calibration procedure. The draft preserves uncertainty about outcomes, but its tamp check omits Fellow’s point that insufficient tamping can also be a factor. [Opus 1 guide](https://help.fellowproducts.com/hc/en-us/articles/12697812844315-What-does-the-Opus-1-inner-adjustment-ring-do-and-how-do-I-use-it) · [Opus 2 calibration guide](https://help.fellowproducts.com/hc/en-us/articles/56361337841691-What-to-Do-if-Your-Opus-2-Can-t-Grind-Fine-Enough-for-Espresso) · [Opus 2 product FAQ](https://fellowproducts.com/products/opus-2-conical-burr-grinder)"
+        },
+        "readerValue": {
+          "score": 4,
+          "reason": "The visual identifier table and same-recipe retest connect setup checks to the right procedure for either generation. That fills a practical gap between Fellow’s Opus 2 guide and Seattle Coffee Gear’s original Opus troubleshooting. The draft leaves readers without a next step if the documented adjustment still fails. [Fellow’s Opus 2 guide](https://help.fellowproducts.com/hc/en-us/articles/56361337841691-What-to-Do-if-Your-Opus-2-Can-t-Grind-Fine-Enough-for-Espresso) · [Seattle Coffee Gear’s Opus guide](https://www.seattlecoffeegear.com/pages/product-resources/fellow-opus-coffee-and-espresso-grinder-product-guide)"
+        },
+        "onPageSeo": {
+          "score": 3,
+          "reason": "The descriptive H1, early answer and decision-ordered H2s match the reader’s language. The brief lacks a proposed page title, slug and meta description. It establishes no relevant internal-link target, and the model table contains a stray §."
+        }
+      },
+      "actions": [
+        "Make the pre-calibration check concrete. Ask readers to verify a firm tamp and confirm that the shot program can run long enough to reach their timing target. Give readers a Fellow support route if the documented adjustment and same-recipe retest still leave the shot too fast.",
+        "Record a natural US-English primary query such as “Fellow Opus espresso shot too fast at finest setting.” Update the brief with the symptom-led results, including Fellow’s Opus 2 guide and Seattle Coffee Gear’s original Opus answer. Frame the two-model guide as an editorial experiment with unmeasured demand.",
+        "Complete the handoff with a proposed page title, stable slug and concise meta description. Include an internal link if a relevant espresso troubleshooting page exists, and remove the stray § from the model table."
+      ]
+    },
+    {
+      "verdict": "pass",
+      "scores": {
+        "topicSelection": {
+          "score": 3,
+          "reason": "The brief makes a credible case for a US troubleshooting experiment and explains why it chose the Opus over Ode Gen 2 cleaning. The owner thread illustrates model confusion, but the search strings are research prompts and traffic remains unmeasured. [Opus 2 owner discussion](https://www.reddit.com/r/FellowProducts/comments/1vpg7vw/opus_2_calibration_help/)"
+        },
+        "evidence": {
+          "score": 5,
+          "reason": "Fellow’s US-facing pages confirm the Opus 1 adjustment sequence and finer range, the Opus 2 side dial and 0–2 starting range, and the checks and tools for finer calibration. The draft avoids promising a result or asserting a conversion between scales. [Opus 1 ring guide](https://help.fellowproducts.com/hc/en-us/articles/12697812844315-What-does-the-Opus-1-inner-adjustment-ring-do-and-how-do-I-use-it) · [Opus 2 product FAQ](https://fellowproducts.com/products/opus-2-conical-burr-grinder) · [Opus 2 calibration guide](https://help.fellowproducts.com/hc/en-us/articles/56361337841691-What-to-Do-if-Your-Opus-2-Can-t-Grind-Fine-Enough-for-Espresso)"
+        },
+        "readerValue": {
+          "score": 5,
+          "reason": "The draft turns two model-specific procedures into one troubleshooting path. Readers can repeat the shot with the same recipe, identify the grinder by its controls, and find the applicable adjustment."
+        },
+        "onPageSeo": {
+          "score": 4,
+          "reason": "The descriptive heading names the product and symptom, the opening answers the question, and the sections follow the reader’s decision order. The brief lacks a proposed page title, slug, and meta description. The only named internal draft serves a grinder-buying decision."
+        }
+      },
+      "actions": [],
+      "optionalImprovements": [
+        "Record a natural primary query such as “Fellow Opus espresso runs fast at finest setting” and use it for a follow-up US search snapshot.",
+        "Add a proposed page title, stable slug, and concise meta description to the brief.",
+        "Remove the stray § before “A stepless dial on the side.”",
+        "Move the Opus 2 calibration link to the first sentence that tells readers to follow the guide so they can open it before handling the screws."
+      ]
+    }
   ]
 }

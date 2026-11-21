@@ -77,18 +77,18 @@ async function reviewDraft({ draft, brief }, seoSkill) {
   return review;
 }
 
-function reviseDraft({ draft, brief }, review, seoSkill) {
+function reviseDraft({ draft, brief }, review, seoSkill, feedback) {
   const prompt = [
-    'Revise the existing draft and brief named below. Resolve the independent judge’s blocking actions. Use score comments as context. Preserve the chosen topic and the same paths. Verify factual corrections against cited sources. Update affected product cards and claim references as needed. If evidence is insufficient, narrow or remove the unsupported material and explain the limitation in the brief. Keep the draft useful and readable. Change only the named draft, its brief, and relevant product cards. Do not write verdict files, commit, or push.',
+    'Revise the existing draft and brief named below. Resolve the independent judge’s blocking actions and any explicit editor feedback. Use score comments as context. Preserve the chosen topic and the same paths. Verify factual corrections against cited sources. Update affected product cards and claim references as needed. If evidence is insufficient, narrow or remove the unsupported material and explain the limitation in the brief. Keep the draft useful and readable. Change only the named draft, its brief, and relevant product cards. Do not write verdict files, commit, or push.',
     seoSkill,
-    JSON.stringify({ draft, brief, verdict: review.verdict, scores: review.scores, actions: review.actions }),
+    JSON.stringify({ draft, brief, verdict: review.verdict, scores: review.scores, actions: review.actions, editorFeedback: feedback }),
   ].join('\n\n');
   run('codex', ['exec', '-s', 'workspace-write', prompt]);
   changedPaths({ draft, brief });
   run(process.execPath, ['agent/validate-knowledge.mjs']);
 }
 
-function savedRevision(slug) {
+function savedRevision(slug, feedback) {
   if (slug === undefined) return null;
   if (!/^[a-z0-9-]+$/.test(slug)) throw new Error('Provide a draft slug without its extension');
   const base = `content/drafts/${slug}`;
@@ -96,20 +96,27 @@ function savedRevision(slug) {
   const brief = `${base}.brief.md`;
   const path = `${base}.review.json`;
   const review = JSON.parse(readFileSync(path, 'utf8'));
-  if (review.draft !== draft || review.brief !== brief || review.verdict !== 'revise') {
-    throw new Error(`Expected a saved revise verdict for ${slug}`);
+  if (review.draft !== draft || review.brief !== brief ||
+      (!feedback && review.verdict !== 'revise') || !['pass', 'revise', 'defer'].includes(review.verdict)) {
+    throw new Error(`Expected a matching saved review for ${slug}. A saved revise verdict or explicit editor feedback is required.`);
   }
   return { draft, brief, review };
 }
 
 try {
-  const { values } = parseArgs({ options: { revise: { type: 'string' } } });
+  const { values } = parseArgs({
+    options: { revise: { type: 'string' }, feedback: { type: 'string' } },
+  });
+  const feedback = values.feedback?.trim();
+  if (values.feedback !== undefined && (!feedback || !values.revise)) {
+    throw new Error('--feedback requires nonempty editor feedback and a --revise draft slug');
+  }
   const branch = run('git', ['symbolic-ref', '--short', 'HEAD'], true).trim();
   run('git', ['remote', 'get-url', 'origin'], true);
   if (workingChanges().length) throw new Error('Start the editorial workflow with a clean checkout');
 
   const seoSkill = readFileSync('agent/skills/coffee-seo/SKILL.md', 'utf8');
-  const saved = savedRevision(values.revise);
+  const saved = savedRevision(values.revise, feedback);
   let article = saved;
   if (!saved) {
     const prompt = [readFileSync('agent/editorial-workflow.md', 'utf8'), seoSkill].join('\n\n');
@@ -123,8 +130,8 @@ try {
   if (article) {
     const { draft, brief } = article;
     const initial = saved?.review ?? await reviewDraft(article, seoSkill);
-    const previous = initial.verdict === 'revise' ? initial : null;
-    if (previous) reviseDraft(article, previous, seoSkill);
+    const previous = initial.verdict === 'revise' || feedback ? initial : null;
+    if (previous) reviseDraft(article, previous, seoSkill, feedback);
 
     const final = previous ? await reviewDraft(article, seoSkill) : initial;
     files = changedPaths(article);
