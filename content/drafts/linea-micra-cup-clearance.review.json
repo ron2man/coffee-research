@@ -1,29 +1,28 @@
 {
   "draft": "content/drafts/linea-micra-cup-clearance.md",
   "brief": "content/drafts/linea-micra-cup-clearance.brief.md",
-  "verdict": "revise",
+  "verdict": "pass",
   "scores": {
     "topicSelection": {
       "score": 4,
-      "reason": "The brief defines a clear US cup-and-scale fit decision and explains why it chose the Micra over the Encore ESP upgrade. Recurring owner questions support an editorial experiment, while traffic and ranking potential remain unmeasured. noto studio already covers bottomless mode, stack height, and level removal. The narrower opportunity is checking all three stock modes, especially two cups on one scale. The Home-Barista review was accessible only through indexed excerpts. [Owner discussion](https://www.reddit.com/r/LaMarzocco/comments/1ino05m/la_marzocco_micra_cup_clearance/) · [noto studio](https://noto-studio.de/blogs/news/linea-micra-cup-clearance) · [Home-Barista](https://www.home-barista.com/blog/la-marzocco-linea-micra-espresso-machine-review-t83283.html)"
+      "reason": "The brief makes a credible case for testing the US cup-clearance query over the Encore ESP upgrade comparison. Owner questions provide qualitative demand signals, while traffic and ranking potential remain unmeasured. The gap is narrow because noto studio already covers bottomless mode and cup-and-scale clearance. Home-Barista returned a 403, limiting the competitive review. [noto studio guide](https://noto-studio.de/blogs/news/linea-micra-cup-clearance)"
     },
     "evidence": {
-      "score": 4,
-      "reason": "The US manufacturer pages support the included portafilter, three configurations, written attachment steps, and routine cleaning. The example dimensions are clearly hypothetical. The opening should limit the clearance claim to what this review could verify for the stock setups. [US product listing](https://home.lamarzoccousa.com/product/linea-micra/) · [Written workflow](https://home.lamarzoccousa.com/?p=292461) · [Maintenance guide](https://home.lamarzoccousa.com/?p=397148)"
+      "score": 5,
+      "reason": "La Marzocco’s US pages confirm the included portafilter, all three configurations, the written fitting directions, and routine cleaning advice. No verified clearance figures cover all three stock modes. The draft states that limit, labels its numbers as illustrative, and tells readers how to check their own setup. [US product listing](https://home.lamarzoccousa.com/product/linea-micra/) · [Written workflow](https://home.lamarzoccousa.com/?p=292461) · [Maintenance guide](https://home.lamarzoccousa.com/?p=397148)"
     },
     "readerValue": {
-      "score": 4,
-      "reason": "The decision table, short-glass fallback, and simultaneous two-cup alignment and scale-support checks give owners a practical way to test their setup. Shoppers still need a seller measurement or fit test, and the instructions leave it unclear whether to measure and test with the brew basket installed."
+      "score": 5,
+      "reason": "Owners get a mode recommendation and a cold fit test. Shoppers get a measurement request they can send to a seller. The double-spout procedure adds concrete checks for simultaneous scale support, outlet alignment, and clearance along both cup paths."
     },
     "onPageSeo": {
       "score": 5,
-      "reason": "The descriptive title uses the primary query naturally, the opening gives an immediate answer, and the headings follow the reader’s decisions. The brief supplies a stable slug and concise meta description and explains why the existing drafts offer no relevant internal target."
+      "reason": "The descriptive heading uses the primary query naturally, the opening gives an immediate answer, and the sections follow the reader’s decisions. The brief supplies a title, slug, and meta description and explains why the existing drafts offer no relevant internal link."
     }
   },
-  "actions": [
-    "Replace the blanket statement that verified figures are unavailable with a scoped statement that the sources checked yielded no verified clearance measurements for all three stock configurations.",
-    "Specify that the reader and seller should lock in the empty portafilter with the intended brew basket installed, then check the full insertion and removal path. Keep the physical fit check as the final step after the stack-height calculation.",
-    "Bring the double-spout fit check forward in the introduction so readers immediately see the article’s distinctive contribution for stock setups."
+  "actions": [],
+  "optionalImprovements": [
+    "Trim the repeated double-spout checks in the opening and table while keeping the full procedure in the fit-test section."
   ],
   "history": [
     {
@@ -76,6 +75,32 @@
         "State near the opening that the guide has no verified clearance figures for the three stock configurations. Give shoppers a worked stack-height example using clearly labeled illustrative numbers.",
         "Make the full-path test more precise. Tell readers and sellers to check the actual cup position on the scale, including rim and handle width. For double-spout use, check that both cups sit flat and align under the outlets at the same time.",
         "Shorten the rejected alternative’s primary query to “Baratza Encore ESP vs ESP Pro” and keep the clearance brief’s competitive claim focused on choosing among the stock modes and checking the full insertion and removal path."
+      ]
+    },
+    {
+      "verdict": "revise",
+      "scores": {
+        "topicSelection": {
+          "score": 4,
+          "reason": "The brief defines a clear US cup-and-scale fit decision and explains why it chose the Micra over the Encore ESP upgrade. Recurring owner questions support an editorial experiment, while traffic and ranking potential remain unmeasured. noto studio already covers bottomless mode, stack height, and level removal. The narrower opportunity is checking all three stock modes, especially two cups on one scale. The Home-Barista review was accessible only through indexed excerpts. [Owner discussion](https://www.reddit.com/r/LaMarzocco/comments/1ino05m/la_marzocco_micra_cup_clearance/) · [noto studio](https://noto-studio.de/blogs/news/linea-micra-cup-clearance) · [Home-Barista](https://www.home-barista.com/blog/la-marzocco-linea-micra-espresso-machine-review-t83283.html)"
+        },
+        "evidence": {
+          "score": 4,
+          "reason": "The US manufacturer pages support the included portafilter, three configurations, written attachment steps, and routine cleaning. The example dimensions are clearly hypothetical. The opening should limit the clearance claim to what this review could verify for the stock setups. [US product listing](https://home.lamarzoccousa.com/product/linea-micra/) · [Written workflow](https://home.lamarzoccousa.com/?p=292461) · [Maintenance guide](https://home.lamarzoccousa.com/?p=397148)"
+        },
+        "readerValue": {
+          "score": 4,
+          "reason": "The decision table, short-glass fallback, and simultaneous two-cup alignment and scale-support checks give owners a practical way to test their setup. Shoppers still need a seller measurement or fit test, and the instructions leave it unclear whether to measure and test with the brew basket installed."
+        },
+        "onPageSeo": {
+          "score": 5,
+          "reason": "The descriptive title uses the primary query naturally, the opening gives an immediate answer, and the headings follow the reader’s decisions. The brief supplies a stable slug and concise meta description and explains why the existing drafts offer no relevant internal target."
+        }
+      },
+      "actions": [
+        "Replace the blanket statement that verified figures are unavailable with a scoped statement that the sources checked yielded no verified clearance measurements for all three stock configurations.",
+        "Specify that the reader and seller should lock in the empty portafilter with the intended brew basket installed, then check the full insertion and removal path. Keep the physical fit check as the final step after the stack-height calculation.",
+        "Bring the double-spout fit check forward in the introduction so readers immediately see the article’s distinctive contribution for stock setups."
       ]
     }
   ]
