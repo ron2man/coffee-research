@@ -1,5 +1,7 @@
 import { readFile, readdir } from 'node:fs/promises';
 
+import { loadCards, matchesReview, reviewInputs } from '../agent/review-inputs.mjs';
+
 const directory = new URL('../content/drafts/', import.meta.url);
 
 async function optionalFile(filename) {
@@ -11,7 +13,8 @@ async function optionalFile(filename) {
   }
 }
 
-export async function readDrafts(runs, repositoryUrl) {
+export async function readDrafts(runs, repositoryUrl, cards) {
+  cards ??= await loadCards();
   let entries;
   try {
     entries = await readdir(directory, { withFileTypes: true });
@@ -32,12 +35,19 @@ export async function readDrafts(runs, repositoryUrl) {
       files.has(reviewName) ? optionalFile(reviewName) : null,
     ]);
     let review = null;
+    let stale = false;
     let reviewError = null;
     if (reviewText) {
       try {
         review = JSON.parse(reviewText);
         if (review?.draft !== path || !['pass', 'revise', 'defer'].includes(review.verdict)) {
           throw new Error('Review does not match this draft or has an invalid verdict.');
+        }
+        try {
+          stale = !matchesReview(id, review, reviewInputs(id, cards));
+        } catch (error) {
+          stale = true;
+          reviewError = error.message;
         }
       } catch {
         reviewError = 'The saved review is unreadable or does not match this draft.';
@@ -52,7 +62,7 @@ export async function readDrafts(runs, repositoryUrl) {
     const query = brief?.match(/^[-*] Primary query\s*[:—]\s*(.+)$/im)?.[1] ??
       brief?.match(/Primary query\s+[“"]([^”"]+)[”"]/i)?.[1] ?? null;
     return {
-      id, article, brief, review, reviewError, commitUrl,
+      id, article, brief, review, reviewError, stale, commitUrl,
       title: article?.match(/^# (.+)$/m)?.[1] ?? id,
       audience: brief?.match(/^[-*] Audience\s*[:—]\s*(.+)$/im)?.[1] ?? null,
       query,

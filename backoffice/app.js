@@ -5,7 +5,7 @@ const statusNames = {
 let queue = [];
 let drafts = [];
 const verdictLabels = {
-  pass: 'Passed review', revise: 'Needs revision', defer: 'Deferred', unjudged: 'Not yet judged',
+  stale: 'Review out of date', pass: 'Passed review', revise: 'Needs revision', defer: 'Deferred', unjudged: 'Not yet judged',
 };
 const scoreLabels = {
   topicSelection: 'Topic selection', evidence: 'Evidence',
@@ -141,7 +141,7 @@ function appendFeedback(container, label, entries) {
 function renderDraft(draft) {
   const card = element('article', undefined, 'draft-card');
   card.id = `draft-${draft.id}`;
-  const verdict = draft.review?.verdict ?? 'unjudged';
+  const verdict = draft.stale ? 'stale' : draft.review?.verdict ?? 'unjudged';
   const label = draft.reviewError ? 'Review unavailable' : verdictLabels[verdict];
   const header = element('div', undefined, 'draft-header');
   header.append(element('h3', draft.title), element('span', label, `verdict verdict-${verdict}`));
@@ -164,6 +164,11 @@ function renderDraft(draft) {
       }
     }
     appendFeedback(review, Array.isArray(draft.review.optionalImprovements) ? 'Blocking actions' : 'Revision actions', actions);
+    if (draft.review.reader) {
+      const reader = draft.review.reader;
+      review.append(element('h4', reader.question), element('blockquote', reader.quote),
+        element('p', reader.action), element('p', reader.unresolved));
+    }
     appendFeedback(review, 'Optional improvements', draft.review.optionalImprovements);
     card.append(review);
     if (Array.isArray(draft.review.history) && draft.review.history.length) {
@@ -192,7 +197,7 @@ function renderDraft(draft) {
 function updateDrafts() {
   const filter = get('draft-filter').value;
   const visible = drafts.filter((draft) => filter === 'all' ||
-    (draft.review?.verdict ?? 'unjudged') === filter);
+    (draft.stale ? 'stale' : draft.review?.verdict ?? 'unjudged') === filter);
   show('draft-list', visible.map(renderDraft), 'No drafts match this review status.');
 }
 
@@ -203,7 +208,7 @@ function render(data) {
   const summary = data.plan?.summary;
   const metrics = [
     ['Editorial drafts', drafts.length],
-    ['Drafts needing revision', drafts.filter((draft) => draft.review?.verdict === 'revise').length],
+    ['Drafts needing revision', drafts.filter((draft) => !draft.stale && draft.review?.verdict === 'revise').length],
     ['Product cards', data.cards.length],
     ['Queued for research', summary?.new ?? '—'],
     ['Due for refresh', summary?.refresh ?? '—'],
@@ -215,6 +220,7 @@ function render(data) {
   });
   show('metrics', metrics);
   show('attention', [
+    ...(data.plan?.articleResearch ?? []).map(task => element('p', task.question + ' · ' + task.missingEvidence)),
     ...data.issues.map((issue) => element('p', issue)),
     ...(data.plan?.openClaims ?? []).map((item) =>
       element('p', `${item.id} · ${item.claimIds.join(', ')}`)),

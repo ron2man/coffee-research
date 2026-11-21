@@ -7,7 +7,14 @@
   "name": "ECM Classika III",
   "category": "machines",
   "updatedAt": "2026-11-21",
-  "variants": [],
+  "variants": [
+    {
+      "id": "classika-iii-gb",
+      "markets": [
+        "GB"
+      ]
+    }
+  ],
   "sources": [
     {
       "id": "manufacturer-product",
@@ -18,6 +25,12 @@
     {
       "id": "manufacturer-introduction",
       "url": "https://www.ecm.de/en/ecm-classika-iii-single-boiler-espresso-machine/",
+      "type": "manufacturer",
+      "accessedAt": "2026-11-21"
+    },
+    {
+      "id": "manufacturer-manual",
+      "url": "https://www.ecm.de/wp-content/uploads/2026/08/BA_Classika-III-web.pdf",
       "type": "manufacturer",
       "accessedAt": "2026-11-21"
     }
@@ -82,6 +95,31 @@
           "locator": "Details — PID and 500 ml boiler bullets"
         }
       ]
+    },
+    {
+      "id": "startup-flush",
+      "statement": "The Classika III v1.0 manual instructs users to run a five-second flush within 60 seconds if MAKE A FLUSH appears after heating.",
+      "status": "supported",
+      "verifiedAt": "2026-11-21",
+      "evidence": [
+        {
+          "sourceId": "manufacturer-manual",
+          "locator": "PDF pages 106 and 112, English §§9.2.2 and 9.8.1"
+        }
+      ]
+    },
+    {
+      "id": "gb-electrical-rating",
+      "statement": "The Classika III v1.0 manual lists 230 V AC, 50/60 Hz for the market group that includes the UK.",
+      "status": "supported",
+      "verifiedAt": "2026-11-21",
+      "evidence": [
+        {
+          "sourceId": "manufacturer-manual",
+          "locator": "PDF page 142, English §14, Power supply"
+        }
+      ],
+      "variantId": "classika-iii-gb"
     }
   ]
 }

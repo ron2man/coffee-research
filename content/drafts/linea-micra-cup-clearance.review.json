@@ -5,25 +5,33 @@
   "scores": {
     "topicSelection": {
       "score": 4,
-      "reason": "Two buyer threads show recurring fit questions, and the brief explains why this topic beat the Encore upgrade comparison. The two-cup alignment and scale-support checks extend noto studio’s existing coverage. Search demand is qualitative, traffic and ranking potential are unmeasured, and Home-Barista returned a 403 on recheck. [Stock-tray buyer thread](https://www.reddit.com/r/LaMarzocco/comments/1syosjz/micra_cup_clearance/) · [Tall-mug buyer thread](https://www.reddit.com/r/LaMarzocco/comments/1ino05m/la_marzocco_micra_cup_clearance/) · [noto studio guide](https://noto-studio.de/blogs/news/linea-micra-cup-clearance)"
+      "reason": "Two owner discussions show recurring US-relevant cup-and-scale questions. The brief makes a defensible experimental choice over the Encore ESP upgrade topic by identifying a narrower gap around testing all three stock setups, especially two cups together. Search volume and ranking potential remain unmeasured, and the full Home-Barista review returned a 403. [Buyer discussion](https://www.reddit.com/r/LaMarzocco/comments/1syosjz/micra_cup_clearance/) [Earlier owner discussion](https://www.reddit.com/r/LaMarzocco/comments/1ino05m/la_marzocco_micra_cup_clearance/)"
     },
     "evidence": {
-      "score": 5,
-      "reason": "The US manufacturer sources confirm the included portafilter, all three configurations, the written locking motion, and routine cleaning advice. Verified clearance figures across all three modes remain unavailable. The draft labels its numbers as illustrative and asks readers to confirm fit with their own setup. [US product listing](https://home.lamarzoccousa.com/product/linea-micra/) · [Written workflow](https://home.lamarzoccousa.com/?p=292461) · [Maintenance guide](https://home.lamarzoccousa.com/?p=397148)"
+      "score": 4,
+      "reason": "La Marzocco’s US listing and written guides confirm the included convertible portafilter, its three modes, and the fitting and cleaning guidance. Verified clearance measurements across all three modes remain unavailable. The draft labels its example as illustrative and directs readers to test their actual setup. [US Micra listing](https://home.lamarzoccousa.com/product/linea-micra/) [Workflow guide](https://home.lamarzoccousa.com/?p=292461) [Maintenance guide](https://home.lamarzoccousa.com/?p=397148)"
     },
     "readerValue": {
       "score": 5,
-      "reason": "The opening gives a clear default for a tight cup-and-scale fit, a short-glass fallback for a tall mug, and a separate check for split shots. Owners can test the full cup path, and shoppers know what to ask the seller to measure before buying."
+      "reason": "The opening tells the reader to try the Micra’s stock portafilter in bottomless mode for one cup and switch to a shorter glass if the cup still crowds the basket. The draft adds a concrete check beyond the existing clearance guide by testing the full level insertion and removal path with the intended basket installed. For the stock double spout, it tells readers to use the two-cup setup only if both bases sit flat, both outlets line up, and both cups can come out level. [noto studio clearance guide](https://noto-studio.de/blogs/news/linea-micra-cup-clearance)"
     },
     "onPageSeo": {
       "score": 5,
-      "reason": "The descriptive title uses the primary query naturally, and the answer appears in the first paragraph. The headings follow the reader’s decision from setup to fit testing. The brief supplies a title, slug, and meta description and explains why the existing drafts offer no relevant internal link."
+      "reason": "The descriptive title uses the primary query naturally, the first paragraph answers it, and the headings follow the reader from choosing a setup to checking fit. The proposed slug and meta description match the scope, and the brief identifies no relevant internal-link target among the existing drafts."
     }
   },
   "actions": [],
   "optionalImprovements": [
-    "Format the seller measurement request as a copy-ready checklist so shoppers can forward it directly."
+    "Add the level slide-in and slide-out check to the first paragraph so a skimming reader gets both the recommendation and the fit criterion together."
   ],
+  "reader": {
+    "question": "My cup barely fits on the scale under the stock Linea Micra portafilter. What should I try first, and how can I tell if it fits?",
+    "quote": "Removing the spout attachment frees up space beneath the basket. If your cup still crowds the basket, weigh the shot in a shorter glass and pour it into your serving cup.",
+    "action": "Remove the spout attachment and test the cup on your scale with the machine cool and idle. Slide the cup into brewing position and back out while keeping it level. If it still crowds the basket, weigh the shot in a shorter glass and transfer it to your cup.",
+    "unresolved": "Exact fit depends on your cup, scale, and portafilter setup. The opening limits the bottomless recommendation to one cup and gives the fallback beside it. The first two article paragraphs add the double-spout fit checks and disclose that verified measurements are unavailable across all three stock configurations.",
+    "solved": true
+  },
+  "fingerprint": "3f81577978e723769baaf548bcb9331d73e4039e96a7d01e62aad90e4aab0f0f",
   "history": [
     {
       "verdict": "revise",
@@ -151,6 +159,31 @@
       "actions": [],
       "optionalImprovements": [
         "Trim repeated double-spout checks in the opening and table while keeping the complete procedure in the fit-check section."
+      ]
+    },
+    {
+      "verdict": "pass",
+      "scores": {
+        "topicSelection": {
+          "score": 4,
+          "reason": "Two buyer threads show recurring fit questions, and the brief explains why this topic beat the Encore upgrade comparison. The two-cup alignment and scale-support checks extend noto studio’s existing coverage. Search demand is qualitative, traffic and ranking potential are unmeasured, and Home-Barista returned a 403 on recheck. [Stock-tray buyer thread](https://www.reddit.com/r/LaMarzocco/comments/1syosjz/micra_cup_clearance/) · [Tall-mug buyer thread](https://www.reddit.com/r/LaMarzocco/comments/1ino05m/la_marzocco_micra_cup_clearance/) · [noto studio guide](https://noto-studio.de/blogs/news/linea-micra-cup-clearance)"
+        },
+        "evidence": {
+          "score": 5,
+          "reason": "The US manufacturer sources confirm the included portafilter, all three configurations, the written locking motion, and routine cleaning advice. Verified clearance figures across all three modes remain unavailable. The draft labels its numbers as illustrative and asks readers to confirm fit with their own setup. [US product listing](https://home.lamarzoccousa.com/product/linea-micra/) · [Written workflow](https://home.lamarzoccousa.com/?p=292461) · [Maintenance guide](https://home.lamarzoccousa.com/?p=397148)"
+        },
+        "readerValue": {
+          "score": 5,
+          "reason": "The opening gives a clear default for a tight cup-and-scale fit, a short-glass fallback for a tall mug, and a separate check for split shots. Owners can test the full cup path, and shoppers know what to ask the seller to measure before buying."
+        },
+        "onPageSeo": {
+          "score": 5,
+          "reason": "The descriptive title uses the primary query naturally, and the answer appears in the first paragraph. The headings follow the reader’s decision from setup to fit testing. The brief supplies a title, slug, and meta description and explains why the existing drafts offer no relevant internal link."
+        }
+      },
+      "actions": [],
+      "optionalImprovements": [
+        "Format the seller measurement request as a copy-ready checklist so shoppers can forward it directly."
       ]
     }
   ]

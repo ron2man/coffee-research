@@ -92,7 +92,7 @@
     },
     {
       "id": "fast-heat-up-flush",
-      "statement": "For the documented Fast Heat-Up sequence, ECM instructs users to flush at FLU until the display shows rdY/Go, the cue for brewing the first cup.",
+      "statement": "For the Fast Heat-Up sequence in the Classika PID manual for item CM100003-00, ECM instructs users to flush at FLU until the display shows rdY/Go, the cue for brewing the first cup.",
       "status": "supported",
       "verifiedAt": "2026-11-21",
       "evidence": [

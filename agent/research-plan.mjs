@@ -2,6 +2,8 @@ import { appendFile, mkdir, readFile } from 'node:fs/promises';
 import { parseArgs } from 'node:util';
 import { categories, indexIds, scanKnowledge } from './knowledge.mjs';
 
+import { openResearchTasks } from './opportunities.mjs';
+
 const dayMs = 86_400_000;
 const runOptions = {
   record: { type: 'boolean' },
@@ -58,7 +60,7 @@ try {
   }
   const queue = JSON.parse(await readFile(values.queue, 'utf8'));
   if (queue?.schemaVersion !== 1) throw new Error('Expected research queue schemaVersion 1');
-  indexIds(queue.products, 'candidate');
+  const queued = indexIds(queue.products, 'candidate');
   for (const candidate of queue.products) {
     if (!categories.includes(candidate.category) || typeof candidate.name !== 'string' ||
         !candidate.name.trim() || typeof candidate.origin !== 'string' ||
@@ -70,7 +72,10 @@ try {
   if (errors.length) throw new Error(errors.join('\n'));
   const asOf = new Date().toISOString().slice(0, 10);
   const results = [];
-  for (const candidate of queue.products) {
+  const discoveries = [...cards.values()].filter(card => !queued.has(card.id))
+    .map(({ id, name, category }) => ({ id, name, category, origin: 'knowledge' }));
+  const products = [...queue.products, ...discoveries];
+  for (const candidate of products) {
     const card = cards.get(candidate.id);
     if (card && card.category !== candidate.category) {
       throw new Error(`Queue category differs from card category for ${candidate.id}`);
@@ -93,7 +98,7 @@ try {
   };
   if (shouldRecord) await recordRun('completed', summary);
   console.log(JSON.stringify({
-    asOf, refreshDays, summary, openClaims, batch: work.slice(0, limit),
+    asOf, refreshDays, summary, openClaims, products: results, articleResearch: openResearchTasks(), batch: work.slice(0, limit),
   }, null, 2));
 } catch (error) {
   if (shouldRecord) {

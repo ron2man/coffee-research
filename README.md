@@ -38,8 +38,23 @@ From a clean checkout, run `node agent/run-editorial.mjs`. Use the same command 
 
 The editorial runner explicitly loads the repository's [coffee SEO skill](agent/skills/coffee-seo/SKILL.md). A separate read-only Codex invocation evaluates each draft against its brief and product evidence. Its `.review.json` is saved beside the draft, and the verdict appears in the backoffice run history. Pass, revise, and defer drafts are all retained in Git for review. Only a pass qualifies for a future website handoff. The runner stops before committing if a draft cannot be validated or the judge cannot return a valid review.
 
-To judge drafts already in the repository, run `node agent/review-drafts.mjs`. Pass a draft slug to review a specific draft. Existing verdicts are skipped. The command writes local review files for the backoffice without rerunning discovery, drafting, or Git sync.
+To judge drafts already in the repository, run `node agent/review-drafts.mjs`. Pass a draft slug to review a specific draft. Current verdicts are skipped by default. Legacy reviews and reviews whose inputs have changed are checked again. Add `--rejudge` to evaluate the current drafts again and preserve previous verdicts in review history. The command writes local review files for the backoffice without rerunning discovery, drafting, or Git sync.
 
 The judge uses `revise` only for material, fixable blockers. A draft that clears the handoff standard can pass with optional improvements. When the judge returns `revise`, the editorial runner gives the draft, brief, and blocking actions to a fresh writer pass. It validates the revised evidence and runs the independent judge again. The second verdict is the current status. The first remains in review history. Each invocation makes at most one revision pass.
 
 To apply that loop to an existing draft with a saved `revise` verdict, start from a clean checkout and run `node agent/run-editorial.mjs --revise linea-micra-cup-clearance` (replace the slug with the one you want). This mode uses the saved feedback and revisits the selected draft without searching for a new topic.
+
+## Coffee Fieldnotes website preview
+
+Run `node site/preview.mjs` and open `http://127.0.0.1:4180/`. Refresh the page after editing a draft, article manifest, or stylesheet. Restart the server after editing preview or renderer code. This preview reads only articles listed in [the site manifest](site/articles.json) and requires a saved passing review for each draft. The homepage lists included guides. The reviewed opening paragraph appears directly beneath the headline. A stale or failed review removes that guide from both the index and its route. Preview pages are marked noindex.
+
+The future website agent can add approved entries to the manifest and improve the shared templates in `site/`. Manifest entries select the draft, slug, category and guide type. Headlines and summaries come directly from the reviewed article. Run the preview to check the rendered page before adding production hosting.
+
+
+## Editorial commissioning and review
+
+Each cycle researches a proposal in `content/opportunities/` before an independent read-only evaluation chooses `proceed`, `narrow`, or `research`. The decision is saved beside the proposal. A research decision queues the missing evidence and ends the cycle before drafting. A narrow decision commissions a smaller reader question and keeps the broader research task open. Research tasks appear in the planner JSON and the backoffice attention list. The planner checks all product cards for refresh, including discoveries outside the original queue.
+
+For an existing brief, run `node agent/check-topic.mjs <slug>` to inspect its commissioning decision without changing the draft. The two pilot slugs are `ecm-classika-iii-vs-classika-pid` and `bambino-plus-cleaning-vs-descaling`.
+
+The reader judge receives the rendered article in an isolated working directory. It poses a reader question, quotes the page, and records the action and unresolved details. The evidence judge then receives that result alongside the brief, referenced claims, and commissioning decision. Review fingerprints bind the article, brief, cited claims and sources, rubric, and rendered HTML together. Existing reviews without fingerprints show as out of date. Use `node agent/review-drafts.mjs` to migrate or refresh them.

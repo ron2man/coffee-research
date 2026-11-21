@@ -68,9 +68,9 @@ async function dashboardData() {
   });
   return {
     plan,
-    queue: queue.products.map((item) => ({
+    queue: (plan?.products ?? queue.products).map((item) => ({
       ...item,
-      originLabel: queue.origins[item.origin],
+      originLabel: queue.origins[item.origin] ?? 'Discovered product card',
       status: plan ? (nextById.get(item.id) ?? 'current') : 'unavailable',
     })),
     cards: [...knowledge.cards.values()],
@@ -78,7 +78,7 @@ async function dashboardData() {
     milestones,
     lessons,
     runs,
-    drafts: await readDrafts(runs, repositoryUrl),
+    drafts: await readDrafts(runs, repositoryUrl, knowledge.cards),
   };
 }
 

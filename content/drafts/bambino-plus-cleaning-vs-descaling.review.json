@@ -5,27 +5,33 @@
   "scores": {
     "topicSelection": {
       "score": 4,
-      "reason": "The brief makes a defensible experimental choice over the Encore ESP troubleshooting topic. The competing guide already distinguishes the two alerts and explains the descale pause, but attributes the early cleaning shortcut to the ANZ booklet. Breville’s current US manual documents it too. The owner report illustrates the problem, while search demand and traffic potential remain unmeasured. [Competing guide](https://kitchenwatcher.com/guides/breville-bambino-plus-flashing-lights/) · [Breville US manual, p. 17](https://assets.breville.com/BES500/BES500_USCM_IB_Y25_LR.pdf#page=17)"
+      "reason": "The brief compares two plausible US English queries and chooses the one with a clearer, better-documented reader task. Competing guides already cover both alerts and the rinse pause, so the gap is narrow and rests on the focused Y25 reference. Search demand and ranking potential remain unmeasured. [Kitchen Watcher](https://kitchenwatcher.com/guides/breville-bambino-plus-flashing-lights/)"
     },
     "evidence": {
-      "score": 4,
-      "reason": "The SKU-linked Y25 manual confirms the alerts, button sequences, rinse pause, and completion cues. The older Breville URL returned 404, but a retailer-hosted copy of the older Breville booklet confirms the shortcut is absent from its cleaning section. The draft appropriately leaves compatibility with older units unresolved. [Breville US SKU page](https://www.breville.com/en-us/product/bes500?sku=BES500BSS1BUS1) · [Y25 manual, pp. 17–18](https://assets.breville.com/BES500/BES500_USCM_IB_Y25_LR.pdf#page=17) · [Older Breville booklet, p. 15](https://www.williams-sonoma.com/netstorage/pdf/142739-Breville-Bambino-Plus-Manual.pdf#page=15)"
+      "score": 5,
+      "reason": "The manual linked from the US SKU page supports the alert patterns, button sequences, rinse pause, and completion cues. The booklet comparison establishes where the early-cleaning shortcut is documented. Compatibility with older units and the cause of recurring alerts remain unresolved, appropriately outside the guide’s claims. [Breville US SKU page](https://www.breville.com/en-us/product/bes500?sku=BES500BSS1BUS1) · [Y25 booklet](https://assets.breville.com/BES500/BES500_USCM_IB_Y25_LR.pdf#page=17) · [Q21 booklet](https://assets.breville.com/Instruction-Booklets/USCM/BES500_USCM_IB_Q21_FA_WEB.pdf#page=16) · [Older booklet](https://www.williams-sonoma.com/netstorage/pdf/142739-Breville-Bambino-Plus-Manual.pdf#page=15)"
     },
     "readerValue": {
-      "score": 4,
-      "reason": "The opening stands on its own. An owner can watch for STEAM in the flashing pattern and choose the correct cycle before pressing a button. The rest explains how to start each cycle, distinguish the descale pause from completion, and decide when to contact support."
+      "score": 5,
+      "reason": "The opening alone resolves the reader’s scenario: 1 CUP and STEAM flashing together in alternation with 2 CUP calls for descaling. The side-by-side table turns separate manual procedures into a model-specific checklist. The rinse instructions tell the owner to refill and resume at the automatic pause, then wait for standby to confirm completion. [Y25 booklet, pp. 17–18](https://assets.breville.com/BES500/BES500_USCM_IB_Y25_LR.pdf#page=17)"
     },
     "onPageSeo": {
-      "score": 3,
-      "reason": "The title names the model and the maintenance question, the opening answers it directly, and the headings follow practical owner questions. The brief lacks a concise primary query, proposed page title, slug, meta description, and an assessment of whether the existing Bambino content offers a relevant internal link."
+      "score": 5,
+      "reason": "The descriptive headline and first paragraph answer the primary query in natural language. The table and headings follow the owner’s workflow. The brief supplies a page title, slug, meta description, and a related grinder draft whose setup intent makes an in-article link optional."
     }
   },
   "actions": [],
   "optionalImprovements": [
-    "Replace the broken older-manual link in the draft, brief, and card with the verified retailer-hosted copy. [Older Breville booklet, p. 15](https://www.williams-sonoma.com/netstorage/pdf/142739-Breville-Bambino-Plus-Manual.pdf#page=15)",
-    "Record a concise primary query such as “Bambino Plus cleaning vs descaling lights” and add a proposed page title, stable slug, and meta description to the brief. Add an internal link if an existing page helps readers with this maintenance task.",
-    "Make the descale pause easier to follow at the machine by explicitly telling readers to put the refilled tank and emptied container back in place before starting the rinse. [Breville US manual, p. 18](https://assets.breville.com/BES500/BES500_USCM_IB_Y25_LR.pdf#page=18)"
+    "Add the manual’s power-off gesture where the draft tells readers to turn the machine off: briefly press 1 CUP and STEAM together. That distinguishes shutting down from the five-second hold that enters descale mode. [Y25 booklet, p. 18](https://assets.breville.com/BES500/BES500_USCM_IB_Y25_LR.pdf#page=18)"
   ],
+  "reader": {
+    "question": "On my US Bambino Plus, 1 CUP and STEAM flash together, then 2 CUP flashes. Should I run the cleaning cycle or descale?",
+    "quote": "If 1 CUP and STEAM flash together, alternating with 2 CUP, the machine is asking you to descale. Watch which buttons light up before pressing anything. The Y25 booklet linked from Breville’s US SKU page says the descale reminder lasts about 15 seconds. Pressing any of the flashing buttons dismisses the reminder.",
+    "action": "Run the descaling cycle for that pattern. If only 1 CUP and 2 CUP take turns flashing, run the group-head cleaning cycle with a disc and tablet. The opening identifies the applicable US model and puts the timing and dismissal caveats next to the light patterns.",
+    "unresolved": "The maintenance choice is resolved for the stated model. The page leaves compatibility of the early-cleaning shortcut with older production runs unverified.",
+    "solved": true
+  },
+  "fingerprint": "02d4961e74fd277c497ad3244a0637de7ab60eb72b3e5fb80b81d0ec6cd40d1f",
   "history": [
     {
       "verdict": "revise",
@@ -80,6 +86,71 @@
         "Beside the rinse instructions, add Breville’s warning to keep the tank installed and avoid fully emptying it while descaling is running. In the support section, tell readers to stop using the machine if it malfunctions. [Breville booklet, p. 17](https://assets.breville.com/BES500/BES500_USCM_IB_Y25_LR.pdf#page=17) · [Breville booklet, p. 3](https://assets.breville.com/BES500/BES500_USCM_IB_Y25_LR.pdf#page=3)",
         "Add a proposed page title, slug, and meta description to the brief. Add an internal link if a published page helps with the same maintenance decision."
       ]
+    },
+    {
+      "verdict": "pass",
+      "scores": {
+        "topicSelection": {
+          "score": 4,
+          "reason": "The brief makes a defensible experimental choice over the Encore ESP troubleshooting topic. The competing guide already distinguishes the two alerts and explains the descale pause, but attributes the early cleaning shortcut to the ANZ booklet. Breville’s current US manual documents it too. The owner report illustrates the problem, while search demand and traffic potential remain unmeasured. [Competing guide](https://kitchenwatcher.com/guides/breville-bambino-plus-flashing-lights/) · [Breville US manual, p. 17](https://assets.breville.com/BES500/BES500_USCM_IB_Y25_LR.pdf#page=17)"
+        },
+        "evidence": {
+          "score": 4,
+          "reason": "The SKU-linked Y25 manual confirms the alerts, button sequences, rinse pause, and completion cues. The older Breville URL returned 404, but a retailer-hosted copy of the older Breville booklet confirms the shortcut is absent from its cleaning section. The draft appropriately leaves compatibility with older units unresolved. [Breville US SKU page](https://www.breville.com/en-us/product/bes500?sku=BES500BSS1BUS1) · [Y25 manual, pp. 17–18](https://assets.breville.com/BES500/BES500_USCM_IB_Y25_LR.pdf#page=17) · [Older Breville booklet, p. 15](https://www.williams-sonoma.com/netstorage/pdf/142739-Breville-Bambino-Plus-Manual.pdf#page=15)"
+        },
+        "readerValue": {
+          "score": 4,
+          "reason": "The opening stands on its own. An owner can watch for STEAM in the flashing pattern and choose the correct cycle before pressing a button. The rest explains how to start each cycle, distinguish the descale pause from completion, and decide when to contact support."
+        },
+        "onPageSeo": {
+          "score": 3,
+          "reason": "The title names the model and the maintenance question, the opening answers it directly, and the headings follow practical owner questions. The brief lacks a concise primary query, proposed page title, slug, meta description, and an assessment of whether the existing Bambino content offers a relevant internal link."
+        }
+      },
+      "actions": [],
+      "optionalImprovements": [
+        "Replace the broken older-manual link in the draft, brief, and card with the verified retailer-hosted copy. [Older Breville booklet, p. 15](https://www.williams-sonoma.com/netstorage/pdf/142739-Breville-Bambino-Plus-Manual.pdf#page=15)",
+        "Record a concise primary query such as “Bambino Plus cleaning vs descaling lights” and add a proposed page title, stable slug, and meta description to the brief. Add an internal link if an existing page helps readers with this maintenance task.",
+        "Make the descale pause easier to follow at the machine by explicitly telling readers to put the refilled tank and emptied container back in place before starting the rinse. [Breville US manual, p. 18](https://assets.breville.com/BES500/BES500_USCM_IB_Y25_LR.pdf#page=18)"
+      ]
+    },
+    {
+      "verdict": "revise",
+      "scores": {
+        "topicSelection": {
+          "score": 4,
+          "reason": "The brief makes a credible case for an editorial experiment. It compares the maintenance query with Encore ESP troubleshooting and identifies a specific gap: Kitchen Watcher already covers both alerts and the descale pause, but presents the early-cleaning shortcut as absent from the US edition it consulted. Search demand and ranking potential remain unmeasured. [Kitchen Watcher guide](https://kitchenwatcher.com/guides/breville-bambino-plus-flashing-lights/)"
+        },
+        "evidence": {
+          "score": 4,
+          "reason": "Breville’s US SKU page links to Y25, which confirms the alert patterns, controls, and completion cues. The older Breville URL returned a 404, but a retailer-hosted copy of the older Breville booklet confirms that its cleaning section omits the shortcut. Compatibility across older production runs remains unverified. [US SKU page](https://www.breville.com/en-us/product/bes500?sku=BES500BSS1BUS1) · [Y25 booklet](https://assets.breville.com/BES500/BES500_USCM_IB_Y25_LR.pdf#page=17) · [Older Breville booklet](https://www.williams-sonoma.com/netstorage/pdf/142739-Breville-Bambino-Plus-Manual.pdf#page=15)"
+        },
+        "readerValue": {
+          "score": 4,
+          "reason": "The opening resolves the test reader’s choice immediately. At the machine, the draft gives a model-specific rule: steady 1 CUP and STEAM after the solution pause mean refill and start the rinse, while alternating lights followed by standby mean the cycle is complete. Competing coverage already explains that pause. The draft’s distinct addition is putting both workflows alongside the pre-alert shortcut documented in the current US booklet."
+        },
+        "onPageSeo": {
+          "score": 4,
+          "reason": "The descriptive title, immediate answer, and question-led headings fit the troubleshooting intent and use the model and button names naturally. The brief lacks a proposed slug and meta description and leaves the related Bambino draft unnamed as a potential internal-link target."
+        }
+      },
+      "actions": [
+        "Name BES500BSS1BUS1 and the Y25 booklet in the opening. The current US BES500 wording presents the procedure as applying across the US model family, while the commission and product cards cover a specific SKU and booklet. Keep the older-booklet caveat next to the shortcut.",
+        "Make the descale instructions usable at the machine by saying where to place the waste container and to put it back after emptying it at the pause. The draft tells readers to empty it and then restart the rinse, leaving the step that catches the rinse water implicit. [Y25 descale steps](https://assets.breville.com/BES500/BES500_USCM_IB_Y25_LR.pdf#page=18)",
+        "Tell readers to stop using a machine that malfunctions and contact Breville Consumer Support. The current ending gives the contact step but leaves readers free to keep using a machine that repeatedly fails to complete the documented cycle. [Breville safeguards](https://assets.breville.com/BES500/BES500_USCM_IB_Y25_LR.pdf#page=3)"
+      ],
+      "optionalImprovements": [
+        "Replace the dead older-manual URL with the verified copy of the Breville booklet. [Older Breville booklet](https://www.williams-sonoma.com/netstorage/pdf/142739-Breville-Bambino-Plus-Manual.pdf#page=15)",
+        "Add a stable slug and a short meta description that mentions both light patterns. Consider linking from the related Bambino guide when it has a published URL and a relevant maintenance reference."
+      ],
+      "reader": {
+        "question": "On my US Bambino Plus (BES500), 1 CUP and STEAM flash together, then 2 CUP flashes. Should I run the cleaning cycle or descale?",
+        "quote": "If 1 CUP and STEAM flash together, alternating with 2 CUP, the machine is asking you to descale. Watch which buttons light up before pressing anything. The descale reminder lasts about 15 seconds and a button press can dismiss it.",
+        "action": "Run the descale cycle and complete the fresh-water rinse. If only 1 CUP and 2 CUP take turns flashing, run the group-head cleaning cycle with a cleaning disc and tablet. The opening puts the US BES500 scope and the brief, dismissible descale reminder alongside the light patterns.",
+        "unresolved": "The maintenance choice is resolved. If the alert returns immediately after the cycle reaches its documented endpoint, the lights alone cannot diagnose the cause. The page directs the owner to contact Breville support with the light pattern and cycle details.",
+        "solved": true
+      },
+      "fingerprint": "342ded778d2040e2c3bd8c16958b351042a4523d99de6a3d3862aa0cca7d75fb"
     }
   ]
 }
