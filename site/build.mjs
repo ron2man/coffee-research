@@ -5,8 +5,8 @@
 //                                   archived drafts (badged), mock offers, noindex
 //   npm run site:build -- --production   published posts only, real data/offers, disclosures required
 //   npm run site:preview            build (preview) and serve on http://127.0.0.1:4321, rebuilding on reload
-import { cpSync, mkdirSync, rmSync, writeFileSync } from 'node:fs';
-import { dirname, join, resolve } from 'node:path';
+import { cpSync, existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { dirname, join, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { parseArgs } from 'node:util';
 import { defaultNicheId, loadNiche, categoryIds } from '../engine/state/niche.mjs';
@@ -17,6 +17,21 @@ import { homePage, howWeWorkPage, layout, postPage, postPath, rootPage } from '.
 
 const here = dirname(fileURLToPath(import.meta.url));
 export const repoRoot = resolve(here, '..');
+
+// Mock photos (site/assets/mock) appear in preview builds only and are never copied into production.
+function loadMock() {
+  const file = join(here, 'assets', 'mock', 'credits.json');
+  if (!existsSync(file)) return null;
+  const data = JSON.parse(readFileSync(file, 'utf8'));
+  const entries = Object.entries(data.images).map(([name, meta]) => ({ file: name, ...meta }));
+  const byName = new Map(entries.map((e) => [e.file, e]));
+  return {
+    home: byName.get(data.home) ?? null,
+    posts: new Map(Object.entries(data.posts ?? {}).map(([slug, name]) => [slug, byName.get(name)]).filter(([, e]) => e)),
+    wide: entries.filter((e) => e.shape === 'wide'),
+    thumbs: entries.filter((e) => e.shape === 'square'),
+  };
+}
 
 export function buildSite({ root = repoRoot, production = false, now = Date.now(), outDir = join(root, 'site', 'dist') } = {}) {
   const preview = !production;
@@ -35,11 +50,14 @@ export function buildSite({ root = repoRoot, production = false, now = Date.now(
   // and its PriceBox shows that market's offers (or says the product isn't sold there).
   for (const post of posts) post.markets = markets.map((m) => m.id);
   const productIds = [...new Set(posts.flatMap((p) => p.productIds))];
-  const offers = preview ? mockOffers(productIds, markets, { now }) : loadOffers(join(root, 'data', 'offers'));
+  const mockPrices = join(here, 'mock-prices.json');
+  const offers = preview
+    ? mockOffers(productIds, markets, { now, prices: existsSync(mockPrices) ? JSON.parse(readFileSync(mockPrices, 'utf8')) : {} })
+    : loadOffers(join(root, 'data', 'offers'));
   const tools = loadTools(root);
 
   const pages = new Map();
-  const site = { name: niche.name, markets, cards, tools, disclosure, pages };
+  const site = { name: niche.name, markets, cards, tools, disclosure, pages, mock: preview ? loadMock() : null };
   const plan = [];
   for (const market of markets) {
     plan.push({ path: `/${market.locale}/`, market, kind: 'home' });
@@ -76,7 +94,8 @@ export function buildSite({ root = repoRoot, production = false, now = Date.now(
     mkdirSync(dirname(file), { recursive: true });
     writeFileSync(file, html);
   }
-  cpSync(join(here, 'assets'), join(outDir, 'assets'), { recursive: true });
+  const mockDir = join(here, 'assets', 'mock');
+  cpSync(join(here, 'assets'), join(outDir, 'assets'), { recursive: true, filter: (src) => preview || !(src === mockDir || src.startsWith(mockDir + sep)) });
   return { outDir, pages: [...pages.keys()].sort(), posts: posts.map((p) => ({ slug: p.slug, status: p.status, markets: p.markets })) };
 }
 

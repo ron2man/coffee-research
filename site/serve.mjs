@@ -7,7 +7,7 @@ import { buildSite, repoRoot } from './build.mjs';
 
 const port = Number(process.env.SITE_PORT ?? 4321);
 const dist = join(repoRoot, 'site', 'dist');
-const types = { '.html': 'text/html; charset=utf-8', '.css': 'text/css; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.svg': 'image/svg+xml', '.json': 'application/json' };
+const types = { '.html': 'text/html; charset=utf-8', '.css': 'text/css; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.svg': 'image/svg+xml', '.json': 'application/json', '.woff2': 'font/woff2', '.txt': 'text/plain; charset=utf-8' };
 
 createServer((request, response) => {
   try {

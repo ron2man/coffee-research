@@ -1,4 +1,4 @@
-# Coffee Fieldnotes article standard
+# YourCoffeeSetup article standard
 
 Proposed house style for the public site. Use the Bambino grinder column as the buying-guide pilot.
 
@@ -16,7 +16,7 @@ These are editing ranges. A complete 400-word buying column can ship. Extra word
 
 ## Authors and dates
 
-Use Coffee Fieldnotes as the publication credit for an automated article. Link the credit to an editorial-method page explaining how the agent researches, writes and checks claims. Give a named contributor a linked byline or review credit only for work they actually performed. Include their relevant experience in their bio. Attribute firsthand observations to the person who made them. Show the original publication date and add an updated date when the advice materially changes.
+Use YourCoffeeSetup as the publication credit for an automated article. Link the credit to an editorial-method page explaining how the agent researches, writes and checks claims. Give a named contributor a linked byline or review credit only for work they actually performed. Include their relevant experience in their bio. Attribute firsthand observations to the person who made them. Show the original publication date and add an updated date when the advice materially changes.
 
 ## Images
 

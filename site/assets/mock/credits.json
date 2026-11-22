@@ -1,0 +1,13 @@
+{
+  "_note": "Mock photos for preview builds only. Free under the Unsplash License. Never copied into a production build; replace with human-supplied photos credited with name and date.",
+  "home": "home-hero.jpg",
+  "posts": { "which-grinder-for-bambino": "guide-hero.jpg" },
+  "images": {
+    "home-hero.jpg": { "alt": "A home espresso machine and cups on a kitchen counter by a window", "credit": "Nathan Dumlao on Unsplash", "shape": "wide" },
+    "guide-hero.jpg": { "alt": "Espresso tools, a hand grinder and a knock box on a wooden counter", "credit": "Madeline Liu on Unsplash", "shape": "wide" },
+    "thumb-machine.jpg": { "alt": "A home espresso machine", "credit": "Nathan Dumlao on Unsplash", "shape": "square" },
+    "thumb-tamp.jpg": { "alt": "Hands holding a portafilter", "credit": "Kaylee Stoll on Unsplash", "shape": "square" },
+    "thumb-pour.jpg": { "alt": "Water poured from a gooseneck kettle into a dripper", "credit": "Jakub Kapusnak on Unsplash", "shape": "square" },
+    "thumb-scale.jpg": { "alt": "A dripper on a glass carafe on a coffee scale", "credit": "Jakub Kapusnak on Unsplash", "shape": "square" }
+  }
+}

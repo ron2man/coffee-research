@@ -1,0 +1,6 @@
+{
+  "_note": "Preview-only mock prices, set near list prices checked 2026-11-22 so the PriceBox matches the guides. Not live data; the offers agent (M7) replaces this.",
+  "baratza-encore-esp-pro": { "US": 299.95, "GB": 249 },
+  "baratza-encore-esp": { "US": 199.95, "GB": 149 },
+  "turin-df54": { "US": 249 }
+}

@@ -31,4 +31,4 @@ const server = createServer(async (request, response) => {
       .end('Could not render the preview. Check the server output.');
   }
 });
-server.listen(port, '127.0.0.1', () => console.log(`Coffee Fieldnotes: http://127.0.0.1:${server.address().port}/`));
+server.listen(port, '127.0.0.1', () => console.log(`YourCoffeeSetup: http://127.0.0.1:${server.address().port}/`));

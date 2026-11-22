@@ -34,32 +34,40 @@ export function formatPrice(price, currency, locale) {
   return new Intl.NumberFormat(locale, { style: 'currency', currency }).format(price);
 }
 
+const MOCK_SELLERS = [
+  ['mock-marketplace', 'Mock marketplace'],
+  ['mock-brand-store', 'Mock brand store'],
+  ['mock-specialty-shop', 'Mock specialty shop'],
+];
+
 /**
- * Mock offers for previews: clearly labelled sellers, recent timestamps, one stale offer per
- * product in the secondary market so the stale-price rule is visible.
+ * Mock offers for previews: clearly labelled sellers (three per product, like a real page), recent
+ * timestamps, and one stale market per odd product so the stale-price rule is visible. `prices`
+ * ({ productId: { US: 299.95 } }) keeps mock prices in line with the guides; others are generated.
  */
-export function mockOffers(productIds, markets, { now = Date.now() } = {}) {
+export function mockOffers(productIds, markets, { now = Date.now(), prices = {} } = {}) {
   const offers = new Map();
   productIds.forEach((productId, index) => {
     const variants = markets.map((market, m) => {
-      const base = 150 + ((index * 37) % 250);
+      const generated = 150 + ((index * 37) % 250);
+      const price = prices[productId]?.[market.id] ?? (m === 0 ? generated + 0.95 : Math.round(generated * 0.85) + 0.99);
       const stale = m > 0 && index % 2 === 1;
       return {
         market: market.id,
         sku: `${productId}-${market.id.toLowerCase()}`,
-        offers: [{
-          seller: `mock-retailer-${market.id.toLowerCase()}`,
-          sellerName: `Mock retailer (${market.id})`,
+        offers: MOCK_SELLERS.map(([seller, name], s) => ({
+          seller: `${seller}-${market.id.toLowerCase()}`,
+          sellerName: `${name} (${market.id})`,
           type: 'affiliate',
           url: '#mock-offer',
-          price: m === 0 ? base + 0.95 : Math.round(base * 0.85) + 0.99,
+          price,
           currency: market.currency,
           availability: 'in_stock',
-          checkedAt: new Date(now - (stale ? 72 : 3 + index) * 3_600_000).toISOString(),
+          checkedAt: new Date(now - (stale ? 72 + s : 3 + index + s * 2) * 3_600_000).toISOString(),
           matchConfidence: 'high',
           linkOk: true,
           mock: true,
-        }],
+        })),
       };
     });
     offers.set(productId, { productId, variants });

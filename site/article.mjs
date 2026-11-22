@@ -74,12 +74,12 @@ export function layout({ title, description, content }) {
   <a class="skip-link" href="#main">Skip to content</a>
   <header class="masthead">
     <div class="frame masthead-inner">
-      <a href="/" class="wordmark">Coffee <span>Fieldnotes</span></a>
+      <a href="/" class="wordmark">YourCoffeeSetup</a>
       <nav aria-label="Main navigation"><a href="/#guides">Guides</a></nav>
     </div>
   </header>
   <main id="main">${content}</main>
-  <footer class="footer"><div class="frame">Coffee Fieldnotes</div></footer>
+  <footer class="footer"><div class="frame">YourCoffeeSetup</div></footer>
 </body>
 </html>`;
 }
@@ -87,7 +87,7 @@ export function layout({ title, description, content }) {
 export function renderCandidate(markdown) {
   const article = parseArticle(markdown);
   return layout({
-    title: `${article.heading} | Coffee Fieldnotes`,
+    title: `${article.heading} | YourCoffeeSetup`,
     description: article.description,
     content: `
     <header class="article-hero"><div class="frame">

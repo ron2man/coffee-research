@@ -87,7 +87,25 @@
     draw();
   }
 
+  // Sidebar "On this page": mark the section being read.
+  function spyToc() {
+    var links = document.querySelectorAll('.post-rail .toc a[href^="#"]');
+    if (!links.length || !('IntersectionObserver' in window)) return;
+    var byId = {};
+    Array.prototype.forEach.call(links, function (a) { byId[a.getAttribute('href').slice(1)] = a; });
+    var heads = Object.keys(byId).map(function (id) { return document.getElementById(id); }).filter(Boolean);
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        Array.prototype.forEach.call(links, function (a) { a.removeAttribute('aria-current'); });
+        byId[e.target.id].setAttribute('aria-current', 'true');
+      });
+    }, { rootMargin: '0px 0px -70% 0px' });
+    heads.forEach(function (h) { observer.observe(h); });
+  }
+
   document.addEventListener('DOMContentLoaded', function () {
     Array.prototype.forEach.call(document.querySelectorAll('.picker[data-tool]'), mountPicker);
+    spyToc();
   });
 })();

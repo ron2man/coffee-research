@@ -9,7 +9,7 @@ const slugPattern = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 
 function home(articles) {
   return layout({
-    title: 'Coffee Fieldnotes | Home espresso guides',
+    title: 'YourCoffeeSetup | Home espresso guides',
     description: 'Practical guides and comparisons for choosing and using home coffee equipment.',
     content: `
     <section class="hero"><div class="frame">

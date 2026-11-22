@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "coffee",
-  "name": "Coffee Fieldnotes",
+  "name": "YourCoffeeSetup",
   "categories": [
     { "id": "machines", "label": "Home espresso machines" },
     { "id": "grinders", "label": "Grinders" },

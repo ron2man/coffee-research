@@ -7,6 +7,22 @@ export const marketLabel = (market) => region.of(market.id === 'GB' ? 'GB' : mar
 const shortLabel = (market) => (market.id === 'GB' ? 'UK' : market.id);
 export const postPath = (market, slug) => `/${market.locale}/guides/${slug}/`;
 
+// Wordmark: a CamelCase name like "YourCoffeeSetup" becomes accent / bold / light parts.
+const nameParts = (name) => name.match(/[A-Z][a-z]*|[^A-Z\s]+/g) ?? [name];
+export function brandMark(name) {
+  const parts = nameParts(name);
+  if (parts.length < 3 || /\s/.test(name)) return escape(name);
+  return `<span class="b1">${escape(parts[0])}</span>${escape(parts.slice(1, -1).join(''))}<span class="b3">${escape(parts.at(-1))}</span>`;
+}
+// Preview-only mock photos, credited. Production builds pass site.mock = null.
+function mockPhoto(img, cls) {
+  if (!img) return '';
+  return `<figure class="${cls}"><img src="/assets/mock/${escape(img.file)}" alt="${escape(img.alt)}"><figcaption>Photo: ${escape(img.credit)}. Mock image for the preview.</figcaption></figure>`;
+}
+const pick = (list, key) => (list?.length ? list[[...key].reduce((h, c) => (h * 31 + c.charCodeAt(0)) >>> 0, 7) % list.length] : null);
+const postPhoto = (site, slug) => (site.mock ? site.mock.posts.get(slug) ?? pick(site.mock.wide, slug) : null);
+const spokenName = (name) => (/\s/.test(name) ? name : nameParts(name).join(' '));
+
 const STATUS_BADGE = {
   draft: 'Draft · not published',
   reference: 'Quality reference · not published',
@@ -27,7 +43,7 @@ export function layout({ site, market, title, description, body, path, preview, 
 <title>${escape(title)}</title>
 <meta name="description" content="${escape(description)}">
 ${robots ? `<meta name="robots" content="${robots}">` : ''}
-<meta name="color-scheme" content="light dark">
+<meta name="color-scheme" content="light">
 <link rel="stylesheet" href="/assets/site.css">
 <link rel="icon" href="/assets/icon.svg" type="image/svg+xml">
 </head>
@@ -36,7 +52,7 @@ ${robots ? `<meta name="robots" content="${robots}">` : ''}
 ${preview ? '<div class="preview-bar">Preview build · mock prices · not public</div>' : ''}
 <header class="top">
   <div class="wrap top-inner">
-    <a class="brand" href="/${market.locale}/">${escape(site.name)}</a>
+    <a class="brand" href="/${market.locale}/" aria-label="${escape(spokenName(site.name))}, home">${brandMark(site.name)}</a>
     <nav class="nav" aria-label="Main">
       <a href="/${market.locale}/#guides">Guides</a>
       <a href="/${market.locale}/how-we-work/">How we work</a>
@@ -50,7 +66,7 @@ ${body}
 <footer class="foot">
   <div class="wrap">
     <p class="disclosure">${escape(site.disclosure(market))}</p>
-    <p>${escape(site.name)} · Straight answers, including when to buy nothing. · <a href="/${market.locale}/how-we-work/">How we work</a></p>
+    <p><span class="brand-inline">${escape(site.name)}</span> · Straight answers, including when to buy nothing. · <a href="/${market.locale}/how-we-work/">How we work</a></p>
   </div>
 </footer>
 <script src="/assets/site.js" defer></script>
@@ -59,22 +75,33 @@ ${body}
 `;
 }
 
+// One source for product offers, used by both the PriceBox and the sidebar pick card, so the two
+// can never show different products or prices.
+function productOffers({ site, market, productId, offers, now }) {
+  const card = site.cards.get(productId)?.card;
+  return {
+    name: card?.name ?? productId,
+    sold: !card || card.variants.some((v) => v.markets.includes(market.id)),
+    list: offersFor(offers, productId, market.id, { now }).slice(0, 3),
+  };
+}
+const priceText = (offer, market) => formatPrice(offer.price, offer.currency, `${market.language}-${market.id}`);
+const checkedText = (offer) => `checked ${Math.max(1, Math.round(offer.ageHours))}h ago`;
+const noOffersText = (market, sold) => (sold ? `No ${shortLabel(market)} listing tracked yet` : `No ${shortLabel(market)} model in our records yet`);
+
 export function priceBox({ site, market, productIds, offers, now }) {
   if (!productIds.length) return '';
   const rows = productIds.map((productId) => {
-    const card = site.cards.get(productId)?.card;
-    const name = card?.name ?? productId;
-    const sold = !card || card.variants.some((v) => v.markets.includes(market.id));
-    const list = offersFor(offers, productId, market.id, { now });
+    const { name, sold, list } = productOffers({ site, market, productId, offers, now });
     let action;
-    if (!sold) action = `<span class="pb-none">No ${escape(shortLabel(market))} model in our records yet</span>`;
-    else if (!list.length) action = `<span class="pb-none">No ${escape(shortLabel(market))} listing tracked yet</span>`;
+    if (!sold || !list.length) action = `<span class="pb-none">${escape(noOffersText(market, sold))}</span>`;
     else {
-      const offer = list[0];
-      const price = offer.showPrice
-        ? `<span class="pb-price">${escape(formatPrice(offer.price, offer.currency, `${market.language}-${market.id}`))}</span><span class="pb-age">checked ${Math.max(1, Math.round(offer.ageHours))}h ago</span>`
-        : '<span class="pb-price pb-stale">Check current price</span>';
-      action = `${price}<a class="pb-button" href="${escape(offer.url)}" rel="sponsored nofollow noopener" target="_blank">View at ${escape(offer.sellerName ?? offer.seller)}</a>${offer.mock ? '<span class="pb-mock">mock</span>' : ''}`;
+      action = list.map((offer) => {
+        const price = offer.showPrice
+          ? `<span class="pb-price">${escape(priceText(offer, market))}</span><span class="pb-age">${checkedText(offer)}</span>`
+          : '<span class="pb-price pb-stale">Check current price</span>';
+        return `<span class="pb-offer"><a class="pb-button" href="${escape(offer.url)}" rel="sponsored nofollow noopener" target="_blank">${escape(offer.sellerName ?? offer.seller)}</a>${price}${offer.mock ? '<span class="pb-mock">mock</span>' : ''}</span>`;
+      }).join('');
     }
     return `<li class="pb-row" id="buy-${escape(productId)}"><span class="pb-name">${escape(name)}</span><span class="pb-action">${action}</span></li>`;
   }).join('');
@@ -131,42 +158,111 @@ export function postBody({ post, site, market, offers, now }) {
   return { html, headings: headings.filter((h) => h.level === 2 && !/^how this guide/i.test(h.text)) };
 }
 
+/** Sidebar card for the guide's pick (first product id). Same data and price as the PriceBox row. */
+export function pickCard({ site, market, productId, offers, now, keep }) {
+  if (!productId) return '';
+  const { name, sold, list } = productOffers({ site, market, productId, offers, now });
+  const offer = sold ? list[0] : null;
+  const price = !offer ? `<p class="pick-none">${escape(noOffersText(market, sold))}</p>`
+    : offer.showPrice ? `<p class="pick-price-line"><span class="pick-price">${escape(priceText(offer, market))}</span> <span class="pick-age">${checkedText(offer)}</span></p>`
+    : '<p class="pick-price-line"><span class="pick-price pick-stale">Check current price</span></p>';
+  const button = offer ? `<a class="pick-button" href="${escape(offer.url)}" rel="sponsored nofollow noopener" target="_blank">View at ${escape(offer.sellerName ?? offer.seller)}</a>${offer.mock ? ' <span class="pb-mock">mock</span>' : ''}` : '';
+  const more = list.length > 1 ? `Compare ${list.length} sellers` : 'Where to buy';
+  return `<section class="pick" aria-label="Our pick">
+<p class="pick-label">Our pick</p>
+<p class="pick-name">${escape(name)}</p>
+${price}
+${offer ? '<p class="pick-note">Affiliate link: we may earn a commission. It never changes the pick.</p>' : ''}
+${button}
+<a class="pick-compare" href="#buy-${escape(productId)}">${more}</a>
+${keep ? `<p class="pick-keep">Keep yours? <a href="#${keep.id}">${inline(keep.text)}</a></p>` : ''}
+</section>`;
+}
+
 export function postPage({ site, market, post, offers, now, preview }) {
   const { html, headings } = postBody({ post, site, market, offers, now });
   const postMarket = site.markets.find((m) => m.id === post.market) ?? market;
   const elsewhere = postMarket.id !== market.id
     ? `<p class="callout">Written for readers in the ${escape(marketLabel(postMarket))}. Product names and advice may differ where you are; prices and links below are for the ${escape(marketLabel(market))}.</p>` : '';
   const badge = STATUS_BADGE[post.status] ? `<span class="badge">${STATUS_BADGE[post.status]}</span>` : '';
-  const updated = post.updatedAt ? ` · Updated ${escape(post.updatedAt)}` : '';
-  const toc = headings.length > 2 ? `<nav class="toc" aria-label="On this page"><strong>On this page</strong><ol>${headings.map((h) => `<li><a href="#${h.id}">${inline(h.text)}</a></li>`).join('')}</ol></nav>` : '';
-  const humanData = post.humanData?.length ? '' : '<p class="honesty">We haven’t tested these products ourselves. This guide is built from manuals, published tests and owner reports; see how it was put together at the end.</p>';
-  return `<article class="post wrap-narrow">
-<p class="meta">${badge}${escape(post.type)}${updated} · Prices for the ${escape(shortLabel(market))}</p>
+  const updated = post.updatedAt ? `Updated ${escape(post.updatedAt)} · ` : '';
+  const pickId = post.pick ?? post.productIds[0];
+  const toc = headings.length ? `<nav class="toc" aria-label="On this page"><strong>On this page</strong><ol>${headings.map((h) => `<li><a href="#${h.id}">${inline(h.text)}</a></li>`).join('')}</ol></nav>` : '';
+  const honesty = post.humanData?.length ? '' : 'We haven’t tested these products ourselves. This guide is built from manuals, published tests and owner reports; how it was put together is at the end.';
+  const notes = [post.disclosure ? escape(site.disclosure(market)) : '', honesty].filter(Boolean);
+  const topNotes = notes.length ? `<div class="post-notes">${notes.map((n) => `<p>${n}</p>`).join('')}</div>` : '';
+  // The guide's keep-what-you-have section, linked from the pick card.
+  const keep = headings.find((h) => /already (own|have)|keep (yours|what you have)|try this first/i.test(h.text));
+  const pick = pickCard({ site, market, productId: pickId, offers, now, keep });
+  // Notes go right after the opening answer: still before the first affiliate link in the text column
+  // (the PriceBox), and the sidebar card carries its own disclosure above its button.
+  let placed = false;
+  const withNotes = html.replace(/<p class="lead">[\s\S]*?<\/p>/, (lead) => { placed = true; return lead + topNotes; });
+  const notesFirst = placed ? '' : topNotes;
+  return `<article class="post">
+<header class="wrap post-head">
+<div class="post-head-main">
+<p class="kicker">${badge}${escape(post.type)}</p>
 <h1>${escape(post.title)}</h1>
+</div>
+<div class="post-head-side">
+<p class="post-summary">${escape(post.description)}</p>
+<p class="meta">${updated}Prices for the ${escape(shortLabel(market))}</p>
+${pickId ? `<a class="jump-pick" href="#buy-${escape(pickId)}">Jump to the pick</a>` : ''}
+</div>
+</header>
+${mockPhoto(postPhoto(site, post.slug), 'wrap post-photo')}
+<div class="wrap post-layout">
+<div class="post-main">
+${notesFirst}
 ${elsewhere}
-${toc}
-<div class="prose">${html}</div>
-${humanData}
-${post.disclosure ? `<p class="disclosure-inline">${escape(site.disclosure(market))}</p>` : ''}
+<div class="prose">${withNotes}</div>
+</div>
+${pick || toc ? `<aside class="post-rail" aria-label="Guide tools"><div class="rail-sticky">${pick}${toc}</div></aside>` : ''}
+</div>
 </article>`;
 }
 
 export function homePage({ site, market, posts }) {
-  const local = posts.filter((p) => p.markets.includes(market.id));
-  const cards = local.map((post) => `<li class="card">
-<a href="${postPath(market, post.slug)}">
-<span class="card-kicker">${escape(post.type)}${STATUS_BADGE[post.status] ? ' · preview' : ''}${post.market !== market.id ? ` · written for ${escape(shortLabel(site.markets.find((m) => m.id === post.market) ?? market))}` : ''}</span>
-<span class="card-title">${escape(post.title)}</span>
-<span class="card-text">${escape(post.description)}</span>
-</a></li>`).join('');
-  return `<section class="hero"><div class="wrap">
-<p class="hero-kicker">Home espresso, ${escape(marketLabel(market))}</p>
-<h1>Straight answers for home espresso. <span>Including when to buy nothing.</span></h1>
-<p class="hero-text">We read the manuals, the owner forums and the reviews so you don’t have to, then give you one clear recommendation, a test you can run on what you already own, and the cases where we’d choose differently.</p>
-</div></section>
-<section class="wrap" id="guides" aria-labelledby="guides-title">
-<h2 id="guides-title" class="section-title">Guides</h2>
-${cards ? `<ul class="cards">${cards}</ul>` : '<p class="empty">No guides for this market yet.</p>'}
+  // Archived pilot drafts stay reachable by URL in previews but are left off the home list.
+  const local = posts.filter((p) => p.markets.includes(market.id) && p.status !== 'archived');
+  const kicker = (post) => `${escape(post.type)}${STATUS_BADGE[post.status] ? ' · preview' : ''}${post.market !== market.id ? ` · written for ${escape(shortLabel(site.markets.find((m) => m.id === post.market) ?? market))}` : ''}`;
+  const [lead, ...rest] = local;
+  const thumbs = site.mock?.thumbs ?? [];
+  const feature = lead ? `<div class="feature">
+<div class="feature-main">
+<p class="kicker">${kicker(lead)}</p>
+<h2 class="feature-title"><a href="${postPath(market, lead.slug)}">${escape(lead.title)}</a></h2>
+</div>
+<div class="feature-side">
+<p class="feature-answer">${escape(lead.description)}</p>
+<a class="feature-link" href="${postPath(market, lead.slug)}">Read the answer</a>
+</div>
+</div>
+${mockPhoto(site.mock?.home ?? postPhoto(site, lead.slug), 'feature-photo')}` : '<p class="empty">No guides for this market yet.</p>';
+  const rows = rest.map((post, i) => {
+    const thumb = thumbs.length ? thumbs[i % thumbs.length] : null;
+    return `<li class="answer"><a href="${postPath(market, post.slug)}">
+${thumb ? `<img class="answer-photo" src="/assets/mock/${escape(thumb.file)}" alt="${escape(thumb.alt)}">` : ''}
+<span class="answer-body">
+<span class="kicker">${kicker(post)}</span>
+<span class="answer-title">${escape(post.title)}</span>
+<span class="answer-text">${escape(post.description)}</span>
+</span>
+</a></li>`;
+  }).join('');
+  const thumbCredit = rows && thumbs.length ? `<p class="photo-credit">Thumbnails: ${escape([...new Set(thumbs.slice(0, rest.length).map((t) => t.credit.replace(/ on Unsplash$/, '')))].join(', '))} on Unsplash. Mock images for the preview.</p>` : '';
+  return `<section class="wrap" id="guides" aria-labelledby="guides-title">
+<h1 class="intro" id="guides-title">Straight answers for home espresso in the ${escape(shortLabel(market))}. Including when to buy nothing.</h1>
+${feature}
+${rows ? `<div class="section-head"><h2 class="section-title">More answers</h2></div>
+<ul class="answer-list">${rows}</ul>${thumbCredit}` : ''}
+</section>
+<section class="wrap band" aria-label="Keep what you have">
+<div class="band-inner">
+<h2>Keep yours first.</h2>
+<p>Every guide has a test you can run on the gear you already own. If it passes, you keep your money.</p>
+</div>
 </section>
 <section class="wrap principles" aria-label="How we work">
 <div><h3>One opinion</h3><p>Every guide starts with what we’d do, then says when we’d choose differently.</p></div>

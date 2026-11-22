@@ -60,6 +60,8 @@ A local preview site now renders the quality reference, the archived drafts and 
 - **2026-11-21 · Site before the M4 gate.** The project lead asked for a local preview site now. It stays a preview (noindex, mock prices, no deploy). The M4 "send it to a friend" gate still applies before any public deploy.
 - **2026-11-21 · Scheduler.** Hourly launchd job in a dedicated clone on `main` (`docs/operations.md`).
 
+- **2026-11-22 · Design and name.** The site uses design A3 (white, near-black, one cherry red, Schibsted Grotesk, rules not cards) and the name YourCoffeeSetup. The affiliate disclosure and the "not tested by us" note sit under the title, before any link. Preview builds show credited Unsplash mock photos from `site/assets/mock/`; production builds never copy them.
+
 ## Open questions
 
 - **Offers as public paths:** `data/offers/` is treated as reader-facing because prices appear on the site, which would mean a PR for every daily price refresh. Revisit at M7: one option is to have the site read offers at build time from an internal file.
@@ -67,6 +69,10 @@ A local preview site now renders the quality reference, the archived drafts and 
 - **Scheduler on macOS:** a `launchd` plist for the tick has not been written. Decide the interval once M0 shows what a run costs.
 - **Untested prompts:** judge, research, angle, writer, post-judge, critic and tuner have not run for real. Expect the first proposals from the tuner within a day of hourly runs.
 - **Writer output to Markdown:** writer drafts are JSON in `content/drafts/`; the site reads them directly. The publish step (draft → `content/published/<slug>.md` in a PR) is not built yet.
-- **Mock offer prices** are placeholders and don't match real prices; replace with the offers agent (M7) after affiliate terms are verified.
+- **Mock offer prices** now come from `site/mock-prices.json` (near US list prices checked 2026-11-22: Encore ESP Pro $299.95, Encore ESP $199.95, DF54 about $249) so previews match the guides, with three mock sellers per product. Replace with the offers agent (M7) after affiliate terms are verified.
+- **Amazon Associates price display:** its rules on showing and caching prices are stricter than our 48-hour window (prices from its product API, how fresh they must be, and whether we may store them). Check the current Operating Agreement before M7 designs price storage or display for Amazon links.
+- **Display ads (AdSense or similar):** not before 60–90 days of traffic data. Before any trial, check program approval rules, policies for sites that also use affiliate links, and the consent banner needed for UK/EU visitors. The guide page's right column (planned) reserves one slot for this.
+- **Voice and author:** guides mix "I" (the recommendation) and "we" (the method). Decide on a single voice, ideally a named author, since the no-fake-testing promise relies on named people.
+- **Audience:** current guides range from a Bambino (about $300) to a Linea Micra (about $4–5k). Decide entry-level vs every machine, and whether to organise guides by machine.
 - **Niche-aware checks:** `market` and `contentType` in artifacts are not yet checked against `niche.json`.
 - **Affiliate terms and consent:** sellers and disclosure text in `niche.json` stay empty until program terms are verified per market.

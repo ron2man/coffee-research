@@ -29,6 +29,26 @@ test('preview build renders both markets, the picker, a pricebox and collapsed s
   assert.match(us, /Quality reference · not published/);
 });
 
+test('preview build shows credited mock photos; they stay out of production assets', (t) => {
+  const outDir = out(t);
+  buildSite({ root: repoRoot, outDir });
+  const home = readFileSync(join(outDir, 'en-us/index.html'), 'utf8');
+  assert.match(home, /src="\/assets\/mock\/home-hero\.jpg"/);
+  assert.match(home, /Photo: Nathan Dumlao on Unsplash\. Mock image for the preview\./);
+});
+
+test('sidebar pick shows the same product and price as the PriceBox', (t) => {
+  const outDir = out(t);
+  buildSite({ root: repoRoot, outDir });
+  const us = readFileSync(join(outDir, 'en-us/guides/which-grinder-for-bambino/index.html'), 'utf8');
+  const pickName = us.match(/class="pick-name">([^<]+)</)[1];
+  const pickPrice = us.match(/class="pick-price">([^<]+)</)[1];
+  const row = us.match(/<li class="pb-row" id="buy-baratza-encore-esp-pro">[\s\S]*?<\/li>/)[0];
+  assert.match(row, new RegExp(`class="pb-name">${pickName}<`));
+  assert.match(row, new RegExp(`class="pb-price">${pickPrice.replace(/[$.]/g, '\\$&')}<`));
+  assert.match(us, /href="#buy-baratza-encore-esp-pro">Jump to the pick</);
+});
+
 test('production build refuses to ship without verified disclosures', (t) => {
   assert.throws(() => buildSite({ root: repoRoot, production: true, outDir: out(t) }), /No disclosure text/);
 });

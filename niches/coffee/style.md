@@ -1,4 +1,4 @@
-# Coffee Fieldnotes style guide
+# YourCoffeeSetup style guide
 
 The writer agent receives this file. The lint (M4) and the post judge enforce it. Quality reference: [content/reference/bambino-grinder-picker.html](../../content/reference/bambino-grinder-picker.html).
 

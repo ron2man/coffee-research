@@ -46,7 +46,7 @@ The judge uses `revise` only for material, fixable blockers. A draft that clears
 
 To apply that loop to an existing draft with a saved `revise` verdict, start from a clean checkout and run `node agent/run-editorial.mjs --revise linea-micra-cup-clearance` (replace the slug with the one you want). This mode uses the saved feedback and revisits the selected draft without searching for a new topic.
 
-## Coffee Fieldnotes website preview
+## YourCoffeeSetup website preview
 
 Run `node site/preview.mjs` and open `http://127.0.0.1:4180/`. Refresh the page after editing a draft, article manifest, or stylesheet. Restart the server after editing preview or renderer code. This preview reads only articles listed in [the site manifest](site/articles.json) and requires a saved passing review for each draft. The homepage lists included guides. The reviewed opening paragraph appears directly beneath the headline. A stale or failed review removes that guide from both the index and its route. Preview pages are marked noindex.
 
