@@ -65,31 +65,9 @@ const tag = Object.entries(events).map(([name, params], i) => ({
   consentSettings: { consentStatus: 'NOT_SET' },
 }));
 
-// The one Google tag: loads GA4 on All Pages (built-in trigger 2147479553), sends page_view, and
-// adds market and page_id to every event from this page. Not Initialization: there it never fired
-// (container v5/v6), and consent defaults are already set in the page before GTM loads.
-const ALL_PAGES = '2147479553';
-tag.unshift({
-  ...ids, tagId: String(tag.length + 1), name: 'Google tag - GA4', type: 'googtag', fingerprint,
-  parameter: [
-    // Literal ID, not a variable, so GTM can link the tag to the GA4 destination.
-    { type: 'TEMPLATE', key: 'tagId', value: MEASUREMENT_ID },
-    {
-      type: 'LIST', key: 'configSettingsTable',
-      list: ['market', 'page_id'].map((p) => ({
-        type: 'MAP',
-        map: [
-          { type: 'TEMPLATE', key: 'parameter', value: p },
-          { type: 'TEMPLATE', key: 'parameterValue', value: `{{DLV - ${p}}}` },
-        ],
-      })),
-    },
-  ],
-  firingTriggerId: [ALL_PAGES],
-  tagFiringOption: 'ONCE_PER_EVENT',
-  monitoringMetadata: { type: 'MAP' },
-  consentSettings: { consentStatus: 'NOT_SET' },
-});
+// No Google tag here on purpose. Create it by hand in the GTM UI (docs/deploy.md): only a UI-made
+// Google tag is linked to the GA4 destination. An imported one compiled to a bare __googtag that
+// never sent a hit (container v5-v8). Import this file with Merge, never Overwrite.
 
 const container = {
   exportFormatVersion: 2,
