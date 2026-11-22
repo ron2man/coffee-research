@@ -1,0 +1,77 @@
+{
+  "id": "2026-11-22T08-20-38-652Z-critic",
+  "agent": "idea-judge",
+  "source": "critic",
+  "at": "2026-11-22T08:20:38.652Z",
+  "itemIds": [
+    "breville-builtin-grinder-wont-grind-fine-enough",
+    "sage-bambino-descale-cycle-fails-tank-empty",
+    "uk-hard-water-espresso-machine-water-and-descale",
+    "df64-worn-burrs-cant-reach-espresso"
+  ],
+  "findings": [
+    {
+      "severity": "major",
+      "itemIds": [
+        "breville-builtin-grinder-wont-grind-fine-enough"
+      ],
+      "problem": "The judge gave evidenceFeasibility 4 by asserting that Breville manuals and support pages document the upper-burr adjustment, but never opened one. The card's own Lemmy signal calls the adjustment 'undocumented'. Research then couldn't read a single Breville booklet and moved the item to needs_human, so a research slot went on an idea whose key evidence wasn't reachable.",
+      "evidence": "Judge's score: 'Breville manuals and support pages document the upper-burr adjustment and replacement burrs'. Card signal lemmy.world/post/5716405: 'the undocumented internal burr adjustment'. Research blockedReason: 'Every Breville instruction booklet I fetched was a compressed PDF this environment cannot read… ManualsLib, manualmachine, device.report and notice-facile all returned 403.'",
+      "suggestion": "Before scoring evidenceFeasibility 4 or 5, open the primary source the answer depends on (a manual, support page or spec sheet) and confirm that it exists, is readable with the tools available and covers the claim. If it is only a PDF or is blocked, cap the score at 3 and say so in the reason."
+    },
+    {
+      "severity": "major",
+      "itemIds": [
+        "breville-builtin-grinder-wont-grind-fine-enough"
+      ],
+      "problem": "demandEvidence 4 rests partly on 'many independent Home-Barista threads' that search supposedly turned up, but the reason names none of them. Of the card's three signals, only one is recent (2026). The other two date from 2023 and 2018, and the judge didn't mention either. Unnamed search hits can't be checked and shouldn't lift a score above what the verified signals support.",
+      "evidence": "Score reason: 'search shows many independent Home-Barista threads on Barista Express/Pro grinders that won't go fine enough'. No URL is given. Card signals are dated 2026-08-30, 2023-09-25 and 2018-08-24.",
+      "suggestion": "Every signal that supports a demandEvidence score of 3 or more must be named by URL, with its date, in the reason. Signals more than about two years old count as weak support, and the reason should say how many of the verified signals are recent."
+    },
+    {
+      "severity": "minor",
+      "itemIds": [
+        "breville-builtin-grinder-wont-grind-fine-enough"
+      ],
+      "problem": "The judge confirmed the Singletrack signal as 'what the card says', but the card overstates the outcome. The card says moving the upper burr plus a Breville replacement burr fixed it. In the thread, moving the burr and cleaning the grinder fixed it. The replacement burr was on its way, but the thread never says it arrived or helped. That matters because the card sells 'replace a worn burr' as a fix step.",
+      "evidence": "Card note: 'Moving the upper burr to 1 plus a Breville replacement burr fixed it.' The thread (fetched) says: turned the upper burr from 4 to 1, cleaned it, got a 28-second shot on 1 September; the new burr was being sent but its effect isn't reported.",
+      "suggestion": "When verifying a signal, check the card's specific claim (who said what, what fixed it), not only the topic. Note any overstatement in the score reason so research doesn't inherit it."
+    },
+    {
+      "severity": "minor",
+      "itemIds": [
+        "breville-builtin-grinder-wont-grind-fine-enough"
+      ],
+      "problem": "The card targets the US market, but its main recent signal is a UK forum about a Sage-branded machine. The judge didn't mention the mismatch, even though manuals, burr part numbers and warranty terms differ by market.",
+      "evidence": "Card: \"market\": \"US\". Signal: singletrackworld.com thread titled 'sage-breville-barista-pro-grinder'. Research later had to work through separate USCM and ANZ booklets.",
+      "suggestion": "Check that the signals come from the card's market. If they don't, say so and either lower demandEvidence or suggest changing the market."
+    },
+    {
+      "severity": "minor",
+      "itemIds": [
+        "sage-bambino-descale-cycle-fails-tank-empty",
+        "uk-hard-water-espresso-machine-water-and-descale"
+      ],
+      "problem": "There was nothing to fault here. I note it so it's kept. The judge saw that two cards came from the same single Singletrack thread and scored both down for depending on one source, and it read the thread accurately. A fetch of the thread confirms the float-sensor reply, the hard-water side comments and the poster wanting a new machine under £400.",
+      "evidence": "Fetched singletrackworld.com/forum/off-topic/espresso-machines-not-bean-to-cup-pod: opening post 26/03/2025, no-water warning after warranty repair, budget 'ideally <£400', float/hall-sensor reply, Brita and Ashbeck suggestions. This matches the judge's reasons.",
+      "suggestion": "Keep checking whether several cards trace back to one source, and treat them as one signal."
+    }
+  ],
+  "addressedBy": null,
+  "summary": "This is a solid batch. All three signals I opened (the Singletrack Barista Pro thread, the Singletrack Bambino thread and Lemmy post 46736915) are what the judge said they were. The three rejections are well argued and say what would change the decision. The one weak spot is the idea it advanced. Its demand score leaned on unnamed search results, and its evidenceFeasibility score assumed Breville manuals cover the upper-burr adjustment without anyone opening one. Research then stalled at needs_human because the manuals couldn't be read. The main fix is to make the judge open at least one primary evidence source before scoring evidenceFeasibility 4 or higher, and to name every URL behind a demand score.",
+  "keep": [
+    "Rejection reasons say what new evidence would justify re-scoring (e.g. 'Re-score it once there are independent UK signals, such as coffeeforums.co.uk \"do I need a descale\" threads'; 'Find posts where owners actually ask \"drift or wear?\"').",
+    "Reading the signal's intent, not just its topic: the DF64 Lemmy post was correctly identified as a satisfied upgrade report rather than a question. A fetch confirms 'upgrade report, not a question'.",
+    "Noticing when several cards depend on the same single thread, and scoring demand down for it.",
+    "Applying the advance thresholds strictly and advancing only one idea when only one cleared the bar.",
+    "Score reasons name concrete competitors (Seattle Coffee Gear guide, Decent water doc, coffeeblog walkthrough) rather than generic claims.",
+    "commercialFit treats 'keep the machine' as the default honest path."
+  ],
+  "promptChanges": [
+    "Under 'How to judge', add: \"Before giving evidenceFeasibility 4 or 5, open the one primary source the answer depends most on (a manual, support page or spec sheet). Confirm it exists, is readable with your tools (not only a blocked or compressed PDF) and actually covers the claim. If you can't confirm this, cap the score at 3 and say why.\"",
+    "In step 1 (Verify the demand), add: \"Name every signal you count by URL and date in the demandEvidence reason. Search results you didn't open, or don't name, can't raise the score. Signals older than about two years are weak support, so say how many verified signals are recent.\"",
+    "In step 1, add: \"Check the card's specific claims about each signal (what the asker wanted, what fixed it), not only that the page is on topic. Record any overstatement in the score reason so research doesn't inherit it.\"",
+    "Add to 'How to judge': \"Check that the signals come from the card's market. If the main signals are from another market, say so and lower demandEvidence or recommend changing the market.\"",
+    "[niche] In the idea-judge niche guidance, add: \"Breville/Sage instruction booklets are compressed PDFs on assets.breville.com, and ManualsLib returns 403. Don't assume manual coverage for Breville/Sage internals (e.g. the upper-burr adjustment, which owners call undocumented) unless you have read a readable support page.\""
+  ]
+}
