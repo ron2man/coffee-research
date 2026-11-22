@@ -3,11 +3,11 @@
   "id": "breville-builtin-grinder-wont-grind-fine-enough",
   "type": "new-post",
   "niche": "coffee",
-  "status": "briefed",
-  "attempts": 1,
+  "status": "blocked",
+  "attempts": 2,
   "revisions": 0,
   "createdAt": "2026-11-21T17:35:36.159Z",
-  "updatedAt": "2026-11-22T16:09:58.659Z",
+  "updatedAt": "2026-11-22T16:47:22.588Z",
   "artifacts": {
     "idea": "data/ideas/breville-builtin-grinder-wont-grind-fine-enough.json",
     "idea-judge": "data/idea-scores/breville-builtin-grinder-wont-grind-fine-enough.json",
@@ -100,7 +100,16 @@
       "to": "briefed",
       "by": "human:ronshtaiman",
       "reason": "the only thing that missing is the offers / link to articles to buy a separate grinder as I think most of the users won't buy a new machine"
+    },
+    {
+      "at": "2026-11-22T16:47:22.588Z",
+      "from": "briefed",
+      "to": "blocked",
+      "by": "scheduler",
+      "reason": "writer failed 2 times: claude -p timed out after 30 minutes"
     }
   ],
-  "lastError": "quality checks failed: breville-builtin-grinder-wont-grind-fine-enough: claims first-hand testing (\"hands-on\") without human data"
+  "lastError": "claude -p timed out after 30 minutes",
+  "resumeStatus": "briefed",
+  "blockedReason": "writer failed 2 times: claude -p timed out after 30 minutes"
 }
