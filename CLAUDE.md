@@ -15,7 +15,7 @@ This repo is being rebuilt per [rebuild-spec.md](rebuild-spec.md). It's an auton
 - `knowledge/<category>/<product>.md`: product cards (evidence layer, schemaVersion 1, see `knowledge/README.md`).
 - `data/`: agent artifacts (`ideas/`, `idea-scores/`, `research/`, `briefs/`, `reviews/`, …). `content/drafts/`: writer output. `content/archive/drafts/`: legacy pipeline drafts (Bambino grinder guide is the quality reference).
 - `agent/`: legacy Codex editorial pipeline. Being replaced (spec section 11), so don't extend it.
-- `backoffice/`: loopback dashboard. `site/`: static site (`build.mjs`, `lib/`, `assets/`; legacy `render.mjs`/`preview.mjs` remain for the backoffice). Tools live in `content/tools/<id>.json`.
+- `backoffice/`: loopback dashboard. `site/`: the Astro website for yourcoffeesetup.com (`src/` pages and layout, `lib/` data layer and HTML components, `public/assets/`); deploy, GA4 and Search Console setup in `docs/deploy.md`. Legacy `render.mjs`/`article.mjs` remain for the old `agent/` pipeline. Tools live in `content/tools/<id>.json`.
 - `ops/`: `tick.sh` and the launchd installer (`npm run schedule`). See `docs/operations.md`.
 
 ## Commands
@@ -30,7 +30,8 @@ npm run item -- list                       # items and status; also show|resume|
 npm run seed -- add "topic hint" --commit    # seed the idea agent (runs at the next tick)
 npm run feedback -- list | add <agent> "note"   # feedback per agent
 npm run prompt -- list | show|apply|reject <id> # prompt proposals from the tuner
-npm run site:preview                       # preview site on http://127.0.0.1:4321 (mock prices)
+npm run site:preview                       # preview site on http://127.0.0.1:4321 (mock prices; restart to pick up content changes)
+npm run site:build:production              # what the live site builds (published posts only)
 npm run schedule -- install|status|logs    # hourly launchd job (run in the scheduler's own clone)
 node backoffice/server.mjs                 # dashboard
 ```

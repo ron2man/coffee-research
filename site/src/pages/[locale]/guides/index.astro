@@ -1,0 +1,15 @@
+---
+import Base from '../../../layouts/Base.astro';
+import { site } from '../../../data/load.mjs';
+
+export async function getStaticPaths() {
+  const { data } = await site();
+  if (!data.posts.length) return [];
+  return data.markets.map((market) => ({ params: { locale: market.locale }, props: { market } }));
+}
+const { market } = Astro.props;
+const { data, t } = await site();
+---
+<Base title={`All guides | ${data.site.name}`} description={`Every ${data.site.name} guide, newest first.`} path={`/${market.locale}/guides/`} market={market}>
+  <Fragment set:html={t.guideListPage({ site: data.site, market, posts: data.listedPosts })} />
+</Base>

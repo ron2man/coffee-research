@@ -1,0 +1,14 @@
+---
+import Base from '../../layouts/Base.astro';
+import { site } from '../../data/load.mjs';
+
+export async function getStaticPaths() {
+  const { data } = await site();
+  return data.markets.map((market) => ({ params: { locale: market.locale }, props: { market } }));
+}
+const { market } = Astro.props;
+const { data, t } = await site();
+---
+<Base title={`How we work | ${data.site.name}`} description="Where our topics come from, what we check, and what we never claim." path={`/${market.locale}/how-we-work/`} market={market}>
+  <Fragment set:html={t.howWeWorkPage({ site: data.site, market })} />
+</Base>

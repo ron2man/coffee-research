@@ -6,6 +6,6 @@
     "content/published/",
     "site/",
     "data/offers/",
-    "holding-page/"
+    "wrangler.jsonc"
   ]
 }

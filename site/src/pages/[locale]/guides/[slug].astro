@@ -1,0 +1,15 @@
+---
+import Base from '../../../layouts/Base.astro';
+import { site } from '../../../data/load.mjs';
+
+export async function getStaticPaths() {
+  const { data } = await site();
+  return data.markets.flatMap((market) => data.posts.filter((p) => p.markets.includes(market.id))
+    .map((post) => ({ params: { locale: market.locale, slug: post.slug }, props: { market, post } })));
+}
+const { market, post } = Astro.props;
+const { data, t } = await site();
+---
+<Base title={`${post.title} | ${data.site.name}`} description={post.description} path={`/${market.locale}/guides/${post.slug}/`} market={market} pageId={post.slug}>
+  <Fragment set:html={t.postPage({ site: data.site, market, post, offers: data.offers, now: data.now, preview: data.preview })} />
+</Base>

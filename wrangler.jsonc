@@ -1,0 +1,19 @@
+// Cloudflare Worker for yourcoffeesetup.com: static assets only (no `main`, no server code).
+// Workers Builds runs `npm run site:build` from the repo root, then `npx wrangler deploy` on main
+// and `npx wrangler preview` on every other branch. See docs/deploy.md.
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "yourcoffeesetup",
+  "compatibility_date": "2026-11-22",
+  "assets": {
+    "directory": "./site/dist",
+    // Astro builds 404.html; serve it with a 404 status for unknown paths.
+    "not_found_handling": "404-page"
+  },
+  // Production answers on the domain. www is redirected to the root with a Redirect Rule.
+  "routes": [
+    { "pattern": "yourcoffeesetup.com", "custom_domain": true },
+    { "pattern": "www.yourcoffeesetup.com", "custom_domain": true }
+  ],
+  "observability": { "enabled": true }
+}

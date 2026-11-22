@@ -1,0 +1,16 @@
+---
+import Base from '../../layouts/Base.astro';
+import Holding from '../../components/Holding.astro';
+import { site } from '../../data/load.mjs';
+
+export async function getStaticPaths() {
+  const { data } = await site();
+  return data.markets.map((market) => ({ params: { locale: market.locale }, props: { market } }));
+}
+const { market } = Astro.props;
+const { data, t } = await site();
+const local = data.posts.filter((p) => p.markets.includes(market.id) && !p.supersededBy);
+---
+<Base title={`${data.site.name}: straight answers for home espresso in the ${t.shortLabel(market)}`} description="One clear recommendation, a test for what you already own, and when to buy nothing." path={`/${market.locale}/`} market={market}>
+  {local.length ? <Fragment set:html={t.homePage({ site: data.site, market, posts: data.posts })} /> : <Holding market={market} />}
+</Base>

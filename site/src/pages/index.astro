@@ -1,0 +1,16 @@
+---
+// Root: a market chooser (x-default). site.js sends returning readers to their remembered or
+// browser-language market; the links stay for everyone else and for crawlers.
+import Base from '../layouts/Base.astro';
+import { site } from '../data/load.mjs';
+const { data, t } = await site();
+---
+<Base title={`${data.site.name}: what to fix, what to upgrade, what to keep`} description="Straight answers about your home coffee setup. Choose where you buy." path="/" bodyClass="chooser">
+  <div class="wrap-narrow chooser-main">
+    <h1>{data.site.name}</h1>
+    <p>Choose where you buy:</p>
+    <ul class="chooser-list">
+      {data.markets.map((m) => <li><a href={`/${m.locale}/`} data-market={m.locale}>{t.marketLabel(m)}</a></li>)}
+    </ul>
+  </div>
+</Base>
