@@ -1,0 +1,18 @@
+{
+  "id": "2026-11-22T15-52-49-438Z-human",
+  "agent": "writer",
+  "source": "human",
+  "at": "2026-11-22T15:52:49.438Z",
+  "itemIds": [
+    "breville-builtin-grinder-wont-grind-fine-enough"
+  ],
+  "findings": [
+    {
+      "severity": "major",
+      "problem": "it looks amazing! the only thing that missing is the offers / link to articles to buy a separate grinder as I think most of the users won't buy a new machine",
+      "evidence": "human note by ronshtaiman",
+      "suggestion": "it looks amazing! the only thing that missing is the offers / link to articles to buy a separate grinder as I think most of the users won't buy a new machine"
+    }
+  ],
+  "addressedBy": null
+}
