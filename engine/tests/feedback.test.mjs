@@ -146,3 +146,13 @@ test('writer checks: offered products need knowledge cards', () => {
   const { blocking } = runChecks('writer', [{ itemId: 'x', artifact: { title: 'T', description: 'D', body: 'Fix your {{product:machine-a}}.', productIds: ['machine-a'], offerIds: ['grinder-z'], claims: [] } }], { cards, existingContent: [] });
   assert.ok(blocking.some((b) => /offers grinder-z, which has no knowledge card/.test(b)));
 });
+
+test('testing-claim lint: real claims fail, workflow wording and disclaimers pass', async () => {
+  const { testingClaims } = await import('../feedback/checks.mjs');
+  assert.deepEqual(testingClaims("It's more hands-on per shot."), []);
+  assert.deepEqual(testingClaims("We haven't tested either machine, and there was no hands-on testing."), []);
+  assert.deepEqual(testingClaims('We did not run our own tests.'), []);
+  assert.deepEqual(testingClaims('In our testing it was quiet.'), ['In our testing']);
+  assert.deepEqual(testingClaims("We've tested it for a month."), ["We've tested"]);
+  assert.deepEqual(testingClaims('Our hands-on review found it loud.'), ['Our hands-on']);
+});

@@ -5,7 +5,15 @@ import { claimStatus } from '../state/knowledge.mjs';
 
 const DAY_MS = 86_400_000;
 export const SIGNAL_MAX_AGE_DAYS = 730;
-const FORBIDDEN_EXPERIENCE = /\b(we tested|in our testing|hands-on|we measured|our tests?)\b/i;
+// First-person testing claims. "Hands-on" alone is fine ("more hands-on per shot" describes a workflow);
+// negated phrases ("we haven't tested", "no hands-on testing") are honest disclaimers, not claims.
+const FORBIDDEN_EXPERIENCE = /\b(we(?:'ve| have)? tested|i(?:'ve| have)? tested|in (?:our|my) testing|we(?:'ve| have)? measured|i measured|our (?:own )?tests?|our hands-on|hands-on (?:tests?|testing|reviews?|trials?))\b/gi;
+const NEGATION = /\b(no|not|never|without|haven'?t|hasn'?t|didn'?t|don'?t|nor|n't)\b[^.]{0,25}$/i;
+export function testingClaims(text) {
+  return [...text.matchAll(FORBIDDEN_EXPERIENCE)]
+    .filter((m) => !NEGATION.test(text.slice(Math.max(0, m.index - 40), m.index)))
+    .map((m) => m[0]);
+}
 const AI_PATTERNS = [/\bin conclusion\b/i, /\bit'?s worth noting\b/i, /\bwhen it comes to\b/i, /\bultimately,/i];
 
 const domain = (url) => {
@@ -80,8 +88,9 @@ const CHECKS = {
       if (inlineLinks > 2) blocking.push(`${itemId}: ${inlineLinks} inline links before the sources section (max 2)`);
       const words = main.split(/\s+/).filter(Boolean).length;
       if (words && inlineLinks / (words / 100) > 1) warnings.push(`${itemId}: link density above 1 per 100 words`);
-      if (FORBIDDEN_EXPERIENCE.test(body) && !(draft.humanData?.length)) {
-        blocking.push(`${itemId}: claims first-hand testing ("${body.match(FORBIDDEN_EXPERIENCE)[0]}") without human data`);
+      const claimsTesting = testingClaims(body);
+      if (claimsTesting.length && !(draft.humanData?.length)) {
+        blocking.push(`${itemId}: claims first-hand testing ("${claimsTesting[0]}") without human data`);
       }
       if (!/^#+\s*How this guide was put together/im.test(body)) warnings.push(`${itemId}: no "How this guide was put together" section`);
       if (!/^#+\s*When I'?d choose differently/im.test(body)) warnings.push(`${itemId}: no "When I'd choose differently" section`);
