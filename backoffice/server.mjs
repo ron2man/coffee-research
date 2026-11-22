@@ -5,12 +5,21 @@ import { fileURLToPath } from 'node:url';
 import { promisify } from 'node:util';
 import { readDrafts } from './drafts.mjs';
 import { scanKnowledge } from '../agent/knowledge.mjs';
+import { todayData } from './today.mjs';
+import { resolve } from 'node:path';
+import { homedir } from 'node:os';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
 const exec = promisify(execFile);
 const port = Number(process.env.BACKOFFICE_PORT ?? 4173);
+// The "Today" view reads state from BACKOFFICE_ROOT (default: this checkout). Point it at the
+// scheduler's clone to see live runs: BACKOFFICE_ROOT=~/Projects/coffee-research-bot npm run dashboard
+const stateRoot = process.env.BACKOFFICE_ROOT ? resolve(process.env.BACKOFFICE_ROOT.replace(/^~(?=\/)/, homedir())) : root;
 const assets = new Map([
-  ['/', ['index.html', 'text/html; charset=utf-8']],
+  ['/', ['today.html', 'text/html; charset=utf-8']],
+  ['/today.js', ['today.js', 'text/javascript; charset=utf-8']],
+  ['/today.css', ['today.css', 'text/css; charset=utf-8']],
+  ['/legacy', ['index.html', 'text/html; charset=utf-8']],
   ['/style.css', ['style.css', 'text/css; charset=utf-8']],
   ['/app.js', ['app.js', 'text/javascript; charset=utf-8']],
 ]);
@@ -94,6 +103,8 @@ const server = createServer(async (request, response) => {
   try {
     if (request.method !== 'GET') {
       response.writeHead(405, { Allow: 'GET' }).end();
+    } else if (request.url === '/today-data') {
+      response.writeHead(200, { 'Content-Type': 'application/json' }).end(JSON.stringify(await todayData(stateRoot)));
     } else if (request.url === '/data') {
       const data = await dashboardData();
       response.writeHead(200, { 'Content-Type': 'application/json' }).end(JSON.stringify(data));
@@ -112,5 +123,5 @@ const server = createServer(async (request, response) => {
 });
 
 server.listen(port, '127.0.0.1', () => {
-  console.log(`Coffee Backoffice: http://127.0.0.1:${server.address().port}`);
+  console.log(`Backoffice: http://127.0.0.1:${server.address().port}  (state from ${stateRoot})`);
 });

@@ -1,0 +1,26 @@
+:root { font: 15px/1.5 system-ui, sans-serif; color: #1c2b27; background: #f2f5f3; color-scheme: light dark; }
+@media (prefers-color-scheme: dark) { :root { color: #e3ece8; background: #121a18; } .panel, .item, .card { background: #1a2522 !important; border-color: #2c3c37 !important; } code { background: #22312d !important; } }
+* { box-sizing: border-box; } body { margin: 0; }
+.bar { position: sticky; top: 0; display: flex; gap: 1.5rem; align-items: center; padding: .7rem 1.5rem; background: #132d28; color: #eef6f2; z-index: 2; flex-wrap: wrap; }
+.bar nav { display: flex; gap: 1rem; flex: 1; } .bar a { color: #b9d6cc; text-decoration: none; } .bar a:hover { color: white; }
+button { font: inherit; background: #1f5144; color: white; border: 0; border-radius: 6px; padding: .4rem .8rem; cursor: pointer; }
+main { max-width: 76rem; margin: 0 auto; padding: 1.2rem; }
+.panel { background: white; border: 1px solid #dbe5e0; border-radius: 12px; padding: 1.1rem 1.2rem; margin: 1rem 0; }
+h2 { margin: 0 0 .8rem; font-size: 1.15rem; } h3 { font-size: .95rem; margin: 1.2rem 0 .5rem; }
+.muted, #status { color: #5b6f68; font-size: .88rem; }
+.item { border: 1px solid #dbe5e0; border-left: 4px solid #b5532a; border-radius: 8px; padding: .75rem .9rem; margin: .6rem 0; background: #fff; }
+.item .kind { font-size: .75rem; text-transform: uppercase; letter-spacing: .06em; color: #b5532a; font-weight: 700; }
+.item .title { font-weight: 600; margin: .15rem 0; } .item .reason { color: #5b6f68; font-size: .9rem; }
+.cmds { display: flex; flex-direction: column; gap: .3rem; margin-top: .5rem; }
+.cmd { display: flex; gap: .5rem; align-items: center; } code { background: #edf2ef; padding: .2rem .45rem; border-radius: 5px; font-size: .82rem; overflow-x: auto; white-space: nowrap; flex: 1; }
+.cmd button { padding: .2rem .55rem; font-size: .78rem; }
+.empty { color: #2f6b45; font-weight: 600; }
+.board { display: grid; grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr)); gap: .6rem; }
+.col h4 { margin: 0 0 .4rem; font-size: .8rem; text-transform: uppercase; letter-spacing: .05em; color: #5b6f68; }
+.card { border: 1px solid #dbe5e0; border-radius: 8px; padding: .5rem .6rem; margin-bottom: .4rem; font-size: .85rem; background: #fafcfb; overflow-wrap: anywhere; }
+.card small { display: block; color: #5b6f68; }
+.sched { display: grid; grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr)); gap: .8rem; }
+.sched div strong { display: block; font-size: 1.05rem; }
+pre { background: #0f1a17; color: #cfe3da; padding: .8rem; border-radius: 8px; overflow: auto; max-height: 16rem; font-size: .78rem; }
+table { width: 100%; border-collapse: collapse; font-size: .85rem; } th, td { text-align: left; padding: .4rem .5rem .4rem 0; border-bottom: 1px solid #e1e9e5; vertical-align: top; }
+.table-wrap { overflow-x: auto; } .bad { color: #b33a2a; } .ok { color: #2f6b45; }

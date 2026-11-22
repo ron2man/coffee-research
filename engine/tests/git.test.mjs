@@ -124,3 +124,8 @@ test('an agent that writes files itself fails the run and nothing is committed f
   assert.equal(result.failures[0].attempts, 1);
   assert.ok(!result.changedFiles.includes('knowledge/grinders/x.md'));
 });
+
+test('commit messages describe critic and tuner runs', () => {
+  assert.equal(commitMessage({ ran: 'critic', review: { target: 'idea', findings: 7 } }), 'tick(critic): reviewed idea (7 findings)');
+  assert.equal(commitMessage({ ran: 'tuner', tune: { target: 'idea', proposal: 'idea-x' } }), 'tick(tuner): proposed idea-x for idea');
+});

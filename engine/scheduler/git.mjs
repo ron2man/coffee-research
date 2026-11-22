@@ -73,6 +73,8 @@ export function commitInternal(root, paths, message, { remote = policy.remote, b
 }
 
 export function commitMessage(result) {
+  if (result.review) return `tick(${result.ran}): reviewed ${result.review.target} (${result.review.findings} findings)`;
+  if (result.tune) return `tick(${result.ran}): proposed ${result.tune.proposal} for ${result.tune.target}`;
   const outcomes = result.created?.length
     ? `created ${result.created.join(', ')}`
     : result.results?.map((r) => `${r.id} ${r.outcome}→${r.to}`).join('; ')
