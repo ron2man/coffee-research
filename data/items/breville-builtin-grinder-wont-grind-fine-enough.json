@@ -3,11 +3,11 @@
   "id": "breville-builtin-grinder-wont-grind-fine-enough",
   "type": "new-post",
   "niche": "coffee",
-  "status": "idea_approved",
+  "status": "researched",
   "attempts": 0,
   "revisions": 0,
   "createdAt": "2026-11-21T17:35:36.159Z",
-  "updatedAt": "2026-11-22T09:03:24.712Z",
+  "updatedAt": "2026-11-22T09:25:30.426Z",
   "artifacts": {
     "idea": "data/ideas/breville-builtin-grinder-wont-grind-fine-enough.json",
     "idea-judge": "data/idea-scores/breville-builtin-grinder-wont-grind-fine-enough.json",
@@ -41,6 +41,13 @@
       "to": "idea_approved",
       "by": "human:ronshtaiman",
       "reason": "poppler installed"
+    },
+    {
+      "at": "2026-11-22T09:25:30.426Z",
+      "from": "idea_approved",
+      "to": "researched",
+      "by": "research",
+      "reason": "With poppler installed, I read the current US Breville booklets for the BES870 (X26) and BES878 (Q26) page by page. Breville supports every step of the diagnosis order: bean freshness, single-wall vs dual-wall basket, dose and tamp, finer dial setting, cleaning the burrs, then the upper-burr adjustment (one step at a time), along with the fast-shot troubleshooting rows. Breville presents the upper-burr adjustment as a feature of the machine, so the 'fix it first' path rests on manufacturer evidence. Three things are still open: the upper-burr number range and factory position, any burr-contact warning, and whether adjustment affects the warranty. The writer can handle them honestly as 'the booklet doesn't say'. They don't block the decision. The stopping rule for buying a grinder is an editorial judgement built on these claims, not a missing fact."
     }
   ]
 }
