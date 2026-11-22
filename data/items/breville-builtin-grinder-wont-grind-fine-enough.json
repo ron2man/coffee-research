@@ -3,14 +3,15 @@
   "id": "breville-builtin-grinder-wont-grind-fine-enough",
   "type": "new-post",
   "niche": "coffee",
-  "status": "idea_approved",
+  "status": "needs_human",
   "attempts": 0,
   "revisions": 0,
   "createdAt": "2026-11-21T17:35:36.159Z",
-  "updatedAt": "2026-11-21T20:53:48.391Z",
+  "updatedAt": "2026-11-22T06:54:44.751Z",
   "artifacts": {
     "idea": "data/ideas/breville-builtin-grinder-wont-grind-fine-enough.json",
-    "idea-judge": "data/idea-scores/breville-builtin-grinder-wont-grind-fine-enough.json"
+    "idea-judge": "data/idea-scores/breville-builtin-grinder-wont-grind-fine-enough.json",
+    "research": "data/research/breville-builtin-grinder-wont-grind-fine-enough.json"
   },
   "history": [
     {
@@ -26,6 +27,15 @@
       "to": "idea_approved",
       "by": "idea-judge",
       "reason": "I checked the Singletrack thread (Aug 2026) and it is what the card says. Search turns up many Home-Barista threads asking the same thing. Current answers give conflicting tips but no diagnosis order, so a step-by-step fault tree that lets readers keep the machine adds real value."
+    },
+    {
+      "at": "2026-11-22T06:54:44.751Z",
+      "from": "idea_approved",
+      "to": "needs_human",
+      "by": "research",
+      "reason": "The diagnosis hinges on Breville's own upper-burr guidance for the BES870 and BES878: the procedure, the range of positions, the factory position, any warning about burr contact, and warranty terms. Every Breville instruction booklet I fetched was a compressed PDF this environment cannot read: BES870 USCM O21 and X26, BES870 ANZ M21, the Williams Sonoma BES870 and BES878 copies, the AJ Madison copy and the archive.org copy. PDF rendering failed because pdftoppm/poppler is not installed. ManualsLib, manualmachine, device.report and notice-facile all returned 403. A human needs to do one of two things. Either supply the extracted text of the 'Adjusting the upper burr / conical burrs' and 'Troubleshooting' pages of the current US booklets (https://assets.breville.com/BES870/BES870_USCM_IB_X26_LR.pdf and https://assets.breville.com/BES878/BES878_USCM_IB_Q26_LR.pdf) with page numbers, or install poppler on the runner so the next research pass can read them. The question to Breville US support about whether adjusting or replacing the upper burr affects the warranty also needs a human. So far the only supported claims are the Barista Pro dial range and starting setting, one owner report, and a parts-seller listing for the upper burr."
     }
-  ]
+  ],
+  "resumeStatus": "idea_approved",
+  "blockedReason": "The diagnosis hinges on Breville's own upper-burr guidance for the BES870 and BES878: the procedure, the range of positions, the factory position, any warning about burr contact, and warranty terms. Every Breville instruction booklet I fetched was a compressed PDF this environment cannot read: BES870 USCM O21 and X26, BES870 ANZ M21, the Williams Sonoma BES870 and BES878 copies, the AJ Madison copy and the archive.org copy. PDF rendering failed because pdftoppm/poppler is not installed. ManualsLib, manualmachine, device.report and notice-facile all returned 403. A human needs to do one of two things. Either supply the extracted text of the 'Adjusting the upper burr / conical burrs' and 'Troubleshooting' pages of the current US booklets (https://assets.breville.com/BES870/BES870_USCM_IB_X26_LR.pdf and https://assets.breville.com/BES878/BES878_USCM_IB_Q26_LR.pdf) with page numbers, or install poppler on the runner so the next research pass can read them. The question to Breville US support about whether adjusting or replacing the upper burr affects the warranty also needs a human. So far the only supported claims are the Barista Pro dial range and starting setting, one owner report, and a parts-seller listing for the upper burr."
 }
