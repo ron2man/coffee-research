@@ -5,7 +5,9 @@ import { fileURLToPath } from 'node:url';
 import { promisify } from 'node:util';
 import { readDrafts } from './drafts.mjs';
 import { scanKnowledge } from '../agent/knowledge.mjs';
-import { findStateRoot, todayData } from './today.mjs';
+import { articleDetail, findStateRoot, todayData } from './today.mjs';
+import { ActionError, runAction } from './actions.mjs';
+import { randomBytes } from 'node:crypto';
 import { resolve } from 'node:path';
 import { homedir } from 'node:os';
 
@@ -15,6 +17,23 @@ const port = Number(process.env.BACKOFFICE_PORT ?? 4173);
 // The "Today" view reads state from BACKOFFICE_ROOT (default: this checkout). Point it at the
 // scheduler's clone to see live runs: BACKOFFICE_ROOT=~/Projects/coffee-research-bot npm run dashboard
 const stateRoot = process.env.BACKOFFICE_ROOT ? resolve(process.env.BACKOFFICE_ROOT.replace(/^~(?=\/)/, homedir())) : findStateRoot(root);
+// Actions need this token (fetched same-origin from /session), so other sites can't post to the dashboard.
+const sessionToken = randomBytes(24).toString('hex');
+const commitActions = process.env.BACKOFFICE_NO_COMMIT !== '1';
+
+function readBody(request, limit = 64 * 1024) {
+  return new Promise((resolveBody, reject) => {
+    let size = 0;
+    const chunks = [];
+    request.on('data', (chunk) => {
+      size += chunk.length;
+      if (size > limit) { reject(new ActionError('Request too large', 413)); request.destroy(); } else chunks.push(chunk);
+    });
+    request.on('end', () => resolveBody(Buffer.concat(chunks).toString('utf8')));
+    request.on('error', reject);
+  });
+}
+
 const assets = new Map([
   ['/', ['today.html', 'text/html; charset=utf-8']],
   ['/today.js', ['today.js', 'text/javascript; charset=utf-8']],
@@ -101,8 +120,28 @@ const server = createServer(async (request, response) => {
   response.setHeader('X-Content-Type-Options', 'nosniff');
   response.setHeader('Content-Security-Policy', "default-src 'self'; frame-ancestors 'none'; base-uri 'none'");
   try {
-    if (request.method !== 'GET') {
-      response.writeHead(405, { Allow: 'GET' }).end();
+    const url = new URL(request.url, 'http://localhost');
+    if (request.method === 'POST' && url.pathname.startsWith('/action/')) {
+      const origin = request.headers.origin;
+      if ((origin && origin !== `http://${host}`) || request.headers['x-backoffice-token'] !== sessionToken || !String(request.headers['content-type']).startsWith('application/json')) {
+        response.writeHead(403, { 'Content-Type': 'application/json' }).end(JSON.stringify({ error: 'Reload the dashboard and try again.' }));
+        return;
+      }
+      try {
+        const payload = JSON.parse((await readBody(request)) || '{}');
+        const result = await runAction(stateRoot, url.pathname.slice('/action/'.length), payload, { commit: commitActions });
+        response.writeHead(200, { 'Content-Type': 'application/json' }).end(JSON.stringify(result));
+      } catch (error) {
+        const status = error instanceof ActionError ? error.status : 500;
+        response.writeHead(status, { 'Content-Type': 'application/json' }).end(JSON.stringify({ error: error.message }));
+      }
+    } else if (request.method !== 'GET') {
+      response.writeHead(405, { Allow: 'GET, POST' }).end();
+    } else if (url.pathname === '/session') {
+      response.writeHead(200, { 'Content-Type': 'application/json' }).end(JSON.stringify({ token: sessionToken, root: stateRoot, commits: commitActions }));
+    } else if (url.pathname === '/article') {
+      const detail = articleDetail(stateRoot, url.searchParams.get('id') ?? '');
+      response.writeHead(detail ? 200 : 404, { 'Content-Type': 'application/json' }).end(JSON.stringify(detail ?? { error: 'No such article' }));
     } else if (request.url === '/today-data') {
       response.writeHead(200, { 'Content-Type': 'application/json' }).end(JSON.stringify(await todayData(stateRoot)));
     } else if (request.url === '/data') {

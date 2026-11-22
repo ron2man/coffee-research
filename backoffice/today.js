@@ -23,8 +23,9 @@ function render(d) {
   $('inbox-list').innerHTML = d.inbox.length ? d.inbox.map((i) => `<div class="item">
     <div class="kind">${esc(i.kind)}</div><div class="title">${esc(i.title)}</div>
     <div class="reason">${esc(i.reason)}${i.at ? ` · ${ago(i.at)}` : ''}</div>
-    ${i.link ? `<div><a href="${esc(i.link)}" target="_blank" rel="noopener">Open in the preview site</a> <span class="muted">(run npm run site:preview first)</span></div>` : ''}
-    ${commands(i.commands)}</div>`).join('') : '<p class="empty">Nothing is waiting for you.</p>';
+    ${i.stuckId ? `<div class="actions"><input data-reason-for="${esc(i.stuckId)}" placeholder="What did you fix or decide?"><button type="button" data-item-act="resume" data-item="${esc(i.stuckId)}">Resume</button><button type="button" class="danger" data-item-act="reject" data-item="${esc(i.stuckId)}">Reject</button></div>` : ''}
+    ${i.itemId ? `<div class="actions"><button type="button" data-inbox-article="${esc(i.itemId)}">Open</button></div>` : i.proposalId ? '<div class="actions"><a href="#proposals">Review below</a></div>' : ''}
+    <details><summary class="muted">Terminal commands</summary>${commands(i.commands)}</details></div>`).join('') : '<p class="empty">Nothing is waiting for you.</p>';
 
   $('board').innerHTML = d.pipeline.filter((c) => c.items.length || !['published', 'measured', 'blocked', 'needs_human'].includes(c.status)).map((c) => `<div class="col"><h4>${esc(c.status)} (${c.items.length})</h4>${c.items.map((i) => `<div class="card" title="${esc(i.lastReason)}">${esc(i.id)}<small>${i.ageHours} h · attempts ${i.attempts}${i.revisions ? ` · rev ${i.revisions}` : ''}</small></div>`).join('')}</div>`).join('');
 
@@ -32,10 +33,10 @@ function render(d) {
   <h3>Prompt proposals</h3>${d.proposals.length ? `<table><tbody>${d.proposals.map((p) => `<tr><td>${esc(p.id)}</td><td>${esc(p.status)}</td><td>${esc(p.summary)}</td></tr>`).join('')}</tbody></table>` : '<p class="muted">None yet. The tuner proposes once an agent has enough open feedback.</p>'}`;
 
   $('seeds-list').innerHTML = d.seeds.length ? `<table><thead><tr><th>Seed</th><th>Status</th><th>Looked at</th><th>Cards</th></tr></thead><tbody>${d.seeds.map((x) => `<tr><td>${esc(x.text)}</td><td>${esc(x.status)}</td><td>${x.considered}×</td><td>${esc(x.itemIds.join(', '))}</td></tr>`).join('')}</tbody></table>` : '<p class="muted">No seeds yet.</p>';
-  $('seeds-list').insertAdjacentHTML('beforeend', commands(['npm run seed -- add "..." --commit']));
   const total = d.costs.reduce((sum, c) => sum + c.costUsd, 0);
   $('costs').innerHTML = `<p class="muted">Cost is the CLI's estimate at API prices, not your subscription bill. Total: $${total.toFixed(2)}.</p><table><thead><tr><th>Agent</th><th>Runs</th><th>Failures</th><th>Avg min</th><th>Est. cost</th><th>Last</th></tr></thead><tbody>${d.costs.map((c) => `<tr><td>${esc(c.agent)}</td><td>${c.runs}</td><td class="${c.failures ? 'bad' : ''}">${c.failures}</td><td>${c.avgMinutes ?? '–'}</td><td>$${c.costUsd.toFixed(2)}</td><td>${ago(c.last)}</td></tr>`).join('')}</tbody></table>`;
   $('recent').innerHTML = `<table><thead><tr><th>When</th><th>Agent</th><th>Item</th><th>Result</th><th>Min</th></tr></thead><tbody>${d.recentRuns.map((r) => `<tr><td>${ago(r.timestamp)}</td><td>${esc(r.agent ?? 'human')}</td><td>${esc(r.itemId ?? '')}</td><td class="${r.status === 'failed' ? 'bad' : ''}">${esc(r.status === 'failed' ? r.error : `${r.outcome ?? ''}${r.to ? ` → ${r.to}` : ''}`)}</td><td>${r.minutes ?? ''}</td></tr>`).join('')}</tbody></table>`;
+  renderArticles(d);
   $('status').textContent = `Reading ${d.root} · updated ${new Date(d.generatedAt).toLocaleTimeString()} · refreshes every minute`;
 }
 
@@ -57,3 +58,115 @@ document.addEventListener('click', (event) => {
 $('reload').addEventListener('click', load);
 load();
 setInterval(load, 60_000);
+
+// ---------- Actions: comments, send back to the writer, proposals, seeds ----------
+let token = null;
+async function session() {
+  if (!token) token = (await (await fetch('/session')).json()).token;
+  return token;
+}
+function toast(text, error = false) {
+  const el = $('toast');
+  el.textContent = text;
+  el.className = error ? 'err' : '';
+  el.hidden = false;
+  clearTimeout(toast.t);
+  toast.t = setTimeout(() => { el.hidden = true; }, 6000);
+}
+async function post(name, payload, button) {
+  if (button) button.disabled = true;
+  try {
+    const response = await fetch(`/action/${name}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-Backoffice-Token': await session() },
+      body: JSON.stringify(payload),
+    });
+    const result = await response.json();
+    if (!response.ok) throw new Error(result.error ?? response.statusText);
+    toast(`${result.message}${result.committed ? ' Saved and pushed.' : ''}`);
+    await load();
+    return result;
+  } catch (error) {
+    toast(error.message, true);
+    return null;
+  } finally {
+    if (button) button.disabled = false;
+  }
+}
+
+function renderArticles(d) {
+  $('article-list').innerHTML = d.articles.length ? d.articles.map((a) => `<div class="article-row">
+    <div><span class="pill ${esc(a.status)}">${esc(a.status.replace('_', ' '))}</span><span class="t">${esc(a.title)}</span>
+    <div class="muted">${a.verdict ? `${['briefed', 'drafted'].includes(a.status) ? 'Before this revision the judge said' : 'Judge'}: ${esc(a.verdict)}${a.wouldForward ? ', would forward' : ''} · ` : ''}${a.revisions ? `revision ${a.revisions} · ` : ''}updated ${ago(a.updatedAt)}</div></div>
+    <button type="button" data-article="${esc(a.id)}">Open</button></div>`).join('') : '<p class="muted">No drafts yet.</p>';
+
+  const colour = (diff) => esc(diff).split('\n').map((l) => (/^\+(?!\+\+)/.test(l) ? `<span class="add">${l}</span>` : /^-(?!--)/.test(l) ? `<span class="del">${l}</span>` : l)).join('\n');
+  $('proposal-list').innerHTML = d.openProposals.length ? d.openProposals.map((p) => `<div class="item">
+    <div class="kind">${esc(p.agent)} · ${ago(p.at)}</div><div class="title">${esc(p.summary)}</div>
+    <details><summary>Show the change</summary><div class="diff">${colour(p.diff)}</div></details>
+    <div class="actions"><button type="button" data-apply="${esc(p.id)}">Apply</button>
+    <input data-reason-for="${esc(p.id)}" placeholder="Why not? (needed to reject)"><button type="button" class="danger" data-reject-proposal="${esc(p.id)}">Reject</button></div></div>`).join('')
+    : '<p class="muted">Nothing to review. The tuner proposes once an agent has enough feedback.</p>';
+}
+
+async function openArticle(id) {
+  const response = await fetch(`/article?id=${encodeURIComponent(id)}`);
+  const a = await response.json();
+  if (!response.ok) return toast(a.error ?? 'Not found', true);
+  $('article-title').textContent = a.draft?.title ?? a.id;
+  const r = a.review;
+  const scores = r ? Object.entries(r.scores).map(([k, v]) => `<div class="score" title="${esc(v.reason)}"><span>${esc(k.replace(/([A-Z])/g, ' $1').toLowerCase())}</span><strong>${v.score}/5</strong></div>`).join('') : '';
+  $('article-body').innerHTML = `<div class="article-grid">
+    <div class="prose">${a.draft ? a.draft.html : '<p class="muted">The writer hasn’t produced this draft yet.</p>'}</div>
+    <div class="side">
+      <p><span class="pill ${esc(a.status)}">${esc(a.status.replace('_', ' '))}</span>${a.previewUrl ? `<a href="${esc(a.previewUrl)}" target="_blank" rel="noopener">Open in the site preview</a> <span class="muted">(npm run site:preview)</span>` : ''}</p>
+      <h3>Your comment</h3>
+      <textarea id="article-note" placeholder="What should change? Be specific: the writer gets this word for word."></textarea>
+      <div class="actions">
+        <button type="button" data-act="comment">Add comment</button>
+        ${a.allowed.revise ? '<button type="button" data-act="revise">Send back to the writer</button>' : ''}
+        ${a.allowed.resume ? '<button type="button" data-act="resume">Resume</button>' : ''}
+        ${a.allowed.reject ? '<button type="button" class="danger" data-act="reject">Reject article</button>' : ''}
+      </div>
+      <p class="muted">${a.allowed.revise ? '“Send back” rewrites this article now. “Add comment” is kept for the next pass and teaches the writer’s prompt.' : a.status === 'briefed' ? 'The writer is working on this. Comments reach it on this pass.' : ''}</p>
+      ${r ? `<h3>Post judge: ${r.wouldForward ? 'would forward' : 'would not forward'}</h3>${scores}
+        ${r.blockingActions?.length ? `<h3>Blocking fixes</h3><ul>${r.blockingActions.map((x) => `<li>${esc(x)}</li>`).join('')}</ul>` : ''}
+        ${r.optionalImprovements?.length ? `<h3>Optional improvements</h3><ul>${r.optionalImprovements.map((x) => `<li>${esc(x)}</li>`).join('')}</ul>` : ''}
+        <h3>Against the top results</h3><ul>${r.competitorComparison.map((c) => `<li>${esc(c.weGiveThatTheyDont)} <span class="muted">(${esc(new URL(c.url).hostname)})</span></li>`).join('')}</ul>` : ''}
+      <h3>Notes and checks</h3>${a.notes.length ? a.notes.map((n) => `<div class="note ${n.open ? 'open' : ''}"><strong>${esc(n.source)} → ${esc(n.agent)}</strong> · ${ago(n.at)}${n.open ? '' : ' · done'}<br>${n.findings.map(esc).join('<br>')}</div>`).join('') : '<p class="muted">None.</p>'}
+      ${a.draft ? `<h3>Products</h3><p class="muted">Discussed: ${esc(a.draft.productIds.join(', ') || 'none')}<br>Offered: ${esc(a.draft.offerIds.join(', ') || 'none')}<br>${a.draft.claims} sourced claims</p>` : ''}
+      <h3>History</h3>${a.history.map((h) => `<div class="note"><strong>${esc(h.from ?? 'new')} → ${esc(h.to)}</strong> by ${esc(h.by)} · ${ago(h.at)}${h.reason ? `<br>${esc(h.reason)}` : ''}</div>`).join('')}
+    </div></div>`;
+  $('article-body').dataset.id = a.id;
+  if (!$('article-dialog').open) $('article-dialog').showModal();
+}
+
+document.addEventListener('click', async (event) => {
+  const t = event.target;
+  if (t.dataset.article) return openArticle(t.dataset.article);
+  if (t.hasAttribute?.('data-close')) return $('article-dialog').close();
+  if (t.dataset.act) {
+    const id = $('article-body').dataset.id;
+    const text = $('article-note').value;
+    if (t.dataset.act === 'reject' && !confirm('Reject this article? It leaves the pipeline (it can be reopened later).')) return;
+    const done = await post(t.dataset.act, { itemId: id, text }, t);
+    if (done) openArticle(id);
+    return;
+  }
+  if (t.dataset.apply) return post('apply-proposal', { proposalId: t.dataset.apply }, t);
+  if (t.dataset.rejectProposal) {
+    const id = t.dataset.rejectProposal;
+    return post('reject-proposal', { proposalId: id, text: document.querySelector(`[data-reason-for="${CSS.escape(id)}"]`).value }, t);
+  }
+  if (t.dataset.inboxArticle) return openArticle(t.dataset.inboxArticle);
+  if (t.dataset.itemAct) {
+    const id = t.dataset.item;
+    return post(t.dataset.itemAct, { itemId: id, text: document.querySelector(`[data-reason-for="${CSS.escape(id)}"]`).value }, t);
+  }
+});
+
+$('seed-form').addEventListener('submit', async (event) => {
+  event.preventDefault();
+  const input = event.target.elements.text;
+  if (await post('seed', { text: input.value }, event.submitter)) input.value = '';
+});

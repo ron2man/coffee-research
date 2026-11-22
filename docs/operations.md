@@ -30,6 +30,14 @@ If step 3 asks for a passphrase, add the key to the macOS keychain (`ssh-add --a
 
 The Mac must be awake. launchd runs a missed interval when the Mac wakes. To pause: `npm run schedule -- uninstall`.
 
+## The dashboard
+
+```sh
+npm run dashboard        # http://127.0.0.1:4173
+```
+
+It finds the scheduler's clone next to your working copy and reads the live state from there. From it you can open each article (rendered, with the judge's scores and fixes, checks and history), add a comment for the writer, send a passed article back to the writer, resume or reject stuck items, apply or reject prompt proposals, and add topic seeds. Every action goes through the status machine, waits if a tick is running, and is committed and pushed to `main` from the scheduler's clone. Set `BACKOFFICE_NO_COMMIT=1` to act without committing.
+
 ## Your daily loop (in your own working copy)
 
 ```sh

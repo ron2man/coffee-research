@@ -9,6 +9,11 @@ import { loadItems, readJson, readRuns } from '../engine/state/store.mjs';
 import { listFeedback, listProposals } from '../engine/feedback/store.mjs';
 import { lockPath, isStale } from '../engine/scheduler/lock.mjs';
 import { tick } from '../engine/scheduler/tick.mjs';
+import { parseMarkdown } from '../site/lib/markdown.mjs';
+import { localize } from '../site/lib/templates.mjs';
+import { loadCardsSync } from '../engine/state/knowledge.mjs';
+import { categoryIds, defaultNicheId, loadNiche } from '../engine/state/niche.mjs';
+import { diffProposal } from '../engine/feedback/cli.mjs';
 import { listSeeds } from '../engine/state/seeds.mjs';
 
 const hourMs = 3_600_000;
@@ -82,16 +87,16 @@ export async function todayData(root) {
   const inbox = [];
 
   for (const p of proposals.filter((x) => x.status === 'open')) {
-    inbox.push({ kind: 'Prompt proposal', title: `${p.agent}: ${p.summary}`, reason: `Addresses ${p.addresses.length} feedback entries`, at: p.at,
+    inbox.push({ kind: 'Prompt proposal', proposalId: p.id, title: `${p.agent}: ${p.summary}`, reason: `Addresses ${p.addresses.length} feedback entries`, at: p.at,
       commands: [`npm run prompt -- show ${p.id}`, `npm run prompt -- apply ${p.id} --commit`, `npm run prompt -- reject ${p.id} --reason "..." --commit`] });
   }
   for (const item of items.filter((i) => i.status === 'needs_human' || i.status === 'blocked')) {
-    inbox.push({ kind: item.status === 'blocked' ? 'Blocked item' : 'Needs you', title: item.id, reason: item.blockedReason ?? item.lastError ?? '', at: item.updatedAt,
+    inbox.push({ kind: item.status === 'blocked' ? 'Blocked item' : 'Needs you', itemId: item.artifacts.writer ? item.id : null, stuckId: item.artifacts.writer ? null : item.id, title: item.id, reason: item.blockedReason ?? item.lastError ?? '', at: item.updatedAt,
       commands: [`npm run item -- show ${item.id}`, `npm run item -- resume ${item.id} --reason "..." --commit`, `npm run item -- reject ${item.id} --reason "..." --commit`] });
   }
   for (const item of items.filter((i) => i.status === 'passed')) {
     const draft = item.artifacts.writer && existsSync(join(root, item.artifacts.writer)) ? readJson(join(root, item.artifacts.writer)) : null;
-    inbox.push({ kind: 'Draft to read', title: draft?.title ?? item.id, reason: 'Passed the post judge. Would you send it to a friend?', at: item.updatedAt,
+    inbox.push({ kind: 'Draft to read', itemId: item.id, title: draft?.title ?? item.id, reason: 'Passed the post judge. Would you send it to a friend?', at: item.updatedAt,
       link: draft ? `http://127.0.0.1:4321/en-${(draft.market ?? 'US').toLowerCase()}/guides/${draft.slug}/` : null,
       commands: ['npm run site:preview', `npm run feedback -- add writer "..." --item ${item.id} --commit`] });
   }
@@ -142,8 +147,79 @@ export async function todayData(root) {
     pipeline,
     feedback,
     proposals: proposals.slice(-10).reverse().map(({ id, agent, status, summary, at }) => ({ id, agent, status, summary, at })),
+    articles: articles(root),
+    openProposals: openProposals(root),
     seeds: listSeeds(root).reverse().slice(0, 15).map(({ id, text, status, considered, itemIds }) => ({ id, text, status, considered, itemIds })),
     costs: costs(runs),
     recentRuns: runs.slice(-25).reverse().map(({ timestamp, agent, itemId, status, outcome, error, to, durationMs, usage }) => ({ timestamp, agent, itemId, status, outcome, error, to, minutes: durationMs ? Math.round(durationMs / 6000) / 10 : null, costUsd: usage?.costUsd ?? null })),
   };
+}
+
+// ---- Articles: everything the writer produced, with the judge's review and the human notes ----
+
+const ARTICLE_STATUSES = ['passed', 'drafted', 'briefed', 'needs_human', 'blocked', 'published', 'rejected'];
+
+function articleContext(root) {
+  const niche = loadNiche(defaultNicheId(root), root);
+  const { cards } = loadCardsSync(join(root, 'knowledge'), categoryIds(niche));
+  const market = niche.markets[0];
+  return { site: { cards, pages: new Set() }, market };
+}
+
+const readArtifact = (root, item, name) => (item.artifacts[name] && existsSync(join(root, item.artifacts[name])) ? readJson(join(root, item.artifacts[name])) : null);
+
+export function articles(root) {
+  const { items } = loadItems(root);
+  const { site, market } = articleContext(root);
+  return items.filter((item) => item.artifacts.writer && ARTICLE_STATUSES.includes(item.status))
+    .map((item) => {
+      const draft = readArtifact(root, item, 'writer');
+      const review = readArtifact(root, item, 'post-judge');
+      const judged = item.history.filter((h) => h.by === 'post-judge').at(-1);
+      return {
+        id: item.id,
+        status: item.status,
+        title: draft ? localize(draft, site, market).title : item.id,
+        updatedAt: item.updatedAt,
+        revisions: item.revisions,
+        verdict: judged ? judged.to : null,
+        wouldForward: review?.wouldForward ?? null,
+      };
+    })
+    .sort((a, b) => b.updatedAt.localeCompare(a.updatedAt));
+}
+
+export function articleDetail(root, id) {
+  const { items } = loadItems(root);
+  const item = items.find((i) => i.id === id);
+  if (!item) return null;
+  const { site, market } = articleContext(root);
+  const raw = readArtifact(root, item, 'writer');
+  const draft = raw ? localize(raw, site, market) : null;
+  const notes = ['writer', 'post-judge'].flatMap((agent) => listFeedback(root, agent)
+    .filter((entry) => entry.itemIds.includes(id))
+    .map((entry) => ({ agent, source: entry.source, at: entry.at, open: !entry.addressedBy, findings: entry.findings.map((f) => f.problem) })));
+  return {
+    id,
+    status: item.status,
+    allowed: {
+      comment: true,
+      revise: item.status === 'passed',
+      resume: ['blocked', 'needs_human'].includes(item.status),
+      reject: !['rejected', 'measured', 'published'].includes(item.status),
+    },
+    previewUrl: draft ? `http://127.0.0.1:4321/${market.locale}/guides/${raw.slug}/` : null,
+    draft: draft && {
+      title: draft.title, description: draft.description, primaryQuery: raw.primaryQuery,
+      productIds: raw.productIds, offerIds: raw.offerIds ?? [], claims: raw.claims?.length ?? 0,
+      html: parseMarkdown(draft.body).blocks.map((b) => (b.type === 'component' ? `<p class="component">[${b.name}${b.arg ? `: ${b.arg}` : ''}]</p>` : b.html)).join('\n'),
+    },
+    review: readArtifact(root, item, 'post-judge'),
+    notes: notes.sort((a, b) => b.at.localeCompare(a.at)),
+    history: item.history.slice().reverse(),
+  };
+}
+
+export function openProposals(root) {
+  return listProposals(root).filter((p) => p.status === 'open').map((p) => ({ id: p.id, agent: p.agent, summary: p.summary, at: p.at, diff: diffProposal(root, p) }));
 }
