@@ -1,3 +1,5 @@
 .backoffice/
 node_modules/
 site/dist/
+site/.env
+site/.astro/

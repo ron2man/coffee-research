@@ -5,7 +5,6 @@
   "publicPaths": [
     "content/published/",
     "site/",
-    "data/offers/",
-    "holding-page/"
+    "data/offers/"
   ]
 }

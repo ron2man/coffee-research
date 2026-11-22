@@ -1,0 +1,17 @@
+---
+// Home page while no guide is live: says what the site is and how to reach us.
+interface Props { market: any }
+const { market } = Astro.props;
+const where = market.id === 'GB' ? 'the UK' : 'the US';
+---
+<section class="wrap holding" aria-labelledby="holding-title">
+  <p class="kicker">Coming soon for {where}</p>
+  <h1 id="holding-title">Fix it, upgrade it, <em>or keep it.</em></h1>
+  <p class="holding-lede">Straight answers about the espresso machine, grinder and milk on your counter: what to fix, what to upgrade, and when yours is fine.</p>
+  <ul class="holding-list">
+    <li>Why your latte tastes flat, and the cheapest fix</li>
+    <li>Which upgrade actually changes the cup</li>
+    <li>When to keep what you have</li>
+  </ul>
+  <p class="holding-note">The first guides are being written now. Questions about your setup? <a href="mailto:hello@yourcoffeesetup.com">hello@yourcoffeesetup.com</a></p>
+</section>

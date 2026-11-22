@@ -1,4 +1,5 @@
-// Market choice (auto-detect with manual override) and the Picker component.
+// Market choice (auto-detect with manual override), the Picker component, and GA4 events.
+// Events go out only when the page loaded GA4 (production with PUBLIC_GA4_ID set).
 (function () {
   var KEY = 'market';
   function get() { try { return localStorage.getItem(KEY); } catch (e) { return null; } }
@@ -21,6 +22,42 @@
     var link = event.target.closest && event.target.closest('[data-market]');
     if (link) set(link.getAttribute('data-market'));
   });
+
+  // GA4 custom events (rebuild-spec 9): affiliate_click, tool_complete, scroll_depth.
+  function track(name, params) {
+    if (typeof window.gtag !== 'function') return;
+    var page = document.body.getAttribute('data-page');
+    if (page) params.page_id = page;
+    window.gtag('event', name, params);
+  }
+  var toolState = {};
+
+  document.addEventListener('click', function (event) {
+    var link = event.target.closest && event.target.closest('a[rel~="sponsored"][data-product]');
+    if (!link) return;
+    track('affiliate_click', {
+      product_id: link.getAttribute('data-product'),
+      seller: link.getAttribute('data-seller'),
+      market: link.getAttribute('data-market'),
+      position: link.getAttribute('data-position'),
+      tool_state: toolState[link.getAttribute('data-product')] || 'none'
+    });
+  });
+
+  function scrollDepth() {
+    if (!document.body.getAttribute('data-page')) return;
+    var marks = [25, 50, 75, 100];
+    var sent = {};
+    function check() {
+      var doc = document.documentElement;
+      var max = doc.scrollHeight - window.innerHeight;
+      var pct = max > 0 ? Math.round((window.scrollY / max) * 100) : 100;
+      marks.forEach(function (m) {
+        if (pct >= m && !sent[m]) { sent[m] = true; track('scroll_depth', { percent: m }); }
+      });
+    }
+    window.addEventListener('scroll', check, { passive: true });
+  }
 
   function matches(when, answers) {
     return Object.keys(when).every(function (k) { return answers[k] === when[k]; });
@@ -64,7 +101,10 @@
       result.hidden = !done;
       if (!done) return;
       var rule = tool.rules.filter(function (r) { return matches(r.when, answers); })[0];
-      var r = tool.results[rule ? rule.result : tool['default']];
+      var resultKey = rule ? rule.result : tool['default'];
+      var r = tool.results[resultKey];
+      if (r.productId) toolState[r.productId] = tool.id + ':' + resultKey;
+      track('tool_complete', { tool_id: tool.id, result: resultKey });
       var h = document.createElement('strong');
       h.textContent = r.title;
       var p = document.createElement('p');
@@ -107,5 +147,6 @@
   document.addEventListener('DOMContentLoaded', function () {
     Array.prototype.forEach.call(document.querySelectorAll('.picker[data-tool]'), mountPicker);
     spyToc();
+    scrollDepth();
   });
 })();

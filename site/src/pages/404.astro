@@ -1,0 +1,12 @@
+---
+import Base from '../layouts/Base.astro';
+import { site } from '../data/load.mjs';
+const { data, t } = await site();
+const market = data.markets[0];
+---
+<Base title={`Page not found | ${data.site.name}`} path="/404/" market={market} noindex>
+  <section class="wrap-narrow notfound">
+    <h1>That page isn’t here.</h1>
+    <p>It may have moved, or the link was mistyped. Go to the home page for {data.markets.map((m, i) => <>{i ? ' or ' : ''}<a href={`/${m.locale}/`} data-market={m.locale}>{t.marketLabel(m)}</a></>)}.</p>
+  </section>
+</Base>

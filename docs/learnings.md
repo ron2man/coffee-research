@@ -49,7 +49,7 @@ To keep learning from runs without hand reviews, we built a feedback loop. Deter
 
 A local preview site now renders the quality reference, the archived drafts and future writer drafts for US and UK. It includes a data-driven Picker, a PriceBox with mock offers that hides prices older than 48h, a per-market disclosure, and a "How we work" page. The production build refuses to run without verified disclosure text.
 
-[Feedback loop](../engine/feedback/) · [Operations](operations.md) · [Site build](../site/build.mjs) · [Idea prompt](../engine/agents/idea/prompt.md)
+[Feedback loop](../engine/feedback/) · [Operations](operations.md) · [Site config](../site/astro.config.mjs) · [Idea prompt](../engine/agents/idea/prompt.md)
 
 ## Decisions
 
@@ -58,6 +58,7 @@ A local preview site now renders the quality reference, the archived drafts and 
 
 - **2026-11-21 · Prompt changes.** The tuner proposes and a human applies (`npm run prompt -- apply`). Prompts never change unattended.
 - **2026-11-21 · Site before the M4 gate.** The project lead asked for a local preview site now. It stays a preview (noindex, mock prices, no deploy). The M4 "send it to a friend" gate still applies before any public deploy.
+- **2026-11-22 · Domain, Astro site and deploys.** The site is `yourcoffeesetup.com` (Cloudflare Registrar). `site/` is now an Astro project (plain JS islands, no UI framework) that replaces the custom builder. The page shell is Astro; the data layer and HTML components in `site/lib` are loaded unbundled at build time, because the engine modules resolve their files relative to themselves. URLs stay `/en-us/…` and `/en-gb/…` on one domain with `hreflang`, and the root page is the x-default market chooser. Cloudflare Pages builds from GitHub: `main` builds production, other branches build noindex previews. The project lead chose to finish and deploy the site before the M4 gate. Production shows only `content/published/` (none yet), so the market homes show a holding message, and no draft reaches the live site until a post is published through a PR. GA4 uses Consent Mode v2 (denied by default in the UK, EEA and Switzerland until a consent banner exists) and sends `affiliate_click`, `tool_complete` and `scroll_depth`. Setup steps are in [deploy.md](deploy.md).
 - **2026-11-21 · Scheduler.** Hourly launchd job in a dedicated clone on `main` (`docs/operations.md`).
 
 - **2026-11-22 · Design and name.** The site uses design A3 (white, near-black, one cherry red, Schibsted Grotesk, rules not cards) and the name YourCoffeeSetup. The affiliate disclosure and the "not tested by us" note sit under the title, before any link. Preview builds show credited Unsplash mock photos from `site/assets/mock/`; production builds never copy them.

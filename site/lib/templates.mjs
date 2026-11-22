@@ -1,10 +1,11 @@
-// Page templates and components (PriceBox, Picker, Callout). Plain functions returning HTML.
+// Page bodies and components (PriceBox, Picker, pick card) as plain functions returning HTML.
+// The Astro pages in src/ wrap these; the page shell (head, nav, footer) is src/layouts/Base.astro.
 import { escape, inline, parseMarkdown } from './markdown.mjs';
 import { formatPrice, offersFor } from './offers.mjs';
 
 const region = new Intl.DisplayNames(['en'], { type: 'region' });
 export const marketLabel = (market) => region.of(market.id === 'GB' ? 'GB' : market.id);
-const shortLabel = (market) => (market.id === 'GB' ? 'UK' : market.id);
+export const shortLabel = (market) => (market.id === 'GB' ? 'UK' : market.id);
 export const postPath = (market, slug) => `/${market.locale}/guides/${slug}/`;
 
 // Wordmark: a CamelCase name like "YourCoffeeSetup" becomes accent / bold / light parts.
@@ -22,7 +23,7 @@ function mockPhoto(img, cls) {
 const pick = (list, key) => (list?.length ? list[[...key].reduce((h, c) => (h * 31 + c.charCodeAt(0)) >>> 0, 7) % list.length] : null);
 const postPhoto = (site, slug) => (site.mock ? site.mock.posts.get(slug) ?? pick(site.mock.wide, slug) : null);
 // Short nav labels: "Home espresso machines" → "Machines".
-const navLabel = (category) => category.nav ?? category.label.replace(/^home espresso /i, '').replace(/^./, (c) => c.toUpperCase());
+export const navLabel = (category) => category.nav ?? category.label.replace(/^home espresso /i, '').replace(/^./, (c) => c.toUpperCase());
 const categoryLabel = (site, id) => site.allCategories?.find((c) => c.id === id)?.label ?? null;
 function dateLabel(post, market) {
   if (!post.updatedAt) return post.status === 'published' ? '' : 'Draft';
@@ -50,59 +51,13 @@ ${guideRows({ site, market, posts: list })}
 </section>`;
 }
 
-const spokenName = (name) => (/\s/.test(name) ? name : nameParts(name).join(' '));
+export const spokenName = (name) => (/\s/.test(name) ? name : nameParts(name).join(' '));
 
 const STATUS_BADGE = {
   draft: 'Draft · not published',
   reference: 'Quality reference · not published',
   archived: 'Archived pilot draft · not published',
 };
-
-export function layout({ site, market, title, description, body, path, preview, robots }) {
-  const switcher = site.markets.map((m) => {
-    const target = path.replace(`/${market.locale}/`, `/${m.locale}/`);
-    const exists = site.pages.has(target);
-    return `<a href="${exists ? target : `/${m.locale}/`}" hreflang="${m.language}-${m.id}" data-market="${m.locale}"${m.id === market.id ? ' aria-current="true"' : ''}>${shortLabel(m)}</a>`;
-  }).join('');
-  return `<!doctype html>
-<html lang="${market.language}-${market.id}">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>${escape(title)}</title>
-<meta name="description" content="${escape(description)}">
-${robots ? `<meta name="robots" content="${robots}">` : ''}
-<meta name="color-scheme" content="light">
-<link rel="stylesheet" href="/assets/site.css">
-<link rel="icon" href="/assets/icon.svg" type="image/svg+xml">
-</head>
-<body>
-<a class="skip" href="#main">Skip to content</a>
-${preview ? '<div class="preview-bar">Preview build · mock prices · not public</div>' : ''}
-<header class="top">
-  <div class="wrap top-inner">
-    <a class="brand" href="/${market.locale}/" aria-label="${escape(spokenName(site.name))}, home">${brandMark(site.name)}</a>
-    <nav class="nav" aria-label="Main">
-      ${site.categories.map((c) => `<a href="/${market.locale}/${c.id}/">${escape(navLabel(c))}</a>`).join('')}
-      <a href="/${market.locale}/guides/">All guides</a>
-      <span class="market" role="group" aria-label="Market">${switcher}</span>
-    </nav>
-  </div>
-</header>
-<main id="main">
-${body}
-</main>
-<footer class="foot">
-  <div class="wrap">
-    <p class="disclosure">${escape(site.disclosure(market))}</p>
-    <p class="foot-links"><span class="brand-inline">${escape(site.name)}</span> <a href="/${market.locale}/how-we-work/">How we work</a> <a href="/${market.locale}/how-we-work/#disclosure">Disclosure</a> <a href="/${market.locale}/guides/">All guides</a></p>
-  </div>
-</footer>
-<script src="/assets/site.js" defer></script>
-</body>
-</html>
-`;
-}
 
 // One source for product offers, used by both the PriceBox and the sidebar pick card, so the two
 // can never show different products or prices.
@@ -114,6 +69,8 @@ function productOffers({ site, market, productId, offers, now }) {
     list: offersFor(offers, productId, market.id, { now }).slice(0, 3),
   };
 }
+// Read by site.js for the GA4 affiliate_click event (rebuild-spec 9).
+const trackAttrs = (productId, offer, market, position) => `data-product="${escape(productId)}" data-seller="${escape(offer.seller)}" data-market="${escape(market.id)}" data-position="${position}"`;
 const priceText = (offer, market) => formatPrice(offer.price, offer.currency, `${market.language}-${market.id}`);
 const checkedText = (offer) => `checked ${Math.max(1, Math.round(offer.ageHours))}h ago`;
 const noOffersText = (market, sold) => (sold ? `No ${shortLabel(market)} listing tracked yet` : `No ${shortLabel(market)} model in our records yet`);
@@ -129,7 +86,7 @@ export function priceBox({ site, market, productIds, offers, now }) {
         const price = offer.showPrice
           ? `<span class="pb-price">${escape(priceText(offer, market))}</span><span class="pb-age">${checkedText(offer)}</span>`
           : '<span class="pb-price pb-stale">Check current price</span>';
-        return `<span class="pb-offer"><a class="pb-button" href="${escape(offer.url)}" rel="sponsored nofollow noopener" target="_blank">${escape(offer.sellerName ?? offer.seller)}</a>${price}${offer.mock ? '<span class="pb-mock">mock</span>' : ''}</span>`;
+        return `<span class="pb-offer"><a class="pb-button" href="${escape(offer.url)}" rel="sponsored nofollow noopener" target="_blank" ${trackAttrs(productId, offer, market, 'pricebox')}>${escape(offer.sellerName ?? offer.seller)}</a>${price}${offer.mock ? '<span class="pb-mock">mock</span>' : ''}</span>`;
       }).join('');
     }
     return `<li class="pb-row" id="buy-${escape(productId)}"><span class="pb-name">${escape(name)}</span><span class="pb-action">${action}</span></li>`;
@@ -195,7 +152,7 @@ export function pickCard({ site, market, productId, offers, now, keep }) {
   const price = !offer ? `<p class="pick-none">${escape(noOffersText(market, sold))}</p>`
     : offer.showPrice ? `<p class="pick-price-line"><span class="pick-price">${escape(priceText(offer, market))}</span> <span class="pick-age">${checkedText(offer)}</span></p>`
     : '<p class="pick-price-line"><span class="pick-price pick-stale">Check current price</span></p>';
-  const button = offer ? `<a class="pick-button" href="${escape(offer.url)}" rel="sponsored nofollow noopener" target="_blank">View at ${escape(offer.sellerName ?? offer.seller)}</a>${offer.mock ? ' <span class="pb-mock">mock</span>' : ''}` : '';
+  const button = offer ? `<a class="pick-button" href="${escape(offer.url)}" rel="sponsored nofollow noopener" target="_blank" ${trackAttrs(productId, offer, market, 'pick')}>View at ${escape(offer.sellerName ?? offer.seller)}</a>${offer.mock ? ' <span class="pb-mock">mock</span>' : ''}` : '';
   const more = list.length > 1 ? `Compare ${list.length} sellers` : 'Where to buy';
   return `<section class="pick" aria-label="Our pick">
 <p class="pick-label">Our pick</p>
@@ -306,29 +263,7 @@ export function howWeWorkPage({ site, market }) {
 <h2>Buying, or not</h2>
 <p>Every guide includes a way to keep what you have. When we recommend buying, the recommendation doesn’t depend on which shop pays us.</p>
 <h2 id="disclosure">Disclosure</h2>
-<p>${escape(site.disclosure(market))}</p>
+<p>${escape(site.disclosure(market) ?? 'We don’t use affiliate links yet. When we do, this section will name the programmes and how they pay us, and every page with a link will say so before it.')}</p>
 </div>
 </article>`;
-}
-
-export function rootPage({ site }) {
-  const links = site.markets.map((m) => `<li><a href="/${m.locale}/" data-market="${m.locale}">${escape(marketLabel(m))}</a></li>`).join('');
-  return `<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>${escape(site.name)}</title>
-<link rel="stylesheet" href="/assets/site.css">
-<script src="/assets/site.js"></script>
-</head>
-<body class="chooser">
-<main class="wrap-narrow">
-<h1>${escape(site.name)}</h1>
-<p>Choose where you buy:</p>
-<ul class="chooser-list">${links}</ul>
-</main>
-</body>
-</html>
-`;
 }

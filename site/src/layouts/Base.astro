@@ -1,0 +1,94 @@
+---
+// The page shell: head (SEO, hreflang, analytics), masthead, footer. Every page uses it.
+import { site } from '../data/load.mjs';
+import Analytics from '../components/Analytics.astro';
+
+interface Props {
+  title: string;
+  description?: string;
+  path: string;                 // e.g. /en-us/guides/x/
+  market?: any;                 // absent on the root chooser
+  pageId?: string;              // guide slug, sent with analytics events
+  bodyClass?: string;
+  noindex?: boolean;
+}
+const { title, description, path, market, pageId, bodyClass, noindex } = Astro.props;
+const { data, t, SITE_URL } = await site();
+const { preview, production, markets } = data;
+const siteInfo = data.site;
+const { brandMark, navLabel, shortLabel, spokenName } = t;
+const env = import.meta.env;
+const ga4 = production ? (env.PUBLIC_GA4_ID || process.env.PUBLIC_GA4_ID || '') : '';
+const gscToken = env.PUBLIC_GSC_VERIFICATION || process.env.PUBLIC_GSC_VERIFICATION || '';
+const robots = preview || noindex ? 'noindex, nofollow' : null;
+
+// hreflang: the same page in every market that has it, plus x-default (the root chooser).
+const alternates = market
+  ? markets.map((m) => ({ m, href: path.replace(`/${market.locale}/`, `/${m.locale}/`) })).filter(({ href }) => siteInfo.pages.has(href))
+  : markets.map((m) => ({ m, href: `/${m.locale}/` }));
+const lang = market ? `${market.language}-${market.id}` : 'en';
+const ogLocale = market ? `${market.language}_${market.id}` : 'en_US';
+const switcher = market ? markets.map((m) => {
+  const target = path.replace(`/${market.locale}/`, `/${m.locale}/`);
+  return { m, href: siteInfo.pages.has(target) ? target : `/${m.locale}/` };
+}) : [];
+const disclosure = market ? siteInfo.disclosure(market) : null;
+const hasGuides = siteInfo.pages.has(`/${market?.locale}/guides/`);
+---
+<!doctype html>
+<html lang={lang}>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>{title}</title>
+{description && <meta name="description" content={description}>}
+{robots && <meta name="robots" content={robots}>}
+<link rel="canonical" href={`${SITE_URL}${path}`}>
+{alternates.map(({ m, href }) => <link rel="alternate" hreflang={`${m.language}-${m.id}`} href={`${SITE_URL}${href}`}>)}
+<link rel="alternate" hreflang="x-default" href={`${SITE_URL}/`}>
+<meta property="og:type" content={pageId ? 'article' : 'website'}>
+<meta property="og:site_name" content={siteInfo.name}>
+<meta property="og:title" content={title}>
+{description && <meta property="og:description" content={description}>}
+<meta property="og:url" content={`${SITE_URL}${path}`}>
+<meta property="og:locale" content={ogLocale}>
+<meta name="twitter:card" content="summary">
+{gscToken && <meta name="google-site-verification" content={gscToken}>}
+<meta name="color-scheme" content="light">
+<meta name="theme-color" content="#ffffff">
+<link rel="preload" href="/assets/fonts/schibsted-grotesk.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/site.css">
+<link rel="icon" href="/assets/icon.svg" type="image/svg+xml">
+{ga4 && <Analytics id={ga4} market={market?.id} pageId={pageId} />}
+</head>
+<body class={bodyClass} data-page={pageId}>
+<a class="skip" href="#main">Skip to content</a>
+{preview && <div class="preview-bar">Preview build · mock prices · not public</div>}
+{market && (
+<header class="top">
+  <div class="wrap top-inner">
+    <a class="brand" href={`/${market.locale}/`} aria-label={`${spokenName(siteInfo.name)}, home`} set:html={brandMark(siteInfo.name)} />
+    <nav class="nav" aria-label="Main">
+      {siteInfo.categories.map((c) => <a href={`/${market.locale}/${c.id}/`}>{navLabel(c)}</a>)}
+      {hasGuides && <a href={`/${market.locale}/guides/`}>All guides</a>}
+      <span class="market" role="group" aria-label="Market">
+        {switcher.map(({ m, href }) => <a href={href} hreflang={`${m.language}-${m.id}`} data-market={m.locale} aria-current={m.id === market.id ? 'true' : undefined}>{shortLabel(m)}</a>)}
+      </span>
+    </nav>
+  </div>
+</header>
+)}
+<main id="main">
+<slot />
+</main>
+{market && (
+<footer class="foot">
+  <div class="wrap">
+    {disclosure && <p class="disclosure">{disclosure}</p>}
+    <p class="foot-links"><span class="brand-inline">{siteInfo.name}</span> <a href={`/${market.locale}/how-we-work/`}>How we work</a> <a href={`/${market.locale}/how-we-work/#disclosure`}>Disclosure</a> {hasGuides && <a href={`/${market.locale}/guides/`}>All guides</a>} <a href="mailto:hello@yourcoffeesetup.com">hello@yourcoffeesetup.com</a></p>
+  </div>
+</footer>
+)}
+<script is:inline src="/assets/site.js" defer></script>
+</body>
+</html>

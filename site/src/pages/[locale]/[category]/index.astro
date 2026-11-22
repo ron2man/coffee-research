@@ -1,0 +1,15 @@
+---
+// A category page exists only once the category has enough listed guides (see categoryCounts).
+import Base from '../../../layouts/Base.astro';
+import { site } from '../../../data/load.mjs';
+
+export async function getStaticPaths() {
+  const { data } = await site();
+  return data.markets.flatMap((market) => data.site.categories.map((category) => ({ params: { locale: market.locale, category: category.id }, props: { market, category } })));
+}
+const { market, category } = Astro.props;
+const { data, t } = await site();
+---
+<Base title={`${category.label} | ${data.site.name}`} description={`Every ${data.site.name} guide about ${category.label.toLowerCase()}.`} path={`/${market.locale}/${category.id}/`} market={market}>
+  <Fragment set:html={t.guideListPage({ site: data.site, market, posts: data.listedPosts, category })} />
+</Base>

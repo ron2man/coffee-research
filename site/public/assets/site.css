@@ -208,7 +208,19 @@ th { font-weight: 700; }
 .foot a { color: #fff; }
 .foot .brand-inline { color: #fff; font-weight: 800; }
 
-.chooser main { padding-top: 5rem; } .chooser-list { font: 700 1.3rem/2.2 var(--sans); }
+/* Holding home (no guides live yet) and 404 */
+.holding { padding-top: clamp(3rem, 9vw, 7rem); padding-bottom: clamp(3rem, 9vw, 7rem); }
+.holding h1 { margin: .75rem 0 0; font: 800 clamp(2.6rem, 7.5vw, 5.4rem)/1 var(--sans); letter-spacing: -.045em; max-width: 13ch; }
+.holding h1 em { font-style: normal; color: var(--acc-text); }
+.holding-lede { margin: 1.75rem 0 0; font-size: clamp(1.1rem, 2.2vw, 1.35rem); max-width: 38ch; color: var(--ink-2); }
+.holding-list { list-style: none; padding: 0; margin: 2.25rem 0 0; border-top: 1px solid var(--line); max-width: 38rem; }
+.holding-list li { padding: .8rem 0; border-bottom: 1px solid var(--line); font-weight: 600; }
+.holding-list li::before { content: "\2192"; color: var(--acc-text); margin-right: .6rem; }
+.holding-note { margin: 2rem 0 0; color: var(--mute); max-width: 40rem; }
+.notfound { padding-top: 4rem; padding-bottom: 6rem; }
+.notfound h1 { font: 800 clamp(2rem, 5vw, 3rem)/1.1 var(--sans); letter-spacing: -.03em; }
+
+.chooser main, .chooser-main { padding-top: 5rem; } .chooser-list { font: 700 1.3rem/2.2 var(--sans); }
 @media (max-width: 40rem) {
   body { font-size: 17px; }
   .wrap, .wrap-narrow { padding-left: 1.25rem; padding-right: 1.25rem; }

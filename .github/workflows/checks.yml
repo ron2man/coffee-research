@@ -1,0 +1,22 @@
+# Tests, repo validation and both site builds on every PR and every push to main.
+# Make "checks" a required status check on main (Settings > Branches) so a broken site can't merge.
+# Deploys are not done here: Cloudflare Pages builds the site itself from the repo.
+name: checks
+on:
+  pull_request:
+  push:
+    branches: [main]
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm test
+      - run: npm run validate
+      - run: npm run site:build
+      - run: npm run site:build:production

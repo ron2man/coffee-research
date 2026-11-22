@@ -13,13 +13,16 @@
     "feedback": "FEEDBACK_TOOL=feedback node engine/feedback/cli.mjs",
     "prompt": "FEEDBACK_TOOL=prompt node engine/feedback/cli.mjs",
     "schedule": "node ops/schedule.mjs",
-    "site:build": "node site/build.mjs",
-    "site:preview": "node site/serve.mjs",
+    "site:build": "astro build --root site",
+    "site:preview": "astro dev --root site --port 4321",
     "dashboard": "node backoffice/server.mjs",
-    "seed": "node engine/state/seed-cli.mjs"
+    "seed": "node engine/state/seed-cli.mjs",
+    "site:build:production": "SITE_MODE=production astro build --root site"
   },
   "dependencies": {
+    "@astrojs/sitemap": "^3.7.6",
     "ajv": "^8.20.0",
-    "ajv-formats": "^3.0.1"
+    "ajv-formats": "^3.0.1",
+    "astro": "^7.4.13"
   }
 }
