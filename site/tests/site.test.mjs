@@ -15,7 +15,7 @@ const builds = new Map();
 function build(mode) {
   if (builds.has(mode)) return builds.get(mode);
   const outDir = mkdtempSync(join(tmpdir(), `site-${mode}-`));
-  const env = { ...process.env, SITE_MODE: mode, PUBLIC_GA4_ID: 'G-TEST000001', ASTRO_TELEMETRY_DISABLED: '1' };
+  const env = { ...process.env, SITE_MODE: mode, PUBLIC_GTM_ID: 'GTM-TEST0001', ASTRO_TELEMETRY_DISABLED: '1' };
   delete env.WORKERS_CI_BRANCH;
   execFileSync(astro, ['build', '--root', 'site', '--outDir', outDir], { cwd: repoRoot, env, stdio: 'pipe' });
   const read = (path) => readFileSync(join(outDir, path), 'utf8');
@@ -45,7 +45,7 @@ test('preview build renders both markets, the picker, a pricebox and collapsed s
   assert.match(us, /Quality reference · not published/);
 });
 
-test('preview builds never load GA4 and block crawlers', () => {
+test('preview builds never load GTM and block crawlers', () => {
   const { read } = build('preview');
   assert.doesNotMatch(read('en-us/index.html'), /googletagmanager/);
   assert.match(read('robots.txt'), /Disallow: \//);
@@ -90,13 +90,15 @@ test('home page links all guides and lists them as compact rows', () => {
   assert.match(home, /class="band-link" href="\/en-us\/how-we-work\/"/);
 });
 
-test('production with no published guides: holding homes, indexable, GA4 with consent defaults', () => {
+test('production with no published guides: holding homes, indexable, GTM with consent defaults', () => {
   const { read, has } = build('production');
   const home = read('en-us/index.html');
   assert.match(home, /Fix it, upgrade it, <em>or keep it\.<\/em>/);
   assert.doesNotMatch(home, /name="robots"/);
   assert.doesNotMatch(home, /Preview build/);
-  assert.match(home, /googletagmanager\.com\/gtag\/js\?id=G-TEST000001/);
+  assert.match(home, /googletagmanager\.com\/gtm\.js\?id=GTM-TEST0001/);
+  assert.doesNotMatch(home, /gtag\/js/);
+  assert.ok(home.indexOf("gtag('consent', 'default'") < home.indexOf('gtm.js?id='), 'consent defaults are set before GTM loads');
   assert.match(home, /analytics_storage: 'denied', region: regions/);
   assert.match(home, /<link rel="canonical" href="https:\/\/yourcoffeesetup\.com\/en-us\/">/);
   assert.match(home, /hreflang="en-GB" href="https:\/\/yourcoffeesetup\.com\/en-gb\/"/);

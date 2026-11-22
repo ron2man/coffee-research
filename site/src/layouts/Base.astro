@@ -18,7 +18,7 @@ const { preview, production, markets } = data;
 const siteInfo = data.site;
 const { brandMark, navLabel, shortLabel, spokenName } = t;
 const env = import.meta.env;
-const ga4 = production ? (env.PUBLIC_GA4_ID || process.env.PUBLIC_GA4_ID || '') : '';
+const gtm = production ? (env.PUBLIC_GTM_ID || process.env.PUBLIC_GTM_ID || '') : '';
 const gscToken = env.PUBLIC_GSC_VERIFICATION || process.env.PUBLIC_GSC_VERIFICATION || '';
 const robots = preview || noindex ? 'noindex, nofollow' : null;
 
@@ -59,7 +59,7 @@ const hasGuides = siteInfo.pages.has(`/${market?.locale}/guides/`);
 <link rel="preload" href="/assets/fonts/schibsted-grotesk.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/assets/site.css">
 <link rel="icon" href="/assets/icon.svg" type="image/svg+xml">
-{ga4 && <Analytics id={ga4} market={market?.id} pageId={pageId} />}
+{gtm && <Analytics id={gtm} market={market?.id} pageId={pageId} />}
 </head>
 <body class={bodyClass} data-page={pageId}>
 <a class="skip" href="#main">Skip to content</a>

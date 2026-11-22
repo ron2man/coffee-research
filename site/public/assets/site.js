@@ -1,5 +1,6 @@
-// Market choice (auto-detect with manual override), the Picker component, and GA4 events.
-// Events go out only when the page loaded GA4 (production with PUBLIC_GA4_ID set).
+// Market choice (auto-detect with manual override), the Picker component, and analytics events.
+// Events go to the GTM dataLayer only when the page loaded GTM (production with PUBLIC_GTM_ID set);
+// GA4 event tags in the GTM container forward them (docs/deploy.md).
 (function () {
   var KEY = 'market';
   function get() { try { return localStorage.getItem(KEY); } catch (e) { return null; } }
@@ -24,11 +25,13 @@
   });
 
   // GA4 custom events (rebuild-spec 9): affiliate_click, tool_complete, scroll_depth.
+  // Pushed as { event, params }: GTM reads params.* as data layer variables, and the nested object
+  // is replaced on every push, so one event's parameters never leak into the next.
   function track(name, params) {
-    if (typeof window.gtag !== 'function') return;
+    if (!window.dataLayer) return;
     var page = document.body.getAttribute('data-page');
     if (page) params.page_id = page;
-    window.gtag('event', name, params);
+    window.dataLayer.push({ event: name, params: params });
   }
   var toolState = {};
 

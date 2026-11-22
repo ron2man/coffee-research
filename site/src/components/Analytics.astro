@@ -1,21 +1,24 @@
 ---
-// GA4 with Consent Mode v2. Production builds only, and only when PUBLIC_GA4_ID is set
-// (Workers Builds build variable, or site/.env locally). There is no consent banner yet, so in the UK,
-// EEA and Switzerland analytics storage starts denied: GA4 gets cookieless pings and models the
-// rest. Ads signals are denied everywhere because the site runs no ads. When a banner exists it
-// calls gtag('consent', 'update', { analytics_storage: 'granted' }) after the reader agrees.
+// Google Tag Manager with Consent Mode v2. Production builds only, and only when PUBLIC_GTM_ID is
+// set (Workers Builds build variable, or site/.env locally). GA4 itself is configured inside the
+// GTM container (docs/deploy.md), not here. Consent defaults are set before GTM loads, so every tag
+// in the container sees them. There is no consent banner yet, so in the UK, EEA and Switzerland
+// analytics storage starts denied: GA4 gets cookieless pings and models the rest. Ads signals are
+// denied everywhere because the site runs no ads. When a banner exists it calls
+// gtag('consent', 'update', { analytics_storage: 'granted' }) after the reader agrees.
+// site.js pushes the custom events (affiliate_click, tool_complete, scroll_depth) to dataLayer.
 interface Props { id: string; market?: string; pageId?: string }
 const { id, market, pageId } = Astro.props;
-const config = { ...(market ? { market } : {}), ...(pageId ? { page_id: pageId } : {}) };
+const page = { ...(market ? { market } : {}), ...(pageId ? { page_id: pageId } : {}) };
 const regions = ['GB', 'CH', 'AT', 'BE', 'BG', 'HR', 'CY', 'CZ', 'DK', 'EE', 'FI', 'FR', 'DE', 'GR', 'HU', 'IE', 'IT', 'LV', 'LT', 'LU', 'MT', 'NL', 'PL', 'PT', 'RO', 'SK', 'SI', 'ES', 'SE', 'IS', 'LI', 'NO'];
 ---
-<script is:inline define:vars={{ id, config, regions }}>
+<script is:inline define:vars={{ id, page, regions }}>
   window.dataLayer = window.dataLayer || [];
   function gtag() { dataLayer.push(arguments); }
   window.gtag = gtag;
   gtag('consent', 'default', { ad_storage: 'denied', ad_user_data: 'denied', ad_personalization: 'denied', analytics_storage: 'denied', region: regions });
   gtag('consent', 'default', { ad_storage: 'denied', ad_user_data: 'denied', ad_personalization: 'denied', analytics_storage: 'granted' });
-  gtag('js', new Date());
-  gtag('config', id, config);
+  dataLayer.push(page);
+  dataLayer.push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
 </script>
-<script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${id}`}></script>
+<script is:inline async src={`https://www.googletagmanager.com/gtm.js?id=${id}`}></script>

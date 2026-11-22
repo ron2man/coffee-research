@@ -69,7 +69,7 @@ function productOffers({ site, market, productId, offers, now }) {
     list: offersFor(offers, productId, market.id, { now }).slice(0, 3),
   };
 }
-// Read by site.js for the GA4 affiliate_click event (rebuild-spec 9).
+// Read by site.js for the affiliate_click event (rebuild-spec 9).
 const trackAttrs = (productId, offer, market, position) => `data-product="${escape(productId)}" data-seller="${escape(offer.seller)}" data-market="${escape(market.id)}" data-position="${position}"`;
 const priceText = (offer, market) => formatPrice(offer.price, offer.currency, `${market.language}-${market.id}`);
 const checkedText = (offer) => `checked ${Math.max(1, Math.round(offer.ageHours))}h ago`;
