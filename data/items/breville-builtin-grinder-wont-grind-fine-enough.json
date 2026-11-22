@@ -3,11 +3,11 @@
   "id": "breville-builtin-grinder-wont-grind-fine-enough",
   "type": "new-post",
   "niche": "coffee",
-  "status": "passed",
+  "status": "briefed",
   "attempts": 0,
   "revisions": 0,
   "createdAt": "2026-11-21T17:35:36.159Z",
-  "updatedAt": "2026-11-22T14:07:41.269Z",
+  "updatedAt": "2026-11-22T15:16:32.430Z",
   "artifacts": {
     "idea": "data/ideas/breville-builtin-grinder-wont-grind-fine-enough.json",
     "idea-judge": "data/idea-scores/breville-builtin-grinder-wont-grind-fine-enough.json",
@@ -72,6 +72,13 @@
       "to": "passed",
       "by": "post-judge",
       "reason": "The draft gives the reader an ordered diagnosis based on Breville's booklets, a test they can run tonight, the correct burr direction and a clear point to stop. The top results for the query are three Home-Barista threads, and none of them offers an order of checks. They mix tips, shims and \"buy a grinder\" advice. The draft commits to one view: don't buy a grinder yet. It has a keep-yours default and a \"When I'd choose differently\" section, and it states once what the booklets don't cover. I found only small issues: two unsupported generalisations, a wrong season, and a reference to a troubleshooter tool that doesn't exist in content/tools yet. None of them blocks the post."
+    },
+    {
+      "at": "2026-11-22T15:16:32.430Z",
+      "from": "passed",
+      "to": "briefed",
+      "by": "human:ron",
+      "reason": "Keep the article and its diagnosis order. Change the ending: if after every check the shot is still too fast at setting 1, the built-in grinder is the limit. Don't buy a new machine; buy a separate grinder, and link to our grinder guide for Barista Express/Pro owners with {{guide:...}} (it doesn't exist yet). Write it once for every country: name the machines with {{product:barista-express}} / {{product:barista-pro}}, not Breville or Sage, and drop US-only wording. Don't offer the Barista Express or Pro for sale: leave offerIds empty until a grinder is researched."
     }
   ]
 }
