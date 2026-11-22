@@ -1,0 +1,40 @@
+{
+  "id": "uk-nespresso-to-beans-bean-to-cup-or-espresso-machine",
+  "seedId": "2026-11-22-seed",
+  "question": "I've used Nespresso for years and I'm tired of the taste (or the pod cost). Should I move to a bean-to-cup machine, a manual espresso machine with a grinder, or just keep my pods?",
+  "audience": "UK Nespresso owners (Original or Vertuo, including the Sage-made Nespresso models) who drink one to a few coffees a day, often lattes or flat whites, and have no grinder or barista experience. The same question applies to US Nespresso owners choosing between a super-automatic and a Breville/Sage-type machine.",
+  "market": "GB",
+  "language": "en",
+  "pain": "They want fresher, better-tasting coffee or lower running costs than pods give them, but the advice they get splits between bean-to-cup machines, manual machines and staying on pods, and nobody explains the daily routine each one involves.",
+  "decision": "Keep the capsule machine, buy a bean-to-cup machine, or buy a manual espresso machine plus a burr grinder (or a machine with a built-in grinder), based on how many drinks they make, milk vs black, tolerance for daily cleaning, and budget.",
+  "contentType": "buying-decision",
+  "demand": {
+    "kind": "qualitative",
+    "signals": [
+      {
+        "url": "https://www.mumsnet.com/talk/_chat/5427871-coffee-machine-advice-please",
+        "date": "2025-10-15",
+        "note": "Sage Nespresso owner's pump has failed. They drink one latte or flat white a day and want a machine's convenience but fresh-bean taste. Replies split between bean-to-cup (Magnifica S, Gaggia Anima) and a Barista Express."
+      },
+      {
+        "url": "https://www.mumsnet.com/talk/_chat/5433494-coffee-machines",
+        "date": "2025-10-26",
+        "note": "After about 20 years on Nespresso they're tired of the taste and ask which bean-to-cup gives barista-quality coffee and whether manual machines are better. After buying a Rivelia they were confused by its dial and by coffee that wasn't hot."
+      },
+      {
+        "url": "https://www.mumsnet.com/talk/_chat/5390852-nespresso-machine-worth-it",
+        "date": "2025-08-13",
+        "note": "Heavy coffee drinker, let down by Dolce Gusto and Tassimo, weighs a cheap Nespresso. Replies say pods are too expensive and they should go to beans, and one says their bean-to-cup sits unused because they can't make good coffee with it."
+      }
+    ]
+  },
+  "competitorGap": "The Mumsnet threads give brand-by-brand anecdotes (Rivelia, Magnifica, Sage Barista, Gaggia Classic) with no rule tying the choice to the reader's drink type or routine. Retailer 'upgrading from Nespresso' guides found in search (Clive Coffee, Complete Home Barista) assume a manual machine plus grinder and skip bean-to-cup and keeping the pods. Nobody spells out what each path costs in daily effort: hopper and grounds drawer, milk-system cleaning, descaling, dialling in.",
+  "valueAdd": "A short decision rule or quiz (drinks per day, milk or black, minutes you'll spend per morning, budget) that sends readers to one of three paths, keeping the Nespresso included. Each path gets a plain 'what your morning looks like' routine and the first-month pitfalls these posters hit, such as the grind dial and coffee not hot enough on a new bean-to-cup. All of it can be researched from manuals and owner reports without hands-on testing. 'Keep your pods' stays open for readers whose main complaint is cost and who drink one coffee a day.",
+  "commercialPath": [
+    "bean-to-cup machine",
+    "entry-level espresso machine with steam wand",
+    "espresso machine with built-in grinder",
+    "espresso-capable burr grinder"
+  ],
+  "overlapsWith": []
+}

@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "id": "uk-coffee-machine-gift-for-partner-non-coffee-drinker",
+  "type": "new-post",
+  "niche": "coffee",
+  "status": "idea",
+  "attempts": 0,
+  "revisions": 0,
+  "createdAt": "2026-11-22T14:54:50.457Z",
+  "updatedAt": "2026-11-22T14:54:50.457Z",
+  "artifacts": {
+    "idea": "data/ideas/uk-coffee-machine-gift-for-partner-non-coffee-drinker.json"
+  },
+  "history": [
+    {
+      "at": "2026-11-22T14:54:50.457Z",
+      "from": null,
+      "to": "idea",
+      "by": "idea",
+      "reason": "generated"
+    }
+  ]
+}

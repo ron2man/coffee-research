@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "id": "uk-nespresso-to-beans-bean-to-cup-or-espresso-machine",
+  "type": "new-post",
+  "niche": "coffee",
+  "status": "idea",
+  "attempts": 0,
+  "revisions": 0,
+  "createdAt": "2026-11-22T14:54:50.456Z",
+  "updatedAt": "2026-11-22T14:54:50.456Z",
+  "artifacts": {
+    "idea": "data/ideas/uk-nespresso-to-beans-bean-to-cup-or-espresso-machine.json"
+  },
+  "history": [
+    {
+      "at": "2026-11-22T14:54:50.456Z",
+      "from": null,
+      "to": "idea",
+      "by": "idea",
+      "reason": "generated"
+    }
+  ]
+}

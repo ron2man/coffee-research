@@ -1,0 +1,41 @@
+{
+  "id": "uk-coffee-machine-gift-for-partner-non-coffee-drinker",
+  "seedId": "2026-11-22-seed-2",
+  "question": "My partner loves coffee but I don't drink it. Which kind of coffee machine should I buy them as a present, or should I get something smaller instead?",
+  "audience": "UK gift buyers who don't drink coffee themselves, buying for a husband, wife, boyfriend or girlfriend who orders lattes out or is a coffee fan, usually for Christmas or a milestone birthday, with a budget from about £100 to £500. They choose between Nespresso, bean-to-cup (De'Longhi, Philips, Ninja) and Sage espresso machines.",
+  "market": "GB",
+  "language": "en",
+  "pain": "They can't judge pod vs bean-to-cup vs manual espresso machines. Replies push them in opposite directions, and they risk spending hundreds on a machine that doesn't suit how their partner drinks coffee, or that duplicates what they already own.",
+  "decision": "Which type of machine fits the recipient (pod, bean-to-cup, or espresso machine with steam wand), or whether to skip a machine and give a grinder or accessory if the partner already has a setup.",
+  "contentType": "troubleshooter-tool",
+  "demand": {
+    "kind": "qualitative",
+    "signals": [
+      {
+        "url": "https://www.mumsnet.com/talk/christmas/5451537-coffee-machine-as-a-present-i-need-help-please",
+        "date": "2025-11-28",
+        "note": "Poster who doesn't drink coffee is picking between a Nespresso Vertuo Pop and a Vertuo Next for a coffee-loving boyfriend. Replies warn about Vertuo pod costs and suggest bean-to-cup or a basic espresso machine plus grinder."
+      },
+      {
+        "url": "https://www.mumsnet.com/talk/christmas/5461398-coffee-machine-help-please",
+        "date": "2025-12-17",
+        "note": "Non-coffee-drinker with £500 wants a Christmas machine for a husband who orders lattes out. They lean to Philips or Ninja, and replies split between the Sage Barista Express (better coffee, more work) and one-button bean-to-cup machines."
+      },
+      {
+        "url": "https://www.mumsnet.com/talk/am_i_being_unreasonable/5492764-help-me-choose-coffee-machine",
+        "date": "2026-02-19",
+        "note": "Instant-coffee drinker who has never owned a machine asks which of four Argos machines to buy for a husband's 40th. Replies range across De'Longhi bean-to-cup, Sage, Gaggia Classic, Nespresso, Ninja Luxe and AeroPress."
+      }
+    ]
+  },
+  "competitorGap": "Gift guides found in search (Seattle Coffee Gear 'gifts for latte lovers who already own an espresso machine', CoffeeGeek 'espresso gifts under $50', Which? and T3 coffee-lover lists) are accessory roundups that assume the buyer knows the recipient's setup and coffee language. The Mumsnet threads show buyers who know neither, and the replies are personal brand loyalty with no question that sorts the options: does he drink milk drinks, will he tolerate a manual process, what does he already own, what are the running costs.",
+  "valueAdd": "A gift-finder for non-coffee drinkers built on questions they can answer by watching their partner (what they order out, whether they enjoy fiddling with gear, what's on the counter now, counter space, budget). It points to one machine type, or to 'don't buy a machine': a grinder or small accessory if they already own a setup, or a pod machine they'll actually use. It also explains running costs (Vertuo pods vs beans) and the one thing to check before buying (counter depth, milk-frothing method), with no hands-on testing claims.",
+  "commercialPath": [
+    "pod machine",
+    "bean-to-cup machine",
+    "espresso machine with steam wand",
+    "burr grinder",
+    "milk jug or scale accessories"
+  ],
+  "overlapsWith": []
+}

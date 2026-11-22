@@ -1,0 +1,25 @@
+{
+  "id": "2026-11-22T14-54-50-455Z-check",
+  "agent": "idea",
+  "source": "check",
+  "at": "2026-11-22T14:54:50.455Z",
+  "itemIds": [
+    "uk-nespresso-to-beans-bean-to-cup-or-espresso-machine",
+    "uk-coffee-machine-gift-for-partner-non-coffee-drinker"
+  ],
+  "findings": [
+    {
+      "severity": "minor",
+      "problem": "uk-nespresso-to-beans-bean-to-cup-or-espresso-machine: all signals come from one site (mumsnet.com)",
+      "evidence": "deterministic check",
+      "suggestion": "Address in the prompt if it recurs."
+    },
+    {
+      "severity": "minor",
+      "problem": "uk-coffee-machine-gift-for-partner-non-coffee-drinker: all signals come from one site (mumsnet.com)",
+      "evidence": "deterministic check",
+      "suggestion": "Address in the prompt if it recurs."
+    }
+  ],
+  "addressedBy": null
+}
