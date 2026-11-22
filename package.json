@@ -14,7 +14,7 @@
     "prompt": "FEEDBACK_TOOL=prompt node engine/feedback/cli.mjs",
     "schedule": "node ops/schedule.mjs",
     "site:build": "astro build --root site",
-    "site:preview": "astro dev --root site --port 4321",
+    "site:preview": "astro dev --root site --port 4321 --host 127.0.0.1",
     "dashboard": "node backoffice/server.mjs",
     "seed": "node engine/state/seed-cli.mjs",
     "site:build:production": "SITE_MODE=production astro build --root site"
