@@ -1,47 +1,46 @@
 {
   "scores": {
     "readerValueVsCompetitors": {
-      "score": 4,
-      "reason": "The top results are forum threads with scattered, conflicting tips: 'Fine' position past 1, 3 more steps on the inner burr, shim the lower burr, buy a grinder. The draft puts those into a sequence ('Go through them in order and stop at the first one that slows the shot'). It ties each step to Breville's own fast-shot causes, uses the dual-wall basket quote to explain why diagnosis needs a single-wall basket, and ends with a date-code and warranty path. A reader stuck at setting 1 comes away knowing what to do tonight. The forums can't give them that."
+      "score": 5,
+      "reason": "It gives an ordered diagnosis a reader can run tonight: the roast date, single-wall vs dual-wall basket, the cap level with the rim, and the time until the espresso starts to flow, checked against the manual's 8–12 s and 1–6 s figures. Then it cleans the burrs and moves the upper burr 'one number toward finer'. It ends with a clear rule for when to stop. The ranking forum threads mix shims, burr clash and 'buy a grinder' advice with no order, and SCG says to go coarser."
     },
     "distinctivenessVoice": {
       "score": 4,
-      "reason": "The post opens with 'Don't buy a grinder yet.' It argues against forum advice directly ('follow the ring, not the forum'), and it labels its own rule as judgement ('My rule, which is a judgement and not a Breville instruction'). Section shapes vary. 'Keep the machine' repeats the recommendation once, which is acceptable."
+      "reason": "It opens with 'Don't buy anything yet.' and keeps to one view all the way through. Its own judgements are labelled as such ('My rule, which is my judgement and not the manual's'). Sections differ in shape: a four-point test, a numbered procedure, prose. The repeated 'my judgement' labels in 'When I'd choose differently' are a little heavy."
     },
     "honestyAboutLimits": {
       "score": 5,
-      "reason": "The 'What the booklet doesn't say' paragraph covers the range, factory position, contact warning and warranty once, plainly. The owner report is framed as 'a single report, not a spec'. The parts listing is flagged as Australian and not a Breville spec. The methods section lists what was not done, with no hedging chains."
+      "reason": "A single 'What the booklet doesn't say' paragraph covers the burr range, factory position, burr-contact warning and warranty. The parts listing is labelled 'not a manufacturer spec' and the owner report 'a single report'. The methods section says the North American editions were read and other markets' editions weren't compared. The prose avoids hedging."
     },
     "evidenceIntegrity": {
-      "score": 4,
-      "reason": "The factual statements map to claims. Two lines are unsupported generalisations: 'Most people who ask this question haven't done all of them' and 'Supermarket beans without a roast date are the most common culprit'. Also, the Singletrack thread is dated Aug–Sep 2026, so 'this autumn' is not quite right. None of these is serious, but each is a statement the claims don't back."
+      "score": 5,
+      "reason": "Each statement I checked matches a claim card: the 22–33 lb tamp and cap-level dose, 16–19 g, Pro flow at 8–12 s with under 7 s meaning fast, Express at 1–6 s/20 s, and the Allen key for the shower-screen seal. The kg conversion is arithmetic. The two unsupported generalisations from the last draft are gone."
     },
     "topicFit": {
       "score": 5,
-      "reason": "The post delivers the brief's thesis and every mustInclude item: dial ranges, tonight test, FINE direction against SCG's coarser advice, cleaning before moving the burr, PDC part codes, owner report, green-bean warning, and the choose-differently cases. It respects leaveOut: no '6' default, no shims, no grinder picks, no prices."
+      "reason": "It answers the brief's question directly (adjust the upper burr, replace it, or buy a grinder) for a beginner Express or Pro owner already at setting 1. It follows the leave-out list: no '6' default, no shims, no grinder picks, no prices. It ends on the owner's required outcome: a separate grinder, not a new machine."
     }
   },
   "wouldForward": true,
   "competitorComparison": [
     {
-      "url": "https://www.home-barista.com/repairs/breville-barista-express-does-not-grind-enough-t86594.html",
-      "weGiveThatTheyDont": "An ordered set of checks (beans, basket, dose, timing, clean, upper burr) with Breville's own numbers for each, plus a stopping rule for when to buy a grinder. The thread offers the advice to adjust the inner burr if there's no clash, but no sequence and no manufacturer sourcing."
+      "url": "https://www.home-barista.com/espresso-machines/even-at-grind-size-1-barista-express-still-gushes-what-am-i-missing-t101609.html",
+      "weGiveThatTheyDont": "An order of checks based on the manual, with numbers. It rules out beans, the dual-wall basket and dose before touching the burr, and gives the timing figures to check against, where the thread offers scattered replies."
     },
     {
-      "url": "https://www.home-barista.com/espresso-machines/breville-barista-express-not-grinding-enough-coffee-t91683.html",
-      "weGiveThatTheyDont": "The dual-wall basket warning and the tamper-cap dose check, which rule out non-grind causes before anyone touches the burr. The draft also tells the reader that Breville documents the upper burr as an owner feature, which settles the 'don't touch it' argument."
+      "url": "https://www.seattlecoffeegear.com/blogs/scg-blog/adjusting-the-top-burr-on-the-breville-barista-express",
+      "weGiveThatTheyDont": "The correct direction (toward FINE for fast shots, where SCG says coarser). It also adds the checks to do before touching the burr, an honest note on what isn't documented, the date-code parts check, the step of contacting the manufacturer, and a point at which to stop."
     },
     {
-      "url": "https://www.home-barista.com/tips/barista-express-extraction-too-fast-t55122-20.html",
-      "weGiveThatTheyDont": "A date-code check for the correct replacement burr part, a tip to contact Breville under the warranty's 'function' clause before buying, and an explicit keep-the-machine default. The thread drifts toward shims and grinder upgrades."
+      "url": "https://www.home-barista.com/espresso-machines/cant-get-breville-sage-barista-to-grind-fine-enough-t100955.html",
+      "weGiveThatTheyDont": "A single committed answer: a keep-yours default, one burr step at a time, and a clear threshold for buying a separate grinder rather than a new machine. Forum replies split between modding, shimming and upgrading."
     }
   ],
   "blockingActions": [],
   "optionalImprovements": [
-    "Cut or source 'Most people who ask this question haven't done all of them' and 'Supermarket beans without a roast date are the most common culprit'. No claim supports either one. Recast them as judgement ('in my experience of these threads…') or remove them.",
-    "Change 'this autumn' to 'in August 2026' or 'this year'. The thread is from Aug–Sep.",
-    "The body says 'The troubleshooter on this page walks through the same questions', but there is no grind-fault-tree in content/tools/ yet. Make sure the tool ships with the post, or cut the sentence before publishing.",
-    "Forum results say the Express dial has a 'Fine' mark one step past 1. If the booklet shows it, a short line would help readers who think 1 is the end of the dial. Add it only once research supports it.",
-    "Make sure the 'How this guide was put together' section renders collapsed, as the style guide requires."
+    "Before publishing, write {{guide:grinder-for-barista-express-and-pro}} or swap the link out. Right now the ending points to a guide that doesn't exist.",
+    "Build grind-fault-tree and upper-burr-direction-diagram in content/tools, or remove them from the tools field, so the layout doesn't render missing assets.",
+    "Cut one of the three 'my judgement' labels in 'When I'd choose differently'. Once in the section intro would do.",
+    "Once someone asks support about replacement burrs outside Australia, replace the Australian-only listing with something that works in every market."
   ]
 }

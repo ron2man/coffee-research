@@ -3,11 +3,11 @@
   "id": "breville-builtin-grinder-wont-grind-fine-enough",
   "type": "new-post",
   "niche": "coffee",
-  "status": "drafted",
+  "status": "passed",
   "attempts": 0,
   "revisions": 0,
   "createdAt": "2026-11-21T17:35:36.159Z",
-  "updatedAt": "2026-11-22T15:26:52.297Z",
+  "updatedAt": "2026-11-22T15:35:04.473Z",
   "artifacts": {
     "idea": "data/ideas/breville-builtin-grinder-wont-grind-fine-enough.json",
     "idea-judge": "data/idea-scores/breville-builtin-grinder-wont-grind-fine-enough.json",
@@ -86,6 +86,13 @@
       "to": "drafted",
       "by": "writer",
       "reason": "I revised the draft to follow the owner's notes and kept the article and its order of checks. The ending now says that if every check is done and the manufacturer can't fix it, the built-in grinder is the limit. The advice is to buy a separate grinder, not a new machine. That points to {{guide:grinder-for-barista-express-and-pro|…}}, a slug I chose because the guide doesn't exist yet. Machines are named with {{product:}} tokens. \"Breville\" and \"US booklet\" are gone from the advice; I say \"the manual\" or \"the manufacturer\" instead. The methods section says once which booklet editions were read and that other markets' editions weren't compared. offerIds is empty because no grinder has been researched yet. I also applied the judge's optional fixes. I cut the two generalisations no claim supports ('most people who ask…' and 'supermarket beans… most common culprit'). 'This autumn' is now 'in August 2026'. I removed the sentence pointing to an on-page troubleshooter, because content/tools has no grind-fault-tree yet. The tools field still lists the brief's two assets, so whoever publishes this should build those tools or drop them. I added a rough kg conversion next to the lb tamp figure so it reads in every market."
+    },
+    {
+      "at": "2026-11-22T15:35:04.473Z",
+      "from": "drafted",
+      "to": "passed",
+      "by": "post-judge",
+      "reason": "The revision makes the changes the owner asked for, and nothing it was already good at has slipped. The order of checks is unchanged. The ending now settles the decision: \"the built-in grinder is the limit. Don't replace the whole machine... Buy a separate espresso grinder\", with a link to the grinder guide. Machines are named with {{product:}} tokens and offerIds is empty, as the owner instructed. The top results for the query are Home-Barista threads and the Seattle Coffee Gear top-burr post. None of them gives an order of checks, explains why the pressurised basket hides the grind problem, gives the correct burr direction, or says when to stop. The claims I spot-checked (tamp figure and cap-level dose, the Pro's flow timing, the Allen key being for the shower-screen seal) match the knowledge cards. Before publishing, two links need to resolve: the grinder guide slug and the two listed tools don't exist yet."
     }
   ]
 }
