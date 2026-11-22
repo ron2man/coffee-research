@@ -1,0 +1,18 @@
+{
+  "id": "2026-11-22T16-09-58-657Z-check",
+  "agent": "writer",
+  "source": "check",
+  "at": "2026-11-22T16:09:58.657Z",
+  "itemIds": [
+    "breville-builtin-grinder-wont-grind-fine-enough"
+  ],
+  "findings": [
+    {
+      "severity": "major",
+      "problem": "breville-builtin-grinder-wont-grind-fine-enough: claims first-hand testing (\"hands-on\") without human data",
+      "evidence": "deterministic check (run rejected)",
+      "suggestion": "Fix in the prompt so the agent stops producing this."
+    }
+  ],
+  "addressedBy": null
+}
