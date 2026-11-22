@@ -16,7 +16,7 @@ function build(mode) {
   if (builds.has(mode)) return builds.get(mode);
   const outDir = mkdtempSync(join(tmpdir(), `site-${mode}-`));
   const env = { ...process.env, SITE_MODE: mode, PUBLIC_GA4_ID: 'G-TEST000001', ASTRO_TELEMETRY_DISABLED: '1' };
-  delete env.CF_PAGES_BRANCH;
+  delete env.WORKERS_CI_BRANCH;
   execFileSync(astro, ['build', '--root', 'site', '--outDir', outDir], { cwd: repoRoot, env, stdio: 'pipe' });
   const read = (path) => readFileSync(join(outDir, path), 'utf8');
   const result = { outDir, read, has: (path) => existsSync(join(outDir, path)) };
@@ -26,9 +26,9 @@ function build(mode) {
 test.after(() => { for (const { outDir } of builds.values()) rmSync(outDir, { recursive: true, force: true }); });
 
 test('build mode: SITE_MODE wins, then the Cloudflare branch, else preview', () => {
-  assert.equal(siteMode({ SITE_MODE: 'production', CF_PAGES_BRANCH: 'feature' }), 'production');
-  assert.equal(siteMode({ CF_PAGES_BRANCH: 'main' }), 'production');
-  assert.equal(siteMode({ CF_PAGES_BRANCH: 'site/astro' }), 'preview');
+  assert.equal(siteMode({ SITE_MODE: 'production', WORKERS_CI_BRANCH: 'feature' }), 'production');
+  assert.equal(siteMode({ WORKERS_CI_BRANCH: 'main' }), 'production');
+  assert.equal(siteMode({ WORKERS_CI_BRANCH: 'site/astro' }), 'preview');
   assert.equal(siteMode({}), 'preview');
 });
 

@@ -1,6 +1,6 @@
 # Tests, repo validation and both site builds on every PR and every push to main.
 # Make "checks" a required status check on main (Settings > Branches) so a broken site can't merge.
-# Deploys are not done here: Cloudflare Pages builds the site itself from the repo.
+# Deploys are not done here: Cloudflare Workers Builds builds and deploys the site from the repo.
 name: checks
 on:
   pull_request:

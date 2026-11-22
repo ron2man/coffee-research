@@ -15,12 +15,12 @@ export const repoRoot = resolve(siteDir, '..');
 export const SITE_URL = 'https://yourcoffeesetup.com';
 
 /**
- * Build mode. SITE_MODE wins; on Cloudflare Pages the production branch builds production and
- * every other branch (PR previews) builds preview; local builds default to preview.
+ * Build mode. SITE_MODE wins; on Cloudflare Workers Builds the production branch builds production
+ * and every other branch (PR previews) builds preview; local builds default to preview.
  */
 export function siteMode(env = process.env) {
   if (env.SITE_MODE === 'production' || env.SITE_MODE === 'preview') return env.SITE_MODE;
-  if (env.CF_PAGES_BRANCH) return env.CF_PAGES_BRANCH === 'main' ? 'production' : 'preview';
+  if (env.WORKERS_CI_BRANCH) return env.WORKERS_CI_BRANCH === 'main' ? 'production' : 'preview';
   return 'preview';
 }
 

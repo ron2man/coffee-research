@@ -5,6 +5,7 @@
   "publicPaths": [
     "content/published/",
     "site/",
-    "data/offers/"
+    "data/offers/",
+    "wrangler.jsonc"
   ]
 }

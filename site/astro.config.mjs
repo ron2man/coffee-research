@@ -1,6 +1,6 @@
 // Astro config for yourcoffeesetup.com. Build from the repo root: `npm run site:build`.
 // Mode (preview or production) comes from lib/site-data.mjs: SITE_MODE, else the
-// Cloudflare Pages branch (main = production, anything else = preview), else preview.
+// Workers Builds branch (main = production, anything else = preview), else preview.
 import { rmSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'astro/config';

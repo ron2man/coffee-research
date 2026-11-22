@@ -1,4 +1,4 @@
-# Cloudflare Pages response headers.
+# Response headers for the Worker's static assets (Workers Static Assets _headers).
 /*
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
@@ -11,6 +11,7 @@
 /assets/fonts/*
   Cache-Control: public, max-age=31536000, immutable
 
-# Preview and branch deploys on *.pages.dev must never be indexed: only yourcoffeesetup.com is.
-https://:project.pages.dev/*
+# workers.dev addresses (branch Previews, deployment URLs, the Worker's own subdomain) must never be
+# indexed: only yourcoffeesetup.com is.
+https://:worker.:subdomain.workers.dev/*
   X-Robots-Tag: noindex
