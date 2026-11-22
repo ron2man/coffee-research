@@ -16,6 +16,8 @@
     { "pattern": "www.yourcoffeesetup.com", "custom_domain": true }
   ],
   "observability": { "enabled": true },
+  // Branch Previews answer on <branch>-yourcoffeesetup.<subdomain>.workers.dev (noindex).
+  "preview_urls": true,
   // Required by `wrangler preview` (branch Previews on *.workers.dev). Empty: Previews need no
   // bindings, and production routes stay at the top level and never apply to Previews.
   "previews": {}
