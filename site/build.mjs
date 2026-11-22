@@ -11,9 +11,9 @@ import { fileURLToPath } from 'node:url';
 import { parseArgs } from 'node:util';
 import { defaultNicheId, loadNiche, categoryIds } from '../engine/state/niche.mjs';
 import { loadCardsSync } from '../engine/state/knowledge.mjs';
-import { collectPosts, loadTools } from './lib/content.mjs';
+import { categoryCounts, collectPosts, listed, loadTools } from './lib/content.mjs';
 import { loadOffers, mockOffers } from './lib/offers.mjs';
-import { homePage, howWeWorkPage, layout, postPage, postPath, rootPage } from './lib/templates.mjs';
+import { guideListPage, homePage, howWeWorkPage, layout, postPage, postPath, rootPage } from './lib/templates.mjs';
 
 const here = dirname(fileURLToPath(import.meta.url));
 export const repoRoot = resolve(here, '..');
@@ -49,6 +49,8 @@ export function buildSite({ root = repoRoot, production = false, now = Date.now(
   // Every post is available in every market: a post written for another market gets a notice,
   // and its PriceBox shows that market's offers (or says the product isn't sold there).
   for (const post of posts) post.markets = markets.map((m) => m.id);
+  // A guide's category: its front matter, else the category of its first product's card.
+  for (const post of posts) post.category = post.category ?? cards.get(post.productIds[0])?.card?.category ?? null;
   const productIds = [...new Set(posts.flatMap((p) => p.productIds))];
   const mockPrices = join(here, 'mock-prices.json');
   const offers = preview
@@ -57,11 +59,14 @@ export function buildSite({ root = repoRoot, production = false, now = Date.now(
   const tools = loadTools(root);
 
   const pages = new Map();
-  const site = { name: niche.name, markets, cards, tools, disclosure, pages, mock: preview ? loadMock() : null };
+  const categories = categoryCounts(niche.categories ?? [], posts);
+  const site = { name: niche.name, markets, cards, tools, disclosure, pages, categories, allCategories: niche.categories ?? [], mock: preview ? loadMock() : null };
   const plan = [];
   for (const market of markets) {
     plan.push({ path: `/${market.locale}/`, market, kind: 'home' });
     plan.push({ path: `/${market.locale}/how-we-work/`, market, kind: 'how' });
+    plan.push({ path: `/${market.locale}/guides/`, market, kind: 'list' });
+    for (const category of categories) plan.push({ path: `/${market.locale}/${category.id}/`, market, kind: 'list', category });
     for (const post of posts.filter((p) => p.markets.includes(market.id))) plan.push({ path: postPath(market, post.slug), market, kind: 'post', post });
   }
   for (const entry of plan) pages.set(entry.path, null);
@@ -75,6 +80,11 @@ export function buildSite({ root = repoRoot, production = false, now = Date.now(
       title = `${niche.name}: straight answers for home espresso`;
       description = 'One clear recommendation, a test for what you already own, and when to buy nothing.';
       body = homePage({ site, market, posts });
+    } else if (entry.kind === 'list') {
+      const label = entry.category?.label ?? 'All guides';
+      title = `${label} | ${niche.name}`;
+      description = entry.category ? `Every ${niche.name} guide about ${label.toLowerCase()}.` : `Every ${niche.name} guide, newest first.`;
+      body = guideListPage({ site, market, posts: posts.filter(listed), category: entry.category });
     } else if (entry.kind === 'how') {
       title = `How we work | ${niche.name}`;
       description = 'Where our topics come from, what we check, and what we never claim.';

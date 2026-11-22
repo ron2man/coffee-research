@@ -58,7 +58,7 @@ a:focus-visible, button:focus-visible, summary:focus-visible { outline: 3px soli
 .band { margin-top: 4.5rem; }
 .band-inner { background: var(--acc); color: #fff; padding: 3rem 2.5rem; display: flex; flex-wrap: wrap; gap: 1.5rem 4rem; align-items: flex-end; }
 .band h2 { margin: 0; flex: 1 1 20rem; font: 800 clamp(2.4rem, 5vw, 3.5rem)/1 var(--sans); letter-spacing: -.035em; }
-.band p { margin: 0; flex: 1 1 24rem; font-size: 1.2rem; }
+.band p { font-size: 1.2rem; }
 .principles { display: grid; gap: 2rem 3.5rem; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); padding-top: 4.5rem; padding-bottom: 5rem; }
 .principles > div { border-top: 2px solid var(--fg); padding-top: .9rem; }
 .principles h3 { margin: 0 0 .4rem; font: 800 1.2rem/1.2 var(--sans); }
@@ -73,6 +73,30 @@ figcaption, .photo-credit { margin-top: .5rem; font-size: 13px; color: var(--mut
 .feature-photo img { display: block; width: 100%; height: 32.5rem; object-fit: cover; }
 .post-photo { margin-top: 1.5rem; }
 .post-photo img { display: block; width: 100%; height: clamp(10rem, 17vw, 13rem); object-fit: cover; }
+
+/* Compact guide rows, category tiles, list pages */
+.section-head a { font-size: 15px; font-weight: 600; }
+.guide-rows { list-style: none; margin: 0; padding: 0; }
+.guide-rows a { display: grid; grid-template-columns: 8.5rem minmax(0, 1fr) 7rem; gap: .25rem 1.5rem; align-items: baseline; padding: 1rem 0; border-bottom: 1px solid var(--line); text-decoration: none; }
+.gr-tag { font-size: 13px; font-weight: 700; color: var(--acc-text); }
+.gr-title { display: block; font-size: 1.2rem; font-weight: 700; line-height: 1.25; letter-spacing: -.01em; }
+.guide-rows a:hover .gr-title { text-decoration: underline; text-decoration-color: var(--acc); }
+.gr-summary { display: block; margin-top: .2rem; font-size: 15px; color: var(--ink-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.gr-date { font-size: 14px; color: var(--mute); text-align: right; }
+.categories { margin-top: 1rem; }
+.tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); gap: .75rem; margin-top: 1rem; }
+.tile { display: flex; flex-direction: column; justify-content: space-between; gap: .5rem; min-height: 7.5rem; padding: 1.3rem; background: var(--surface); text-decoration: none; }
+.tile:hover { background: var(--fg); color: var(--bg); }
+.tile-title { font-size: 1.5rem; font-weight: 800; letter-spacing: -.02em; } .tile-count { font-size: 15px; }
+.band-text { flex: 1 1 24rem; } .band-text p { margin: 0; }
+.band-link { display: inline-flex; align-items: center; min-height: 44px; margin-top: 1rem; padding: 0 1.1rem; background: #fff; color: var(--fg); text-decoration: none; font-weight: 700; border-radius: 2px; }
+.band-link:hover { background: var(--fg); color: #fff; }
+.band-gap { height: 5rem; }
+.list-page { padding-top: 3rem; padding-bottom: 5rem; }
+.list-title { margin: 0; font: 800 clamp(2.2rem, 5vw, 3.4rem)/1.05 var(--sans); letter-spacing: -.035em; }
+.list-page .meta { margin-bottom: 1.5rem; }
+.foot-links { display: flex; flex-wrap: wrap; gap: .5rem 1.5rem; align-items: baseline; }
+.foot-links .brand-inline { margin-right: auto; }
 
 /* Post: title beside summary, shorter photo, reading column (~70 characters) + sticky sidebar */
 .post { padding-top: 2rem; padding-bottom: 5rem; }
@@ -193,5 +217,7 @@ th { font-weight: 700; }
   .prose .lead { font-size: 1.35rem; }
   .feature-photo img { height: auto; aspect-ratio: 4 / 3; }
   .post-photo img { height: auto; aspect-ratio: 16 / 9; }
-  .answer-photo { flex-basis: 5.5rem; width: 5.5rem; height: 5.5rem; }
+  .guide-rows a { grid-template-columns: minmax(0, 1fr); }
+  .gr-date { text-align: left; order: -1; }
+  .gr-summary { white-space: normal; }
 }

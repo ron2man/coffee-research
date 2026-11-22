@@ -6,6 +6,7 @@ import { join } from 'node:path';
 import { buildSite, repoRoot } from '../build.mjs';
 import { offersFor, mockOffers } from '../lib/offers.mjs';
 import { parseMarkdown } from '../lib/markdown.mjs';
+import { categoryCounts } from '../lib/content.mjs';
 
 function out(t) {
   const dir = mkdtempSync(join(tmpdir(), 'site-'));
@@ -47,6 +48,23 @@ test('sidebar pick shows the same product and price as the PriceBox', (t) => {
   assert.match(row, new RegExp(`class="pb-name">${pickName}<`));
   assert.match(row, new RegExp(`class="pb-price">${pickPrice.replace(/[$.]/g, '\\$&')}<`));
   assert.match(us, /href="#buy-baratza-encore-esp-pro">Jump to the pick</);
+});
+
+test('a category reaches the nav only with three listed guides', () => {
+  const cats = [{ id: 'machines', label: 'Home espresso machines' }, { id: 'grinders', label: 'Grinders' }];
+  const post = (category, supersededBy) => ({ category, supersededBy });
+  const counted = categoryCounts(cats, [post('machines'), post('machines'), post('machines'), post('grinders'), post('grinders'), post('grinders', 'newer-guide')]);
+  assert.deepEqual(counted.map((c) => [c.id, c.count]), [['machines', 3]]);
+});
+
+test('home page links all guides and lists them as compact rows', (t) => {
+  const outDir = out(t);
+  const result = buildSite({ root: repoRoot, outDir });
+  assert.ok(result.pages.includes('/en-us/guides/'));
+  const home = readFileSync(join(outDir, 'en-us/index.html'), 'utf8');
+  assert.match(home, /<a href="\/en-us\/guides\/">All guides<\/a>/);
+  assert.doesNotMatch(home, /class="nav"[\s\S]*?How we work[\s\S]*?<\/nav>/, 'How we work lives in the footer, not the nav');
+  assert.match(home, /class="band-link" href="\/en-us\/how-we-work\/"/);
 });
 
 test('production build refuses to ship without verified disclosures', (t) => {

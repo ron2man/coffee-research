@@ -21,6 +21,35 @@ function mockPhoto(img, cls) {
 }
 const pick = (list, key) => (list?.length ? list[[...key].reduce((h, c) => (h * 31 + c.charCodeAt(0)) >>> 0, 7) % list.length] : null);
 const postPhoto = (site, slug) => (site.mock ? site.mock.posts.get(slug) ?? pick(site.mock.wide, slug) : null);
+// Short nav labels: "Home espresso machines" → "Machines".
+const navLabel = (category) => category.nav ?? category.label.replace(/^home espresso /i, '').replace(/^./, (c) => c.toUpperCase());
+const categoryLabel = (site, id) => site.allCategories?.find((c) => c.id === id)?.label ?? null;
+function dateLabel(post, market) {
+  if (!post.updatedAt) return post.status === 'published' ? '' : 'Draft';
+  const d = new Date(`${post.updatedAt}T12:00:00Z`);
+  return Number.isNaN(d.getTime()) ? escape(post.updatedAt) : new Intl.DateTimeFormat(`${market.language}-${market.id}`, { day: 'numeric', month: 'short', year: 'numeric' }).format(d);
+}
+const byDate = (a, b) => (b.updatedAt ?? '').localeCompare(a.updatedAt ?? '');
+
+/** Compact guide rows: tag, title, one-line summary, date. */
+export function guideRows({ site, market, posts }) {
+  if (!posts.length) return '<p class="empty">No guides here yet.</p>';
+  return `<ol class="guide-rows">${posts.map((post) => `<li><a href="${postPath(market, post.slug)}">
+<span class="gr-tag">${escape(navLabel({ label: categoryLabel(site, post.category) ?? post.type }))}${STATUS_BADGE[post.status] ? ' · preview' : ''}</span>
+<span class="gr-main"><span class="gr-title">${escape(post.title)}</span><span class="gr-summary">${escape(post.description)}</span></span>
+<span class="gr-date">${dateLabel(post, market)}</span>
+</a></li>`).join('')}</ol>`;
+}
+
+export function guideListPage({ site, market, posts, category }) {
+  const list = posts.filter((p) => p.markets.includes(market.id) && (!category || p.category === category.id)).sort(byDate);
+  return `<section class="wrap list-page">
+<h1 class="list-title">${escape(category ? navLabel(category) : 'All guides')}</h1>
+<p class="meta">${list.length} ${list.length === 1 ? 'guide' : 'guides'}, newest first</p>
+${guideRows({ site, market, posts: list })}
+</section>`;
+}
+
 const spokenName = (name) => (/\s/.test(name) ? name : nameParts(name).join(' '));
 
 const STATUS_BADGE = {
@@ -54,8 +83,8 @@ ${preview ? '<div class="preview-bar">Preview build · mock prices · not public
   <div class="wrap top-inner">
     <a class="brand" href="/${market.locale}/" aria-label="${escape(spokenName(site.name))}, home">${brandMark(site.name)}</a>
     <nav class="nav" aria-label="Main">
-      <a href="/${market.locale}/#guides">Guides</a>
-      <a href="/${market.locale}/how-we-work/">How we work</a>
+      ${site.categories.map((c) => `<a href="/${market.locale}/${c.id}/">${escape(navLabel(c))}</a>`).join('')}
+      <a href="/${market.locale}/guides/">All guides</a>
       <span class="market" role="group" aria-label="Market">${switcher}</span>
     </nav>
   </div>
@@ -66,7 +95,7 @@ ${body}
 <footer class="foot">
   <div class="wrap">
     <p class="disclosure">${escape(site.disclosure(market))}</p>
-    <p><span class="brand-inline">${escape(site.name)}</span> · Straight answers, including when to buy nothing. · <a href="/${market.locale}/how-we-work/">How we work</a></p>
+    <p class="foot-links"><span class="brand-inline">${escape(site.name)}</span> <a href="/${market.locale}/how-we-work/">How we work</a> <a href="/${market.locale}/how-we-work/#disclosure">Disclosure</a> <a href="/${market.locale}/guides/">All guides</a></p>
   </div>
 </footer>
 <script src="/assets/site.js" defer></script>
@@ -224,11 +253,10 @@ ${pick || toc ? `<aside class="post-rail" aria-label="Guide tools"><div class="r
 }
 
 export function homePage({ site, market, posts }) {
-  // Archived pilot drafts stay reachable by URL in previews but are left off the home list.
-  const local = posts.filter((p) => p.markets.includes(market.id) && p.status !== 'archived');
+  // Superseded drafts stay reachable by URL in previews but are left off the home lists.
+  const local = posts.filter((p) => p.markets.includes(market.id) && !p.supersededBy);
   const kicker = (post) => `${escape(post.type)}${STATUS_BADGE[post.status] ? ' · preview' : ''}${post.market !== market.id ? ` · written for ${escape(shortLabel(site.markets.find((m) => m.id === post.market) ?? market))}` : ''}`;
   const [lead, ...rest] = local;
-  const thumbs = site.mock?.thumbs ?? [];
   const feature = lead ? `<div class="feature">
 <div class="feature-main">
 <p class="kicker">${kicker(lead)}</p>
@@ -240,35 +268,28 @@ export function homePage({ site, market, posts }) {
 </div>
 </div>
 ${mockPhoto(site.mock?.home ?? postPhoto(site, lead.slug), 'feature-photo')}` : '<p class="empty">No guides for this market yet.</p>';
-  const rows = rest.map((post, i) => {
-    const thumb = thumbs.length ? thumbs[i % thumbs.length] : null;
-    return `<li class="answer"><a href="${postPath(market, post.slug)}">
-${thumb ? `<img class="answer-photo" src="/assets/mock/${escape(thumb.file)}" alt="${escape(thumb.alt)}">` : ''}
-<span class="answer-body">
-<span class="kicker">${kicker(post)}</span>
-<span class="answer-title">${escape(post.title)}</span>
-<span class="answer-text">${escape(post.description)}</span>
-</span>
-</a></li>`;
-  }).join('');
-  const thumbCredit = rows && thumbs.length ? `<p class="photo-credit">Thumbnails: ${escape([...new Set(thumbs.slice(0, rest.length).map((t) => t.credit.replace(/ on Unsplash$/, '')))].join(', '))} on Unsplash. Mock images for the preview.</p>` : '';
+  const latest = rest.sort(byDate).slice(0, 8);
+  const tiles = site.categories.map((c) => `<a class="tile" href="/${market.locale}/${c.id}/"><span class="tile-title">${escape(navLabel(c))}</span><span class="tile-count">${c.count} guides</span></a>`).join('');
   return `<section class="wrap" id="guides" aria-labelledby="guides-title">
 <h1 class="intro" id="guides-title">Straight answers for home espresso in the ${escape(shortLabel(market))}. Including when to buy nothing.</h1>
 ${feature}
-${rows ? `<div class="section-head"><h2 class="section-title">More answers</h2></div>
-<ul class="answer-list">${rows}</ul>${thumbCredit}` : ''}
+${latest.length ? `<div class="section-head"><h2 class="section-title">Latest guides</h2><a href="/${market.locale}/guides/">All guides</a></div>
+${guideRows({ site, market, posts: latest })}` : ''}
 </section>
+${tiles ? `<section class="wrap categories" aria-labelledby="cat-title">
+<div class="section-head"><h2 class="section-title" id="cat-title">Browse by category</h2></div>
+<div class="tiles">${tiles}</div>
+</section>` : ''}
 <section class="wrap band" aria-label="Keep what you have">
 <div class="band-inner">
 <h2>Keep yours first.</h2>
+<div class="band-text">
 <p>Every guide has a test you can run on the gear you already own. If it passes, you keep your money.</p>
+<a class="band-link" href="/${market.locale}/how-we-work/">How we work</a>
+</div>
 </div>
 </section>
-<section class="wrap principles" aria-label="How we work">
-<div><h3>One opinion</h3><p>Every guide starts with what we’d do, then says when we’d choose differently.</p></div>
-<div><h3>No fake testing</h3><p>We say what we read and what we didn’t test. Measurements only appear when a named person took them.</p></div>
-<div><h3>Keep yours</h3><p>Each guide has a path for keeping the gear you already own, and a test to tell if you should.</p></div>
-</section>`;
+<div class="band-gap"></div>`;
 }
 
 export function howWeWorkPage({ site, market }) {
@@ -284,6 +305,7 @@ export function howWeWorkPage({ site, market }) {
 <p>We don’t claim to have tested products. When a guide includes a measurement or a photo of our own, it names who took it and when.</p>
 <h2>Buying, or not</h2>
 <p>Every guide includes a way to keep what you have. When we recommend buying, the recommendation doesn’t depend on which shop pays us.</p>
+<h2 id="disclosure">Disclosure</h2>
 <p>${escape(site.disclosure(market))}</p>
 </div>
 </article>`;

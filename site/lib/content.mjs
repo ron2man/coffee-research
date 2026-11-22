@@ -27,6 +27,7 @@ function fromMarkdown(root, dir, name, status) {
     market: data.market ?? 'US',
     language: data.language ?? 'en',
     type: data.type ?? 'Guide',
+    category: data.category ?? null,
     productIds: data.productIds ?? [],
     tools: data.tools ?? [],
     updatedAt: data.updatedAt ?? data.publishedAt ?? null,
@@ -42,7 +43,7 @@ function fromWriterDraft(root, name) {
   const draft = JSON.parse(readFileSync(join(root, 'content/drafts', name), 'utf8'));
   return {
     slug: draft.slug, title: draft.title, description: draft.description, market: draft.market, language: draft.language,
-    type: 'Draft', productIds: draft.productIds ?? [], tools: draft.tools ?? [], updatedAt: null, disclosure: true,
+    type: 'Draft', category: draft.category ?? null, productIds: draft.productIds ?? [], tools: draft.tools ?? [], updatedAt: null, disclosure: true,
     humanData: draft.humanData ?? [], body: draft.body, status: 'draft', source: `content/drafts/${name}`,
   };
 }
@@ -62,8 +63,11 @@ export function collectPosts(root, { preview = false } = {}) {
   if (preview) {
     posts.push(...list(join(root, 'content/drafts'), '.json').map((n) => fromWriterDraft(root, n)));
     posts.push(...list(join(root, 'content/reference'), '.md').map((n) => fromMarkdown(root, 'content/reference', n, 'reference')));
+    const supersededFile = join(root, 'content/archive/superseded.json');
+    const superseded = existsSync(supersededFile) ? JSON.parse(readFileSync(supersededFile, 'utf8')) : {};
     posts.push(...list(join(root, 'content/archive/drafts'), '.md').filter((n) => archivedPassed(root, n))
-      .map((n) => fromMarkdown(root, 'content/archive/drafts', n, 'archived')));
+      .map((n) => fromMarkdown(root, 'content/archive/drafts', n, 'archived'))
+      .map((post) => (superseded[post.slug] ? { ...post, supersededBy: superseded[post.slug] } : post)));
   }
   const seen = new Set();
   return posts.filter((post) => {
@@ -72,6 +76,19 @@ export function collectPosts(root, { preview = false } = {}) {
     seen.add(post.slug);
     return true;
   });
+}
+
+/** Guides listed on the home page, in guide lists and in counts. Superseded drafts stay reachable by URL only. */
+export const listed = (post) => !post.supersededBy;
+
+/**
+ * Categories that have earned a place in the nav and the category tiles: at least `min` listed
+ * guides. A category with one guide looks abandoned, so it stays out until it qualifies.
+ */
+export function categoryCounts(categories, posts, min = 3) {
+  return categories
+    .map((c) => ({ ...c, count: posts.filter((p) => listed(p) && p.category === c.id).length }))
+    .filter((c) => c.count >= min);
 }
 
 export function loadTools(root) {
