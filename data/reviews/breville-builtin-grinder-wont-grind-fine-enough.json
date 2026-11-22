@@ -1,0 +1,47 @@
+{
+  "scores": {
+    "readerValueVsCompetitors": {
+      "score": 4,
+      "reason": "The top results are forum threads with scattered, conflicting tips: 'Fine' position past 1, 3 more steps on the inner burr, shim the lower burr, buy a grinder. The draft puts those into a sequence ('Go through them in order and stop at the first one that slows the shot'). It ties each step to Breville's own fast-shot causes, uses the dual-wall basket quote to explain why diagnosis needs a single-wall basket, and ends with a date-code and warranty path. A reader stuck at setting 1 comes away knowing what to do tonight. The forums can't give them that."
+    },
+    "distinctivenessVoice": {
+      "score": 4,
+      "reason": "The post opens with 'Don't buy a grinder yet.' It argues against forum advice directly ('follow the ring, not the forum'), and it labels its own rule as judgement ('My rule, which is a judgement and not a Breville instruction'). Section shapes vary. 'Keep the machine' repeats the recommendation once, which is acceptable."
+    },
+    "honestyAboutLimits": {
+      "score": 5,
+      "reason": "The 'What the booklet doesn't say' paragraph covers the range, factory position, contact warning and warranty once, plainly. The owner report is framed as 'a single report, not a spec'. The parts listing is flagged as Australian and not a Breville spec. The methods section lists what was not done, with no hedging chains."
+    },
+    "evidenceIntegrity": {
+      "score": 4,
+      "reason": "The factual statements map to claims. Two lines are unsupported generalisations: 'Most people who ask this question haven't done all of them' and 'Supermarket beans without a roast date are the most common culprit'. Also, the Singletrack thread is dated Aug–Sep 2026, so 'this autumn' is not quite right. None of these is serious, but each is a statement the claims don't back."
+    },
+    "topicFit": {
+      "score": 5,
+      "reason": "The post delivers the brief's thesis and every mustInclude item: dial ranges, tonight test, FINE direction against SCG's coarser advice, cleaning before moving the burr, PDC part codes, owner report, green-bean warning, and the choose-differently cases. It respects leaveOut: no '6' default, no shims, no grinder picks, no prices."
+    }
+  },
+  "wouldForward": true,
+  "competitorComparison": [
+    {
+      "url": "https://www.home-barista.com/repairs/breville-barista-express-does-not-grind-enough-t86594.html",
+      "weGiveThatTheyDont": "An ordered set of checks (beans, basket, dose, timing, clean, upper burr) with Breville's own numbers for each, plus a stopping rule for when to buy a grinder. The thread offers the advice to adjust the inner burr if there's no clash, but no sequence and no manufacturer sourcing."
+    },
+    {
+      "url": "https://www.home-barista.com/espresso-machines/breville-barista-express-not-grinding-enough-coffee-t91683.html",
+      "weGiveThatTheyDont": "The dual-wall basket warning and the tamper-cap dose check, which rule out non-grind causes before anyone touches the burr. The draft also tells the reader that Breville documents the upper burr as an owner feature, which settles the 'don't touch it' argument."
+    },
+    {
+      "url": "https://www.home-barista.com/tips/barista-express-extraction-too-fast-t55122-20.html",
+      "weGiveThatTheyDont": "A date-code check for the correct replacement burr part, a tip to contact Breville under the warranty's 'function' clause before buying, and an explicit keep-the-machine default. The thread drifts toward shims and grinder upgrades."
+    }
+  ],
+  "blockingActions": [],
+  "optionalImprovements": [
+    "Cut or source 'Most people who ask this question haven't done all of them' and 'Supermarket beans without a roast date are the most common culprit'. No claim supports either one. Recast them as judgement ('in my experience of these threads…') or remove them.",
+    "Change 'this autumn' to 'in August 2026' or 'this year'. The thread is from Aug–Sep.",
+    "The body says 'The troubleshooter on this page walks through the same questions', but there is no grind-fault-tree in content/tools/ yet. Make sure the tool ships with the post, or cut the sentence before publishing.",
+    "Forum results say the Express dial has a 'Fine' mark one step past 1. If the booklet shows it, a short line would help readers who think 1 is the end of the dial. Add it only once research supports it.",
+    "Make sure the 'How this guide was put together' section renders collapsed, as the style guide requires."
+  ]
+}

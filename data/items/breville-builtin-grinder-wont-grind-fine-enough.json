@@ -3,17 +3,18 @@
   "id": "breville-builtin-grinder-wont-grind-fine-enough",
   "type": "new-post",
   "niche": "coffee",
-  "status": "drafted",
+  "status": "passed",
   "attempts": 0,
   "revisions": 0,
   "createdAt": "2026-11-21T17:35:36.159Z",
-  "updatedAt": "2026-11-22T13:06:56.536Z",
+  "updatedAt": "2026-11-22T14:07:41.269Z",
   "artifacts": {
     "idea": "data/ideas/breville-builtin-grinder-wont-grind-fine-enough.json",
     "idea-judge": "data/idea-scores/breville-builtin-grinder-wont-grind-fine-enough.json",
     "research": "data/research/breville-builtin-grinder-wont-grind-fine-enough.json",
     "angle": "data/briefs/breville-builtin-grinder-wont-grind-fine-enough.json",
-    "writer": "content/drafts/breville-builtin-grinder-wont-grind-fine-enough.json"
+    "writer": "content/drafts/breville-builtin-grinder-wont-grind-fine-enough.json",
+    "post-judge": "data/reviews/breville-builtin-grinder-wont-grind-fine-enough.json"
   },
   "history": [
     {
@@ -64,6 +65,13 @@
       "to": "drafted",
       "by": "writer",
       "reason": "The brief can be written honestly from the supported claims. Breville's US booklets for the BES870 and BES878 back every free step and the upper-burr procedure. The parts listings and the owner report are labelled as what they are. Four things are stated once as not covered by the booklets: the burr number range, the factory position, a burr-contact warning and the warranty effect. Leave-out items are excluded: the '6' default, shims, grinder recommendations, prices and burr-wear claims."
+    },
+    {
+      "at": "2026-11-22T14:07:41.269Z",
+      "from": "drafted",
+      "to": "passed",
+      "by": "post-judge",
+      "reason": "The draft gives the reader an ordered diagnosis based on Breville's booklets, a test they can run tonight, the correct burr direction and a clear point to stop. The top results for the query are three Home-Barista threads, and none of them offers an order of checks. They mix tips, shims and \"buy a grinder\" advice. The draft commits to one view: don't buy a grinder yet. It has a keep-yours default and a \"When I'd choose differently\" section, and it states once what the booklets don't cover. I found only small issues: two unsupported generalisations, a wrong season, and a reference to a troubleshooter tool that doesn't exist in content/tools yet. None of them blocks the post."
     }
   ]
 }
