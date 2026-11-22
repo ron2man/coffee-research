@@ -26,7 +26,7 @@ npm test                                   # all tests (engine + legacy)
 npm run validate                           # niche, agents, items, artifacts, knowledge cards
 npm run tick -- --dry-run                  # show what the scheduler would run next
 npm run tick -- --commit                   # run one tick, commit + push internal changes to main
-npm run item -- list                       # items and status; also show|resume|reject|park|reopen <id> --reason "..."
+npm run item -- list                       # items and status; also show|resume|reject|park|reopen|revise <id> --reason "..."
 npm run seed -- add "topic hint" --commit    # seed the idea agent (runs at the next tick)
 npm run feedback -- list | add <agent> "note"   # feedback per agent
 npm run prompt -- list | show|apply|reject <id> # prompt proposals from the tuner
@@ -50,6 +50,7 @@ node backoffice/server.mjs                 # dashboard
 ## Style rules (spec section 7; full guide in `niches/coffee/style.md`)
 
 - Recommendation in the first paragraph, human voice, one clear opinion, a "When I'd choose differently" section, a "don't buy / keep yours" path.
+- One post for every market: name products with `{{product:<id>}}` / `{{model:<id>}}` (resolved per market from card variants); no market-specific brands, prices or retailers in the text. Link our own guides with `{{guide:<slug>|text}}`.
 - At most 2 inline links. Sources go in a collapsed "How this guide was put together" section.
 - No "we tested / hands-on / we measured" without human data that has an author and a date.
 - Prefer a tool, decision rule or diagnosis over a spec table. No hedging chains, no "In conclusion".

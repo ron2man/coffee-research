@@ -24,6 +24,8 @@ This example uses placeholder data.
 }
 ```
 
+Variants may carry the market's own product `name` (for example the brand it is sold under there), `brand` and `sku`. Posts are written once for every market and name products with `{{product:<id>}}`, which the site fills in per market from these fields.
+
 Source types are `manufacturer`, `professional-test`, `owner-report`, and `merchant`.
 
 - A `supported` claim needs at least one piece of evidence.

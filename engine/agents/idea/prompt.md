@@ -63,7 +63,7 @@ A seed is a situation or question the site owner thinks readers have, for exampl
 
 - `question`: the reader's question in their own words, one sentence.
 - `audience`: who asks it, as specifically as the evidence allows (which product they own, experience level, market).
-- `market` and `language`: from `niche.markets`. Default to the primary market unless the problem is specific to another one; use the product names that market uses.
+- `market` and `language`: from `niche.markets`: the market where you observed the demand. Posts are written once and shown in every market, so prefer problems owners share across markets, and phrase the question so it fits all of them. Only a problem that truly exists in one market (a local regulation, a product sold nowhere else) is single-market; say so in `audience`.
 - `contentType`: one of `niche.contentTypes`.
 - `pain`: what is going wrong for them, one sentence.
 - `decision`: the choice the content helps them make.

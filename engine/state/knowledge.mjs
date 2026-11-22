@@ -56,6 +56,9 @@ export function validateCard(markdown, category, filename) {
         variant.markets.every((market) => typeof market === 'string' && /^[A-Z]{2}$/.test(market)),
       `Invalid markets for variant ${variant.id}`,
     );
+    for (const field of ['name', 'brand', 'sku']) {
+      requireCondition(variant[field] === undefined || nonempty(variant[field]), `Variant ${variant.id} has an empty ${field}`);
+    }
   }
 
   for (const source of card.sources) {

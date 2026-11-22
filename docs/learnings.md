@@ -51,6 +51,18 @@ A local preview site now renders the quality reference, the archived drafts and 
 
 [Feedback loop](../engine/feedback/) · [Operations](operations.md) · [Site config](../site/astro.config.mjs) · [Idea prompt](../engine/agents/idea/prompt.md)
 
+### 2026-11-22 · M4 · The first post through the whole pipeline, and what the owner changed
+
+The Barista Express/Pro diagnosis went from idea to `passed` without manual edits to the content. Research first stopped at `needs_human` because the manuals were PDFs it couldn't read. After poppler was installed and the item resumed, it read Breville's booklets page by page. The post judge passed the draft, and the project lead called it "amazing". It also raised three points:
+
+1. The content should not change by country. Only product sub-versions differ, and offers come from their own mechanism. This became principle 8 in the spec: products are named with tokens resolved from card variants, and the "written for another market" notice is gone.
+2. The ending should give the escalation path. If the free fixes fail, buy a grinder, not a new machine. This became a writer rule ("end on the decision: the smallest sensible purchase") and a post-judge blocking check. The draft was sent back with `npm run item -- revise`.
+3. A follow-up guide on which grinder Barista Express/Pro owners should buy. This was added as a seed. The two guides will link with `{{guide:…}}`.
+
+Seeds work: the owner's capsule-machine seed produced a "Nespresso to beans" card with three signals.
+
+[Writer prompt](../engine/agents/writer/prompt.md) · [Spec principle 8](../rebuild-spec.md)
+
 ## Decisions
 
 - **2026-11-21 · Git flow.** Internal changes (items, research, briefs, drafts, knowledge cards) are committed straight to `main` by `npm run tick -- --commit`, with no approval, so the pipeline never waits on a merge. Reader-facing paths (`content/published/`, `site/`, `data/offers/`) are never committed by a tick and need their own PR. The boundary is [git-policy.json](../engine/scheduler/git-policy.json). The publish step that opens content PRs arrives with M4/M5.
@@ -66,6 +78,8 @@ A local preview site now renders the quality reference, the archived drafts and 
 - **2026-11-22 · Design and name.** The site uses design A3 (white, near-black, one cherry red, Schibsted Grotesk, rules not cards) and the name YourCoffeeSetup. The affiliate disclosure and the "not tested by us" note sit under the title, before any link. Preview builds show credited Unsplash mock photos from `site/assets/mock/`; production builds never copy them.
 
 - **2026-11-22 · Homepage setup questionnaire: parked.** A "What's your setup?" picker (sentence form: "I have a [machine] and I want to [upgrade / fix / buy]", with the straight answer shown in place) is mocked up on the design canvas as A4. It waits until there are enough guides that most machine × intent combinations have a real answer; with 4 guides about half would show "Not answered yet". Revisit when each listed machine has guides for at least two intents.
+
+- **2026-11-22 · One post for every market.** Per-market differences are data (card variants, offers, disclosures), not prose.
 
 ## Open questions
 

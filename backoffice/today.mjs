@@ -1,8 +1,9 @@
 // Data for the "Today" dashboard (rebuild-spec section 9): what needs the human, the pipeline,
 // the scheduler, feedback and run costs. Read-only. BACKOFFICE_ROOT points it at another checkout
 // (e.g. the scheduler's clone, which holds the live run log).
-import { existsSync, readFileSync, statSync } from 'node:fs';
-import { join } from 'node:path';
+import { spawnSync } from 'node:child_process';
+import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
+import { dirname, join, resolve } from 'node:path';
 import { loadAgents, isPipelineAgent } from '../engine/agents/registry.mjs';
 import { loadItems, readJson, readRuns } from '../engine/state/store.mjs';
 import { listFeedback, listProposals } from '../engine/feedback/store.mjs';
@@ -11,6 +12,33 @@ import { tick } from '../engine/scheduler/tick.mjs';
 import { listSeeds } from '../engine/state/seeds.mjs';
 
 const hourMs = 3_600_000;
+
+const gitOut = (cwd, ...args) => {
+  const result = spawnSync('git', args, { cwd, encoding: 'utf8' });
+  return result.status === 0 ? result.stdout.trim() : null;
+};
+
+/**
+ * Where the live state is: the scheduler's own clone (a sibling checkout of the same repository with
+ * a tick log), so the dashboard is current without pulling. Falls back to this checkout.
+ */
+export function findStateRoot(root) {
+  const origin = gitOut(root, 'remote', 'get-url', 'origin');
+  const parent = dirname(resolve(root));
+  const candidates = [];
+  for (const name of existsSync(parent) ? readdirSync(parent) : []) {
+    const dir = join(parent, name);
+    const log = join(dir, '.backoffice', 'tick.log');
+    try {
+      if (!existsSync(log) || !statSync(dir).isDirectory()) continue;
+      if (origin && gitOut(dir, 'remote', 'get-url', 'origin') !== origin) continue;
+      candidates.push({ dir, at: statSync(log).mtimeMs });
+    } catch {
+      // unreadable sibling: skip
+    }
+  }
+  return candidates.sort((a, b) => b.at - a.at)[0]?.dir ?? resolve(root);
+}
 
 function lastTickLog(root) {
   const path = join(root, '.backoffice', 'tick.log');
@@ -68,9 +96,14 @@ export async function todayData(root) {
       commands: ['npm run site:preview', `npm run feedback -- add writer "..." --item ${item.id} --commit`] });
   }
   const recentFailures = runs.filter((r) => r.status === 'failed' && now - Date.parse(r.timestamp) < 24 * hourMs);
-  const unavailable = recentFailures.filter((r) => r.runnerUnavailable).at(-1);
+  // Only while it is still the latest event: a later successful run means the problem is gone.
+  const unavailable = runs.at(-1)?.runnerUnavailable && now - Date.parse(runs.at(-1).timestamp) < 24 * hourMs ? runs.at(-1) : null;
   if (unavailable) inbox.push({ kind: 'Scheduler problem', title: 'The runner could not start', reason: unavailable.error, at: unavailable.timestamp, commands: ['claude auth status', 'npm run schedule -- logs'] });
   if (errors.length) inbox.push({ kind: 'Scheduler problem', title: 'Item store is invalid', reason: errors.join('; '), commands: ['npm run validate'] });
+
+  if (!existsSync(join(root, '.backoffice', 'tick.log'))) {
+    inbox.push({ kind: 'Dashboard', title: 'Not reading the scheduler’s folder', reason: `No tick log in ${root}, so statuses may be out of date. Start the dashboard with BACKOFFICE_ROOT pointing at the scheduler's clone, or run git pull here.`, commands: ['git pull', 'BACKOFFICE_ROOT=~/Projects/coffee-research-bot npm run dashboard'] });
+  }
 
   const lockFile = lockPath(root);
   const holder = existsSync(lockFile) ? (() => { try { return JSON.parse(readFileSync(lockFile, 'utf8')); } catch { return null; } })() : null;

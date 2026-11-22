@@ -10,7 +10,7 @@ const FLOWS = {
     researched: ['briefed', 'rejected'],
     briefed: ['drafted'],
     drafted: ['passed', 'briefed', 'rejected'], // briefed = one revision loop
-    passed: ['published'],
+    passed: ['published', 'briefed'], // briefed = a human asks for a rewrite
     published: ['measured'],
     measured: [],
     rejected: ['idea'], // re-score when new demand data arrives

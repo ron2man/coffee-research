@@ -10,6 +10,6 @@ export async function getStaticPaths() {
 const { market, post } = Astro.props;
 const { data, t } = await site();
 ---
-<Base title={`${post.title} | ${data.site.name}`} description={post.description} path={`/${market.locale}/guides/${post.slug}/`} market={market} pageId={post.slug}>
+<Base title={`${t.localize(post, data.site, market).title} | ${data.site.name}`} description={t.localize(post, data.site, market).description} path={`/${market.locale}/guides/${post.slug}/`} market={market} pageId={post.slug}>
   <Fragment set:html={t.postPage({ site: data.site, market, post, offers: data.offers, now: data.now, preview: data.preview })} />
 </Base>

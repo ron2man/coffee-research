@@ -25,7 +25,8 @@ The goal is a machine that does real good for coffee lovers: it finds what peopl
 5. **State lives in files.** No hidden memory. Everything is inspectable and diffable in Git.
 6. **Deterministic scheduling, AI only for judgement work.** No LLM orchestrator.
 7. **Humans approve what ships.** Internal changes (items, research, briefs, drafts, knowledge cards) are committed straight to `main` with no approval, so the pipeline never waits on a merge. Anything that can reach a reader (published posts, site code, offers shown on the site) goes through its own PR that a human merges. The boundary is `engine/scheduler/git-policy.json`. *(Decision 2026-11-21.)*
-8. **Measure before optimizing.** No SEO changes on fewer than 60 to 90 days of data.
+8. **One post for every market.** A post is written once and shown in every market. What differs per market is data, not prose: product names and model numbers come from the knowledge card variants (`{{product:id}}`, `{{model:id}}`), and offers, prices, currency and disclosure come from the offers layer. The text only mentions a market when a variant really differs. *(Decision 2026-11-22.)*
+9. **Measure before optimizing.** No SEO changes on fewer than 60 to 90 days of data.
 
 ## 3. Scope
 

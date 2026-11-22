@@ -63,7 +63,7 @@ export function loadSiteData({ root = repoRoot, mode = siteMode(), now = Date.no
   };
   if (production && posts.length) markets.forEach(disclosure);
 
-  const productIds = [...new Set(posts.flatMap((p) => p.productIds))];
+  const productIds = [...new Set(posts.flatMap((p) => p.offerIds ?? []))];
   const mockPrices = join(siteDir, 'mock-prices.json');
   const offers = preview
     ? mockOffers(productIds, markets, { now, prices: existsSync(mockPrices) ? JSON.parse(readFileSync(mockPrices, 'utf8')) : {} })

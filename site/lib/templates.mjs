@@ -8,6 +8,44 @@ export const marketLabel = (market) => region.of(market.id === 'GB' ? 'GB' : mar
 export const shortLabel = (market) => (market.id === 'GB' ? 'UK' : market.id);
 export const postPath = (market, slug) => `/${market.locale}/guides/${slug}/`;
 
+// Posts are written once for every market. Products are named with tokens that resolve per market
+// from the knowledge card's variants: {{product:id}} → that market's name, {{model:id}} → its SKU,
+// {{brand:id}} → its brand. {{guide:slug|text}} links to another guide (plain text if it isn't built).
+function variantFor(card, market) {
+  return card?.variants.find((v) => v.markets.includes(market.id)) ?? null;
+}
+export function productName(site, market, productId) {
+  const card = site.cards.get(productId)?.card;
+  return variantFor(card, market)?.name ?? card?.variants.find((v) => v.name)?.name ?? card?.name ?? productId;
+}
+export function resolveTokens(text, { site, market, links = true }) {
+  if (!text) return text;
+  return text
+    .replace(/\{\{product:([a-z0-9-]+)\}\}/g, (_, id) => productName(site, market, id))
+    .replace(/\{\{model:([a-z0-9-]+)\}\}/g, (_, id) => {
+      const card = site.cards.get(id)?.card;
+      return variantFor(card, market)?.sku ?? card?.variants[0]?.sku ?? '';
+    })
+    .replace(/\{\{brand:([a-z0-9-]+)\}\}/g, (_, id) => {
+      const card = site.cards.get(id)?.card;
+      return variantFor(card, market)?.brand ?? card?.brand ?? 'the manufacturer';
+    })
+    .replace(/\{\{guide:([a-z0-9-]+)(?:\|([^}]*))?\}\}/g, (_, slug, label) => {
+      const path = postPath(market, slug);
+      const text = label ?? slug.replace(/-/g, ' ');
+      return links && site.pages?.has(path) ? `[${text}](${path})` : text;
+    });
+}
+/** The post as readers in this market see it: names, models and guide links resolved. */
+export function localize(post, site, market) {
+  return {
+    ...post,
+    title: resolveTokens(post.title, { site, market, links: false }),
+    description: resolveTokens(post.description, { site, market, links: false }),
+    body: resolveTokens(post.body, { site, market }),
+  };
+}
+
 // Wordmark: a CamelCase name like "YourCoffeeSetup" becomes accent / bold / light parts.
 const nameParts = (name) => name.match(/[A-Z][a-z]*|[^A-Z\s]+/g) ?? [name];
 export function brandMark(name) {
@@ -35,7 +73,7 @@ const byDate = (a, b) => (b.updatedAt ?? '').localeCompare(a.updatedAt ?? '');
 /** Compact guide rows: tag, title, one-line summary, date. */
 export function guideRows({ site, market, posts }) {
   if (!posts.length) return '<p class="empty">No guides here yet.</p>';
-  return `<ol class="guide-rows">${posts.map((post) => `<li><a href="${postPath(market, post.slug)}">
+  return `<ol class="guide-rows">${posts.map((source) => localize(source, site, market)).map((post) => `<li><a href="${postPath(market, post.slug)}">
 <span class="gr-tag">${escape(navLabel({ label: categoryLabel(site, post.category) ?? post.type }))}${STATUS_BADGE[post.status] ? ' · preview' : ''}</span>
 <span class="gr-main"><span class="gr-title">${escape(post.title)}</span><span class="gr-summary">${escape(post.description)}</span></span>
 <span class="gr-date">${dateLabel(post, market)}</span>
@@ -64,7 +102,7 @@ const STATUS_BADGE = {
 function productOffers({ site, market, productId, offers, now }) {
   const card = site.cards.get(productId)?.card;
   return {
-    name: card?.name ?? productId,
+    name: productName(site, market, productId),
     sold: !card || card.variants.some((v) => v.markets.includes(market.id)),
     list: offersFor(offers, productId, market.id, { now }).slice(0, 3),
   };
@@ -124,7 +162,7 @@ export function postBody({ post, site, market, offers, now }) {
     if (block.type === 'component') {
       if (block.name === 'tool') html += picker(site.tools.get(block.arg));
       if (block.name === 'pricebox') {
-        html += priceBox({ site, market, productIds: block.arg ? [block.arg] : post.productIds, offers, now });
+        html += priceBox({ site, market, productIds: block.arg ? [block.arg] : post.offerIds ?? [], offers, now });
         priceBoxShown = true;
       }
       continue;
@@ -137,8 +175,9 @@ export function postBody({ post, site, market, offers, now }) {
     html += block.html;
   }
   if (inSources) html += '</details>';
-  if (!priceBoxShown && post.productIds.length) {
-    const box = priceBox({ site, market, productIds: post.productIds, offers, now });
+  // Offers are what the guide recommends buying, never the product the reader already owns.
+  if (!priceBoxShown && post.offerIds?.length) {
+    const box = priceBox({ site, market, productIds: post.offerIds, offers, now });
     html = inSources ? html.replace('<details class="sources">', `${box}<details class="sources">`) : html + box;
   }
   return { html, headings: headings.filter((h) => h.level === 2 && !/^how this guide/i.test(h.text)) };
@@ -165,14 +204,13 @@ ${keep ? `<p class="pick-keep">Keep yours? <a href="#${keep.id}">${inline(keep.t
 </section>`;
 }
 
-export function postPage({ site, market, post, offers, now, preview }) {
+export function postPage({ site, market, post: source, offers, now, preview }) {
+  const post = localize(source, site, market);
   const { html, headings } = postBody({ post, site, market, offers, now });
-  const postMarket = site.markets.find((m) => m.id === post.market) ?? market;
-  const elsewhere = postMarket.id !== market.id
-    ? `<p class="callout">Written for readers in the ${escape(marketLabel(postMarket))}. Product names and advice may differ where you are; prices and links below are for the ${escape(marketLabel(market))}.</p>` : '';
+  const elsewhere = ''; // one post for every market: no "written for another market" notice
   const badge = STATUS_BADGE[post.status] ? `<span class="badge">${STATUS_BADGE[post.status]}</span>` : '';
   const updated = post.updatedAt ? `Updated ${escape(post.updatedAt)} · ` : '';
-  const pickId = post.pick ?? post.productIds[0];
+  const pickId = post.pick ?? post.offerIds?.[0] ?? null;
   const toc = headings.length ? `<nav class="toc" aria-label="On this page"><strong>On this page</strong><ol>${headings.map((h) => `<li><a href="#${h.id}">${inline(h.text)}</a></li>`).join('')}</ol></nav>` : '';
   const honesty = post.humanData?.length ? '' : 'We haven’t tested these products ourselves. This guide is built from manuals, published tests and owner reports; how it was put together is at the end.';
   const notes = [post.disclosure ? escape(site.disclosure(market)) : '', honesty].filter(Boolean);
@@ -212,7 +250,7 @@ ${pick || toc ? `<aside class="post-rail" aria-label="Guide tools"><div class="r
 export function homePage({ site, market, posts }) {
   // Superseded drafts stay reachable by URL in previews but are left off the home lists.
   const local = posts.filter((p) => p.markets.includes(market.id) && !p.supersededBy);
-  const kicker = (post) => `${escape(post.type)}${STATUS_BADGE[post.status] ? ' · preview' : ''}${post.market !== market.id ? ` · written for ${escape(shortLabel(site.markets.find((m) => m.id === post.market) ?? market))}` : ''}`;
+  const kicker = (post) => `${escape(post.type)}${STATUS_BADGE[post.status] ? ' · preview' : ''}`;
   const [lead, ...rest] = local;
   const feature = lead ? `<div class="feature">
 <div class="feature-main">

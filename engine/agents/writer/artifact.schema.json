@@ -124,6 +124,16 @@
           }
         }
       }
+    },
+    "offerIds": {
+      "type": "array",
+      "maxItems": 4,
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+        "maxLength": 80
+      },
+      "description": "Products the post recommends buying, shown in the 'Our pick' card and the 'Where to buy' box (first = the pick). Never the product the reader already owns. Empty when the answer is to buy nothing, or the right product isn't researched yet."
     }
   }
 }

@@ -19,7 +19,7 @@ import { openSeeds, settleSeeds } from '../state/seeds.mjs';
 import { categoryIds } from '../state/niche.mjs';
 import { loadCardsSync, validateCard } from '../state/knowledge.mjs';
 import { runChecks } from '../feedback/checks.mjs';
-import { addFeedback, readReviewState } from '../feedback/store.mjs';
+import { addFeedback, openFeedback, readReviewState } from '../feedback/store.mjs';
 import { applyReview, applyTune, buildReviewInput, buildTuneInput, checkTuneArtifact, reviewCandidates, tuneCandidates } from '../feedback/loop.mjs';
 import { newItem, transition } from '../state/machine.mjs';
 import { defaultNicheId, loadNiche, repoRoot } from '../state/niche.mjs';
@@ -140,7 +140,11 @@ function buildInput(root, niche, agent, chosenItems, allItems) {
       })),
     };
   }
-  const entries = chosenItems.map((item) => ({ item, artifacts: loadArtifacts(root, item, agent.inputArtifacts) }));
+  // Human notes on this item (e.g. a revision request) go straight to the agent they are for.
+  const notes = (item) => openFeedback(root, agent.name)
+    .filter((entry) => entry.source === 'human' && entry.itemIds.includes(item.id))
+    .map((entry) => ({ at: entry.at, note: entry.findings.map((f) => f.problem).join(' ') }));
+  const entries = chosenItems.map((item) => ({ item, artifacts: loadArtifacts(root, item, agent.inputArtifacts), humanNotes: notes(item) }));
   const today = new Date().toISOString().slice(0, 10);
   const existingContent = contentIndex(root);
   return agent.mode === 'batch' ? { niche, today, existingContent, items: entries } : { niche, today, existingContent, ...entries[0] };

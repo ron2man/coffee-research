@@ -87,6 +87,22 @@ const CHECKS = {
       if (!/^#+\s*When I'?d choose differently/im.test(body)) warnings.push(`${itemId}: no "When I'd choose differently" section`);
       for (const pattern of AI_PATTERNS) if (pattern.test(body)) warnings.push(`${itemId}: generic phrasing matches ${pattern}`);
       for (const claim of draft.claims ?? []) checkClaims(claim.claimIds, context.cards, `${itemId} "${claim.statement.slice(0, 60)}"`, blocking);
+      // Market-neutral naming: products are named with tokens the site fills in per market.
+      const text = [draft.title, draft.description, body].join('\n');
+      for (const [, kind, id] of text.matchAll(/\{\{(product|model|brand):([a-z0-9-]+)\}\}/g)) {
+        if (!context.cards?.has(id)) blocking.push(`${itemId}: {{${kind}:${id}}} names a product with no knowledge card`);
+        else if (!(draft.productIds ?? []).includes(id)) warnings.push(`${itemId}: {{${kind}:${id}}} is not in productIds`);
+      }
+      for (const id of draft.productIds ?? []) {
+        if (context.cards?.has(id) && !text.includes(`{{product:${id}}}`)) warnings.push(`${itemId}: product ${id} is never named with {{product:${id}}}, so its name won't adapt per market`);
+      }
+      for (const id of draft.offerIds ?? []) {
+        if (!context.cards?.has(id)) blocking.push(`${itemId}: offers ${id}, which has no knowledge card`);
+      }
+      const slugs = new Set((context.existingContent ?? []).map((post) => post.slug));
+      for (const [, slug] of body.matchAll(/\{\{guide:([a-z0-9-]+)(?:\|[^}]*)?\}\}/g)) {
+        if (!slugs.has(slug)) warnings.push(`${itemId}: links to guide ${slug}, which doesn't exist yet (rendered as plain text)`);
+      }
     }
     return { blocking, warnings };
   },

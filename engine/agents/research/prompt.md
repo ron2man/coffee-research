@@ -26,6 +26,7 @@ Return card changes in `cardChanges`; you cannot write files yourself. Each chan
 
 - For an existing card, start from its current content and add or update claims and sources. **Never remove an existing claim** (the scheduler refuses). To retire one, change its status and explain in its note.
 - For a new product, create a card in the category directory that matches its category in `niche.categories`.
+- **Variants per market**: the same post is shown in every market in `niche.markets`, so record each product's variant for every market where it is sold, with that market's own `name` (the full product name as sold there, including the brand), `sku` and `markets`. Check the manufacturer's site for each market. If a product isn't sold in a market, leave that market out.
 - Set `updatedAt` to `today`. `verifiedAt` must not be later than `updatedAt`. Sources need `accessedAt`.
 - Exactly one fenced `json` block per card, IDs in kebab-case, unique within the card.
 - Up to 6 card changes per run. Focus on the claims this idea needs.

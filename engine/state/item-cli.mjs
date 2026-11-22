@@ -7,6 +7,7 @@
 //   npm run item -- reject <id> --reason "..."   any active item → rejected
 //   npm run item -- park   <id> --reason "..."   active item → needs_human
 //   npm run item -- reopen <id> --reason "..."   rejected → idea (drops later artifacts)
+//   npm run item -- revise <id> --reason "..."   passed draft → writer again; the reason goes to the writer
 //   add --commit to commit and push the item file to main (same rules as a tick)
 import { join, resolve } from 'node:path';
 import { parseArgs } from 'node:util';
@@ -16,6 +17,7 @@ import { allowedTransitions, initialStatus, SIDE_STATES, transition } from './ma
 import { repoRoot } from './niche.mjs';
 import { appendRun, loadItems, readJson, saveItem } from './store.mjs';
 import { withLock } from '../scheduler/lock.mjs';
+import { addFeedback } from '../feedback/store.mjs';
 import { commitInternal, syncMain } from '../scheduler/git.mjs';
 
 function target(command, item) {
@@ -27,6 +29,9 @@ function target(command, item) {
       return 'rejected';
     case 'park':
       return 'needs_human';
+    case 'revise':
+      if (item.status !== 'passed') throw new Error(`${item.id} is ${item.status}; only passed drafts can be sent back for a human revision`);
+      return 'briefed';
     case 'reopen':
       if (item.status !== 'rejected') throw new Error(`${item.id} is ${item.status}; only rejected items can be reopened`);
       return initialStatus(item.type);
@@ -47,6 +52,13 @@ export function act(root, command, id, { reason, by = 'human' } = {}) {
   const from = item.status;
   const next = saveItem(root, transition(item, to, { by: `human:${by}`, reason }));
   appendRun(root, { workflow: `human:${command}`, agent: null, itemId: id, status: 'completed', outcome: command, from, to, by });
+  if (command === 'revise') {
+    // The writer reads human notes for its item; the tuner also sees them as feedback on the writer.
+    next.feedbackPath = addFeedback(root, {
+      agent: 'writer', source: 'human', itemIds: [id],
+      findings: [{ severity: 'major', problem: reason.trim(), evidence: `revision requested by ${by}`, suggestion: reason.trim() }],
+    });
+  }
   return next;
 }
 
@@ -76,7 +88,7 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
       const item = await withLock(root, async () => {
         if (values.commit) syncMain(root);
         const saved = act(root, command, id, { reason: values.reason, by: process.env.USER ?? userInfo().username });
-        if (values.commit) commitInternal(root, [`data/items/${id}.json`], `item(${command}): ${id} → ${saved.status}`);
+        if (values.commit) commitInternal(root, [`data/items/${id}.json`, ...(saved.feedbackPath ? [saved.feedbackPath] : [])], `item(${command}): ${id} → ${saved.status}`);
         return saved;
       }, { label: `item ${command}` });
       console.log(`${item.id}: ${item.history.at(-2)?.to ?? ''} → ${item.status}`);

@@ -24,7 +24,21 @@ const log = join(root, '.backoffice', 'tick.log');
 const launchctl = (...args) => spawnSync('launchctl', args, { encoding: 'utf8' });
 const escape = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;');
 
+/**
+ * Fixed minutes past each hour (e.g. 60 → :05, 30 → :05 and :35). Unlike StartInterval, launchd
+ * runs a calendar job that was missed while the Mac slept once it wakes, so no hour is skipped silently.
+ */
+export function minutesFor(intervalMinutes) {
+  const step = Math.min(60, intervalMinutes);
+  const minutes = [];
+  for (let m = 5; m < 60; m += step) minutes.push(m);
+  return minutes;
+}
+
 export function plist({ intervalMinutes }) {
+  const hours = intervalMinutes > 60 ? Array.from({ length: Math.floor(24 / Math.round(intervalMinutes / 60)) }, (_, i) => i * Math.round(intervalMinutes / 60)) : [null];
+  const slots = hours.flatMap((hour) => minutesFor(intervalMinutes).map((minute) =>
+    `    <dict>${hour === null ? '' : `<key>Hour</key><integer>${hour}</integer>`}<key>Minute</key><integer>${minute}</integer></dict>`)).join('\n');
   return `<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
@@ -33,7 +47,10 @@ export function plist({ intervalMinutes }) {
   <key>ProgramArguments</key>
   <array><string>/bin/bash</string><string>${escape(join(root, 'ops', 'tick.sh'))}</string></array>
   <key>WorkingDirectory</key><string>${escape(root)}</string>
-  <key>StartInterval</key><integer>${intervalMinutes * 60}</integer>
+  <key>StartCalendarInterval</key>
+  <array>
+${slots}
+  </array>
   <key>RunAtLoad</key><false/>
   <key>StandardOutPath</key><string>${escape(join(root, '.backoffice', 'launchd.out.log'))}</string>
   <key>StandardErrorPath</key><string>${escape(join(root, '.backoffice', 'launchd.err.log'))}</string>
@@ -49,7 +66,7 @@ function main() {
   if (platform() !== 'darwin' && command !== 'logs') throw new Error('launchd is macOS only. On Linux use cron: see docs/operations.md');
   if (command === 'install') {
     const intervalMinutes = Number(values['interval-minutes'] ?? 60);
-    if (!Number.isFinite(intervalMinutes) || intervalMinutes < 15) throw new Error('--interval-minutes must be at least 15');
+    if (![15, 20, 30, 60, 120, 180, 240].includes(intervalMinutes)) throw new Error('--interval-minutes must be 15, 20, 30, 60, 120, 180 or 240');
     const branch = spawnSync('git', ['symbolic-ref', '--short', 'HEAD'], { cwd: root, encoding: 'utf8' }).stdout.trim();
     if (branch !== 'main') throw new Error(`This checkout is on ${branch || 'no branch'}; the scheduler commits only on main. Use a dedicated clone on main.`);
     mkdirSync(join(root, '.backoffice'), { recursive: true });
@@ -58,7 +75,8 @@ function main() {
     writeFileSync(plistPath, plist({ intervalMinutes }));
     const result = launchctl('bootstrap', domain, plistPath);
     if (result.status !== 0) throw new Error(`launchctl bootstrap failed: ${result.stderr.trim()}`);
-    console.log(`Installed ${label}: one tick every ${intervalMinutes} min in ${root}\nLog: ${log}`);
+    const at = intervalMinutes > 60 ? `every ${intervalMinutes / 60} h at :05` : `at ${minutesFor(intervalMinutes).map((m) => `:${String(m).padStart(2, '0')}`).join(', ')} past each hour`;
+    console.log(`Installed ${label}: one tick ${at} in ${root}\nMissed slots while the Mac sleeps run once on wake.\nLog: ${log}`);
   } else if (command === 'uninstall') {
     launchctl('bootout', `${domain}/${label}`);
     rmSync(plistPath, { force: true });
@@ -73,7 +91,8 @@ function main() {
     const result = launchctl('print', `${domain}/${label}`);
     if (result.status !== 0) return console.log(`${label} is not installed`);
     const pick = (key) => result.stdout.match(new RegExp(`\\n\\s*${key} = (.+)`))?.[1];
-    console.log(`${label}\n  state: ${pick('state')}\n  runs: ${pick('runs') ?? 0}\n  last exit: ${pick('last exit code') ?? 'n/a'}\n  log: ${log}`);
+    const lastTick = existsSync(log) ? [...readFileSync(log, 'utf8').matchAll(/^=== (\S+) tick ===$/gm)].at(-1)?.[1] : null;
+    console.log(`${label}\n  state: ${pick('state')} (between ticks it is "not running"; that is normal)\n  runs since loaded: ${pick('runs') ?? 0}\n  last exit: ${pick('last exit code') ?? 'n/a'}\n  last tick: ${lastTick ?? 'none yet'}\n  log: ${log}`);
   } else {
     throw new Error(`Unknown command ${command}`);
   }

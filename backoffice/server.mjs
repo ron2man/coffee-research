@@ -5,7 +5,7 @@ import { fileURLToPath } from 'node:url';
 import { promisify } from 'node:util';
 import { readDrafts } from './drafts.mjs';
 import { scanKnowledge } from '../agent/knowledge.mjs';
-import { todayData } from './today.mjs';
+import { findStateRoot, todayData } from './today.mjs';
 import { resolve } from 'node:path';
 import { homedir } from 'node:os';
 
@@ -14,7 +14,7 @@ const exec = promisify(execFile);
 const port = Number(process.env.BACKOFFICE_PORT ?? 4173);
 // The "Today" view reads state from BACKOFFICE_ROOT (default: this checkout). Point it at the
 // scheduler's clone to see live runs: BACKOFFICE_ROOT=~/Projects/coffee-research-bot npm run dashboard
-const stateRoot = process.env.BACKOFFICE_ROOT ? resolve(process.env.BACKOFFICE_ROOT.replace(/^~(?=\/)/, homedir())) : root;
+const stateRoot = process.env.BACKOFFICE_ROOT ? resolve(process.env.BACKOFFICE_ROOT.replace(/^~(?=\/)/, homedir())) : findStateRoot(root);
 const assets = new Map([
   ['/', ['today.html', 'text/html; charset=utf-8']],
   ['/today.js', ['today.js', 'text/javascript; charset=utf-8']],

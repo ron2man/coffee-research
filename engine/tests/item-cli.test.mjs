@@ -41,3 +41,19 @@ test('reject, park and reopen follow the status machine', (t) => {
   assert.deepEqual(get(root).artifacts, { idea: 'data/ideas/x.json' });
   assert.throws(() => act(root, 'reject', 'missing', { reason: 'r' }), /No item missing/);
 });
+
+test('revise sends a passed draft back to the writer with the note', async (t) => {
+  const root = sandbox(t);
+  let item = newItem({ id: 'x', niche: 'coffee', by });
+  for (const to of ['idea_approved', 'researched', 'briefed', 'drafted', 'passed']) item = transition(item, to, { by });
+  saveItem(root, item);
+  const { tick } = await import('../scheduler/tick.mjs');
+  const { loadAgents } = await import('../agents/registry.mjs');
+  const { fakeRunner } = await import('../runner/index.mjs');
+  assert.throws(() => act(root, 'reopen', 'x', { reason: 'r' }), /only rejected/);
+  const revised = act(root, 'revise', 'x', { reason: 'End with: if nothing works, buy a grinder, not a new machine', by: 'ron' });
+  assert.equal(revised.status, 'briefed');
+  let seen;
+  await tick({ root, agents: loadAgents().filter((a) => a.name === 'writer'), runner: fakeRunner({ writer: (input) => { seen = input; throw new Error('stop'); } }) });
+  assert.match(seen.humanNotes[0].note, /buy a grinder, not a new machine/);
+});

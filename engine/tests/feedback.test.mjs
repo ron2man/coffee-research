@@ -130,3 +130,19 @@ test('instructions include niche guidance and listed niche files', (t) => {
   assert.match(text, /Niche file: style.md/);
   assert.throws(() => instructionsFor({ ...idea, nicheFiles: ['missing.md'] }, root, 'coffee'), /niche file missing.md not found/);
 });
+
+test('writer checks: product tokens must have cards, untokenised products and missing guides warn', () => {
+  const cards = new Map([['machine-a', { card: { claims: [] } }]]);
+  const draft = (body, productIds = ['machine-a']) => ({ itemId: 'x', artifact: { title: 'T', description: 'D', body, productIds, claims: [], humanData: [] } });
+  const bad = runChecks('writer', [draft('Use the {{product:machine-z}}.')], { cards, existingContent: [] });
+  assert.ok(bad.blocking.some((b) => /machine-z.*no knowledge card/.test(b)));
+  const plain = runChecks('writer', [draft('Use the Machine A. See {{guide:other-guide|the other guide}}.')], { cards, existingContent: [] });
+  assert.ok(plain.warnings.some((w) => /never named with \{\{product:machine-a\}\}/.test(w)));
+  assert.ok(plain.warnings.some((w) => /guide other-guide, which doesn't exist yet/.test(w)));
+});
+
+test('writer checks: offered products need knowledge cards', () => {
+  const cards = new Map([['machine-a', { card: { claims: [] } }]]);
+  const { blocking } = runChecks('writer', [{ itemId: 'x', artifact: { title: 'T', description: 'D', body: 'Fix your {{product:machine-a}}.', productIds: ['machine-a'], offerIds: ['grinder-z'], claims: [] } }], { cards, existingContent: [] });
+  assert.ok(blocking.some((b) => /offers grinder-z, which has no knowledge card/.test(b)));
+});

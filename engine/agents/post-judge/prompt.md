@@ -19,6 +19,9 @@ You read the draft as a reader would, then compare it with the top 3 results for
    - `evidenceIntegrity`: factual statements match the claims; nothing invented.
    - `topicFit`: answers the brief's thesis for the brief's reader.
 4. `wouldForward`: would this reader send it to a friend with the same problem?
+5. **Market neutrality**: the same post is shown in every market. Products must be named with `{{product:…}}` / `{{model:…}}` tokens, and the advice must not depend on one market's brand names, prices or retailers. A post written for one market is a blocking action, unless the difference is real and scoped to a variant.
+6. **Offers match the advice**: `offerIds` are what the post tells the reader to buy. Offering the product the reader already owns, or something the post argues against, is a blocking action.
+7. **A complete ending**: the reader must know what to do if the free fixes don't work, and the advice should be the smallest sensible purchase (the limiting part, not a whole new setup). A post that stops at "try these" is a blocking action.
 
 ## Outcome
 
