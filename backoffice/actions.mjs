@@ -1,13 +1,14 @@
 // Dashboard actions. Each one goes through the same engine functions as the CLIs (status only
 // changes through the machine), runs under the tick lock, and (with commit) syncs, commits and
 // pushes to main like a tick, so the scheduler sees it at its next run.
-import { existsSync } from 'node:fs';
+import { spawn } from 'node:child_process';
+import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { userInfo } from 'node:os';
 import { act } from '../engine/state/item-cli.mjs';
 import { addSeed } from '../engine/state/seeds.mjs';
 import { addHumanNote, applyProposal, rejectProposal } from '../engine/feedback/cli.mjs';
-import { LockedError, withLock } from '../engine/scheduler/lock.mjs';
+import { LockedError, isStale, lockPath, withLock } from '../engine/scheduler/lock.mjs';
 import { commitInternal, syncMain } from '../engine/scheduler/git.mjs';
 
 const by = () => process.env.USER ?? userInfo().username;
@@ -82,4 +83,26 @@ export async function runAction(root, name, payload = {}, { commit = true } = {}
     if (error instanceof LockedError) throw new ActionError('An agent run is in progress. Try again in a few minutes.', 409);
     throw error;
   }
+}
+
+/**
+ * Start one tick now, exactly as the scheduler runs it (ops/tick.sh: commits, pushes, logs to
+ * .backoffice/tick.log). Returns at once; the dashboard shows progress through the lock and the log.
+ */
+export function startTick(root, { spawnTick = spawn } = {}) {
+  const lock = lockPath(root);
+  if (existsSync(lock)) {
+    let holder = null;
+    try {
+      holder = JSON.parse(readFileSync(lock, 'utf8'));
+    } catch {
+      // unreadable lock: the tick script decides
+    }
+    if (holder && !isStale(holder)) throw new ActionError('A tick is already running.', 409);
+  }
+  const script = join(root, 'ops', 'tick.sh');
+  if (!existsSync(script)) throw new ActionError(`No ops/tick.sh in ${root}`, 500);
+  const child = spawnTick('/bin/bash', [script], { cwd: root, detached: true, stdio: 'ignore' });
+  child.unref?.();
+  return { ok: true, message: 'Tick started. It usually takes 1 to 15 minutes; this page updates while it runs.' };
 }

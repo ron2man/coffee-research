@@ -6,7 +6,7 @@ import { promisify } from 'node:util';
 import { readDrafts } from './drafts.mjs';
 import { scanKnowledge } from '../agent/knowledge.mjs';
 import { articleDetail, findStateRoot, todayData } from './today.mjs';
-import { ActionError, runAction } from './actions.mjs';
+import { ActionError, runAction, startTick } from './actions.mjs';
 import { randomBytes } from 'node:crypto';
 import { resolve } from 'node:path';
 import { homedir } from 'node:os';
@@ -129,7 +129,8 @@ const server = createServer(async (request, response) => {
       }
       try {
         const payload = JSON.parse((await readBody(request)) || '{}');
-        const result = await runAction(stateRoot, url.pathname.slice('/action/'.length), payload, { commit: commitActions });
+        const name = url.pathname.slice('/action/'.length);
+        const result = name === 'tick' ? startTick(stateRoot) : await runAction(stateRoot, name, payload, { commit: commitActions });
         response.writeHead(200, { 'Content-Type': 'application/json' }).end(JSON.stringify(result));
       } catch (error) {
         const status = error instanceof ActionError ? error.status : 500;

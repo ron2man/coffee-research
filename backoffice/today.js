@@ -18,7 +18,9 @@ function render(d) {
     <div><span class="muted">Last tick</span><strong>${ago(s.lastLog?.startedAt ?? s.lastRun?.timestamp)}</strong></div>
     <div><span class="muted">Last agent run</span><strong>${esc(s.lastRun?.agent ?? '–')} ${s.lastRun ? `<small class="${s.lastRun.status === 'failed' ? 'bad' : 'ok'}">${esc(s.lastRun.status)}</small>` : ''}</strong></div>
     <div><span class="muted">Next tick will run</span><strong>${next}</strong></div>
-  </div>${s.lastLog ? `<details><summary>Last tick log</summary><pre>${esc(s.lastLog.tail)}</pre></details>` : '<p class="muted">No tick log in this checkout. Point the dashboard at the scheduler clone with BACKOFFICE_ROOT.</p>'}`;
+  </div>
+  <div class="actions"><button type="button" id="run-tick" ${s.running ? 'disabled' : ''}>${s.running ? 'Tick running…' : 'Run next tick now'}</button>
+  <span class="muted">${s.running ? 'Started ' + ago(s.running.startedAt) + '. The page refreshes every 10 seconds.' : 'Runs the next job right away instead of waiting for the hourly slot.'}</span></div>${s.lastLog ? `<details><summary>Last tick log</summary><pre>${esc(s.lastLog.tail)}</pre></details>` : '<p class="muted">No tick log in this checkout. Point the dashboard at the scheduler clone with BACKOFFICE_ROOT.</p>'}`;
 
   $('inbox-list').innerHTML = d.inbox.length ? d.inbox.map((i) => `<div class="item">
     <div class="kind">${esc(i.kind)}</div><div class="title">${esc(i.title)}</div>
@@ -56,8 +58,15 @@ document.addEventListener('click', (event) => {
   navigator.clipboard.writeText(text).then(() => { event.target.textContent = 'Copied'; setTimeout(() => { event.target.textContent = 'Copy'; }, 1200); });
 });
 $('reload').addEventListener('click', load);
-load();
-setInterval(load, 60_000);
+// Refresh every minute, or every 10 seconds while a tick is running.
+let running = false;
+const loadAndTrack = async () => {
+  await load();
+  running = Boolean(document.getElementById('run-tick')?.disabled);
+};
+loadAndTrack();
+setInterval(() => { if (running) loadAndTrack(); }, 10_000);
+setInterval(() => { if (!running) loadAndTrack(); }, 60_000);
 
 // ---------- Actions: comments, send back to the writer, proposals, seeds ----------
 let token = null;
@@ -144,6 +153,11 @@ async function openArticle(id) {
 document.addEventListener('click', async (event) => {
   const t = event.target;
   if (t.dataset.article) return openArticle(t.dataset.article);
+  if (t.id === 'run-tick') {
+    const started = await post('tick', {}, t);
+    if (started) { running = true; setTimeout(loadAndTrack, 2000); }
+    return;
+  }
   if (t.hasAttribute?.('data-close')) return $('article-dialog').close();
   if (t.dataset.act) {
     const id = $('article-body').dataset.id;

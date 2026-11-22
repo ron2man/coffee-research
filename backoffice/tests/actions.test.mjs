@@ -49,3 +49,20 @@ test('dashboard actions: comment, send back to the writer, seed; a running tick 
   await assert.rejects(runAction(root, 'seed', { text: 'x' }, { commit: false }), (e) => e.status === 409);
   release();
 });
+
+test('run-tick starts ops/tick.sh in the state root, and refuses while a tick holds the lock', async (t) => {
+  const { startTick } = await import('../actions.mjs');
+  const { mkdirSync, writeFileSync } = await import('node:fs');
+  const root = sandbox(t);
+  assert.throws(() => startTick(root, { spawnTick: () => ({}) }), /No ops\/tick.sh/);
+  mkdirSync(join(root, 'ops'));
+  writeFileSync(join(root, 'ops/tick.sh'), '#!/bin/bash\n');
+  const calls = [];
+  startTick(root, { spawnTick: (cmd, args, opts) => { calls.push({ cmd, args, opts }); return { unref() {} }; } });
+  assert.equal(calls[0].cmd, '/bin/bash');
+  assert.equal(calls[0].args[0], join(root, 'ops/tick.sh'));
+  assert.equal(calls[0].opts.detached, true);
+  const release = acquireLock(root);
+  assert.throws(() => startTick(root, { spawnTick: () => ({}) }), /already running/);
+  release();
+});
