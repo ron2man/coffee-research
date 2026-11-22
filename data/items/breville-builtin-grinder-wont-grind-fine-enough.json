@@ -3,11 +3,11 @@
   "id": "breville-builtin-grinder-wont-grind-fine-enough",
   "type": "new-post",
   "niche": "coffee",
-  "status": "blocked",
-  "attempts": 2,
+  "status": "briefed",
+  "attempts": 0,
   "revisions": 0,
   "createdAt": "2026-11-21T17:35:36.159Z",
-  "updatedAt": "2026-11-22T16:47:22.588Z",
+  "updatedAt": "2026-11-22T17:31:37.131Z",
   "artifacts": {
     "idea": "data/ideas/breville-builtin-grinder-wont-grind-fine-enough.json",
     "idea-judge": "data/idea-scores/breville-builtin-grinder-wont-grind-fine-enough.json",
@@ -107,9 +107,13 @@
       "to": "blocked",
       "by": "scheduler",
       "reason": "writer failed 2 times: claude -p timed out after 30 minutes"
+    },
+    {
+      "at": "2026-11-22T17:31:37.131Z",
+      "from": "blocked",
+      "to": "briefed",
+      "by": "human:ron",
+      "reason": "Lint fix: 'more hands-on per shot' is workflow wording, not a testing claim. Retry the rewrite."
     }
-  ],
-  "lastError": "claude -p timed out after 30 minutes",
-  "resumeStatus": "briefed",
-  "blockedReason": "writer failed 2 times: claude -p timed out after 30 minutes"
+  ]
 }
