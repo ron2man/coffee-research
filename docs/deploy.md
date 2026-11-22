@@ -94,8 +94,11 @@ in step with `site/public/assets/site.js` when events or parameters change.
 4. **Tag: GA4 Event** per trigger, Measurement ID = the same `G-…`, Event name = `{{Event}}`, and
    event parameters mapped from the `DLV - params.*` variables above.
 5. Preview in GTM Tag Assistant against `https://yourcoffeesetup.com`, then **Submit / Publish**.
-6. In GA4 (Admin > Custom definitions), register `product_id`, `seller`, `market`, `position`,
-   `page_id` as custom dimensions to report on them.
+6. In GA4 (Admin > Custom definitions), register these event-scoped custom dimensions (done
+   2026-11-22). Type the parameter name if the dropdown doesn't list it yet:
+   `product_id` (Product), `seller` (Seller), `market` (Market), `position` (Link position),
+   `page_id` (Page), `tool_state` (Tool state), `tool_id` (Tool), `result` (Tool result),
+   `percent` (Scroll percent). Dimensions only apply to data collected after they exist.
 
 ## CI
 
