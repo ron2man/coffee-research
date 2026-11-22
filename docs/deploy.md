@@ -71,15 +71,27 @@ builds only. GA4 is configured inside the container, not in the site code.
 
 ### GTM container setup (one-time)
 
-1. **Tag: Google tag**, Tag ID = your GA4 `G-…` measurement ID. Trigger: *Initialization - All Pages*.
-   Under Configuration settings add `market` = `{{DLV - market}}` and `page_id` = `{{DLV - page_id}}`.
-2. **Variables** (User-Defined > Data Layer Variable, version 2): `market`, `page_id`, and
-   `params.product_id`, `params.seller`, `params.market`, `params.position`, `params.tool_state`,
-   `params.tool_id`, `params.result`, `params.percent`, `params.page_id`.
+The whole container (steps 1–4) is in [`ops/gtm/container.json`](../ops/gtm/container.json), generated
+by `node ops/gtm/make-container.mjs ops/gtm/container.json`. Import it with **Admin > Import
+Container**, choose your workspace and **Overwrite**: that replaces every tag, trigger and variable in
+the workspace with the file's, so the container holds exactly one Google tag. Check the change preview,
+then do steps 5 and 6. Keep the generator in step with `site/public/assets/site.js` when events or
+parameters change.
+
+1. **Tag: Google tag**, exactly one, Tag ID = your GA4 `G-…` measurement ID (`G-0K16L41GKQ`).
+   Edit the existing one rather than adding another: two Google tags for the same ID send every
+   `page_view` twice. Trigger: *Initialization - All Pages*. Under Configuration settings add two
+   rows directly on the tag: `market` = `{{DLV - market}}` and `page_id` = `{{DLV - page_id}}`.
+2. **Variables** (User-Defined > Data Layer Variable, version 2). Name each one `DLV - <key>`
+   exactly, because the tags reference them by that name: `DLV - market` (key `market`),
+   `DLV - page_id` (key `page_id`), and `DLV - params.product_id`, `DLV - params.seller`,
+   `DLV - params.market`, `DLV - params.position`, `DLV - params.tool_state`,
+   `DLV - params.tool_id`, `DLV - params.result`, `DLV - params.percent`, `DLV - params.page_id`
+   (key = the part after `DLV - `). Market homes push no `page_id`; only guides do.
 3. **Triggers** (Custom Event): `affiliate_click`, `tool_complete`, `scroll_depth`. Or one trigger
    with event name regex `^(affiliate_click|tool_complete|scroll_depth)$`.
 4. **Tag: GA4 Event** per trigger, Measurement ID = the same `G-…`, Event name = `{{Event}}`, and
-   event parameters mapped from the `params.*` variables above.
+   event parameters mapped from the `DLV - params.*` variables above.
 5. Preview in GTM Tag Assistant against `https://yourcoffeesetup.com`, then **Submit / Publish**.
 6. In GA4 (Admin > Custom definitions), register `product_id`, `seller`, `market`, `position`,
    `page_id` as custom dimensions to report on them.
