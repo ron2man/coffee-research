@@ -39,7 +39,8 @@ test('preview build renders both markets, the picker, a pricebox and collapsed s
   assert.match(us, /class="picker" data-tool="bambino-grinder"/);
   assert.match(us, /<details class="sources"><summary>How this guide was put together/);
   assert.match(us, /\$[\d,]+\.\d\d/, 'US prices in dollars');
-  assert.match(gb, /Written for readers in the United States/);
+  // One post for every market: no "written for another market" notice (rebuild-spec principle 8).
+  assert.doesNotMatch(gb, /Written for readers in/);
   assert.match(gb, /No UK model in our records yet/);
   assert.match(us, /<meta name="robots" content="noindex, nofollow">/);
   assert.match(us, /Quality reference · not published/);
