@@ -3,11 +3,11 @@
   "id": "breville-builtin-grinder-wont-grind-fine-enough",
   "type": "new-post",
   "niche": "coffee",
-  "status": "passed",
+  "status": "briefed",
   "attempts": 0,
   "revisions": 0,
   "createdAt": "2026-11-21T17:35:36.159Z",
-  "updatedAt": "2026-11-22T15:35:04.473Z",
+  "updatedAt": "2026-11-22T15:53:26.321Z",
   "artifacts": {
     "idea": "data/ideas/breville-builtin-grinder-wont-grind-fine-enough.json",
     "idea-judge": "data/idea-scores/breville-builtin-grinder-wont-grind-fine-enough.json",
@@ -93,6 +93,13 @@
       "to": "passed",
       "by": "post-judge",
       "reason": "The revision makes the changes the owner asked for, and nothing it was already good at has slipped. The order of checks is unchanged. The ending now settles the decision: \"the built-in grinder is the limit. Don't replace the whole machine... Buy a separate espresso grinder\", with a link to the grinder guide. Machines are named with {{product:}} tokens and offerIds is empty, as the owner instructed. The top results for the query are Home-Barista threads and the Seattle Coffee Gear top-burr post. None of them gives an order of checks, explains why the pressurised basket hides the grind problem, gives the correct burr direction, or says when to stop. The claims I spot-checked (tamp figure and cap-level dose, the Pro's flow timing, the Allen key being for the shower-screen seal) match the knowledge cards. Before publishing, two links need to resolve: the grinder guide slug and the two listed tools don't exist yet."
+    },
+    {
+      "at": "2026-11-22T15:53:26.321Z",
+      "from": "passed",
+      "to": "briefed",
+      "by": "human:ronshtaiman",
+      "reason": "the only thing that missing is the offers / link to articles to buy a separate grinder as I think most of the users won't buy a new machine"
     }
   ]
 }
