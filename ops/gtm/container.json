@@ -29,7 +29,7 @@
           {
             "type": "TEMPLATE",
             "key": "tagId",
-            "value": "{{Const - GA4 Measurement ID}}"
+            "value": "G-0K16L41GKQ"
           },
           {
             "type": "LIST",

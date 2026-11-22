@@ -71,7 +71,8 @@ const INITIALIZATION_ALL_PAGES = '2147479573';
 tag.unshift({
   ...ids, tagId: String(tag.length + 1), name: 'Google tag - GA4', type: 'googtag', fingerprint,
   parameter: [
-    { type: 'TEMPLATE', key: 'tagId', value: '{{Const - GA4 Measurement ID}}' },
+    // Literal ID: with a variable here the Google tag compiled but never fired (container v5).
+    { type: 'TEMPLATE', key: 'tagId', value: MEASUREMENT_ID },
     {
       type: 'LIST', key: 'configSettingsTable',
       list: ['market', 'page_id'].map((p) => ({
