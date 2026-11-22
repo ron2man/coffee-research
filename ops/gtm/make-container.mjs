@@ -65,13 +65,14 @@ const tag = Object.entries(events).map(([name, params], i) => ({
   consentSettings: { consentStatus: 'NOT_SET' },
 }));
 
-// The one Google tag: loads GA4 on Initialization - All Pages (built-in trigger 2147479573), sends
-// page_view, and adds market and page_id to every event from this page.
-const INITIALIZATION_ALL_PAGES = '2147479573';
+// The one Google tag: loads GA4 on All Pages (built-in trigger 2147479553), sends page_view, and
+// adds market and page_id to every event from this page. Not Initialization: there it never fired
+// (container v5/v6), and consent defaults are already set in the page before GTM loads.
+const ALL_PAGES = '2147479553';
 tag.unshift({
   ...ids, tagId: String(tag.length + 1), name: 'Google tag - GA4', type: 'googtag', fingerprint,
   parameter: [
-    // Literal ID: with a variable here the Google tag compiled but never fired (container v5).
+    // Literal ID, not a variable, so GTM can link the tag to the GA4 destination.
     { type: 'TEMPLATE', key: 'tagId', value: MEASUREMENT_ID },
     {
       type: 'LIST', key: 'configSettingsTable',
@@ -84,7 +85,7 @@ tag.unshift({
       })),
     },
   ],
-  firingTriggerId: [INITIALIZATION_ALL_PAGES],
+  firingTriggerId: [ALL_PAGES],
   tagFiringOption: 'ONCE_PER_EVENT',
   monitoringMetadata: { type: 'MAP' },
   consentSettings: { consentStatus: 'NOT_SET' },

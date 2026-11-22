@@ -80,7 +80,7 @@ parameters change.
 
 1. **Tag: Google tag**, exactly one, Tag ID = your GA4 `G-…` measurement ID (`G-0K16L41GKQ`).
    Edit the existing one rather than adding another: two Google tags for the same ID send every
-   `page_view` twice. Trigger: *Initialization - All Pages*. Under Configuration settings add two
+   `page_view` twice. Trigger: *All Pages* (on *Initialization - All Pages* it never fired). Under Configuration settings add two
    rows directly on the tag: `market` = `{{DLV - market}}` and `page_id` = `{{DLV - page_id}}`.
 2. **Variables** (User-Defined > Data Layer Variable, version 2). Name each one `DLV - <key>`
    exactly, because the tags reference them by that name: `DLV - market` (key `market`),
