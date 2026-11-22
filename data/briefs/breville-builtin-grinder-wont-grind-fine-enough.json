@@ -1,0 +1,103 @@
+{
+  "thesis": "If your Barista Express or Pro still runs fast at setting 1, don't buy a grinder yet. Work through Breville's free checks in order (roast date, single-wall basket, full dose, clean burrs), then move the upper burr finer one number at a time. Only consider a separate grinder after a correctly set and, if needed, replaced burr still can't slow the shot.",
+  "reader": "A beginner owner of a Breville/Sage Barista Express (BES870) or Barista Pro (BES878), bought new or refurbished. They have already turned the dial to 1 and still get fast, sour, thin shots.",
+  "readerDecision": "Keep and fix the built-in grinder (clean it, reposition the upper burr, or get a replacement burr), or stop and buy a standalone espresso grinder.",
+  "whatCompetitorsMiss": [
+    "None of the top pages gives an order of checks. Breville's own fast-shot causes (grind, dose, tamp) and its stale-beans warning come before touching the burr, and nobody puts them first.",
+    "Nobody tells readers that the dual-wall (pressurised) basket regulates pressure 'regardless of the grind, dose and tamp pressure or freshness', so you cannot diagnose grind with it fitted.",
+    "Seattle Coffee Gear says to move the top burr coarser when shots run fast at the finest setting. That is the opposite of what the reader needs, and nothing ties the direction to the FINE/COARSE marks Breville shows on the ring.",
+    "Nobody points out that Breville documents the upper burr as an owner feature in the US booklets, needing no tools and moved one number at a time. Forum advice says 'don't touch it' or 'shim it' instead.",
+    "None of them is honest about what isn't documented: the burr number range, the factory position (the '6' that circulates comes from blogs only), burr-contact warnings and warranty effect.",
+    "None mentions that replacement upper burrs come in two part versions depending on the production date code on the sticker under the machine, or that Breville has offered a free burr to at least one owner.",
+    "None gives a stopping rule: the point where the built-in grinder has reached its limit and a separate grinder becomes the honest answer."
+  ],
+  "ourContribution": "tool",
+  "contributionDetail": "An interactive troubleshooter (grind-fault-tree) that asks one question per step and stops at the first step that fixes the shot. Q1 Which machine? Express: dial 1–16, Breville suggests starting at 5. Pro: dial 1–30, default 15. Q2 Does the bag show a 'Roasted On' date within the last 5–20 days? If not, get fresh beans first, because Breville warns stale coffee can pour too quickly. Q3 Which basket is in the portafilter? If it's dual-wall (pressurised), switch to single-wall, since dual-wall masks grind. Q4 After tamping, is the tamper's metal cap level with the basket rim (about 16–19 g for a double), with a firm tamp? If not, increase the dose. Q5 Time when the espresso starts to flow. Breville's guide says 8–12 s is normal, and under 7 s (Pro) or 1–6 s (Express) means under-extracted. Q6 Have you run Breville's burr cleaning (empty the hopper, run empty, remove the top burr, brush both burrs and the chute)? If not, do it now; Breville says oil build-up impedes performance. Q7 Note the current upper-burr number, then move it one number toward FINE using the wire handle (no tools), refit, and re-test with the same beans and dose. Repeat one step at a time. Back off one step if the grinder sound changes to metal contact or the dial stops making a difference. The booklet gives no range or contact warning, and the post says so. Q8 Still fast at the finest dial and burr settings that don't make contact? Check the production date code on the sticker under the machine, which tells you which upper-burr part you'd need (pre- or post-1926 PDC). Contact Breville first, because the booklet's warranty covers defects in function and one owner was offered a free burr. Stopping rule: buy a separate grinder only if all the steps above are done and shots still run fast. As an editorial judgement, also consider one if you mainly want very light roasts. Otherwise, keep the machine as it is.",
+  "mustInclude": [
+    "The recommendation in the first paragraph: do the free checks in order, then the upper burr, before buying anything.",
+    "A test the reader can run tonight on what they own: roast date on the bag, single-wall versus dual-wall basket, the tamper-cap-level dose check, and timing when the espresso starts to flow against Breville's numbers.",
+    "The different dial ranges for the Express (1–16, start at 5) and the Pro (1–30, default 15), so readers know that 1 means they have used up the dial.",
+    "Breville's own wording that the adjustable upper burr is a feature of the machine, moved one number at a time with its wire handle and no tools.",
+    "The direction: move toward FINE when shots are fast. Note plainly that some guides say the opposite.",
+    "A plain 'what the booklet doesn't say' note: no burr number range, no factory position, no burr-contact warning, nothing about warranty and adjustment. The reader is told to note their starting number and back off if they hear metal contact.",
+    "The burr cleaning step, before moving the burr.",
+    "The date-code check for the two upper-burr part numbers (SP0001801 pre-1926 PDC, SP0027464 from 2019 week 26), presented as a parts-seller listing, not a Breville spec. Say to contact Breville support before buying.",
+    "The single owner report (cleaning plus internal burr moved to 1 fixed a refurbished Pro, and Breville offered a free burr), labelled as one person's experience.",
+    "Breville's warning not to grind green or under-roasted beans.",
+    "A 'When I'd choose differently' section: when a standalone grinder makes sense (every step done and still fast, or the reader mainly wants very light roasts), presented as editorial judgement.",
+    "The keep-yours path as the default outcome."
+  ],
+  "leaveOut": [
+    "Stating '6' as the factory upper-burr position. It comes from blogs and snippets only.",
+    "Any claimed burr number range or 'about as fine as it goes' setting combinations taken from forums.",
+    "Shim kits and other modifications not in the manufacturer's procedure.",
+    "Specific standalone grinder recommendations, comparisons or prices. No grinder claims were researched for this question.",
+    "US prices or availability for replacement burrs (only Australian listings were read).",
+    "Claims about how to recognise a worn burr, or about burr lifespan.",
+    "Claims that older Barista Express units had a fixed upper burr.",
+    "Any 'we tested' or hands-on language.",
+    "Spec tables, machine history, general espresso tips not tied to the fast-shot diagnosis, and the advanced lower-burr removal (Breville says it is only for blockages)."
+  ],
+  "assets": [
+    "grind-fault-tree",
+    "upper-burr-direction-diagram"
+  ],
+  "offerTouchpoints": [
+    {
+      "productId": "barista-express",
+      "role": "dont-buy"
+    },
+    {
+      "productId": "barista-pro",
+      "role": "dont-buy"
+    }
+  ],
+  "claimIds": [
+    "barista-pro/grind-settings-start-15",
+    "barista-pro/grind-dial-1-finest-30-coarsest",
+    "barista-pro/upper-burr-adjustment-documented",
+    "barista-pro/baskets-single-vs-dual-wall",
+    "barista-pro/beans-roasted-on-5-20-days",
+    "barista-pro/extraction-guide-fast-shot",
+    "barista-pro/troubleshooting-runs-too-quickly",
+    "barista-pro/burr-cleaning-cycle",
+    "barista-pro/no-green-or-under-roasted-beans",
+    "barista-pro/warranty-scope",
+    "barista-pro/owner-refurb-upper-burr-fix",
+    "barista-pro/upper-burr-part-sp0027464",
+    "barista-pro/upper-burr-part-sp0001801",
+    "barista-express/grind-dial-1-finest-16-coarsest",
+    "barista-express/upper-burr-adjustment-documented",
+    "barista-express/baskets-single-vs-dual-wall",
+    "barista-express/dose-and-extraction-targets",
+    "barista-express/troubleshooting-runs-too-quickly",
+    "barista-express/beans-roasted-on-5-20-days",
+    "barista-express/burr-cleaning-cycle",
+    "barista-express/no-green-or-under-roasted-beans",
+    "barista-express/warranty-scope",
+    "barista-express/upper-burr-part-sp0027464",
+    "barista-express/upper-burr-part-sp0001801",
+    "barista-express/upper-burr-tool"
+  ],
+  "competitorsReviewed": [
+    {
+      "url": "https://www.seattlecoffeegear.com/blogs/scg-blog/adjusting-the-top-burr-on-the-breville-barista-express",
+      "summary": "Clear removal and refit steps for the Barista Express top burr (hopper off, turn to 'align', lift out, rotate the ring, relock). It tells readers with fast shots at the finest setting to move the burr coarser, which is backwards for this reader. There are no checks of beans, basket or dose beforehand, and no range, factory position, burr-contact warning, warranty note, part date code or point at which to buy a grinder."
+    },
+    {
+      "url": "https://completehomebarista.com/guides/breville-barista-pro-grind-settings/",
+      "summary": "A Barista Pro dial-number guide: go 1–2 steps finer if a shot is under 20 s, settings by roast and bean age, purge and clean the chute. It has nothing for a reader already at setting 1. It doesn't separate single-wall from pressurised baskets, and says nothing about the internal burr, burr contact, warranty, replacement parts or when the built-in grinder has reached its limit."
+    },
+    {
+      "url": "https://singletrackworld.com/forum/off-topic/sage-breville-barista-pro-grinder/",
+      "summary": "An owner thread about a refurbished Barista Pro with gritty grounds. Replies conflict: shim it, don't touch the internal burr, return the machine, buy a grinder. The owner's real fix was cleaning plus moving the internal burr to 1, and Breville offered a free upper burr. There is no order of checks, so a reader can't tell which advice applies to them. Home-Barista threads on the same question rank highly but returned 403 to our fetch."
+    }
+  ],
+  "titleOptions": [
+    "Barista Express or Pro still too fast at grind setting 1? Check these in order before buying a grinder",
+    "Breville built-in grinder won't go fine enough: a step-by-step fix, from beans to upper burr",
+    "Fix the Barista Express grinder you have: beans, basket, dose, then the upper burr"
+  ],
+  "slug": "breville-builtin-grinder-wont-grind-fine-enough",
+  "metaDescription": "Barista Express or Pro still fast at setting 1? Check beans, basket, dose and burrs in order, then move the upper burr finer, before you buy a grinder."
+}

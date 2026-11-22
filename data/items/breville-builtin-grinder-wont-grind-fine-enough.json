@@ -3,15 +3,16 @@
   "id": "breville-builtin-grinder-wont-grind-fine-enough",
   "type": "new-post",
   "niche": "coffee",
-  "status": "researched",
+  "status": "briefed",
   "attempts": 0,
   "revisions": 0,
   "createdAt": "2026-11-21T17:35:36.159Z",
-  "updatedAt": "2026-11-22T09:25:30.426Z",
+  "updatedAt": "2026-11-22T10:34:27.113Z",
   "artifacts": {
     "idea": "data/ideas/breville-builtin-grinder-wont-grind-fine-enough.json",
     "idea-judge": "data/idea-scores/breville-builtin-grinder-wont-grind-fine-enough.json",
-    "research": "data/research/breville-builtin-grinder-wont-grind-fine-enough.json"
+    "research": "data/research/breville-builtin-grinder-wont-grind-fine-enough.json",
+    "angle": "data/briefs/breville-builtin-grinder-wont-grind-fine-enough.json"
   },
   "history": [
     {
@@ -48,6 +49,13 @@
       "to": "researched",
       "by": "research",
       "reason": "With poppler installed, I read the current US Breville booklets for the BES870 (X26) and BES878 (Q26) page by page. Breville supports every step of the diagnosis order: bean freshness, single-wall vs dual-wall basket, dose and tamp, finer dial setting, cleaning the burrs, then the upper-burr adjustment (one step at a time), along with the fast-shot troubleshooting rows. Breville presents the upper-burr adjustment as a feature of the machine, so the 'fix it first' path rests on manufacturer evidence. Three things are still open: the upper-burr number range and factory position, any burr-contact warning, and whether adjustment affects the warranty. The writer can handle them honestly as 'the booklet doesn't say'. They don't block the decision. The stopping rule for buying a grinder is an editorial judgement built on these claims, not a missing fact."
+    },
+    {
+      "at": "2026-11-22T10:34:27.113Z",
+      "from": "researched",
+      "to": "briefed",
+      "by": "angle",
+      "reason": "The pages that rank for this question do not give a diagnosis order. Seattle Coffee Gear explains how to remove the top burr but says to go coarser when shots run fast. Complete Home Barista only says to grind finer and has nothing for readers already at setting 1. Forum threads split between shimming, leaving the burr alone and buying a grinder. Breville's own US booklets for the BES870 and BES878 support every free step: roast date, single-wall basket, dose by the tamper cap, burr cleaning, and the upper-burr adjustment, which Breville calls a feature. That gives the post an ordered troubleshooter built on manufacturer evidence, ending with a clear point at which to stop. The open points (burr number range, factory position, burr-contact warning, warranty) are handled openly as things the booklet doesn't say. They do not block the advice."
     }
   ]
 }
