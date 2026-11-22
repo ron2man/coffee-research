@@ -15,7 +15,8 @@
     "schedule": "node ops/schedule.mjs",
     "site:build": "node site/build.mjs",
     "site:preview": "node site/serve.mjs",
-    "dashboard": "node backoffice/server.mjs"
+    "dashboard": "node backoffice/server.mjs",
+    "seed": "node engine/state/seed-cli.mjs"
   },
   "dependencies": {
     "ajv": "^8.20.0",

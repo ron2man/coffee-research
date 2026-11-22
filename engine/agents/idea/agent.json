@@ -22,5 +22,6 @@
       "WebFetch"
     ]
   },
-  "status": "draft"
+  "status": "draft",
+  "acceptsSeeds": true
 }

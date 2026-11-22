@@ -2,5 +2,10 @@
   "description": "Paths that can reach readers. A tick never commits these; they go through a separate PR that a human merges. Everything else is internal and is committed straight to the main branch.",
   "mainBranch": "main",
   "remote": "origin",
-  "publicPaths": ["content/published/", "site/", "data/offers/"]
+  "publicPaths": [
+    "content/published/",
+    "site/",
+    "data/offers/",
+    "holding-page/"
+  ]
 }

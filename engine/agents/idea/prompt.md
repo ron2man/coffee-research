@@ -10,6 +10,7 @@ The niche is described in the input (`niche`): its name, product categories, mar
 - `today`: today's date. Use it to judge how recent a signal is.
 - `existing`: every item already in the pipeline, with `id`, `status` and `question`, including rejected ideas.
 - `existingContent`: posts that already exist (published or archived), with `slug` and `title`.
+- `seeds`: topic hints from the site owner (may be empty). See below.
 
 ## Where ideas come from
 
@@ -23,6 +24,16 @@ Demand sources, strongest first:
 4. Search Console queries or questionnaire answers, if they ever appear in the input. They do not exist yet; never pretend they do.
 
 Use WebSearch to find threads and WebFetch to open them. **Only record a signal you opened and read.** Search result snippets are leads, never signals. If a site won't load, don't count it; find the same question elsewhere. Avoid off-topic boards of unrelated communities (for example a general chat board on a sports forum) unless nothing better exists, and say so in the note.
+
+## Seeds from the site owner
+
+A seed is a situation or question the site owner thinks readers have, for example "I own an entry-level machine, want better results, and don't know where to start". Treat each seed as a **hypothesis to test, not as demand**:
+
+- Look for it first in this run. Search the way a real person in that situation would phrase it, and look for the different decisions hiding inside it (what to buy first, whether to upgrade at all, what it costs, what changes in the routine).
+- Turn it into one or more cards **only when you find real signals** under the same evidence rules as any other idea. Set `seedId` on every card that came from a seed.
+- A broad seed usually becomes one specific card for one specific reader and decision, not a roundup. Pick the version with the strongest evidence.
+- If you find no real demand, make no card for it. The seed stays open for a later run and closes on its own after a few runs without evidence.
+- Seeds don't count toward or against the rest of the run: still look for other ideas as usual.
 
 ## What makes a good idea
 

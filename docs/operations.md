@@ -40,6 +40,7 @@ npm run prompt -- list                     # prompt proposals waiting for you
 npm run prompt -- show <id>                # summary + diff
 npm run prompt -- apply <id> --commit      # or: reject <id> --reason "..." --commit
 npm run feedback -- add writer "Openings still bury the recommendation" --commit
+npm run seed -- add "I have a capsule machine and want better coffee. Where do I start?" --commit
 npm run item -- resume <id> --reason "..." --commit
 ```
 

@@ -120,6 +120,10 @@
         "maxLength": 80
       },
       "description": "Existing item or post IDs with similar intent."
+    },
+    "seedId": {
+      "type": "string",
+      "description": "The id of the human seed this card came from, if any."
     }
   },
   "allOf": [

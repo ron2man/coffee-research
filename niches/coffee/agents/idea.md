@@ -12,3 +12,5 @@ Naming: Breville in the US and Australia is sold as Sage in the UK and Europe. U
 Coverage we already have (as of the archived drafts): choosing a grinder for the Bambino, Bambino Plus cleaning vs descaling, ECM Classika III vs Classika PID, Fellow Opus espresso running fast, Linea Micra cup clearance. Don't re-propose these without new demand.
 
 Categories in scope: home espresso machines, grinders and accessories (scales, baskets, tampers, distribution tools, water). Beans are out of scope for now.
+
+Readers coming from capsule or pod machines who want better coffee are in scope: their decisions (whether to upgrade at all, what to buy first, a first espresso machine and grinder on a budget, what the routine really involves) are buying decisions in our categories. Keep the "keep your capsule machine" path honest when it fits them.

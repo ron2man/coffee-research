@@ -27,6 +27,7 @@ npm run validate                           # niche, agents, items, artifacts, kn
 npm run tick -- --dry-run                  # show what the scheduler would run next
 npm run tick -- --commit                   # run one tick, commit + push internal changes to main
 npm run item -- list                       # items and status; also show|resume|reject|park|reopen <id> --reason "..."
+npm run seed -- add "topic hint" --commit    # seed the idea agent (runs at the next tick)
 npm run feedback -- list | add <agent> "note"   # feedback per agent
 npm run prompt -- list | show|apply|reject <id> # prompt proposals from the tuner
 npm run site:preview                       # preview site on http://127.0.0.1:4321 (mock prices)

@@ -15,6 +15,7 @@ import { parseArgs } from 'node:util';
 import { fileURLToPath } from 'node:url';
 import { instructionsFor, loadAgents } from '../agents/registry.mjs';
 import { contentIndex } from '../state/content.mjs';
+import { openSeeds, settleSeeds } from '../state/seeds.mjs';
 import { categoryIds } from '../state/niche.mjs';
 import { loadCardsSync, validateCard } from '../state/knowledge.mjs';
 import { runChecks } from '../feedback/checks.mjs';
@@ -25,7 +26,7 @@ import { defaultNicheId, loadNiche, repoRoot } from '../state/niche.mjs';
 import { appendRun, loadItems, readJson, readRuns, saveItem, writeJsonAtomic, writeTextAtomic } from '../state/store.mjs';
 import { assertValid } from '../state/validate.mjs';
 import { RunnerUnavailableError, runnerFor } from '../runner/index.mjs';
-import { commitInternal, commitMessage, syncMain } from './git.mjs';
+import { assertFresh, commitInternal, commitMessage, remoteStatus, syncMain } from './git.mjs';
 import { LockedError, acquireLock } from './lock.mjs';
 import { changedSince, snapshot } from './workspace.mjs';
 
@@ -92,7 +93,9 @@ export function planTick({ agents, items, runs, schedule = null, now = new Date(
           continue;
         }
       }
-      if (agent.schedule && !ignoreSchedule) {
+      // A seed nobody has looked at yet (a human's topic hint) brings the daily run forward.
+      const freshSeed = (loop.freshSeeds ?? 0) > 0 && agent.acceptsSeeds;
+      if (agent.schedule && !ignoreSchedule && !freshSeed) {
         // A run the runner never started (missing CLI, signed out) does not use up the interval.
         const last = lastRunAt(agent, runs, schedule);
         const since = last === null ? Infinity : now.getTime() - last;
@@ -129,6 +132,7 @@ function buildInput(root, niche, agent, chosenItems, allItems) {
       niche,
       today: new Date().toISOString().slice(0, 10),
       existingContent: contentIndex(root),
+      ...(agent.acceptsSeeds ? { seeds: openSeeds(root).map(({ id, text, note }) => ({ id, text, note })) } : {}),
       existing: allItems.map((item) => ({
         id: item.id,
         status: item.status,
@@ -151,7 +155,7 @@ function validateArtifact(agent, artifact, label) {
 }
 
 /** Validate the whole output before touching any file. Returns the decisions to apply. */
-function checkOutput(agent, output, chosenItems, allItems) {
+function checkOutput(root, agent, output, chosenItems, allItems) {
   try {
     assertValid(agent.validateEnvelope, output, `${agent.name} output`);
   } catch (error) {
@@ -159,8 +163,10 @@ function checkOutput(agent, output, chosenItems, allItems) {
   }
   if (agent.mode === 'generate') {
     const taken = new Set(allItems.map((item) => item.id));
+    const seedIds = new Set(agent.acceptsSeeds ? openSeeds(root).map((seed) => seed.id) : []);
     for (const artifact of output.items) {
       validateArtifact(agent, artifact, `${agent.name} item`);
+      if (artifact.seedId && !seedIds.has(artifact.seedId)) throw new OutputError(`${agent.name} item ${artifact.id} cites unknown or closed seed ${artifact.seedId}`);
       if (taken.has(artifact.id)) throw new OutputError(`${agent.name} produced duplicate id ${artifact.id}`);
       taken.add(artifact.id);
     }
@@ -339,6 +345,7 @@ export async function tick({ root = repoRoot, runner, now = new Date(), nicheId,
   const loop = {
     review: critic ? reviewCandidates({ critic, agents, items, state: readReviewState(root), now }) : [],
     tune: tuner ? tuneCandidates({ tuner, agents, root }) : [],
+    freshSeeds: openSeeds(root).filter((seed) => seed.considered === 0).length,
   };
   const plan = planTick({ agents, items, runs: readRuns(root), schedule: readSchedule(root), now, ignoreSchedule, loop });
   if (!plan.chosen) return { ran: null, skipped: plan.skipped };
@@ -396,7 +403,7 @@ export async function tick({ root = repoRoot, runner, now = new Date(), nicheId,
       if (problem) throw new OutputError(problem);
       checked = response.output.artifact;
     } else {
-      checked = checkOutput(agent, response.output, chosenItems, items);
+      checked = checkOutput(root, agent, response.output, chosenItems, items);
       const outputs = agent.mode === 'generate'
         ? checked.map((artifact) => ({ itemId: artifact.id, artifact }))
         : checked.map((d) => ({ itemId: d.itemId, artifact: d.artifact }));
@@ -448,7 +455,10 @@ export async function tick({ root = repoRoot, runner, now = new Date(), nicheId,
     }));
   }
   const extra = { ...(warnings.length ? { warnings } : {}), ...(cardChanges.length ? { cardsChanged: cardChanges.map((c) => c.path) } : {}) };
-  if (agent.mode === 'generate') return { ...summary, created: applyGenerated(root, niche, agent, checked, eventMeta, written), ...extra };
+  if (agent.mode === 'generate') {
+    if (agent.acceptsSeeds) written.push(...settleSeeds(root, request.input.seeds ? openSeeds(root).filter((seed) => request.input.seeds.some((s) => s.id === seed.id)) : [], checked));
+    return { ...summary, created: applyGenerated(root, niche, agent, checked, eventMeta, written), ...extra };
+  }
   return { ...summary, results: applyDecisions(root, agent, checked, chosenItems, eventMeta, written), ...extra };
 }
 
@@ -464,8 +474,14 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
     const root = values.root ? resolve(values.root) : repoRoot;
     const commit = values.commit && !values['dry-run'];
     const run = async () => {
+      // Never run agents on a stale checkout: --commit syncs first; a plain tick refuses if behind.
+      let freshness = null;
       if (commit) syncMain(root);
+      else if (values['dry-run']) freshness = remoteStatus(root);
+      else freshness = assertFresh(root);
       const result = await tick({ root, dryRun: values['dry-run'], nicheId: values.niche, lock: false, ignoreSchedule: values['ignore-schedule'] });
+      if (freshness?.behind > 0) result.warning = `checkout is ${freshness.behind} commit(s) behind the remote; a real tick here would refuse to run`;
+      if (freshness?.unknown) result.warning = `could not check the remote (${freshness.reason}); this checkout may be stale`;
       if (commit && result.changedFiles?.length) result.commit = commitInternal(root, result.changedFiles, commitMessage(result));
       return result;
     };

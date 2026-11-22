@@ -8,6 +8,7 @@ import { loadItems, readJson, readRuns } from '../engine/state/store.mjs';
 import { listFeedback, listProposals } from '../engine/feedback/store.mjs';
 import { lockPath, isStale } from '../engine/scheduler/lock.mjs';
 import { tick } from '../engine/scheduler/tick.mjs';
+import { listSeeds } from '../engine/state/seeds.mjs';
 
 const hourMs = 3_600_000;
 
@@ -108,6 +109,7 @@ export async function todayData(root) {
     pipeline,
     feedback,
     proposals: proposals.slice(-10).reverse().map(({ id, agent, status, summary, at }) => ({ id, agent, status, summary, at })),
+    seeds: listSeeds(root).reverse().slice(0, 15).map(({ id, text, status, considered, itemIds }) => ({ id, text, status, considered, itemIds })),
     costs: costs(runs),
     recentRuns: runs.slice(-25).reverse().map(({ timestamp, agent, itemId, status, outcome, error, to, durationMs, usage }) => ({ timestamp, agent, itemId, status, outcome, error, to, minutes: durationMs ? Math.round(durationMs / 6000) / 10 : null, costUsd: usage?.costUsd ?? null })),
   };

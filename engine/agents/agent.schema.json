@@ -235,6 +235,10 @@
           "minimum": 1
         }
       }
+    },
+    "acceptsSeeds": {
+      "type": "boolean",
+      "description": "generate mode: receives open human seeds (data/seeds) as topic hints; a fresh seed brings a scheduled run forward."
     }
   },
   "allOf": [

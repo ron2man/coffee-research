@@ -9,7 +9,7 @@ import { repoRoot } from '../state/niche.mjs';
 import { saveItem } from '../state/store.mjs';
 import { fakeRunner } from '../runner/index.mjs';
 import { tick } from '../scheduler/tick.mjs';
-import { classify, commitInternal, commitMessage, syncMain } from '../scheduler/git.mjs';
+import { StaleCheckoutError, assertFresh, classify, commitInternal, commitMessage, syncMain } from '../scheduler/git.mjs';
 
 function repo(t) {
   const dir = mkdtempSync(join(tmpdir(), 'engine-git-'));
@@ -31,6 +31,16 @@ function repo(t) {
   git('push', '-q', 'origin', 'main');
   const remoteGit = (...args) => execFileSync('git', ['--git-dir', remote, ...args], { encoding: 'utf8' }).trim();
   return { root, git, remoteGit };
+}
+
+/** A second clone of the same remote (the scheduler's clone, or another machine). */
+function otherClone(root) {
+  const other = join(root, '..', 'other');
+  execFileSync('git', ['clone', '-q', join(root, '..', 'remote.git'), other]);
+  const otherGit = (...args) => execFileSync('git', args, { cwd: other, encoding: 'utf8' }).trim();
+  otherGit('config', 'user.email', 'scheduler@example.test');
+  otherGit('config', 'user.name', 'Scheduler');
+  return { other, otherGit };
 }
 
 const research = () => JSON.parse(readFileSync(join(repoRoot, 'engine/agents/research/fixtures/valid.json'), 'utf8'));
@@ -128,4 +138,62 @@ test('an agent that writes files itself fails the run and nothing is committed f
 test('commit messages describe critic and tuner runs', () => {
   assert.equal(commitMessage({ ran: 'critic', review: { target: 'idea', findings: 7 } }), 'tick(critic): reviewed idea (7 findings)');
   assert.equal(commitMessage({ ran: 'tuner', tune: { target: 'idea', proposal: 'idea-x' } }), 'tick(tuner): proposed idea-x for idea');
+});
+
+test('a plain tick refuses to run on a checkout that is behind the remote', async (t) => {
+  const { root, git } = repo(t);
+  saveItem(root, newItem({ id: 'sour-shots', niche: 'coffee', status: 'idea_approved', by: 'test' }));
+  git('add', 'data/items/sour-shots.json');
+  git('commit', '-qm', 'Seed item');
+  git('push', '-q', 'origin', 'main');
+  assert.deepEqual(assertFresh(root), { behind: 0, ahead: 0 });
+
+  // The scheduler's clone researches the item and pushes; this checkout has not pulled.
+  const { other, otherGit } = otherClone(root);
+  await tick({ root: other, runner: fakeRunner({ research }) });
+  otherGit('add', '-A');
+  otherGit('commit', '-qm', 'tick(research): sour-shots done→researched');
+  otherGit('push', '-q', 'origin', 'main');
+
+  assert.throws(() => assertFresh(root), (error) => error instanceof StaleCheckoutError && /1 commit\(s\) behind origin\/main/.test(error.message));
+  git('pull', '-q', '--ff-only', 'origin', 'main');
+  assert.equal(assertFresh(root).behind, 0);
+});
+
+test('sync refuses, and touches nothing, when local edits clash with incoming commits', (t) => {
+  const { root, git, remoteGit } = repo(t);
+  saveItem(root, newItem({ id: 'sour-shots', niche: 'coffee', status: 'idea_approved', by: 'test' }));
+  git('add', 'data/items/sour-shots.json');
+  git('commit', '-qm', 'Seed item');
+  git('push', '-q', 'origin', 'main');
+
+  const { other, otherGit } = otherClone(root);
+  writeFileSync(join(other, 'data/items/sour-shots.json'), '{"by": "scheduler"}\n');
+  otherGit('commit', '-qam', 'Scheduler moved the item');
+  otherGit('push', '-q', 'origin', 'main');
+
+  // A stale manual run rewrote the same file locally (uncommitted).
+  writeFileSync(join(root, 'data/items/sour-shots.json'), '{"by": "manual run"}\n');
+  const head = git('rev-parse', 'HEAD');
+  assert.throws(() => syncMain(root), /clash with new commits on origin\/main: data\/items\/sour-shots\.json\. Nothing was changed/);
+  assert.equal(git('rev-parse', 'HEAD'), head);
+  assert.equal(readFileSync(join(root, 'data/items/sour-shots.json'), 'utf8'), '{"by": "manual run"}\n');
+  assert.equal(git('stash', 'list'), '');
+  assert.equal(git('diff', '--name-only', '--diff-filter=U'), '');
+  assert.notEqual(remoteGit('rev-parse', 'main'), head);
+});
+
+test('sync fast-forwards past unrelated local edits', (t) => {
+  const { root, git, remoteGit } = repo(t);
+  const { other, otherGit } = otherClone(root);
+  writeFileSync(join(other, 'README.md'), 'scheduler edit\n');
+  otherGit('add', 'README.md');
+  otherGit('commit', '-qm', 'Scheduler commit');
+  otherGit('push', '-q', 'origin', 'main');
+
+  writeFileSync(join(root, '.gitignore'), '.backoffice/\nnotes/\n'); // a human edit elsewhere
+  syncMain(root);
+  assert.equal(git('rev-parse', 'HEAD'), remoteGit('rev-parse', 'main'));
+  assert.match(git('status', '--porcelain'), /M \.gitignore$/);
+  assert.equal(git('stash', 'list'), '');
 });

@@ -297,3 +297,33 @@ test('writer lint: inline links, invented testing and unsupported claims fail th
   const good = await tick({ root, agents, runner: fakeRunner(handlers({ writer: () => draft(`Get the [a](https://a.test).{filler}${sources}`) })) });
   assert.equal(good.error, undefined, good.error);
 });
+
+test('seeds: a fresh seed brings the idea run forward, cards cite it, and unused seeds close after 3 runs', async (t) => {
+  const { addSeed, listSeeds } = await import('../state/seeds.mjs');
+  const root = sandbox(t);
+  const onlyIdea = agents.filter((agent) => agent.name === 'idea');
+  const first = await tick({ root, agents: onlyIdea, runner: fakeRunner({ idea: () => ({ items: [] }) }) });
+  assert.equal(first.ran, 'idea');
+  assert.equal((await tick({ root, agents: onlyIdea, runner: fakeRunner({ idea: () => ({ items: [] }) }) })).ran, null, 'daily interval');
+
+  addSeed(root, { text: 'I have a capsule machine and want better coffee', by: 'ron' });
+  addSeed(root, { text: 'Is a lever machine worth it', by: 'ron' });
+  const [capsule, lever] = listSeeds(root);
+  let seen;
+  const withSeed = await tick({
+    root, agents: onlyIdea,
+    runner: fakeRunner({ idea: (input) => { seen = input.seeds; return { items: [{ ...ideaCard('capsule-upgrade'), seedId: capsule.id }] }; } }),
+  });
+  assert.equal(withSeed.ran, 'idea', 'a fresh seed overrides the interval');
+  assert.equal(seen.length, 2);
+  const after = Object.fromEntries(listSeeds(root).map((s) => [s.id, s]));
+  assert.equal(after[capsule.id].status, 'used');
+  assert.deepEqual(after[capsule.id].itemIds, ['capsule-upgrade']);
+  assert.equal(after[lever.id].considered, 1);
+  assert.equal(after[lever.id].status, 'open');
+
+  const bad = await tick({ root, agents: onlyIdea, ignoreSchedule: true, runner: fakeRunner({ idea: () => ({ items: [{ ...ideaCard('x'), seedId: 'made-up' }] }) }) });
+  assert.match(bad.error, /unknown or closed seed made-up/);
+  for (let i = 0; i < 2; i += 1) await tick({ root, agents: onlyIdea, ignoreSchedule: true, runner: fakeRunner({ idea: () => ({ items: [] }) }) });
+  assert.equal(listSeeds(root).find((s) => s.id === lever.id).status, 'no-demand');
+});
