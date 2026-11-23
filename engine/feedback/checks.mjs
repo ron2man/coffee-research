@@ -2,6 +2,13 @@
 // schema error; warnings are logged as feedback for the critic and the prompt tuner.
 // Checks are about evidence and honesty rules from the spec, never about one niche.
 import { claimStatus } from '../state/knowledge.mjs';
+import { resolveTokens } from '../state/tokens.mjs';
+
+// Title rules (all markets, after product names are filled in). The H1 can carry a little more
+// than the search-result title, which Google cuts at about 60 characters.
+export const TITLE_MAX = 70;
+export const SEO_TITLE_MAX = 60;
+export const DESCRIPTION_MAX = 160;
 
 const DAY_MS = 86_400_000;
 export const SIGNAL_MAX_AGE_DAYS = 730;
@@ -108,6 +115,7 @@ const CHECKS = {
       for (const id of draft.offerIds ?? []) {
         if (!context.cards?.has(id)) blocking.push(`${itemId}: offers ${id}, which has no knowledge card`);
       }
+      for (const problem of titleProblems(draft, context)) blocking.push(`${itemId}: ${problem}`);
       const slugs = new Set((context.existingContent ?? []).map((post) => post.slug));
       for (const [, slug] of body.matchAll(/\{\{guide:([a-z0-9-]+)(?:\|[^}]*)?\}\}/g)) {
         if (!slugs.has(slug)) warnings.push(`${itemId}: links to guide ${slug}, which doesn't exist yet (rendered as plain text)`);
@@ -117,7 +125,21 @@ const CHECKS = {
   },
 };
 
-/** outputs: [{ itemId, artifact }]. context: { today, cards, existingContent }. */
+/** Length problems for title, seoTitle and description in the longest market. */
+export function titleProblems(draft, { cards = new Map(), markets = [{ id: 'US' }] } = {}) {
+  const longest = (text) => (text ? Math.max(...markets.map((market) => resolveTokens(text, { cards, market }).length)) : 0);
+  const problems = [];
+  const title = longest(draft.title);
+  const seo = longest(draft.seoTitle);
+  const description = longest(draft.description);
+  if (title > TITLE_MAX) problems.push(`title is ${title} characters with product names filled in (max ${TITLE_MAX}); shorten it and move the detail to the description`);
+  if (draft.seoTitle && seo > SEO_TITLE_MAX) problems.push(`seoTitle is ${seo} characters (max ${SEO_TITLE_MAX})`);
+  if (!draft.seoTitle && title > SEO_TITLE_MAX) problems.push(`title is ${title} characters, over the ${SEO_TITLE_MAX} a search result shows; add a seoTitle of at most ${SEO_TITLE_MAX}`);
+  if (description > DESCRIPTION_MAX) problems.push(`description is ${description} characters with product names filled in (max ${DESCRIPTION_MAX})`);
+  return problems;
+}
+
+/** outputs: [{ itemId, artifact }]. context: { today, cards, markets, existingContent }. */
 export function runChecks(agentName, outputs, context) {
   const check = CHECKS[agentName];
   return check ? check({ outputs, context }) : { blocking: [], warnings: [] };

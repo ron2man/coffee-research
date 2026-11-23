@@ -129,6 +129,7 @@ async function openArticle(id) {
     <div class="prose">${a.draft ? a.draft.html : '<p class="muted">The writer hasn’t produced this draft yet.</p>'}</div>
     <div class="side">
       <p><span class="pill ${esc(a.status)}">${esc(a.status.replace('_', ' '))}</span>${a.previewUrl ? `<a href="${esc(a.previewUrl)}" target="_blank" rel="noopener">Open in the site preview</a> <span class="muted">(npm run site:preview)</span>` : ''}</p>
+      ${a.draft ? `<h3>Title</h3><p class="muted">${a.draft.titleLength} characters (max 70)${a.draft.seoTitle ? `<br>Search title: ${esc(a.draft.seoTitle)} (${a.draft.seoTitle.length})` : ''}</p>${a.draft.titleProblems.map((p) => `<div class="note open">${esc(p)}</div>`).join('')}` : ''}
       <h3>Your comment</h3>
       <textarea id="article-note" placeholder="What should change? Be specific: the writer gets this word for word."></textarea>
       <div class="actions">

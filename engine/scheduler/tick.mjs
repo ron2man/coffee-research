@@ -14,7 +14,7 @@ import { join, resolve } from 'node:path';
 import { parseArgs } from 'node:util';
 import { fileURLToPath } from 'node:url';
 import { instructionsFor, loadAgents } from '../agents/registry.mjs';
-import { contentIndex } from '../state/content.mjs';
+import { contentIndex, wantedGuides } from '../state/content.mjs';
 import { openSeeds, settleSeeds } from '../state/seeds.mjs';
 import { categoryIds } from '../state/niche.mjs';
 import { loadCardsSync, validateCard } from '../state/knowledge.mjs';
@@ -31,6 +31,7 @@ import { LockedError, acquireLock } from './lock.mjs';
 import { changedSince, snapshot } from './workspace.mjs';
 
 export const MAX_ATTEMPTS = 2;
+export const SEED_WAIT_HOURS = 2;
 const hourMs = 3_600_000;
 
 class OutputError extends Error {
@@ -77,6 +78,13 @@ function byAge(a, b) {
 /** Decide what runs this tick. Pure: no I/O. */
 export function planTick({ agents, items, runs, schedule = null, now = new Date(), ignoreSchedule = false, loop = {} }) {
   const skipped = [];
+  // A human seed shouldn't wait behind a busy pipeline: after SEED_WAIT_HOURS the seed-taking agent
+  // runs first (unless its queue is full).
+  const seedAgent = agents.find((agent) => agent.acceptsSeeds);
+  if (seedAgent && loop.oldestFreshSeedAt && now.getTime() - Date.parse(loop.oldestFreshSeedAt) >= SEED_WAIT_HOURS * hourMs) {
+    const queued = seedAgent.queueCap ? items.filter((item) => seedAgent.queueCap.statuses.includes(item.status)).length : 0;
+    if (!seedAgent.queueCap || queued < seedAgent.queueCap.max) return { chosen: { agent: seedAgent, items: [] }, skipped: [{ agent: '*', reason: `a seed has waited over ${SEED_WAIT_HOURS}h` }] };
+  }
   for (const agent of agents) {
     if (agent.mode === 'review' || agent.mode === 'tune') {
       const due = (agent.mode === 'review' ? loop.review : loop.tune) ?? [];
@@ -132,6 +140,7 @@ function buildInput(root, niche, agent, chosenItems, allItems) {
       niche,
       today: new Date().toISOString().slice(0, 10),
       existingContent: contentIndex(root),
+      wantedGuides: wantedGuides(root),
       ...(agent.acceptsSeeds ? { seeds: openSeeds(root).map(({ id, text, note }) => ({ id, text, note })) } : {}),
       existing: allItems.map((item) => ({
         id: item.id,
@@ -144,10 +153,22 @@ function buildInput(root, niche, agent, chosenItems, allItems) {
   const notes = (item) => openFeedback(root, agent.name)
     .filter((entry) => entry.source === 'human' && entry.itemIds.includes(item.id))
     .map((entry) => ({ at: entry.at, note: entry.findings.map((f) => f.problem).join(' ') }));
-  const entries = chosenItems.map((item) => ({ item, artifacts: loadArtifacts(root, item, agent.inputArtifacts), humanNotes: notes(item) }));
+  const recheck = (item, artifacts) => {
+    if (!agent.recheck || !artifacts[agent.recheck.agent]) return undefined;
+    const { cards } = loadCardsSync(join(root, 'knowledge'), categoryIds(niche));
+    return runChecks(agent.recheck.agent, [{ itemId: item.id, artifact: artifacts[agent.recheck.agent] }], {
+      today: new Date().toISOString().slice(0, 10), cards, markets: niche.markets, existingContent: contentIndex(root),
+    });
+  };
+  const entries = chosenItems.map((item) => {
+    const artifacts = loadArtifacts(root, item, agent.inputArtifacts);
+    const automatedChecks = recheck(item, artifacts);
+    return { item, artifacts, humanNotes: notes(item), ...(automatedChecks ? { automatedChecks } : {}) };
+  });
   const today = new Date().toISOString().slice(0, 10);
   const existingContent = contentIndex(root);
-  return agent.mode === 'batch' ? { niche, today, existingContent, items: entries } : { niche, today, existingContent, ...entries[0] };
+  const wanted = wantedGuides(root);
+  return agent.mode === 'batch' ? { niche, today, existingContent, wantedGuides: wanted, items: entries } : { niche, today, existingContent, wantedGuides: wanted, ...entries[0] };
 }
 
 function validateArtifact(agent, artifact, label) {
@@ -191,6 +212,18 @@ function checkOutput(root, agent, output, chosenItems, allItems) {
   }
   if (agent.maxAdvance) return capAdvances(agent, decisions);
   return decisions;
+}
+
+/** A post can't pass while the writer's blocking checks fail (e.g. a rule added after it was written). */
+function enforceRecheck(agent, decisions, input) {
+  const blocking = (agent.mode === 'batch' ? [] : input.automatedChecks?.blocking) ?? [];
+  if (!blocking.length) return decisions;
+  return decisions.map((d) => (d.outcome !== agent.recheck.passOutcome ? d : {
+    ...d,
+    outcome: agent.recheck.failOutcome,
+    reason: `Automated checks still fail, so it can't pass: ${blocking.join('; ')}. Judge's view: ${d.reason}`,
+    artifact: { ...d.artifact, blockingActions: [...blocking.map((b) => b.replace(/^[^:]+: /, '')).slice(0, 3 - Math.min(3, d.artifact.blockingActions?.length ?? 0)), ...(d.artifact.blockingActions ?? [])].slice(0, 3) },
+  }));
 }
 
 function rankScore(artifact, key) {
@@ -350,6 +383,7 @@ export async function tick({ root = repoRoot, runner, now = new Date(), nicheId,
     review: critic ? reviewCandidates({ critic, agents, items, state: readReviewState(root), now }) : [],
     tune: tuner ? tuneCandidates({ tuner, agents, root }) : [],
     freshSeeds: openSeeds(root).filter((seed) => seed.considered === 0).length,
+    oldestFreshSeedAt: openSeeds(root).filter((seed) => seed.considered === 0).map((seed) => seed.at).sort()[0] ?? null,
   };
   const plan = planTick({ agents, items, runs: readRuns(root), schedule: readSchedule(root), now, ignoreSchedule, loop });
   if (!plan.chosen) return { ran: null, skipped: plan.skipped };
@@ -408,6 +442,7 @@ export async function tick({ root = repoRoot, runner, now = new Date(), nicheId,
       checked = response.output.artifact;
     } else {
       checked = checkOutput(root, agent, response.output, chosenItems, items);
+      if (agent.recheck) checked = enforceRecheck(agent, checked, request.input);
       const outputs = agent.mode === 'generate'
         ? checked.map((artifact) => ({ itemId: artifact.id, artifact }))
         : checked.map((d) => ({ itemId: d.itemId, artifact: d.artifact }));
@@ -415,6 +450,7 @@ export async function tick({ root = repoRoot, runner, now = new Date(), nicheId,
       checks = runChecks(agent.name, outputs, {
         today: new Date().toISOString().slice(0, 10),
         cards: cardsWith(root, niche, cardChanges),
+        markets: niche.markets,
         existingContent: contentIndex(root),
       });
       if (checks.blocking.length) {

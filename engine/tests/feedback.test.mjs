@@ -156,3 +156,15 @@ test('testing-claim lint: real claims fail, workflow wording and disclaimers pas
   assert.deepEqual(testingClaims("We've tested it for a month."), ["We've tested"]);
   assert.deepEqual(testingClaims('Our hands-on review found it loud.'), ['Our hands-on']);
 });
+
+test('title rules: measured in the longest market after product names are filled in', async () => {
+  const { titleProblems } = await import('../feedback/checks.mjs');
+  const cards = new Map([['m', { card: { name: 'M', variants: [{ markets: ['US'], name: 'Brand Machine' }, { markets: ['GB'], name: 'Other Brand the Machine Pro Plus' }] } }]]);
+  const markets = [{ id: 'US' }, { id: 'GB' }];
+  assert.deepEqual(titleProblems({ title: 'Fix a fast {{product:m}} shot', description: 'd' }, { cards, markets }), []);
+  const long = '{{product:m}} still too fast at grind setting 1? Check these in order first';
+  const problems = titleProblems({ title: long, description: 'd' }, { cards, markets });
+  assert.ok(problems.some((p) => /title is 1\d\d characters|title is \d\d characters with/.test(p)));
+  assert.ok(problems.some((p) => /add a seoTitle/.test(p)));
+  assert.deepEqual(titleProblems({ title: 'Fast {{product:m}} shots? Check these first', seoTitle: 'Fast {{product:m}} shots: what to check', description: 'd' }, { cards, markets }), []);
+});

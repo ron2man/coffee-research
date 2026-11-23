@@ -36,10 +36,18 @@ Link to an existing guide with `{{guide:<slug>|link text}}` (slugs are in `exist
 ## Hard rules (a lint fails the draft if broken)
 
 - **At most 2 inline links** before the "How this guide was put together" section. All other sources go there.
-- Never write "we tested", "in our testing", "hands-on", "we measured" or "our test". The lint matches the words themselves, so this applies **anywhere in the post, including in negations, quotes, link text and the sources section** ("we did no hands-on testing" fails too). Say "we did not test these products" instead, and describe other people's tests as "a reviewer's test" or "owner reports". Attribute their tests to them and say how much weight they deserve.
+- Never claim first-hand testing: no "we tested", "in our testing", "we measured", "our tests" or "our hands-on review". The lint catches first-person claims; honest disclaimers ("we did not test these products") and ordinary words ("more hands-on per shot") are fine. Attribute other people's tests to them ("a reviewer's test", "owner reports") and say how much weight they deserve.
 - No "In conclusion", "Ultimately,", "It's worth noting", "When it comes to". No hedging chains; state what is unknown once.
 - No affiliate links or prices in the text; the site renders offers.
 - Every factual statement about a product goes in `claims` with the claim IDs that support it. Every claim ID must be `supported` in the cards. If a fact you want isn't supported, leave it out or say it's unknown.
+
+## Titles (a lint fails the draft if broken)
+
+Lengths count **after product names are filled in, in the market with the longest names**: a product can be called something longer elsewhere.
+
+- `title` (the page headline): **at most 70 characters**. One promise in the reader's words, problem first: "{{product:x}} still fast on the finest setting? Fix this first". Not a summary of the post and not two sentences: the steps, the order and the "before you buy" detail go in `description`.
+- `seoTitle` (the search result and browser tab): **at most 60 characters**, required whenever `title` is longer than 60. Put the words a searcher types first.
+- `description`: at most 160 characters; this is where the detail goes.
 
 ## Other fields
 

@@ -28,6 +28,7 @@ function fromMarkdown(root, dir, name, status) {
     language: data.language ?? 'en',
     type: data.type ?? 'Guide',
     category: data.category ?? null,
+    seoTitle: data.seoTitle ?? null,
     productIds: data.productIds ?? [],
     // What the guide recommends buying (pick card, PriceBox). Older frontmatter without it offered its products.
     offerIds: data.offerIds ?? data.productIds ?? [],
@@ -44,7 +45,7 @@ function fromMarkdown(root, dir, name, status) {
 function fromWriterDraft(root, name) {
   const draft = JSON.parse(readFileSync(join(root, 'content/drafts', name), 'utf8'));
   return {
-    slug: draft.slug, title: draft.title, description: draft.description, market: draft.market, language: draft.language,
+    slug: draft.slug, title: draft.title, seoTitle: draft.seoTitle ?? null, description: draft.description, market: draft.market, language: draft.language,
     type: 'Draft', category: draft.category ?? null, productIds: draft.productIds ?? [], offerIds: draft.offerIds ?? [], tools: draft.tools ?? [], updatedAt: null, disclosure: true,
     humanData: draft.humanData ?? [], body: draft.body, status: 'draft', source: `content/drafts/${name}`,
   };

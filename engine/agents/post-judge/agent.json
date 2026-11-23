@@ -33,5 +33,10 @@
   "status": "draft",
   "nicheFiles": [
     "style.md"
-  ]
+  ],
+  "recheck": {
+    "agent": "writer",
+    "passOutcome": "pass",
+    "failOutcome": "revise"
+  }
 }

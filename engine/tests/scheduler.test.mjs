@@ -327,3 +327,30 @@ test('seeds: a fresh seed brings the idea run forward, cards cite it, and unused
   for (let i = 0; i < 2; i += 1) await tick({ root, agents: onlyIdea, ignoreSchedule: true, runner: fakeRunner({ idea: () => ({ items: [] }) }) });
   assert.equal(listSeeds(root).find((s) => s.id === lever.id).status, 'no-demand');
 });
+
+test('a seed that waited 2 hours jumps the queue; wanted guide links reach the agents', async (t) => {
+  const { addSeed } = await import('../state/seeds.mjs');
+  const { writeJsonAtomic } = await import('../state/store.mjs');
+  const root = sandbox(t);
+  saveItem(root, newItem({ id: 'busy', niche: 'coffee', status: 'idea_approved', by: 'test' }));
+  addSeed(root, { text: 'Which grinder for my machine?', at: new Date(Date.now() - 3 * 3_600_000).toISOString() });
+  writeJsonAtomic(join(root, 'content/drafts/a.json'), { ...fixture('writer').artifact, slug: 'a', body: 'Then see {{guide:grinder-for-x|our grinder guide}}.' });
+  let input;
+  const result = await tick({ root, agents, runner: fakeRunner(handlers({ idea: (i) => { input = i; return { items: [] }; } })) });
+  assert.equal(result.ran, 'idea', 'the seed beats research on the busy item');
+  assert.deepEqual(input.wantedGuides, [{ slug: 'grinder-for-x', linkTexts: ['our grinder guide'], linkedFrom: ['a'] }]);
+});
+
+test('the post judge sees the writer checks re-run, and a draft that still fails them cannot pass', async (t) => {
+  const { writeJsonAtomic } = await import('../state/store.mjs');
+  const root = sandbox(t);
+  const longTitle = 'This title is far too long for a search result and keeps going on and on until it is past seventy';
+  writeJsonAtomic(join(root, 'content/drafts/x.json'), { ...fixture('writer').artifact, title: longTitle });
+  saveItem(root, { ...newItem({ id: 'x', niche: 'coffee', status: 'drafted', by: 'test' }), artifacts: { writer: 'content/drafts/x.json' } });
+  let input;
+  const result = await tick({ root, agents, runner: fakeRunner(handlers({ 'post-judge': (i) => { input = i; return fixture('post-judge'); } })) });
+  assert.ok(input.automatedChecks.blocking.some((b) => /title is \d+ characters/.test(b)));
+  assert.deepEqual(result.results, [{ id: 'x', outcome: 'revise', to: 'briefed' }]);
+  const review = JSON.parse(readFileSync(join(root, 'data/reviews/x.json'), 'utf8'));
+  assert.ok(review.blockingActions.some((a) => /title is/.test(a)));
+});

@@ -14,6 +14,7 @@ import { localize } from '../site/lib/templates.mjs';
 import { loadCardsSync } from '../engine/state/knowledge.mjs';
 import { categoryIds, defaultNicheId, loadNiche } from '../engine/state/niche.mjs';
 import { diffProposal } from '../engine/feedback/cli.mjs';
+import { titleProblems } from '../engine/feedback/checks.mjs';
 import { listSeeds } from '../engine/state/seeds.mjs';
 
 const hourMs = 3_600_000;
@@ -210,7 +211,8 @@ export function articleDetail(root, id) {
     },
     previewUrl: draft ? `http://127.0.0.1:4321/${market.locale}/guides/${raw.slug}/` : null,
     draft: draft && {
-      title: draft.title, description: draft.description, primaryQuery: raw.primaryQuery,
+      title: draft.title, seoTitle: draft.seoTitle, description: draft.description, primaryQuery: raw.primaryQuery,
+      titleLength: draft.title.length, titleProblems: titleProblems(raw, { cards: site.cards, markets: loadNiche(defaultNicheId(root), root).markets }),
       productIds: raw.productIds, offerIds: raw.offerIds ?? [], claims: raw.claims?.length ?? 0,
       html: parseMarkdown(draft.body).blocks.map((b) => (b.type === 'component' ? `<p class="component">[${b.name}${b.arg ? `: ${b.arg}` : ''}]</p>` : b.html)).join('\n'),
     },

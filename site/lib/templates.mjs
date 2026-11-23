@@ -2,6 +2,7 @@
 // The Astro pages in src/ wrap these; the page shell (head, nav, footer) is src/layouts/Base.astro.
 import { escape, inline, parseMarkdown } from './markdown.mjs';
 import { formatPrice, offersFor } from './offers.mjs';
+import { productName as engineProductName, resolveTokens as engineResolveTokens } from '../../engine/state/tokens.mjs';
 
 const region = new Intl.DisplayNames(['en'], { type: 'region' });
 export const marketLabel = (market) => region.of(market.id === 'GB' ? 'GB' : market.id);
@@ -11,36 +12,32 @@ export const postPath = (market, slug) => `/${market.locale}/guides/${slug}/`;
 // Posts are written once for every market. Products are named with tokens that resolve per market
 // from the knowledge card's variants: {{product:id}} → that market's name, {{model:id}} → its SKU,
 // {{brand:id}} → its brand. {{guide:slug|text}} links to another guide (plain text if it isn't built).
-function variantFor(card, market) {
-  return card?.variants.find((v) => v.markets.includes(market.id)) ?? null;
-}
 export function productName(site, market, productId) {
-  const card = site.cards.get(productId)?.card;
-  return variantFor(card, market)?.name ?? card?.variants.find((v) => v.name)?.name ?? card?.name ?? productId;
+  return engineProductName(site.cards, market, productId);
 }
 export function resolveTokens(text, { site, market, links = true }) {
-  if (!text) return text;
-  return text
-    .replace(/\{\{product:([a-z0-9-]+)\}\}/g, (_, id) => productName(site, market, id))
-    .replace(/\{\{model:([a-z0-9-]+)\}\}/g, (_, id) => {
-      const card = site.cards.get(id)?.card;
-      return variantFor(card, market)?.sku ?? card?.variants[0]?.sku ?? '';
-    })
-    .replace(/\{\{brand:([a-z0-9-]+)\}\}/g, (_, id) => {
-      const card = site.cards.get(id)?.card;
-      return variantFor(card, market)?.brand ?? card?.brand ?? 'the manufacturer';
-    })
-    .replace(/\{\{guide:([a-z0-9-]+)(?:\|([^}]*))?\}\}/g, (_, slug, label) => {
+  return engineResolveTokens(text, {
+    cards: site.cards,
+    market,
+    guideLink: (slug, label) => {
       const path = postPath(market, slug);
-      const text = label ?? slug.replace(/-/g, ' ');
-      return links && site.pages?.has(path) ? `[${text}](${path})` : text;
-    });
+      return links && site.pages?.has(path) ? `[${label}](${path})` : label;
+    },
+  });
 }
+/** Title-tag text: the SEO title (or the title), with the site name only when it still fits 60 characters. */
+export function pageTitle(post, siteName, max = 60) {
+  const base = post.seoTitle || post.title;
+  const full = `${base} | ${siteName}`;
+  return full.length <= max ? full : base;
+}
+
 /** The post as readers in this market see it: names, models and guide links resolved. */
 export function localize(post, site, market) {
   return {
     ...post,
     title: resolveTokens(post.title, { site, market, links: false }),
+    seoTitle: post.seoTitle ? resolveTokens(post.seoTitle, { site, market, links: false }) : null,
     description: resolveTokens(post.description, { site, market, links: false }),
     body: resolveTokens(post.body, { site, market }),
   };

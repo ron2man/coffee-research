@@ -36,3 +36,9 @@ test('the pick and the PriceBox come from offerIds, never from the products disc
   assert.doesNotMatch(html, /Where to buy/);
   assert.match(html, /Fix your Breville Barista Express/);
 });
+
+test('page title prefers the SEO title and drops the site name when it would not fit', async () => {
+  const { pageTitle } = await import('../lib/templates.mjs');
+  assert.equal(pageTitle({ title: 'Short title' }, 'YourCoffeeSetup'), 'Short title | YourCoffeeSetup');
+  assert.equal(pageTitle({ title: 'A very long title that goes on', seoTitle: 'Fast shots on a Barista Express: what to check' }, 'YourCoffeeSetup'), 'Fast shots on a Barista Express: what to check');
+});

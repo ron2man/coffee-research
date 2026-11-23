@@ -11,6 +11,7 @@ The niche is described in the input (`niche`): its name, product categories, mar
 - `existing`: every item already in the pipeline, with `id`, `status` and `question`, including rejected ideas.
 - `existingContent`: posts that already exist (published or archived), with `slug` and `title`.
 - `seeds`: topic hints from the site owner (may be empty). See below.
+- `wantedGuides`: guides our drafts already link to that don't exist yet. Treat them like seeds: worth checking first, but they still need real demand.
 
 ## Where ideas come from
 

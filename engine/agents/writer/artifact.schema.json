@@ -134,6 +134,11 @@
         "maxLength": 80
       },
       "description": "Products the post recommends buying, shown in the 'Our pick' card and the 'Where to buy' box (first = the pick). Never the product the reader already owns. Empty when the answer is to buy nothing, or the right product isn't researched yet."
+    },
+    "seoTitle": {
+      "type": "string",
+      "minLength": 1,
+      "description": "The browser-tab and search-result title, at most 60 characters after product names are filled in for every market. Front-load the reader's problem. Use when `title` is longer than 60."
     }
   }
 }

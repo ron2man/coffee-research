@@ -21,7 +21,8 @@ Read the cards behind the claim IDs (`knowledge/<category>/<product-id>.md`) so 
 7. `offerTouchpoints`: where buying comes up honestly. Product IDs must be knowledge card IDs. `primary` and `alternative` are things the reader may buy after reading, never the product they already own (that one is the subject, and the `dont-buy` touchpoint). **Always include a `dont-buy` touchpoint**: the keep-what-you-have path. A post can recommend nothing.
 8. `claimIds`: the supported claims the writer will need (from research; the scheduler checks they exist and are supported).
 9. The post is shown in every market: plan it so the advice holds everywhere, and note real per-variant differences in `mustInclude` rather than writing for one market. Plan the ending: what the reader does if the free fixes don't work, as the smallest sensible purchase. List our existing guides worth linking (from `existingContent`) in `mustInclude`.
-10. `titleOptions` (2–4, plain, specific, no clickbait), `slug`, `metaDescription` (≤160 characters, says what the reader gets).
+10. `titleOptions` (2–4, plain, specific, no clickbait, **at most 70 characters each** once product names are filled in; one promise, not a summary). If this post is the guide another draft already links to (see `wantedGuides`), use that exact `slug` so the links start working.
+11. Remaining fields:, `slug`, `metaDescription` (≤160 characters, says what the reader gets).
 
 ## Outcome
 

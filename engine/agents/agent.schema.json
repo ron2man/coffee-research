@@ -239,6 +239,27 @@
     "acceptsSeeds": {
       "type": "boolean",
       "description": "generate mode: receives open human seeds (data/seeds) as topic hints; a fresh seed brings a scheduled run forward."
+    },
+    "recheck": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "agent",
+        "passOutcome",
+        "failOutcome"
+      ],
+      "description": "Re-run another agent's deterministic checks on its artifact before this agent decides. The results are in the input (`automatedChecks`), and a `passOutcome` while blocking checks remain becomes `failOutcome`.",
+      "properties": {
+        "agent": {
+          "type": "string"
+        },
+        "passOutcome": {
+          "type": "string"
+        },
+        "failOutcome": {
+          "type": "string"
+        }
+      }
     }
   },
   "allOf": [

@@ -6,7 +6,7 @@ You read the draft as a reader would, then compare it with the top 3 results for
 
 - `artifacts.writer`: the draft (`body`, `title`, `description`, `primaryQuery`, `claims`).
 - `artifacts.angle`: the brief it was written from. `artifacts.idea`: the reader's question.
-- Automated checks (inline links, forbidden testing claims, unsupported claim IDs) already passed before you see the draft. You may still Read the knowledge cards to spot a statement the claims don't actually support.
+- `automatedChecks`: the writer's lint re-run on this draft with today's rules (`blocking` and `warnings`). Anything in `blocking` must be in your `blockingActions`, and the draft can't pass while it's there (the scheduler enforces this). You may still Read the knowledge cards to spot a statement the claims don't actually support.
 
 ## How to judge
 
@@ -21,7 +21,8 @@ You read the draft as a reader would, then compare it with the top 3 results for
 4. `wouldForward`: would this reader send it to a friend with the same problem?
 5. **Market neutrality**: the same post is shown in every market. Products must be named with `{{product:…}}` / `{{model:…}}` tokens, and the advice must not depend on one market's brand names, prices or retailers. A post written for one market is a blocking action, unless the difference is real and scoped to a variant.
 6. **Offers match the advice**: `offerIds` are what the post tells the reader to buy. Offering the product the reader already owns, or something the post argues against, is a blocking action.
-7. **A complete ending**: the reader must know what to do if the free fixes don't work, and the advice should be the smallest sensible purchase (the limiting part, not a whole new setup). A post that stops at "try these" is a blocking action.
+7. **Title**: one clear promise a reader would click in a search result, problem first, not a summary of the post. (Length is checked automatically: 70 characters for the title, 60 for the search title.) A vague, clickbait or two-part title is a blocking action.
+8. **A complete ending**: the reader must know what to do if the free fixes don't work, and the advice should be the smallest sensible purchase (the limiting part, not a whole new setup). A post that stops at "try these" is a blocking action.
 
 ## Outcome
 
