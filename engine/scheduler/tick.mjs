@@ -22,6 +22,7 @@ import { runChecks } from '../feedback/checks.mjs';
 import { addFeedback, openFeedback, readReviewState } from '../feedback/store.mjs';
 import { applyAssist, assistCandidates, buildAssistInput, checkAssistArtifact } from './assist.mjs';
 import { listTools } from '../state/tools.mjs';
+import { syncPublished } from '../publish/publish.mjs';
 import { applyReview, applyTune, buildReviewInput, buildTuneInput, checkTuneArtifact, reviewCandidates, tuneCandidates } from '../feedback/loop.mjs';
 import { newItem, transition } from '../state/machine.mjs';
 import { defaultNicheId, loadNiche, repoRoot } from '../state/niche.mjs';
@@ -385,8 +386,14 @@ export async function tick({ root = repoRoot, runner, now = new Date(), nicheId,
     }
   }
   const niche = loadNiche(nicheId ?? defaultNicheId(root), root);
-  const { items, errors } = loadItems(root);
+  let { items, errors } = loadItems(root);
   if (errors.length) throw new Error(`Item store is invalid; fix before scheduling:\n${errors.join('\n')}`);
+  // Posts merged to main since the last tick: passed → published (deterministic, no agent).
+  const publishedFiles = dryRun ? [] : syncPublished(root, items);
+  if (publishedFiles.length) {
+    ({ items } = loadItems(root));
+    for (const path of publishedFiles) appendRun(root, { workflow: 'publish-sync', agent: null, itemId: path.split('/').pop().replace('.json', ''), status: 'completed', outcome: 'published', to: 'published' });
+  }
   const critic = agents.find((agent) => agent.mode === 'review');
   const tuner = agents.find((agent) => agent.mode === 'tune');
   const loop = {
@@ -397,9 +404,9 @@ export async function tick({ root = repoRoot, runner, now = new Date(), nicheId,
     oldestFreshSeedAt: openSeeds(root).filter((seed) => seed.considered === 0).map((seed) => seed.at).sort()[0] ?? null,
   };
   const plan = planTick({ agents, items, runs: readRuns(root), schedule: readSchedule(root), now, ignoreSchedule, loop });
-  if (!plan.chosen) return { ran: null, skipped: plan.skipped };
+  if (!plan.chosen) return { ran: null, skipped: plan.skipped, changedFiles: publishedFiles, ...(publishedFiles.length ? { published: publishedFiles } : {}) };
   const { agent, items: chosenItems } = plan.chosen;
-  const written = [];
+  const written = [...publishedFiles];
   const summary = { ran: agent.name, itemIds: chosenItems.map((item) => item.id), skipped: plan.skipped, changedFiles: written };
   if (dryRun) return { ...summary, dryRun: true };
 

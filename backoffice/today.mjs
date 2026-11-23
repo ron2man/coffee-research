@@ -15,6 +15,7 @@ import { loadCardsSync } from '../engine/state/knowledge.mjs';
 import { categoryIds, defaultNicheId, loadNiche } from '../engine/state/niche.mjs';
 import { diffProposal } from '../engine/feedback/cli.mjs';
 import { titleProblems } from '../engine/feedback/checks.mjs';
+import { publishProblems, REQUESTS_DIR } from '../engine/publish/publish.mjs';
 import { listSeeds } from '../engine/state/seeds.mjs';
 
 const hourMs = 3_600_000;
@@ -97,8 +98,13 @@ export async function todayData(root) {
   }
   for (const item of items.filter((i) => i.status === 'passed')) {
     const draft = item.artifacts.writer && existsSync(join(root, item.artifacts.writer)) ? readJson(join(root, item.artifacts.writer)) : null;
+    const requested = existsSync(join(root, 'data', 'publish', `${item.id}.json`)) ? readJson(join(root, 'data', 'publish', `${item.id}.json`)) : null;
+    if (requested) {
+      inbox.push({ kind: 'Merge to publish', itemId: item.id, title: draft?.title ?? item.id, reason: 'The pull request is open. Merge it on GitHub to publish; the scheduler marks it published at its next tick.', link: requested.prUrl, at: requested.at, commands: [] });
+      continue;
+    }
     inbox.push({ kind: 'Draft to read', itemId: item.id, title: draft?.title ?? item.id, reason: 'Passed the post judge. Would you send it to a friend?', at: item.updatedAt,
-      link: draft ? `http://127.0.0.1:4321/en-${(draft.market ?? 'US').toLowerCase()}/guides/${draft.slug}/` : null,
+      preview: draft ? `http://127.0.0.1:4321/en-${(draft.market ?? 'US').toLowerCase()}/guides/${draft.slug}/` : null,
       commands: ['npm run site:preview', `npm run feedback -- add writer "..." --item ${item.id} --commit`] });
   }
   const recentFailures = runs.filter((r) => r.status === 'failed' && now - Date.parse(r.timestamp) < 24 * hourMs);
@@ -200,10 +206,15 @@ export function articleDetail(root, id) {
   const notes = ['writer', 'post-judge'].flatMap((agent) => listFeedback(root, agent)
     .filter((entry) => entry.itemIds.includes(id))
     .map((entry) => ({ agent, source: entry.source, at: entry.at, open: !entry.addressedBy, findings: entry.findings.map((f) => f.problem) })));
+  const requestPath = join(root, REQUESTS_DIR, `${id}.json`);
+  const publishRequest = existsSync(requestPath) ? readJson(requestPath) : null;
   return {
     id,
     status: item.status,
+    publishRequest,
+    publishBlockers: item.status === 'passed' ? publishProblems(root, item) : [],
     allowed: {
+      publish: item.status === 'passed' && !publishRequest,
       comment: true,
       revise: item.status === 'passed',
       resume: ['blocked', 'needs_human'].includes(item.status),

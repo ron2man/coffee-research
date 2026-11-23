@@ -127,6 +127,7 @@ export function commitInternal(root, paths, message, { remote = policy.remote, b
 }
 
 export function commitMessage(result) {
+  if (!result.ran && result.published?.length) return `tick: published ${result.published.map((p) => p.split('/').pop().replace('.json', '')).join(', ')}`;
   if (result.review) return `tick(${result.ran}): reviewed ${result.review.target} (${result.review.findings} findings)`;
   if (result.tune) return `tick(${result.ran}): proposed ${result.tune.proposal} for ${result.tune.target}`;
   const outcomes = result.created?.length
@@ -135,4 +136,41 @@ export function commitMessage(result) {
       ?? result.failures?.map((f) => `${f.id} failed (attempt ${f.attempts}${f.blocked ? ', blocked' : ''})`).join('; ')
       ?? 'no changes';
   return `tick(${result.ran}): ${outcomes}`;
+}
+
+/**
+ * Commit `files` ({ path: content }) on top of the remote branch `base` and push them to a new
+ * branch, without touching the working tree or the current branch (a private index is used).
+ * Returns the commit sha. Used for reader-facing changes, which go through a pull request.
+ */
+export function pushFilesToBranch(root, files, branch, message, { remote = policy.remote, base = policy.mainBranch } = {}) {
+  git(root, ['fetch', '--quiet', remote, base]);
+  const baseSha = git(root, ['rev-parse', 'FETCH_HEAD']);
+  const index = `${root}/.git/publish-index-${process.pid}`;
+  const env = { ...process.env, GIT_INDEX_FILE: index };
+  const run = (args, input) => {
+    const result = spawnSync('git', args, { cwd: root, encoding: 'utf8', env, input });
+    if (result.status !== 0) throw new Error(`git ${args.join(' ')} failed: ${(result.stderr || result.stdout).trim()}`);
+    return result.stdout.trim();
+  };
+  try {
+    run(['read-tree', baseSha]);
+    for (const [path, content] of Object.entries(files)) {
+      const blob = run(['hash-object', '-w', '--stdin'], content);
+      run(['update-index', '--add', '--cacheinfo', `100644,${blob},${path}`]);
+    }
+    const tree = run(['write-tree']);
+    const sha = run(['commit-tree', tree, '-p', baseSha, '-m', message]);
+    git(root, ['push', '--quiet', '--force', remote, `${sha}:refs/heads/${branch}`]);
+    return sha;
+  } finally {
+    spawnSync('rm', ['-f', index]);
+  }
+}
+
+/** "https://github.com/owner/repo" for an origin on GitHub, else null. */
+export function githubUrl(root, remote = policy.remote) {
+  const url = git(root, ['remote', 'get-url', remote]);
+  const match = url.match(/^(?:https:\/\/github\.com\/|git@github\.com:)([\w.-]+\/[\w.-]+?)(?:\.git)?$/);
+  return match ? `https://github.com/${match[1]}` : null;
 }

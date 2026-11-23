@@ -9,6 +9,8 @@ This repo is being rebuilt per [rebuild-spec.md](rebuild-spec.md). It's an auton
   - `scheduler/tick.mjs`: one deterministic tick. Picks the highest-priority runnable agent, runs it once, validates, applies status changes and logs them to `.backoffice/runs.jsonl`. One tick per checkout at a time (`.backoffice/tick.lock`). Schedule state is committed in `data/scheduler/state.json`.
   - `runner/`: runner abstraction (`fake` for tests; `claude.mjs` runs `claude -p` with read-only tools, a JSON Schema for the output, and refuses API-key auth).
   - `state/item-cli.mjs`: human actions on items (resume, reject, park, reopen). `state/knowledge.mjs`: card validation (moved from `agent/`).
+  - `publish/`: the publishing pull request (`requestPublish`) and the passed → published sync each tick.
+  - `scheduler/assist.mjs`: assist agents (the toolsmith) work on an item without changing its status.
   - `feedback/`: deterministic checks on every output (`checks.mjs`), the feedback store, the critic/tuner loop, and `cli.mjs` (`npm run feedback`, `npm run prompt`). Agents `critic` and `tuner` review outputs and propose prompt changes; a human applies them.
   - `agents/<name>/`: `agent.json` (mode, input status, outcomes → statuses, caps), `artifact.schema.json`, `fixtures/valid.json` + `fixtures/invalid.json`, and `prompt.md` once written. Agents get read-only tools only; the tick writes every file from their validated output, and any file an agent changes itself fails the run.
 - `niches/coffee/`: `niche.json` (categories, markets, sellers, disclosures), `style.md`, and `agents/<agent>.md` niche guidance appended to that agent's prompt. Engine prompts stay niche-agnostic; coffee specifics go here.

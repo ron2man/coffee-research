@@ -6,6 +6,7 @@ import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { userInfo } from 'node:os';
 import { act } from '../engine/state/item-cli.mjs';
+import { requestPublish } from '../engine/publish/publish.mjs';
 import { addSeed } from '../engine/state/seeds.mjs';
 import { addHumanNote, applyProposal, rejectProposal } from '../engine/feedback/cli.mjs';
 import { LockedError, isStale, lockPath, withLock } from '../engine/scheduler/lock.mjs';
@@ -46,6 +47,10 @@ const ACTIONS = {
     act(root, 'reopen', required(itemId, 'Item'), { reason: required(text, 'Reason'), by: by() });
     return { written: [`data/items/${itemId}.json`], message: 'Reopened as an idea: the judge scores it again.' };
   },
+  publish: (root, { itemId }) => {
+    const result = requestPublish(root, required(itemId, 'Article'), { by: by() });
+    return { written: result.written, prUrl: result.prUrl, message: `Pull request ready: merge it on GitHub to publish. ${result.prUrl ?? ''}`.trim() };
+  },
   seed: (root, { text, note }) => ({
     written: [addSeed(root, { text: required(text, 'Seed'), note: note ?? '', by: by() })],
     message: 'Seed added. The idea agent looks into it at the next tick.',
@@ -77,7 +82,7 @@ export async function runAction(root, name, payload = {}, { commit = true } = {}
       }
       const written = result.written.filter(Boolean);
       if (commitAllowed) commitInternal(root, written, `dashboard(${name}): ${payload.itemId ?? payload.proposalId ?? 'seed'}`);
-      return { ok: true, message: result.message, written, committed: commitAllowed };
+      return { ok: true, message: result.message, written, committed: commitAllowed, ...(result.prUrl ? { prUrl: result.prUrl } : {}) };
     }, { label: `dashboard ${name}` });
   } catch (error) {
     if (error instanceof LockedError) throw new ActionError('An agent run is in progress. Try again in a few minutes.', 409);

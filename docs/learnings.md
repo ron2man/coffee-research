@@ -63,6 +63,12 @@ Seeds work: the owner's capsule-machine seed produced a "Nespresso to beans" car
 
 [Writer prompt](../engine/agents/writer/prompt.md) · [Spec principle 8](../rebuild-spec.md)
 
+### 2026-11-23 · M4/M5 · Tools, titles and publishing
+
+The first post's title was 110 characters and named two interactive tools that didn't exist, and passed posts had no way out of preview. Titles now have limits measured in the market with the longest product names (headline 70, search title 60). The post judge re-runs the writer's checks, so a draft written under older rules can't pass. A toolsmith agent builds the pickers a brief asks for (validated data, no code) or declines diagrams with a reason, and the writer may only use tools that exist. Publishing is a pull request opened from the dashboard. The live site needs disclosure text for every market first, and that is the first thing blocking publication.
+
+[Toolsmith](../engine/agents/toolsmith/prompt.md) · [Publishing](../engine/publish/publish.mjs) · [Operations](operations.md)
+
 ## Decisions
 
 - **2026-11-21 · Git flow.** Internal changes (items, research, briefs, drafts, knowledge cards) are committed straight to `main` by `npm run tick -- --commit`, with no approval, so the pipeline never waits on a merge. Reader-facing paths (`content/published/`, `site/`, `data/offers/`) are never committed by a tick and need their own PR. The boundary is [git-policy.json](../engine/scheduler/git-policy.json). The publish step that opens content PRs arrives with M4/M5.
@@ -82,6 +88,8 @@ Seeds work: the owner's capsule-machine seed produced a "Nespresso to beans" car
 - **2026-11-22 · One post for every market.** Per-market differences are data (card variants, offers, disclosures), not prose.
 
 ## Open questions
+
+- **Disclosure text per market (blocks the first publish):** `niches/coffee/niche.json` `disclosures` is empty. Decide the wording for US and GB after checking the affiliate programs you will join.
 
 - **Offers as public paths:** `data/offers/` is treated as reader-facing because prices appear on the site, which would mean a PR for every daily price refresh. Revisit at M7: one option is to have the site read offers at build time from an internal file.
 - **M0 billing (first measurement, 2026-11-22):** one research tick (27 turns, 4.2 min, CLI estimate $1.46 at API prices) moved the subscription's current-session usage from 10% to 18%. So `claude -p` runs do draw from the subscription, at roughly 8 points per research run. That allows about 10 to 12 runs of this size per session window, fewer if the lead uses Claude at the same time. Still open: the reading may include other Claude use in the same window, so repeat once with nothing else running; check the weekly limit too; and confirm `--json-schema` and `--permission-mode dontAsk` on the installed CLI.

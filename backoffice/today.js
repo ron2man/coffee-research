@@ -26,6 +26,7 @@ function render(d) {
     <div class="kind">${esc(i.kind)}</div><div class="title">${esc(i.title)}</div>
     <div class="reason">${esc(i.reason)}${i.at ? ` · ${ago(i.at)}` : ''}</div>
     ${i.stuckId ? `<div class="actions"><input data-reason-for="${esc(i.stuckId)}" placeholder="What did you fix or decide?"><button type="button" data-item-act="resume" data-item="${esc(i.stuckId)}">Resume</button><button type="button" class="danger" data-item-act="reject" data-item="${esc(i.stuckId)}">Reject</button></div>` : ''}
+    ${i.link ? `<div><a href="${esc(i.link)}" target="_blank" rel="noopener">Open the pull request</a></div>` : ''}
     ${i.itemId ? `<div class="actions"><button type="button" data-inbox-article="${esc(i.itemId)}">Open</button></div>` : i.proposalId ? '<div class="actions"><a href="#proposals">Review below</a></div>' : ''}
     <details><summary class="muted">Terminal commands</summary>${commands(i.commands)}</details></div>`).join('') : '<p class="empty">Nothing is waiting for you.</p>';
 
@@ -135,9 +136,12 @@ async function openArticle(id) {
       <div class="actions">
         <button type="button" data-act="comment">Add comment</button>
         ${a.allowed.revise ? '<button type="button" data-act="revise">Send back to the writer</button>' : ''}
+        ${a.allowed.publish ? `<button type="button" data-act="publish" ${a.publishBlockers.length ? 'disabled title="See what blocks publishing below"' : ''}>Approve for publishing</button>` : ''}
         ${a.allowed.resume ? '<button type="button" data-act="resume">Resume</button>' : ''}
         ${a.allowed.reject ? '<button type="button" class="danger" data-act="reject">Reject article</button>' : ''}
       </div>
+      ${a.publishRequest ? `<div class="note open"><strong>Publishing</strong>: pull request on branch ${esc(a.publishRequest.branch)}. ${a.publishRequest.prUrl ? `<a href="${esc(a.publishRequest.prUrl)}" target="_blank" rel="noopener">Open it on GitHub</a> and merge to publish.` : 'Open it on GitHub and merge to publish.'}</div>` : ''}
+      ${a.publishBlockers.length ? `<div class="note open"><strong>Before this can be published</strong><br>${a.publishBlockers.map(esc).join('<br>')}</div>` : ''}
       <p class="muted">${a.allowed.revise ? '“Send back” rewrites this article now. “Add comment” is kept for the next pass and teaches the writer’s prompt.' : a.status === 'briefed' ? 'The writer is working on this. Comments reach it on this pass.' : ''}</p>
       ${r ? `<h3>Post judge: ${r.wouldForward ? 'would forward' : 'would not forward'}</h3>${scores}
         ${r.blockingActions?.length ? `<h3>Blocking fixes</h3><ul>${r.blockingActions.map((x) => `<li>${esc(x)}</li>`).join('')}</ul>` : ''}
@@ -163,6 +167,7 @@ document.addEventListener('click', async (event) => {
   if (t.dataset.act) {
     const id = $('article-body').dataset.id;
     const text = $('article-note').value;
+    if (t.dataset.act === 'publish' && !confirm('Open a pull request that publishes this article? It goes live only when you merge it.')) return;
     if (t.dataset.act === 'reject' && !confirm('Reject this article? It leaves the pipeline (it can be reopened later).')) return;
     const done = await post(t.dataset.act, { itemId: id, text }, t);
     if (done) openArticle(id);
