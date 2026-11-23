@@ -7,14 +7,15 @@
   "attempts": 0,
   "revisions": 1,
   "createdAt": "2026-11-21T17:35:36.159Z",
-  "updatedAt": "2026-11-23T10:56:38.443Z",
+  "updatedAt": "2026-11-23T11:34:43.103Z",
   "artifacts": {
     "idea": "data/ideas/breville-builtin-grinder-wont-grind-fine-enough.json",
     "idea-judge": "data/idea-scores/breville-builtin-grinder-wont-grind-fine-enough.json",
     "research": "data/research/breville-builtin-grinder-wont-grind-fine-enough.json",
     "angle": "data/briefs/breville-builtin-grinder-wont-grind-fine-enough.json",
     "writer": "content/drafts/breville-builtin-grinder-wont-grind-fine-enough.json",
-    "post-judge": "data/reviews/breville-builtin-grinder-wont-grind-fine-enough.json"
+    "post-judge": "data/reviews/breville-builtin-grinder-wont-grind-fine-enough.json",
+    "toolsmith": "data/tools/breville-builtin-grinder-wont-grind-fine-enough.json"
   },
   "history": [
     {

@@ -1,0 +1,241 @@
+{
+  "tools": [
+    {
+      "id": "grind-fault-tree",
+      "title": "Built-in grinder still too fast at setting 1? Find your next step",
+      "questions": [
+        {
+          "key": "shot",
+          "text": "With fresh settings and the dial at 1, how does your shot run right now?",
+          "options": [
+            [
+              "fast",
+              "Still fast: starts flowing within a few seconds, thin and sour"
+            ],
+            [
+              "ok",
+              "Fine now: about 25–30 seconds and tastes right"
+            ]
+          ]
+        },
+        {
+          "key": "beans",
+          "text": "What does the bag of beans say?",
+          "options": [
+            [
+              "fresh",
+              "A 'Roasted On' date 5–20 days ago"
+            ],
+            [
+              "old",
+              "A 'Roasted On' date more than 20 days ago"
+            ],
+            [
+              "nodate",
+              "No roast date, only a best-before date"
+            ]
+          ]
+        },
+        {
+          "key": "basket",
+          "text": "Which basket is in the portafilter?",
+          "options": [
+            [
+              "single",
+              "Single-wall"
+            ],
+            [
+              "dual",
+              "Dual-wall (pressurised)"
+            ]
+          ]
+        },
+        {
+          "key": "dose",
+          "text": "After a firm tamp, where does the tamper's metal cap sit?",
+          "options": [
+            [
+              "level",
+              "Level with the basket rim"
+            ],
+            [
+              "below",
+              "Below the rim"
+            ]
+          ]
+        },
+        {
+          "key": "cleaned",
+          "text": "Have you cleaned the burrs (top burr out, both burrs and chute brushed)?",
+          "options": [
+            [
+              "yes",
+              "Yes"
+            ],
+            [
+              "no",
+              "Not yet"
+            ]
+          ]
+        },
+        {
+          "key": "roast",
+          "text": "What do you mostly drink?",
+          "options": [
+            [
+              "light",
+              "Very light roasts"
+            ],
+            [
+              "other",
+              "Medium or darker roasts"
+            ]
+          ]
+        },
+        {
+          "key": "burr",
+          "text": "Have you moved the upper burr toward FINE?",
+          "options": [
+            [
+              "no",
+              "Not yet"
+            ],
+            [
+              "partway",
+              "Yes, but there's still room to go finer"
+            ],
+            [
+              "limit",
+              "Yes, as fine as it goes without metal-contact sounds"
+            ]
+          ]
+        },
+        {
+          "key": "support",
+          "text": "Have you contacted the manufacturer's support about the burr?",
+          "options": [
+            [
+              "no",
+              "Not yet"
+            ],
+            [
+              "nohelp",
+              "Yes, and they couldn't help"
+            ],
+            [
+              "replaced",
+              "Yes, the burr was replaced and it's still fast"
+            ]
+          ]
+        }
+      ],
+      "results": {
+        "keep": {
+          "title": "Keep what you have",
+          "text": "Your shot is in range, so buy nothing. Keep buying beans with a roast date, leave the upper burr where it is, and write down its number in case you need it later."
+        },
+        "fresh-beans": {
+          "title": "Get a bag with a roast date first",
+          "text": "The manual recommends using beans 5–20 days after their 'Roasted On' date and warns that stale coffee may pour too quickly and taste bitter and watery. A best-before date doesn't tell you this. Test again with fresh beans before you change anything else."
+        },
+        "single-wall": {
+          "title": "Switch to a single-wall basket",
+          "text": "Dual-wall (pressurised) baskets regulate pressure regardless of grind, dose, tamp or freshness, so they hide what the grinder is doing. The manual says to use single-wall baskets with fresh beans. Swap baskets, keep the dial at 1 and time the shot again."
+        },
+        "dose-up": {
+          "title": "Add coffee until the tamper cap sits level",
+          "text": "Too little coffee is one of the manual's three causes of fast shots. After a firm tamp (22–33 lb), the tamper's metal cap should be level with the basket rim, which is about 16–19 g in a double basket. A finer grind may need a little more coffee."
+        },
+        "clean-burrs": {
+          "title": "Clean the burrs before you move them",
+          "text": "Empty the hopper, run the grinder empty, lift out the top burr and brush both burrs and the chute. The manual says this removes oil build-up that can impede performance. Skip the lower-burr removal, which is only for blockages. The burrs are very sharp, so hold them by the edges."
+        },
+        "light-roast": {
+          "title": "Light roasts: a separate grinder makes sense sooner",
+          "text": "This is my judgement, not the manual's. With very light roasts you'll be working at the fine end of the built-in grinder every day, and the manual warns that under-roasted beans can damage the burrs. With the free checks done, a separate espresso grinder is a reasonable next step. Keep the built-in one as a backup."
+        },
+        "move-burr": {
+          "title": "Move the upper burr one number toward FINE",
+          "text": "Breville documents this as a feature. Lift the burr out by its wire handle (no tools), write down its number, turn the ring one number toward FINE, refit, lock and test again with the same beans and dose. Repeat one step at a time. If you hear metal contact or it stops helping, go back one number. Guides that say go coarser have it backwards."
+        },
+        "contact-support": {
+          "title": "Check your date code and contact the manufacturer",
+          "text": "Find the production date code on the sticker under the machine. A parts-seller listing shows two upper burrs: SP0001801 before PDC 1926 and SP0027464 from 1926 (2019 week 26) on. Ask support before buying: the warranty covers defects in function, and one owner was offered a free burr. Have your shot times ready."
+        },
+        "separate-grinder": {
+          "title": "The built-in grinder is the limit: add a separate grinder",
+          "text": "You've done every step and the shot still runs fast. Don't replace the machine, because only the grinder is the problem. A separate espresso grinder is the one purchase that makes sense, and the built-in grinder stays as a backup for busy mornings."
+        }
+      },
+      "rules": [
+        {
+          "when": {
+            "shot": "ok"
+          },
+          "result": "keep"
+        },
+        {
+          "when": {
+            "beans": "old"
+          },
+          "result": "fresh-beans"
+        },
+        {
+          "when": {
+            "beans": "nodate"
+          },
+          "result": "fresh-beans"
+        },
+        {
+          "when": {
+            "basket": "dual"
+          },
+          "result": "single-wall"
+        },
+        {
+          "when": {
+            "dose": "below"
+          },
+          "result": "dose-up"
+        },
+        {
+          "when": {
+            "cleaned": "no"
+          },
+          "result": "clean-burrs"
+        },
+        {
+          "when": {
+            "roast": "light"
+          },
+          "result": "light-roast"
+        },
+        {
+          "when": {
+            "burr": "no"
+          },
+          "result": "move-burr"
+        },
+        {
+          "when": {
+            "burr": "partway"
+          },
+          "result": "move-burr"
+        },
+        {
+          "when": {
+            "support": "no"
+          },
+          "result": "contact-support"
+        }
+      ],
+      "default": "separate-grinder"
+    }
+  ],
+  "skipped": [
+    {
+      "id": "upper-burr-direction-diagram",
+      "why": "This is a diagram, not a picker or troubleshooter, so it needs an image, which this agent can't produce. Also, the only evidence for the direction is the FINE/COARSE marks in the booklet illustrations, with no number range or factory position, so a drawn ring would claim more than the evidence supports. The FINE-direction advice is in the move-burr result of grind-fault-tree instead."
+    }
+  ]
+}
