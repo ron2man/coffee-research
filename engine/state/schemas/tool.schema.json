@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "tool.schema.json",
+  "title": "Interactive picker / troubleshooter (content/tools/<id>.json)",
+  "description": "Questions with fixed options; the first rule whose `when` matches all its answers picks the result, else `default`. Rendered by the site's Picker component. Data only, no code.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "title", "questions", "results", "rules", "default"],
+  "$defs": { "key": { "type": "string", "pattern": "^[a-z0-9]+(?:[-_][a-z0-9]+)*$", "maxLength": 40 } },
+  "properties": {
+    "id": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$", "maxLength": 80 },
+    "title": { "type": "string", "minLength": 1, "maxLength": 80 },
+    "questions": {
+      "type": "array", "minItems": 1, "maxItems": 8,
+      "items": {
+        "type": "object", "additionalProperties": false, "required": ["key", "text", "options"],
+        "properties": {
+          "key": { "$ref": "#/$defs/key" },
+          "text": { "type": "string", "minLength": 1, "maxLength": 140 },
+          "options": {
+            "type": "array", "minItems": 2, "maxItems": 6,
+            "items": { "type": "array", "prefixItems": [{ "$ref": "#/$defs/key" }, { "type": "string", "minLength": 1, "maxLength": 80 }], "minItems": 2, "maxItems": 2 }
+          }
+        }
+      }
+    },
+    "results": {
+      "type": "object", "minProperties": 2,
+      "propertyNames": { "$ref": "#/$defs/key" },
+      "additionalProperties": {
+        "type": "object", "additionalProperties": false, "required": ["title", "text"],
+        "properties": {
+          "title": { "type": "string", "minLength": 1, "maxLength": 80 },
+          "text": { "type": "string", "minLength": 1, "maxLength": 400 },
+          "productId": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" }
+        }
+      }
+    },
+    "rules": {
+      "type": "array", "minItems": 1,
+      "items": {
+        "type": "object", "additionalProperties": false, "required": ["when", "result"],
+        "properties": {
+          "when": { "type": "object", "minProperties": 1, "additionalProperties": { "$ref": "#/$defs/key" } },
+          "result": { "$ref": "#/$defs/key" }
+        }
+      }
+    },
+    "default": { "$ref": "#/$defs/key" }
+  }
+}

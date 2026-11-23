@@ -10,7 +10,7 @@ export const agentsDir = fileURLToPath(new URL('./', import.meta.url));
 const definitionSchema = join(agentsDir, 'agent.schema.json');
 
 function envelopeSchema(agent) {
-  if (agent.mode === 'review' || agent.mode === 'tune') {
+  if (['review', 'tune', 'assist'].includes(agent.mode)) {
     return { type: 'object', additionalProperties: false, required: ['artifact'], properties: { artifact: { type: 'object' } } };
   }
   if (agent.mode === 'generate') {
@@ -53,13 +53,13 @@ export function outputSchema(agent, artifactSchema) {
   const envelope = structuredClone(envelopeSchema(agent));
   const artifact = inlineable(artifactSchema);
   if (agent.mode === 'generate') envelope.properties.items.items = artifact;
-  else if (['item', 'review', 'tune'].includes(agent.mode)) envelope.properties.artifact = artifact;
+  else if (['item', 'review', 'tune', 'assist'].includes(agent.mode)) envelope.properties.artifact = artifact;
   else envelope.properties.decisions.items.properties.artifact = artifact;
   return envelope;
 }
 
 function checkTargets(agent) {
-  if (['generate', 'review', 'tune'].includes(agent.mode)) return;
+  if (['generate', 'review', 'tune', 'assist'].includes(agent.mode)) return;
   // Every outcome must map to a status reachable from the input status.
   const probe = { id: 'probe', type: 'new-post', status: agent.inputStatus };
   const reachable = allowedTransitions(probe);
@@ -115,7 +115,7 @@ export function instructionsFor(agent, root, nicheId) {
 }
 
 /** Agents that produce pipeline output (and so can be reviewed and tuned). */
-export const isPipelineAgent = (agent) => ['generate', 'batch', 'item'].includes(agent.mode);
+export const isPipelineAgent = (agent) => ['generate', 'batch', 'item', 'assist'].includes(agent.mode);
 
 export function loadAgents(dir = agentsDir) {
   return readdirSync(dir, { withFileTypes: true })

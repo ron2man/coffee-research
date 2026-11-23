@@ -1,0 +1,11 @@
+{
+  "name": "toolsmith",
+  "description": "Builds the interactive tools (pickers and troubleshooters) a brief or draft asks for, as data the site renders, before the writer writes the post. Does not change the item's status.",
+  "mode": "assist",
+  "priority": 55,
+  "inputStatus": "briefed",
+  "inputArtifacts": ["idea", "research", "angle", "writer", "post-judge"],
+  "artifactDir": "data/tools",
+  "runner": { "type": "claude", "tools": ["Read", "Glob", "Grep"], "maxTurns": 25 },
+  "status": "draft"
+}

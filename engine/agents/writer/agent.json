@@ -12,7 +12,8 @@
     "idea",
     "research",
     "angle",
-    "post-judge"
+    "post-judge",
+    "toolsmith"
   ],
   "artifactDir": "content/drafts",
   "runner": {

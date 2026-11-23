@@ -14,7 +14,7 @@ import { SCHEDULE_PATH, planTick, readSchedule, tick } from '../scheduler/tick.m
 
 const allAgents = loadAgents();
 // Pipeline agents only; the feedback loop (critic, tuner) has its own tests.
-const agents = allAgents.filter((agent) => !['review', 'tune'].includes(agent.mode));
+const agents = allAgents.filter((agent) => !['review', 'tune', 'assist'].includes(agent.mode));
 const fixture = (name, kind = 'valid') =>
   JSON.parse(readFileSync(join(repoRoot, 'engine/agents', name, 'fixtures', `${kind}.json`), 'utf8'));
 
@@ -353,4 +353,27 @@ test('the post judge sees the writer checks re-run, and a draft that still fails
   assert.deepEqual(result.results, [{ id: 'x', outcome: 'revise', to: 'briefed' }]);
   const review = JSON.parse(readFileSync(join(root, 'data/reviews/x.json'), 'utf8'));
   assert.ok(review.blockingActions.some((a) => /title is/.test(a)));
+});
+
+test('toolsmith builds missing tools for briefed items before the writer, and the writer may only use built tools', async (t) => {
+  const { writeJsonAtomic } = await import('../state/store.mjs');
+  const root = sandbox(t);
+  const brief = { ...fixture('angle').artifact, assets: ['fast-shot-check'] };
+  writeJsonAtomic(join(root, 'data/briefs/x.json'), brief);
+  saveItem(root, { ...newItem({ id: 'x', niche: 'coffee', status: 'briefed', by: 'test' }), artifacts: { angle: 'data/briefs/x.json' } });
+  const withSmith = allAgents.filter((a) => ['toolsmith', 'writer'].includes(a.name)).map((a) => ({ ...a, promptPath: a.promptPath ?? '/dev/null' }));
+  const tool = { ...fixture('toolsmith').artifact.tools[0], id: 'fast-shot-check' };
+  let input;
+  const bad = await tick({ root, agents: withSmith, runner: fakeRunner({ toolsmith: (i) => { input = i; return { artifact: { tools: [{ ...tool, default: 'nope' }], skipped: [] } }; } }) });
+  assert.equal(bad.ran, 'toolsmith');
+  assert.deepEqual(input.missingTools, ['fast-shot-check']);
+  assert.match(bad.error, /default "nope" is not a result/);
+  const good = await tick({ root, agents: withSmith, runner: fakeRunner({ toolsmith: () => ({ artifact: { tools: [tool], skipped: [] } }) }) });
+  assert.deepEqual(good.assist, { target: 'x', built: ['fast-shot-check'], skipped: [] });
+  assert.equal(loadItems(root).items[0].status, 'briefed', 'status unchanged');
+  // Now the writer runs; naming a tool that doesn't exist fails the lint.
+  const draft = (body, tools) => ({ ...fixture('writer'), artifact: { ...fixture('writer').artifact, body: `${body} ${'Start with the basket. '.repeat(10)}`, tools } });
+  const missing = await tick({ root, agents: withSmith, runner: fakeRunner({ writer: (i) => { input = i; return draft('Use it:\n\n{{tool other-tool}}\n\nThen', ['other-tool']); } }) });
+  assert.ok(input.availableTools.some((x) => x.id === 'fast-shot-check'));
+  assert.match(missing.error, /uses tool other-tool, which doesn't exist/);
 });

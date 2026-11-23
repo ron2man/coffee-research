@@ -116,6 +116,15 @@ const CHECKS = {
         if (!context.cards?.has(id)) blocking.push(`${itemId}: offers ${id}, which has no knowledge card`);
       }
       for (const problem of titleProblems(draft, context)) blocking.push(`${itemId}: ${problem}`);
+      if (context.tools) {
+        const markers = [...body.matchAll(/^\{\{\s*tool\s+([a-z0-9-]+)\s*\}\}$/gm)].map((m) => m[1]);
+        for (const id of new Set([...(draft.tools ?? []), ...markers])) {
+          if (!context.tools.has(id)) blocking.push(`${itemId}: uses tool ${id}, which doesn't exist in content/tools (only built tools may be used)`);
+        }
+        for (const id of draft.tools ?? []) {
+          if (context.tools.has(id) && !markers.includes(id)) warnings.push(`${itemId}: tool ${id} is listed but not placed in the body with {{tool ${id}}}`);
+        }
+      }
       const slugs = new Set((context.existingContent ?? []).map((post) => post.slug));
       for (const [, slug] of body.matchAll(/\{\{guide:([a-z0-9-]+)(?:\|[^}]*)?\}\}/g)) {
         if (!slugs.has(slug)) warnings.push(`${itemId}: links to guide ${slug}, which doesn't exist yet (rendered as plain text)`);

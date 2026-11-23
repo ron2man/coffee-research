@@ -22,13 +22,14 @@
       "minLength": 1
     },
     "mode": {
-      "description": "generate: creates new items. batch: decides on all items in inputStatus in one run. item: processes one item. review: the critic, reviews another agent's recent output. tune: proposes prompt changes from open feedback.",
+      "description": "generate: creates new items. batch: decides on all items in inputStatus in one run. item: processes one item. review: the critic, reviews another agent's recent output. tune: proposes prompt changes from open feedback. assist: works on items in inputStatus that need something (e.g. tools) without changing their status.",
       "enum": [
         "generate",
         "batch",
         "item",
         "review",
-        "tune"
+        "tune",
+        "assist"
       ]
     },
     "priority": {

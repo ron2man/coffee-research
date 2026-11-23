@@ -20,6 +20,8 @@ import { categoryIds } from '../state/niche.mjs';
 import { loadCardsSync, validateCard } from '../state/knowledge.mjs';
 import { runChecks } from '../feedback/checks.mjs';
 import { addFeedback, openFeedback, readReviewState } from '../feedback/store.mjs';
+import { applyAssist, assistCandidates, buildAssistInput, checkAssistArtifact } from './assist.mjs';
+import { listTools } from '../state/tools.mjs';
 import { applyReview, applyTune, buildReviewInput, buildTuneInput, checkTuneArtifact, reviewCandidates, tuneCandidates } from '../feedback/loop.mjs';
 import { newItem, transition } from '../state/machine.mjs';
 import { defaultNicheId, loadNiche, repoRoot } from '../state/niche.mjs';
@@ -86,6 +88,12 @@ export function planTick({ agents, items, runs, schedule = null, now = new Date(
     if (!seedAgent.queueCap || queued < seedAgent.queueCap.max) return { chosen: { agent: seedAgent, items: [] }, skipped: [{ agent: '*', reason: `a seed has waited over ${SEED_WAIT_HOURS}h` }] };
   }
   for (const agent of agents) {
+    if (agent.mode === 'assist') {
+      const due = loop.assist?.[agent.name] ?? [];
+      if (!due.length) skipped.push({ agent: agent.name, reason: `no items in ${agent.inputStatus} need it` });
+      else return { chosen: { agent, items: [due[0].item], candidate: due[0] }, skipped };
+      continue;
+    }
     if (agent.mode === 'review' || agent.mode === 'tune') {
       const due = (agent.mode === 'review' ? loop.review : loop.tune) ?? [];
       if (!agent.promptPath) skipped.push({ agent: agent.name, reason: 'no prompt.md yet' });
@@ -158,6 +166,7 @@ function buildInput(root, niche, agent, chosenItems, allItems) {
     const { cards } = loadCardsSync(join(root, 'knowledge'), categoryIds(niche));
     return runChecks(agent.recheck.agent, [{ itemId: item.id, artifact: artifacts[agent.recheck.agent] }], {
       today: new Date().toISOString().slice(0, 10), cards, markets: niche.markets, existingContent: contentIndex(root),
+      tools: new Set(listTools(root).map((tool) => tool.id)),
     });
   };
   const entries = chosenItems.map((item) => {
@@ -168,7 +177,8 @@ function buildInput(root, niche, agent, chosenItems, allItems) {
   const today = new Date().toISOString().slice(0, 10);
   const existingContent = contentIndex(root);
   const wanted = wantedGuides(root);
-  return agent.mode === 'batch' ? { niche, today, existingContent, wantedGuides: wanted, items: entries } : { niche, today, existingContent, wantedGuides: wanted, ...entries[0] };
+  const availableTools = listTools(root).map(({ id, title }) => ({ id, title }));
+  return agent.mode === 'batch' ? { niche, today, existingContent, wantedGuides: wanted, availableTools, items: entries } : { niche, today, existingContent, wantedGuides: wanted, availableTools, ...entries[0] };
 }
 
 function validateArtifact(agent, artifact, label) {
@@ -383,6 +393,7 @@ export async function tick({ root = repoRoot, runner, now = new Date(), nicheId,
     review: critic ? reviewCandidates({ critic, agents, items, state: readReviewState(root), now }) : [],
     tune: tuner ? tuneCandidates({ tuner, agents, root }) : [],
     freshSeeds: openSeeds(root).filter((seed) => seed.considered === 0).length,
+    assist: Object.fromEntries(agents.filter((agent) => agent.mode === 'assist').map((agent) => [agent.name, assistCandidates({ agent, root, items })])),
     oldestFreshSeedAt: openSeeds(root).filter((seed) => seed.considered === 0).map((seed) => seed.at).sort()[0] ?? null,
   };
   const plan = planTick({ agents, items, runs: readRuns(root), schedule: readSchedule(root), now, ignoreSchedule, loop });
@@ -404,7 +415,7 @@ export async function tick({ root = repoRoot, runner, now = new Date(), nicheId,
       root,
       instructions: instructionsFor(agent, root, niche.id),
       input: candidate
-        ? (agent.mode === 'review' ? buildReviewInput : buildTuneInput)({ root, niche, agents, candidate })
+        ? ({ review: buildReviewInput, tune: buildTuneInput, assist: buildAssistInput })[agent.mode]({ root, niche, agents, agent, candidate })
         : buildInput(root, niche, agent, chosenItems, items),
       tools: agent.runner.tools ?? [],
       permissions: agent.runner.permissions ?? {},
@@ -437,7 +448,9 @@ export async function tick({ root = repoRoot, runner, now = new Date(), nicheId,
         throw new OutputError(error.message);
       }
       validateArtifact(agent, response.output.artifact, `${agent.name} artifact`);
-      const problem = agent.mode === 'tune' ? checkTuneArtifact(response.output.artifact, request.input) : null;
+      const problem = agent.mode === 'tune' ? checkTuneArtifact(response.output.artifact, request.input)
+        : agent.mode === 'assist' ? checkAssistArtifact(response.output.artifact, request.input, { cards: cardsWith(root, niche, []) })
+          : null;
       if (problem) throw new OutputError(problem);
       checked = response.output.artifact;
     } else {
@@ -451,6 +464,7 @@ export async function tick({ root = repoRoot, runner, now = new Date(), nicheId,
         today: new Date().toISOString().slice(0, 10),
         cards: cardsWith(root, niche, cardChanges),
         markets: niche.markets,
+        tools: new Set(listTools(root).map((tool) => tool.id)),
         existingContent: contentIndex(root),
       });
       if (checks.blocking.length) {
@@ -474,9 +488,9 @@ export async function tick({ root = repoRoot, runner, now = new Date(), nicheId,
   }
   const eventMeta = { ...meta(), usage: response.usage ?? null };
   if (candidate) {
-    const result = agent.mode === 'review'
-      ? applyReview({ root, candidate, artifact: checked, written })
-      : applyTune({ root, niche, candidate, input: request.input, artifact: checked, written });
+    const result = agent.mode === 'review' ? applyReview({ root, candidate, artifact: checked, written })
+      : agent.mode === 'assist' ? applyAssist({ root, agent, candidate, artifact: checked, written })
+        : applyTune({ root, niche, candidate, input: request.input, artifact: checked, written });
     appendRun(root, { ...eventMeta, itemId: null, status: 'completed', outcome: agent.mode, target: candidate.target });
     return { ...summary, [agent.mode]: result };
   }

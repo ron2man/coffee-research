@@ -8,12 +8,25 @@ These claims were researched for the built-in grinder troubleshooter. The curren
   "id": "barista-express",
   "name": "Barista Express",
   "category": "machines",
-  "updatedAt": "2026-11-22",
+  "updatedAt": "2026-11-23",
   "variants": [
     {
       "id": "bes870xl-us",
       "sku": "BES870XL",
-      "markets": ["US"]
+      "markets": [
+        "US"
+      ],
+      "name": "Breville Barista Express",
+      "brand": "Breville"
+    },
+    {
+      "id": "ses875-gb",
+      "sku": "SES875",
+      "markets": [
+        "GB"
+      ],
+      "name": "Sage the Barista Express",
+      "brand": "Sage"
     }
   ],
   "sources": [
@@ -52,6 +65,12 @@ These claims were researched for the built-in grinder troubleshooter. The curren
       "url": "https://www.ricambi.com.au/breville-coffee-machine-outer-upper-burr-grinder-k",
       "type": "merchant",
       "accessedAt": "2026-11-22"
+    },
+    {
+      "id": "sage-uk-bes875",
+      "url": "https://www.sageappliances.com/en-gb/product/BES875",
+      "type": "manufacturer",
+      "accessedAt": "2026-11-23"
     }
   ],
   "claims": [

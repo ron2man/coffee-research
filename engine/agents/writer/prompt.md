@@ -29,6 +29,10 @@ The same post is shown in every market the site serves. Write it once, so it rea
 - Keep prices, currencies, voltages, retailers and stock out of the text: the site's offers box shows them per market. If something really does differ by market (a variant has a different part or feature), say so once in one sentence, scoped to that variant.
 - Don't write "US", "UK" or another market into the advice unless it is that kind of real difference.
 
+## Interactive tools
+
+`availableTools` lists the tools that exist (the toolsmith builds the ones the brief asks for before you write). Place a tool on its own line as `{{tool <id>}}` where the reader should use it, and list it in `tools`. Only use tools that exist: a draft that names a missing tool fails the lint. If the brief asked for a tool the toolsmith skipped (see `artifacts.toolsmith.skipped`), write that part as steps in prose instead.
+
 ## Linking to our other guides
 
 Link to an existing guide with `{{guide:<slug>|link text}}` (slugs are in `existingContent`). These links don't count toward the inline-link limit. If the natural next read doesn't exist yet, still write the sentence; a guide link to a missing slug shows as plain text until the guide is published.

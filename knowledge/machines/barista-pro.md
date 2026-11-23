@@ -8,17 +8,25 @@ These claims were researched for the built-in grinder troubleshooter. The curren
   "id": "barista-pro",
   "name": "Barista Pro",
   "category": "machines",
-  "updatedAt": "2026-11-22",
+  "updatedAt": "2026-11-23",
   "variants": [
     {
       "id": "bes878-us",
       "sku": "BES878",
-      "markets": ["US"]
+      "markets": [
+        "US"
+      ],
+      "name": "Breville Barista Pro",
+      "brand": "Breville"
     },
     {
       "id": "ses878-gb",
       "sku": "SES878",
-      "markets": ["GB"]
+      "markets": [
+        "GB"
+      ],
+      "name": "Sage the Barista Pro",
+      "brand": "Sage"
     }
   ],
   "sources": [
