@@ -3,11 +3,11 @@
   "id": "breville-builtin-grinder-wont-grind-fine-enough",
   "type": "new-post",
   "niche": "coffee",
-  "status": "briefed",
+  "status": "drafted",
   "attempts": 0,
   "revisions": 1,
   "createdAt": "2026-11-21T17:35:36.159Z",
-  "updatedAt": "2026-11-23T11:34:43.103Z",
+  "updatedAt": "2026-11-23T11:47:31.587Z",
   "artifacts": {
     "idea": "data/ideas/breville-builtin-grinder-wont-grind-fine-enough.json",
     "idea-judge": "data/idea-scores/breville-builtin-grinder-wont-grind-fine-enough.json",
@@ -129,6 +129,13 @@
       "to": "briefed",
       "by": "post-judge",
       "reason": "The body is still the best answer to this query, and this revision handles the owner's \"buy a grinder\" note honestly. The decision section now says \"the one purchase that makes sense is a separate espresso grinder… not a new machine\". It points to the grinder guide twice and leaves offerIds empty, because no card supports a grinder for the Express or Pro. That is correct under the \"offers match the advice\" rule. The draft can't pass yet because the automated title checks are blocking. With product names filled in, the title is 128 characters (the limit is 70), and there is no seoTitle (the limit is 60). It is also a long two-clause title. Before publishing, the grinder-for-barista-express-and-pro guide has to exist. Without it, both guide references render as plain text, and the ending promises a guide the reader can't open. Only a human or a new research item can fix that; the writer can't."
+    },
+    {
+      "at": "2026-11-23T11:47:31.587Z",
+      "from": "briefed",
+      "to": "drafted",
+      "by": "writer",
+      "reason": "This revision fixes both blocking actions from the judge and keeps the body that scored 5/5/5/4/5. The title is now \"Shots still fast at grind setting 1? Fix the built-in grinder first\" (67 characters, no product tokens, so it is the same length in every market). The new seoTitle is \"Built-in grinder too fast at setting 1? What to fix first\" (57 characters). The description keeps both machine tokens and stays under 160 characters even with the longer GB names (about 144). The toolsmith has now built grind-fault-tree, so I placed it after the dial-range paragraph and listed it in tools. The diagram was skipped, and the burr direction stays in prose. I changed 'dialled in' to 'set up' so the spelling stays consistent. offerIds stays empty for the reason given in the last revision: no grinder card has claims about fit or grind range for these machines. Missing research: a standalone espresso grinder for {{product:barista-express}} / {{product:barista-pro}} owners, covering the portafilter size of both machines, dosing fit, an espresso range fine enough for light roasts, and a variant sold in both US and GB. It belongs in the guide slug grinder-for-barista-express-and-pro, which has to be published before this post ships, or both guide links render as plain text."
     }
   ]
 }
