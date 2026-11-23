@@ -5,6 +5,13 @@
   "by": "ron",
   "at": "2026-11-23T12:29:32.223Z",
   "status": "open",
-  "considered": 0,
-  "itemIds": []
+  "considered": 1,
+  "itemIds": [],
+  "attempts": [
+    {
+      "at": "2026-11-23T15:58:57.534Z",
+      "cards": [],
+      "why": "No card yet. The only readable accessory discussions (bottomless portafilter, WDT, shower screen) were in an OzBargain thread from 2024-06-22, which is older than 24 months, and in a 2025 thread I already used for the cleaning card. Reddit, Home-Barista and Coffee Forums UK were blocked. Retry when better sources are reachable."
+    }
+  ]
 }

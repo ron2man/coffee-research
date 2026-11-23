@@ -4,7 +4,18 @@
   "note": "Barista Express/Pro cluster (focus). From Ron.",
   "by": "ron",
   "at": "2026-11-23T12:29:32.220Z",
-  "status": "open",
-  "considered": 0,
-  "itemIds": []
+  "status": "used",
+  "considered": 1,
+  "itemIds": [
+    "barista-express-pro-clean-descale-routine"
+  ],
+  "attempts": [
+    {
+      "at": "2026-11-23T15:58:57.532Z",
+      "cards": [
+        "barista-express-pro-clean-descale-routine"
+      ],
+      "why": "Became barista-express-pro-clean-descale-routine. Signals are OzBargain threads about the clean/descale light and owners giving up after skipping cleaning. US and UK autocomplete ('cleaning cycle', 'descale', 'cleaning cycle not working') points the same way but isn't counted as a signal."
+    }
+  ]
 }

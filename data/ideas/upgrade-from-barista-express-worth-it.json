@@ -1,0 +1,36 @@
+{
+  "id": "upgrade-from-barista-express-worth-it",
+  "seedId": "2026-11-23-should-i-upgrade-from-my-barista-express-or-barista-pro-to-w",
+  "question": "My Barista Express is a few years old. Is it worth upgrading to a dual boiler or an Oracle, or should I just add a better grinder and keep it?",
+  "audience": "Owners of a Barista Express or Barista Pro (Sage in the UK) who have used it for several years and are tempted by Breville's Dual Boiler or Oracle line or a prosumer machine. Seen on Australian forums, and the same decision applies in the US and UK.",
+  "market": "US",
+  "language": "en",
+  "pain": "They aren't sure whether their frustration (slow steaming, inconsistent shots, an aging machine) comes from the machine or the grinder, and an upgrade can cost two to three times what they paid.",
+  "decision": "Keep the machine and upgrade the grinder, move to a dual boiler or heat exchanger (mainly for milk-drink volume), move to an Oracle-style automated machine, or change nothing.",
+  "contentType": "buying-decision",
+  "demand": {
+    "kind": "qualitative",
+    "signals": [
+      {
+        "url": "https://www.ozbargain.com.au/node/956872",
+        "date": "2026-04-25",
+        "note": "Barista Express owner asks whether the Breville Dual Boiler is worth upgrading to. Replies say it is only worth it for heavy milk-drink users bothered by steaming waits, and that a better grinder is the bigger improvement."
+      },
+      {
+        "url": "https://www.ozbargain.com.au/node/981985",
+        "date": "2026-11-08",
+        "note": "Owner of a six-year-old Barista Express wants to replace it and asks whether the Oracle or the Oracle Jet is the better choice, saying they don't see the need for a dual boiler."
+      }
+    ]
+  },
+  "competitorGap": "Upgrade guides (completehomebarista.com, coffeenerd upgrade pages) list next machines by price tier. They don't help the owner work out which symptom is actually the bottleneck (grinder or thermocoil steaming and temperature). Most assume the answer is a new machine, and almost none treat 'keep it' as a result.",
+  "valueAdd": "A symptom-to-bottleneck decision tree. Inconsistent or sour shots point to the grinder first. Long steaming waits and back-to-back milk drinks point to the machine. Wanting less work points to automation. 'Keep it, add a grinder' and 'keep it, change nothing' are both valid results.",
+  "commercialPath": [
+    "standalone espresso grinder",
+    "dual boiler espresso machine",
+    "automated espresso machine with grinder"
+  ],
+  "overlapsWith": [
+    "breville-builtin-grinder-wont-grind-fine-enough"
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "id": "standalone-grinder-for-barista-express-pro",
+  "seedId": "2026-11-22-which-standalone-grinder-should-a-breville-sage-barista-expr",
+  "question": "The built-in grinder on my Breville Barista Express (or Pro) can't grind well enough any more. Which standalone grinder should I buy for this machine, and do I need one at all?",
+  "audience": "Owners of a Breville Barista Express, Express Impress or Barista Pro (sold as Sage in the UK), usually a few years in, who have already gone finer or adjusted the inner burr and still can't dial in. The evidence comes from Australian Breville owners on OzBargain. The machines and the problem are the same in the US and UK.",
+  "market": "US",
+  "language": "en",
+  "pain": "The built-in grinder can't go fine enough, steps too coarsely, or fails now and then, so shots are hard to dial in and owners are told to 'just get a separate grinder' with no guidance on which one suits a 54 mm Breville.",
+  "decision": "Keep the built-in grinder (after the burr checks in our diagnosis guide), add a budget espresso-capable grinder, or add a mid-range single-dose grinder. Choose by budget, drinks and whether the machine itself will be replaced later.",
+  "contentType": "buying-decision",
+  "demand": {
+    "kind": "qualitative",
+    "signals": [
+      {
+        "url": "https://www.ozbargain.com.au/node/899121",
+        "date": "2025-03-25",
+        "note": "Barista Express owner says the built-in grinder fails intermittently and asks whether buying a standalone grinder is worth it. Replies suggest a DF54 or Eureka Mignon at about the same price, and one says the Breville Smart Grinder Pro is no real upgrade over the built-in grinder."
+      },
+      {
+        "url": "https://www.ozbargain.com.au/node/978554",
+        "date": "2026-10-11",
+        "note": "Barista Express owner says the built-in grinder struggles to grind fine enough even for medium roasts and makes decaf hard to dial in, and recommends a separate grinder. Others point to the inner burr dial first."
+      }
+    ]
+  },
+  "competitorGap": "The top 'best grinder for Barista Express' pages (balancejournal.co, completehomebarista.com) are generic lists ranked by price. They skip the step before buying (has the inner burr been adjusted? are the burrs worn?). They don't say whether the grinder will outlive the machine, and they often recommend the Smart Grinder Pro, which owners say is basically the same grinder as the built-in one. None link the choice to a diagnosis of why the built-in grinder fails.",
+  "valueAdd": "Start from our built-in grinder diagnosis, then give a decision rule: no purchase if the burr fix works; a budget espresso-capable grinder if they mostly make milk drinks and keep the machine; a single-dose grinder if they expect to replace the machine. Explain why buying Breville's own standalone grinder is usually a sideways move. Includes a keep-the-built-in path.",
+  "commercialPath": [
+    "standalone espresso grinder",
+    "single-dose grinder",
+    "replacement upper burr (keep path)"
+  ],
+  "overlapsWith": [
+    "breville-builtin-grinder-wont-grind-fine-enough",
+    "best-grinder-for-bambino"
+  ]
+}

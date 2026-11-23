@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "id": "standalone-grinder-for-barista-express-pro",
+  "type": "new-post",
+  "niche": "coffee",
+  "status": "idea",
+  "attempts": 0,
+  "revisions": 0,
+  "createdAt": "2026-11-23T15:58:57.537Z",
+  "updatedAt": "2026-11-23T15:58:57.537Z",
+  "artifacts": {
+    "idea": "data/ideas/standalone-grinder-for-barista-express-pro.json"
+  },
+  "history": [
+    {
+      "at": "2026-11-23T15:58:57.537Z",
+      "from": null,
+      "to": "idea",
+      "by": "idea",
+      "reason": "generated"
+    }
+  ]
+}

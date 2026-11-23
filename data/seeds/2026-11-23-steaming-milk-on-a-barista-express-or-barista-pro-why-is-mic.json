@@ -4,7 +4,18 @@
   "note": "Barista Express/Pro cluster (focus). From Ron.",
   "by": "ron",
   "at": "2026-11-23T12:29:32.226Z",
-  "status": "open",
-  "considered": 0,
-  "itemIds": []
+  "status": "used",
+  "considered": 1,
+  "itemIds": [
+    "barista-express-pro-steam-wand-microfoam"
+  ],
+  "attempts": [
+    {
+      "at": "2026-11-23T15:58:57.534Z",
+      "cards": [
+        "barista-express-pro-steam-wand-microfoam"
+      ],
+      "why": "Became barista-express-pro-steam-wand-microfoam. Signals are OzBargain owner comments. The Home-Barista and Coffee Forums UK Barista Pro steam threads were blocked."
+    }
+  ]
 }

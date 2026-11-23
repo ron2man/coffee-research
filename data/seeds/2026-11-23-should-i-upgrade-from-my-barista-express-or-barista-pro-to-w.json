@@ -4,7 +4,18 @@
   "note": "Barista Express/Pro cluster (focus). From Ron.",
   "by": "ron",
   "at": "2026-11-23T12:29:32.224Z",
-  "status": "open",
-  "considered": 0,
-  "itemIds": []
+  "status": "used",
+  "considered": 1,
+  "itemIds": [
+    "upgrade-from-barista-express-worth-it"
+  ],
+  "attempts": [
+    {
+      "at": "2026-11-23T15:58:57.533Z",
+      "cards": [
+        "upgrade-from-barista-express-worth-it"
+      ],
+      "why": "Became upgrade-from-barista-express-worth-it. Two recent OzBargain threads from Express owners asking about a Dual Boiler and an Oracle. The Coffee Forums UK upgrade threads ('Sage upgrade which machine', 'Need advice on changing from Barista Express') were blocked."
+    }
+  ]
 }

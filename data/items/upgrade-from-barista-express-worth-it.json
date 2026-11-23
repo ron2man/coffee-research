@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "id": "upgrade-from-barista-express-worth-it",
+  "type": "new-post",
+  "niche": "coffee",
+  "status": "idea",
+  "attempts": 0,
+  "revisions": 0,
+  "createdAt": "2026-11-23T15:58:57.539Z",
+  "updatedAt": "2026-11-23T15:58:57.539Z",
+  "artifacts": {
+    "idea": "data/ideas/upgrade-from-barista-express-worth-it.json"
+  },
+  "history": [
+    {
+      "at": "2026-11-23T15:58:57.539Z",
+      "from": null,
+      "to": "idea",
+      "by": "idea",
+      "reason": "generated"
+    }
+  ]
+}

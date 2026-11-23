@@ -5,6 +5,13 @@
   "by": "ron",
   "at": "2026-11-23T12:29:32.217Z",
   "status": "open",
-  "considered": 0,
-  "itemIds": []
+  "considered": 1,
+  "itemIds": [],
+  "attempts": [
+    {
+      "at": "2026-11-23T15:58:57.531Z",
+      "cards": [],
+      "why": "No card. The Express/Pro sour-shot threads I found are on Home-Barista and Coffee Forums UK (search results show many threads, mostly 2016–2022), but both sites blocked fetching, so they can't count. None of the OzBargain threads I opened raised sour or bitter shots. Worth retrying if Reddit or Home-Barista access becomes available."
+    }
+  ]
 }
