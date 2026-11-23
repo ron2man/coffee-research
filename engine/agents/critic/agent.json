@@ -2,9 +2,20 @@
   "name": "critic",
   "description": "Reviews another agent's recent outputs against that agent's own instructions and the spec principles, and records findings for the prompt tuner. Never changes items.",
   "mode": "review",
-  "priority": 25,
+  "priority": 8,
   "artifactDir": "data/feedback",
-  "review": { "minEntries": 3, "maxWaitHours": 24, "maxEntries": 10 },
-  "runner": { "type": "claude", "tools": ["WebFetch", "Read"], "maxTurns": 30 },
+  "review": {
+    "minEntries": 5,
+    "maxWaitHours": 48,
+    "maxEntries": 10
+  },
+  "runner": {
+    "type": "claude",
+    "tools": [
+      "WebFetch",
+      "Read"
+    ],
+    "maxTurns": 30
+  },
   "status": "draft"
 }

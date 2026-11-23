@@ -75,6 +75,16 @@ One real agent run uses about 8% of the subscription's usage, as the project lea
 
 Follow-up: watch the weekly limit, and lengthen the tick interval (`npm run schedule -- install --interval-minutes 120`) if runs start to crowd out the lead's own use.
 
+### 2026-11-23 · Toward one guide a day: focus, demand data, budget, cleanup
+
+The project lead set the goal: one guide a day, built around equipment, with "my setup" as the site's eventual core and affiliation moved to a separate service (`docs/offers-service.md`). Changes:
+
+- `niche.json` `focus`: the Barista Express and Pro cluster. The idea agent starts there, and the judge prefers it when evidence is comparable. Six seeds cover the cluster.
+- Demand data without AI before each idea run: autocomplete phrasing per market and Reddit posts (API with app credentials, or public JSON with blocks recorded). The idea agent can cite these as signals. This answers "the idea agent can't reach Reddit".
+- Fewer runs per guide. The critic and tuner run only on idle ticks and review in batches of 5. The idea agent waits until fewer than 4 ideas are queued. A 12-runs-per-24h budget protects the subscription.
+- Publishing: disclosure text is required only for posts with affiliate offers. Approvals can be queued, and the next tick opens the PR.
+- Removed the legacy `agent/` pipeline, the old site renderer and the old dashboard view.
+
 ## Decisions
 
 - **2026-11-21 · Git flow.** Internal changes (items, research, briefs, drafts, knowledge cards) are committed straight to `main` by `npm run tick -- --commit`, with no approval, so the pipeline never waits on a merge. Reader-facing paths (`content/published/`, `site/`, `data/offers/`) are never committed by a tick and need their own PR. The boundary is [git-policy.json](../engine/scheduler/git-policy.json). The publish step that opens content PRs arrives with M4/M5.

@@ -28,6 +28,13 @@ The goal is a machine that does real good for coffee lovers: it finds what peopl
 8. **One post for every market.** A post is written once and shown in every market. What differs per market is data, not prose: product names and model numbers come from the knowledge card variants (`{{product:id}}`, `{{model:id}}`), and offers, prices, currency and disclosure come from the offers layer. The text only mentions a market when a variant really differs. *(Decision 2026-11-22.)*
 9. **Measure before optimizing.** No SEO changes on fewer than 60 to 90 days of data.
 
+## 2a. Where this is heading (decision 2026-11-23)
+
+- **Build around equipment.** Start from one product (now the Breville/Sage Barista Express and Pro: `niches/coffee/niche.json` `focus`) and derive the owners' problems, maintenance, upgrades and decisions from it, then add products one at a time. A cluster of guides about one product helps readers and search more than scattered topics.
+- **"My setup" is the essence of the site.** Later, a reader enters the gear they own and gets a world built around it: what works, what to upgrade first and what not to buy, what would make it perfect, what they don't know yet. The knowledge cards, compatibility matrix and per-product guide clusters are the data that makes this possible.
+- **Affiliation lives in a separate offers service** (`docs/offers-service.md`): the site sends product IDs and a market, and gets offers and tracked redirect links back.
+- **Target pace: one guide a day**, before scaling or a second niche.
+
 ## 3. Scope
 
 - v1: coffee (home espresso machines, grinders, accessories), English, US market first, UK second.

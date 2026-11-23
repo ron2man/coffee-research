@@ -14,7 +14,10 @@ import { runChecks } from '../feedback/checks.mjs';
 
 const fixture = (name) => JSON.parse(readFileSync(join(repoRoot, 'engine/agents', name, 'fixtures', 'valid.json'), 'utf8'));
 // Give the loop agents a prompt so the planner does not skip them.
-const agents = loadAgents().map((agent) => (['critic', 'tuner'].includes(agent.name) ? { ...agent, promptPath: '/dev/null' } : agent));
+// Loop agents get a prompt and run ahead of the pipeline here (in production they wait for idle ticks).
+const agents = loadAgents().map((agent) => (agent.name === 'critic' ? { ...agent, promptPath: '/dev/null', priority: 25, review: { ...agent.review, minEntries: 3 } }
+  : agent.name === 'tuner' ? { ...agent, promptPath: '/dev/null', priority: 24 } : agent))
+  .sort((a, b) => b.priority - a.priority || a.name.localeCompare(b.name));
 const only = (...names) => agents.filter((agent) => names.includes(agent.name));
 
 function sandbox(t) {

@@ -67,6 +67,31 @@ npm run item -- resume <id> --reason "..." --commit
 3. **Tuner** (agent): when an agent has at least 2 open feedback entries (or any human note) and no open proposal, it proposes a prompt change in `data/prompt-proposals/`. Shared prompts stay niche-agnostic; niche advice goes to `niches/<niche>/agents/<agent>.md`.
 4. **You** apply or reject the proposal. Applied proposals close the feedback they address; rejected ones are shown to the tuner next time.
 
+## Pace and budget
+
+The target is one guide a day: about 6 agent runs per guide (research, angle, toolsmith when a tool is needed, writer, post judge, plus a share of idea and judge runs).
+
+- Install the job every 20 minutes while you're working toward that pace: `npm run schedule -- install --interval-minutes 20`. A tick with nothing due uses nothing.
+- **Daily budget:** a tick doesn't start an agent once 12 agent runs happened in the last 24 hours (each is about 8% of a usage window). Change it with `TICK_MAX_RUNS_PER_DAY` in `~/.config/yourcoffeesetup/env`.
+- The critic and tuner run only when the pipeline has nothing else to do; the idea agent runs when fewer than 4 ideas are waiting (seeds bring it forward).
+
+## Demand data (Reddit, autocomplete)
+
+Before the idea agent runs, the scheduler collects demand data without AI: search-autocomplete suggestions per market for the focus products and your English seeds, and posts from the niche's subreddits (`niche.json` `demand`). It's saved in `data/demand/` and given to the idea agent.
+
+Reddit works best through its API. Create a "script" app at https://www.reddit.com/prefs/apps (name it anything, redirect URI `http://localhost`), then put its ID and secret in `~/.config/yourcoffeesetup/env` on the scheduler's Mac (never in the repo):
+
+```sh
+mkdir -p ~/.config/yourcoffeesetup
+cat >> ~/.config/yourcoffeesetup/env <<'END'
+REDDIT_CLIENT_ID=...
+REDDIT_CLIENT_SECRET=...
+END
+chmod 600 ~/.config/yourcoffeesetup/env
+```
+
+Without it, the scheduler tries Reddit's public JSON once per run and records whether it was blocked (see `sources` in `data/demand/*.json` and the run traces in the dashboard).
+
 ## Costs
 
 Each real run reports its usage in `.backoffice/runs.jsonl` (`usage.costUsd` is the CLI's estimate at API prices, not your subscription bill). One idea run took about 4 minutes and 44 turns. Hourly ticks mean up to 24 agent runs a day when there is work; when nothing is due a tick does nothing and uses no usage.

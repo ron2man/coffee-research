@@ -4,49 +4,201 @@
   "title": "Niche configuration",
   "type": "object",
   "additionalProperties": false,
-  "required": ["schemaVersion", "id", "name", "categories", "markets", "contentTypes", "commercialRoles", "sellers", "disclosures"],
+  "required": [
+    "schemaVersion",
+    "id",
+    "name",
+    "categories",
+    "markets",
+    "contentTypes",
+    "commercialRoles",
+    "sellers",
+    "disclosures"
+  ],
   "$defs": {
-    "slug": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" }
+    "slug": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+    }
   },
   "properties": {
-    "schemaVersion": { "const": 1 },
-    "id": { "$ref": "#/$defs/slug" },
-    "name": { "type": "string", "minLength": 1 },
+    "schemaVersion": {
+      "const": 1
+    },
+    "id": {
+      "$ref": "#/$defs/slug"
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1
+    },
     "categories": {
-      "type": "array", "minItems": 1,
+      "type": "array",
+      "minItems": 1,
       "items": {
-        "type": "object", "additionalProperties": false, "required": ["id", "label"],
-        "properties": { "id": { "$ref": "#/$defs/slug" }, "label": { "type": "string", "minLength": 1 } }
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "label"
+        ],
+        "properties": {
+          "id": {
+            "$ref": "#/$defs/slug"
+          },
+          "label": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
       }
     },
     "markets": {
-      "type": "array", "minItems": 1,
+      "type": "array",
+      "minItems": 1,
       "items": {
-        "type": "object", "additionalProperties": false,
-        "required": ["id", "language", "locale", "currency", "status"],
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "language",
+          "locale",
+          "currency",
+          "status"
+        ],
         "properties": {
-          "id": { "type": "string", "pattern": "^[A-Z]{2}$" },
-          "language": { "type": "string", "pattern": "^[a-z]{2}$" },
-          "locale": { "type": "string", "pattern": "^[a-z]{2}-[a-z]{2}$" },
-          "currency": { "type": "string", "pattern": "^[A-Z]{3}$" },
-          "status": { "enum": ["primary", "secondary", "planned"] }
+          "id": {
+            "type": "string",
+            "pattern": "^[A-Z]{2}$"
+          },
+          "language": {
+            "type": "string",
+            "pattern": "^[a-z]{2}$"
+          },
+          "locale": {
+            "type": "string",
+            "pattern": "^[a-z]{2}-[a-z]{2}$"
+          },
+          "currency": {
+            "type": "string",
+            "pattern": "^[A-Z]{3}$"
+          },
+          "status": {
+            "enum": [
+              "primary",
+              "secondary",
+              "planned"
+            ]
+          }
         }
       }
     },
-    "contentTypes": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/slug" } },
-    "commercialRoles": { "type": "array", "items": { "type": "string" } },
+    "contentTypes": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/slug"
+      }
+    },
+    "commercialRoles": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
     "sellers": {
       "type": "array",
       "items": {
-        "type": "object", "required": ["id", "market", "type"],
+        "type": "object",
+        "required": [
+          "id",
+          "market",
+          "type"
+        ],
         "properties": {
-          "id": { "$ref": "#/$defs/slug" },
-          "market": { "type": "string", "pattern": "^[A-Z]{2}$" },
-          "type": { "enum": ["affiliate", "direct"] }
+          "id": {
+            "$ref": "#/$defs/slug"
+          },
+          "market": {
+            "type": "string",
+            "pattern": "^[A-Z]{2}$"
+          },
+          "type": {
+            "enum": [
+              "affiliate",
+              "direct"
+            ]
+          }
         }
       }
     },
-    "disclosures": { "type": "object", "additionalProperties": { "type": "string", "minLength": 1 } },
-    "openQuestions": { "type": "array", "items": { "type": "string" } }
+    "disclosures": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "openQuestions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "focus": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "products",
+        "why"
+      ],
+      "description": "The product cluster the site builds first: ideas start from the problems, upgrades and decisions of owners of these products.",
+      "properties": {
+        "products": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+          }
+        },
+        "why": {
+          "type": "string",
+          "minLength": 1
+        },
+        "angles": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": "Kinds of owner questions to look for."
+        }
+      }
+    },
+    "demand": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Where the scheduler collects demand data (no AI) before the idea agent runs.",
+      "properties": {
+        "subreddits": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_]+$"
+          }
+        },
+        "querySuffixes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "maxQueries": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    }
   }
 }

@@ -23,6 +23,7 @@ import { addFeedback, openFeedback, readReviewState } from '../feedback/store.mj
 import { applyAssist, assistCandidates, buildAssistInput, checkAssistArtifact } from './assist.mjs';
 import { listTools } from '../state/tools.mjs';
 import { processPublishQueue, syncPublished } from '../publish/publish.mjs';
+import { collectDemand } from '../demand/collect.mjs';
 import { applyReview, applyTune, buildReviewInput, buildTuneInput, checkTuneArtifact, reviewCandidates, tuneCandidates } from '../feedback/loop.mjs';
 import { newItem, transition } from '../state/machine.mjs';
 import { defaultNicheId, loadNiche, repoRoot } from '../state/niche.mjs';
@@ -370,7 +371,7 @@ function recordFailure(root, agent, chosenItems, error, meta, maxAttempts, writt
  * Run one tick. `runner` overrides per-agent runners (tests and simulation).
  * Returns a summary; throws only for store/config problems, never for agent failures.
  */
-export async function tick({ root = repoRoot, runner, now = new Date(), nicheId, agents = loadAgents(), dryRun = false, maxAttempts = MAX_ATTEMPTS, lock = true, ignoreSchedule = false } = {}) {
+export async function tick({ root = repoRoot, runner, now = new Date(), nicheId, agents = loadAgents(), dryRun = false, maxAttempts = MAX_ATTEMPTS, lock = true, ignoreSchedule = false, demandCollector, maxRunsPerDay = Number(process.env.TICK_MAX_RUNS_PER_DAY ?? 12) } = {}) {
   if (lock && !dryRun) {
     let release;
     try {
@@ -380,7 +381,7 @@ export async function tick({ root = repoRoot, runner, now = new Date(), nicheId,
       throw error;
     }
     try {
-      return await tick({ root, runner, now, nicheId, agents, dryRun, maxAttempts, lock: false, ignoreSchedule });
+      return await tick({ root, runner, now, nicheId, agents, dryRun, maxAttempts, lock: false, ignoreSchedule, demandCollector, maxRunsPerDay });
     } finally {
       release();
     }
@@ -410,6 +411,26 @@ export async function tick({ root = repoRoot, runner, now = new Date(), nicheId,
   const summary = { ran: agent.name, itemIds: chosenItems.map((item) => item.id), skipped: plan.skipped, changedFiles: written };
   if (dryRun) return { ...summary, dryRun: true };
 
+  // Usage budget: each agent run draws on the subscription (about 8% of a usage window), so cap
+  // the runs per rolling 24 hours. TICK_MAX_RUNS_PER_DAY changes it.
+  const dayAgo = now.getTime() - 24 * hourMs;
+  const recent = new Set(readRuns(root).filter((r) => r.agent && !r.runnerUnavailable && Date.parse(r.timestamp) > dayAgo)
+    .map((r) => r.runLog ?? `${r.agent}:${r.durationMs}`));
+  if (recent.size >= maxRunsPerDay) {
+    return { ran: null, skipped: [{ agent: agent.name, reason: `daily budget: ${recent.size} agent runs in the last 24h (max ${maxRunsPerDay})` }], changedFiles: written };
+  }
+
+  // Demand data for the idea agent, collected without AI (autocomplete, Reddit). Real runs only.
+  const collector = demandCollector === undefined ? (runner ? null : collectDemand) : demandCollector;
+  let demandSignals = null;
+  if (agent.acceptsSeeds && collector) {
+    const { cards } = loadCardsSync(join(root, 'knowledge'), categoryIds(niche));
+    demandSignals = await collector(niche, { cards, seeds: openSeeds(root) });
+    const path = `data/demand/${new Date().toISOString().replace(/[:.]/g, '-')}.json`;
+    writeJsonAtomic(join(root, path), demandSignals);
+    written.push(path);
+  }
+
   const started = Date.now();
   const candidate = plan.chosen.candidate;
   const meta = () => ({ workflow: `agent:${agent.name}`, agent: agent.name, durationMs: Date.now() - started });
@@ -423,7 +444,7 @@ export async function tick({ root = repoRoot, runner, now = new Date(), nicheId,
       instructions: instructionsFor(agent, root, niche.id),
       input: candidate
         ? ({ review: buildReviewInput, tune: buildTuneInput, assist: buildAssistInput })[agent.mode]({ root, niche, agents, agent, candidate })
-        : buildInput(root, niche, agent, chosenItems, items),
+        : { ...buildInput(root, niche, agent, chosenItems, items), ...(demandSignals ? { demandSignals } : {}) },
       tools: agent.runner.tools ?? [],
       permissions: agent.runner.permissions ?? {},
     };

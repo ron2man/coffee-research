@@ -130,6 +130,8 @@ export function commitMessage(result) {
   if (!result.ran && result.published?.length) return `tick: published ${result.published.map((p) => p.split('/').pop().replace('.json', '')).join(', ')}`;
   if (result.review) return `tick(${result.ran}): reviewed ${result.review.target} (${result.review.findings} findings)`;
   if (result.tune) return `tick(${result.ran}): proposed ${result.tune.proposal} for ${result.tune.target}`;
+  if (result.ran && result.created && !result.created.length && !result.error) return `tick(${result.ran}): no new items`;
+  if (result.error && !result.failures?.length) return `tick(${result.ran}): failed (${result.error.slice(0, 80)})`;
   const outcomes = result.created?.length
     ? `created ${result.created.join(', ')}`
     : result.results?.map((r) => `${r.id} ${r.outcome}→${r.to}`).join('; ')

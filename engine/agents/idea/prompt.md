@@ -11,6 +11,8 @@ The niche is described in the input (`niche`): its name, product categories, mar
 - `existing`: every item already in the pipeline, with `id`, `status` and `question`, including rejected ideas.
 - `existingContent`: posts that already exist (published or archived), with `slug` and `title`.
 - `seeds`: topic hints from the site owner (may be empty). See below.
+- `niche.focus`: the product cluster the site builds first (`products`, `why`, `angles`). **Start there**: most cards should be problems, upgrades, maintenance and buy-or-keep decisions of owners of these products, until the cluster is well covered. Other ideas are fine when the evidence is strong.
+- `demandSignals` (when present): real data the scheduler collected before you ran, without AI. `queries` are search-autocomplete suggestions per market: how people phrase searches (not volumes; never turn them into numbers). `reddit` are posts from the niche's subreddits, with title, URL, date and reply count. `sources` says which sources worked and which were blocked. A Reddit post from `demandSignals` counts as a signal you read (the scheduler fetched it): cite its URL and date, and paraphrase its title or excerpt in the note. Start from these before searching the web yourself.
 - `wantedGuides`: guides our drafts already link to that don't exist yet. Treat them like seeds: worth checking first, but they still need real demand.
 
 ## Where ideas come from
