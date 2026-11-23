@@ -2,45 +2,48 @@
   "scores": {
     "readerValueVsCompetitors": {
       "score": 5,
-      "reason": "It gives an ordered diagnosis a reader can run tonight: the roast date, single-wall vs dual-wall basket, the cap level with the rim, and the time until the espresso starts to flow, checked against the manual's 8–12 s and 1–6 s figures. Then it cleans the burrs and moves the upper burr 'one number toward finer'. It ends with a clear rule for when to stop. The ranking forum threads mix shims, burr clash and 'buy a grinder' advice with no order, and SCG says to go coarser."
+      "reason": "The top results are Home-Barista threads ('Even at grind size 1 my Barista Express still gushes', 'Can't get Breville/Sage to grind fine enough'), the Singletrack thread and the Seattle Coffee Gear top-burr post. None of them gives an ordered diagnosis. The draft does: 'The test you can run tonight', then clean, then the upper burr 'one number toward finer', then the date code and the manufacturer, then 'the built-in grinder is the limit… buy a separate espresso grinder'."
     },
     "distinctivenessVoice": {
-      "score": 4,
-      "reason": "It opens with 'Don't buy anything yet.' and keeps to one view all the way through. Its own judgements are labelled as such ('My rule, which is my judgement and not the manual's'). Sections differ in shape: a four-point test, a numbered procedure, prose. The repeated 'my judgement' labels in 'When I'd choose differently' are a little heavy."
+      "score": 5,
+      "reason": "It opens 'Don't buy anything yet.' and commits to one view throughout. It contradicts the forum ('The manual says something different') and the retailer ('follow the ring, not the forum'). 'When I'd choose differently' now carries one label in its intro, not a label on every item."
     },
     "honestyAboutLimits": {
       "score": 5,
-      "reason": "A single 'What the booklet doesn't say' paragraph covers the burr range, factory position, burr-contact warning and warranty. The parts listing is labelled 'not a manufacturer spec' and the owner report 'a single report'. The methods section says the North American editions were read and other markets' editions weren't compared. The prose avoids hedging."
+      "reason": "'What the booklet doesn't say' states the four unknowns once. The parts listing is called 'a parts listing, not a manufacturer spec', and the owner report is 'a single report, not a spec'. The methods section says 'we did not test either machine' and 'this guide doesn't name one'."
     },
     "evidenceIntegrity": {
-      "score": 5,
-      "reason": "Each statement I checked matches a claim card: the 22–33 lb tamp and cap-level dose, 16–19 g, Pro flow at 8–12 s with under 7 s meaning fast, Express at 1–6 s/20 s, and the Allen key for the shower-screen seal. The kg conversion is arithmetic. The two unsupported generalisations from the last draft are gone."
+      "score": 4,
+      "reason": "All the factual statements map to claims: dial ranges, the 5–20 day roast window, the dual-wall quote, the 22–33 lb tamp, flow timings, the troubleshooting causes, the PDC part numbers and the warranty wording. The 'metal on metal → back off' rule is labelled as the writer's judgement. The 'roughly 10–15 kg' conversion is our own arithmetic, not from a claim, but it's harmless."
     },
     "topicFit": {
       "score": 5,
-      "reason": "It answers the brief's question directly (adjust the upper burr, replace it, or buy a grinder) for a beginner Express or Pro owner already at setting 1. It follows the leave-out list: no '6' default, no shims, no grinder picks, no prices. It ends on the owner's required outcome: a separate grinder, not a new machine."
+      "reason": "It follows the brief's thesis exactly: free checks in order, then the upper burr, then a replacement burr through the manufacturer, and only then a separate grinder. It keeps the leaveOut items out (no '6' default, no shims, no grinder picks, no prices). The keep-yours outcome is the default ('If any step above slowed the shot… buy nothing')."
     }
   },
   "wouldForward": true,
   "competitorComparison": [
     {
       "url": "https://www.home-barista.com/espresso-machines/even-at-grind-size-1-barista-express-still-gushes-what-am-i-missing-t101609.html",
-      "weGiveThatTheyDont": "An order of checks based on the manual, with numbers. It rules out beans, the dual-wall basket and dose before touching the burr, and gives the timing figures to check against, where the thread offers scattered replies."
+      "weGiveThatTheyDont": "One ordered sequence in place of scattered replies. It rules out stale beans, the dual-wall basket and under-dosing before the burr, quotes the manufacturer's own causes for 'runs out too quickly', and sets a clear point at which to stop and buy a grinder."
     },
     {
       "url": "https://www.seattlecoffeegear.com/blogs/scg-blog/adjusting-the-top-burr-on-the-breville-barista-express",
-      "weGiveThatTheyDont": "The correct direction (toward FINE for fast shots, where SCG says coarser). It also adds the checks to do before touching the burr, an honest note on what isn't documented, the date-code parts check, the step of contacting the manufacturer, and a point at which to stop."
+      "weGiveThatTheyDont": "The correct direction for fast shots (toward FINE, where SCG says coarser), checks to do before opening the grinder, the undocumented range and factory position stated honestly, the PDC part-number check, and the route through the warranty or manufacturer before buying."
     },
     {
-      "url": "https://www.home-barista.com/espresso-machines/cant-get-breville-sage-barista-to-grind-fine-enough-t100955.html",
-      "weGiveThatTheyDont": "A single committed answer: a keep-yours default, one burr step at a time, and a clear threshold for buying a separate grinder rather than a new machine. Forum replies split between modding, shimming and upgrading."
+      "url": "https://singletrackworld.com/forum/off-topic/sage-breville-barista-pro-grinder/",
+      "weGiveThatTheyDont": "It turns one owner's fix (clean the burrs, internal burr to 1, free burr from the manufacturer) into a general procedure grounded in the manual. It also settles the 'shim it / don't touch it / buy a grinder' split that the thread leaves open."
     }
   ],
-  "blockingActions": [],
+  "blockingActions": [
+    "Shorten the title to 70 characters or fewer, counting the longest filled-in product name (GB names are longer). Make it one problem-first promise, not two clauses with two product tokens, e.g. 'Built-in grinder still too fast at setting 1? Check these before buying'. Keep the machine names in the description.",
+    "Add a seoTitle of 60 characters or fewer that leads with the search problem, e.g. 'Barista Express too fast at grind setting 1? Fix it first'. Check it is 60 or fewer with product names filled in if you use a token."
+  ],
   "optionalImprovements": [
-    "Before publishing, write {{guide:grinder-for-barista-express-and-pro}} or swap the link out. Right now the ending points to a guide that doesn't exist.",
-    "Build grind-fault-tree and upper-burr-direction-diagram in content/tools, or remove them from the tools field, so the layout doesn't render missing assets.",
-    "Cut one of the three 'my judgement' labels in 'When I'd choose differently'. Once in the section intro would do.",
-    "Once someone asks support about replacement burrs outside Australia, replace the Australian-only listing with something that works in every market."
+    "Publish gate for the human: build and publish the grinder-for-barista-express-and-pro guide before this post ships. Until then, 'our guide to choosing a grinder… answers it' renders as plain text and promises the reader something that doesn't exist. Grinder offers for this post also need new research: the Express and Pro portafilter size, dosing fit, and variants sold in both the US and GB.",
+    "Check the description length with product names filled in. Two product tokens may push it past what a search snippet shows.",
+    "Methods: the raw source URLs are fine in the collapsed section, but check the renderer doesn't turn them into body links that count against the two-link limit.",
+    "'dialled in' is British spelling in a post whose market field is US. That's fine for a post shown in every market, but keep the spelling consistent."
   ]
 }
