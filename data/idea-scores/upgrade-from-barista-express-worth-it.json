@@ -1,0 +1,28 @@
+{
+  "scores": {
+    "demandEvidence": {
+      "score": 4,
+      "reason": "node/956872 asks whether to upgrade to a Dual Boiler (replies: only for milk-heavy use, otherwise a grinder). The card also cites an Oracle-vs-Jet thread, and home-barista has an 'upgrade or better grinder' thread."
+    },
+    "competitorGap": {
+      "score": 3,
+      "reason": "completehomebarista has a dedicated 'upgrading from Barista Express' page that already says grinder first, but it is a price-tier progression with no symptom-to-bottleneck diagnosis."
+    },
+    "valueAddWithoutExperience": {
+      "score": 4,
+      "reason": "A symptom-to-bottleneck tree (shot consistency points to the grinder, steaming waits to the thermocoil, effort to automation) can be built from specs and owner consensus."
+    },
+    "evidenceFeasibility": {
+      "score": 4,
+      "reason": "Thermocoil vs dual boiler specs, steam times and Oracle features are published, and owner reports are plentiful."
+    },
+    "commercialFit": {
+      "score": 5,
+      "reason": "A big, honest decision where 'keep it' or 'add a grinder' are often the right answer."
+    },
+    "overlap": {
+      "score": 3,
+      "reason": "It partly overlaps the standalone-grinder card on the 'add a grinder' branch, so it must hand off to that guide."
+    }
+  }
+}

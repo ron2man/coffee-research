@@ -3,13 +3,14 @@
   "id": "barista-express-pro-clean-descale-routine",
   "type": "new-post",
   "niche": "coffee",
-  "status": "idea",
+  "status": "idea_approved",
   "attempts": 0,
   "revisions": 0,
   "createdAt": "2026-11-23T15:58:57.541Z",
-  "updatedAt": "2026-11-23T15:58:57.541Z",
+  "updatedAt": "2026-11-23T18:02:49.761Z",
   "artifacts": {
-    "idea": "data/ideas/barista-express-pro-clean-descale-routine.json"
+    "idea": "data/ideas/barista-express-pro-clean-descale-routine.json",
+    "idea-judge": "data/idea-scores/barista-express-pro-clean-descale-routine.json"
   },
   "history": [
     {
@@ -18,6 +19,13 @@
       "to": "idea",
       "by": "idea",
       "reason": "generated"
+    },
+    {
+      "at": "2026-11-23T18:02:49.761Z",
+      "from": "idea",
+      "to": "idea_approved",
+      "by": "idea-judge",
+      "reason": "Verified, specific confusion: in OzBargain node/955798 (Apr 2026) an owner misread a solid light for two years and owners in the thread contradicted each other. Breville pages split the cycles up and third-party light guides skip one combined schedule. Maintenance guide in the focus cluster."
     }
   ]
 }

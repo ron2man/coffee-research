@@ -3,13 +3,14 @@
   "id": "uk-nespresso-to-beans-bean-to-cup-or-espresso-machine",
   "type": "new-post",
   "niche": "coffee",
-  "status": "idea",
+  "status": "rejected",
   "attempts": 0,
   "revisions": 0,
   "createdAt": "2026-11-22T14:54:50.456Z",
-  "updatedAt": "2026-11-22T14:54:50.456Z",
+  "updatedAt": "2026-11-23T18:02:49.763Z",
   "artifacts": {
-    "idea": "data/ideas/uk-nespresso-to-beans-bean-to-cup-or-espresso-machine.json"
+    "idea": "data/ideas/uk-nespresso-to-beans-bean-to-cup-or-espresso-machine.json",
+    "idea-judge": "data/idea-scores/uk-nespresso-to-beans-bean-to-cup-or-espresso-machine.json"
   },
   "history": [
     {
@@ -18,6 +19,13 @@
       "to": "idea",
       "by": "idea",
       "reason": "generated"
+    },
+    {
+      "at": "2026-11-23T18:02:49.763Z",
+      "from": "idea",
+      "to": "rejected",
+      "by": "idea-judge",
+      "reason": "Real, verified demand (Mumsnet 5433494: a 20-year Nespresso user ends up confused by a Rivelia). But it sits outside the Barista Express/Pro focus cluster, and UK retailer and coffeeblog guides already cover pod vs bean-to-cup vs manual. Re-score once the cluster is built."
     }
   ]
 }

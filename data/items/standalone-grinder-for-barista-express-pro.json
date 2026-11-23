@@ -3,13 +3,14 @@
   "id": "standalone-grinder-for-barista-express-pro",
   "type": "new-post",
   "niche": "coffee",
-  "status": "idea",
+  "status": "idea_approved",
   "attempts": 0,
   "revisions": 0,
   "createdAt": "2026-11-23T15:58:57.537Z",
-  "updatedAt": "2026-11-23T15:58:57.537Z",
+  "updatedAt": "2026-11-23T18:02:49.760Z",
   "artifacts": {
-    "idea": "data/ideas/standalone-grinder-for-barista-express-pro.json"
+    "idea": "data/ideas/standalone-grinder-for-barista-express-pro.json",
+    "idea-judge": "data/idea-scores/standalone-grinder-for-barista-express-pro.json"
   },
   "history": [
     {
@@ -18,6 +19,13 @@
       "to": "idea",
       "by": "idea",
       "reason": "generated"
+    },
+    {
+      "at": "2026-11-23T18:02:49.760Z",
+      "from": "idea",
+      "to": "idea_approved",
+      "by": "idea-judge",
+      "reason": "Core focus-cluster guide that an existing draft already links to as a wanted guide. The OzBargain signal checks out (failing built-in grinder; DF54 and Mignon suggested; Smart Grinder Pro called no real upgrade). The top results are forum threads and price-tier lists that never start from a diagnosis."
     }
   ]
 }

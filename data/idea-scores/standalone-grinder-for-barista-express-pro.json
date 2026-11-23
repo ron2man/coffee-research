@@ -1,0 +1,28 @@
+{
+  "scores": {
+    "demandEvidence": {
+      "score": 4,
+      "reason": "I opened OzBargain node/899121 (Mar 2025): an Express owner with an intermittently failing grinder asks which standalone grinder to buy, and several home-barista threads ask the same thing."
+    },
+    "competitorGap": {
+      "score": 3,
+      "reason": "Search returns home-barista threads, SCG Smart Grinder comparisons and completehomebarista lists. They are useful but scattered, and none ties the choice to the burr diagnosis or to whether the grinder will outlive the machine."
+    },
+    "valueAddWithoutExperience": {
+      "score": 4,
+      "reason": "The decision rule (fix the burr first, budget grinder for milk drinks, single-dose grinder if the machine will be replaced) and the 'Smart Grinder Pro is a sideways move' point both come from specs and owner consensus."
+    },
+    "evidenceFeasibility": {
+      "score": 4,
+      "reason": "Burr specs, step counts, 54 mm portafilter fit and plenty of owner reports are published."
+    },
+    "commercialFit": {
+      "score": 5,
+      "reason": "A real buy-or-keep decision, with an honest 'replace the upper burr and keep it' path."
+    },
+    "overlap": {
+      "score": 4,
+      "reason": "This is the wanted 'grinder-for-barista-express-and-pro' guide. It complements the grind diagnosis post rather than duplicating it, and the archived Bambino grinder guide is a different machine."
+    }
+  }
+}

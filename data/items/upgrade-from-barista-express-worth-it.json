@@ -3,13 +3,14 @@
   "id": "upgrade-from-barista-express-worth-it",
   "type": "new-post",
   "niche": "coffee",
-  "status": "idea",
+  "status": "idea_approved",
   "attempts": 0,
   "revisions": 0,
   "createdAt": "2026-11-23T15:58:57.539Z",
-  "updatedAt": "2026-11-23T15:58:57.539Z",
+  "updatedAt": "2026-11-23T18:02:49.762Z",
   "artifacts": {
-    "idea": "data/ideas/upgrade-from-barista-express-worth-it.json"
+    "idea": "data/ideas/upgrade-from-barista-express-worth-it.json",
+    "idea-judge": "data/idea-scores/upgrade-from-barista-express-worth-it.json"
   },
   "history": [
     {
@@ -18,6 +19,13 @@
       "to": "idea",
       "by": "idea",
       "reason": "generated"
+    },
+    {
+      "at": "2026-11-23T18:02:49.762Z",
+      "from": "idea",
+      "to": "idea_approved",
+      "by": "idea-judge",
+      "reason": "Two recent verified OzBargain threads (Apr and Nov 2026) ask exactly this, and the replies converge on a rule (grinder first, dual boiler only for heavy milk use). It is a machine-level decision for a different reader than the grinder guide. The writer should link to the grinder guide rather than repeat it."
     }
   ]
 }

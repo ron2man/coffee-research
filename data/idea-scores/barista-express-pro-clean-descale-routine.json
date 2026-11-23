@@ -1,0 +1,28 @@
+{
+  "scores": {
+    "demandEvidence": {
+      "score": 4,
+      "reason": "In node/955798 an owner was confused by a solid light, replies disagreed on solid vs flashing, and both cycles cleared it. A second thread links abandoned used machines to skipped cleaning."
+    },
+    "competitorGap": {
+      "score": 3,
+      "reason": "Barista Life and pesado585 explain the light states and Breville has per-cycle pages, but nothing combines the light key, a full schedule and 'looks like a fault, is overdue maintenance'."
+    },
+    "valueAddWithoutExperience": {
+      "score": 4,
+      "reason": "A light-state key, a daily-to-yearly schedule and a symptom list can all be built from the manuals."
+    },
+    "evidenceFeasibility": {
+      "score": 5,
+      "reason": "The BES870/BES878 manuals document the cycles, the light behaviour and the reset steps."
+    },
+    "commercialFit": {
+      "score": 3,
+      "reason": "Mostly no purchase. Tablets, descaler and gaskets are honest small buys that also support keeping the machine."
+    },
+    "overlap": {
+      "score": 4,
+      "reason": "The archived Bambino Plus cleaning-vs-descaling post covers a different machine and light logic, so only the format overlaps."
+    }
+  }
+}

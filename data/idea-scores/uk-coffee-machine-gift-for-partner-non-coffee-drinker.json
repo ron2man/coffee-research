@@ -1,0 +1,28 @@
+{
+  "scores": {
+    "demandEvidence": {
+      "score": 4,
+      "reason": "Verified Mumsnet thread: a non-coffee drinker has £500 for a husband who drinks lattes, and replies split across Sage, De'Longhi, Ninja and Philips. Two more independent threads."
+    },
+    "competitorGap": {
+      "score": 3,
+      "reason": "Gift lists assume coffee knowledge, but UK 'which machine type' buyer guides already exist."
+    },
+    "valueAddWithoutExperience": {
+      "score": 3,
+      "reason": "An observe-your-partner quiz is useful, but the machine-type logic is mostly general."
+    },
+    "evidenceFeasibility": {
+      "score": 4,
+      "reason": "Running costs and product specs are published."
+    },
+    "commercialFit": {
+      "score": 3,
+      "reason": "An honest gift decision, but gift framing pulls toward selling a product, and 'don't buy a machine' is harder to make land."
+    },
+    "overlap": {
+      "score": 3,
+      "reason": "Its core sorting of pod vs bean-to-cup vs espresso duplicates the Nespresso-to-beans card."
+    }
+  }
+}
