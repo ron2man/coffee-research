@@ -2,48 +2,43 @@
   "scores": {
     "readerValueVsCompetitors": {
       "score": 5,
-      "reason": "The top results are Home-Barista threads ('Even at grind size 1 my Barista Express still gushes', 'Can't get Breville/Sage to grind fine enough'), the Singletrack thread and the Seattle Coffee Gear top-burr post. None of them gives an ordered diagnosis. The draft does: 'The test you can run tonight', then clean, then the upper burr 'one number toward finer', then the date code and the manufacturer, then 'the built-in grinder is the limit… buy a separate espresso grinder'."
+      "reason": "It gives an ordered diagnosis with a test the reader can run tonight on their own machine (roast date, basket, cap-level dose, time to first flow against the manual's numbers). It explains that the dual-wall basket works \"regardless of the grind, dose and tamp pressure or freshness\", gives the correct burr direction, and has a stopping rule that leads to one purchase. The top results are forum threads with conflicting tips, plus an SCG post that points the burr the wrong way."
     },
     "distinctivenessVoice": {
       "score": 5,
-      "reason": "It opens 'Don't buy anything yet.' and commits to one view throughout. It contradicts the forum ('The manual says something different') and the retailer ('follow the ring, not the forum'). 'When I'd choose differently' now carries one label in its intro, not a label on every item."
+      "reason": "It opens with \"Don't buy anything yet.\" It commits to one view, sets its own rule for metal contact (\"My rule, which is my judgement and not the manual's\"), and has a real \"When I'd choose differently\" section with three distinct cases."
     },
     "honestyAboutLimits": {
       "score": 5,
-      "reason": "'What the booklet doesn't say' states the four unknowns once. The parts listing is called 'a parts listing, not a manufacturer spec', and the owner report is 'a single report, not a spec'. The methods section says 'we did not test either machine' and 'this guide doesn't name one'."
+      "reason": "\"What the booklet doesn't say\" lists the four unknowns once, plainly. The parts listing is labelled \"a parts listing, not a manufacturer spec\", and the owner report as \"a single report, not a spec\". The methods section says no testing was done, no one contacted support and no grinders were researched."
     },
     "evidenceIntegrity": {
       "score": 4,
-      "reason": "All the factual statements map to claims: dial ranges, the 5–20 day roast window, the dual-wall quote, the 22–33 lb tamp, flow timings, the troubleshooting causes, the PDC part numbers and the warranty wording. The 'metal on metal → back off' rule is labelled as the writer's judgement. The 'roughly 10–15 kg' conversion is our own arithmetic, not from a claim, but it's harmless."
+      "reason": "Every factual statement maps to a claim ID: dial ranges, the 5–20 days, the basket quote, 22–33 lb and 16–19 g, flow timings, troubleshooting causes, the warranty wording and the PDC part numbers. \"A machine that can't grind fine enough... could reasonably count\" is an inference, but it reads clearly as one. The kg conversion is added by the writer, and it is correct."
     },
     "topicFit": {
       "score": 5,
-      "reason": "It follows the brief's thesis exactly: free checks in order, then the upper burr, then a replacement burr through the manufacturer, and only then a separate grinder. It keeps the leaveOut items out (no '6' default, no shims, no grinder picks, no prices). The keep-yours outcome is the default ('If any step above slowed the shot… buy nothing')."
+      "reason": "It delivers the brief's thesis in order: free checks, then cleaning, then the upper burr toward FINE, then the date code and the manufacturer, then a separate grinder. It respects the leaveOut list: no '6', no shims, no grinder picks, no prices."
     }
   },
   "wouldForward": true,
   "competitorComparison": [
     {
       "url": "https://www.home-barista.com/espresso-machines/even-at-grind-size-1-barista-express-still-gushes-what-am-i-missing-t101609.html",
-      "weGiveThatTheyDont": "One ordered sequence in place of scattered replies. It rules out stale beans, the dual-wall basket and under-dosing before the burr, quotes the manufacturer's own causes for 'runs out too quickly', and sets a clear point at which to stop and buy a grinder."
-    },
-    {
-      "url": "https://www.seattlecoffeegear.com/blogs/scg-blog/adjusting-the-top-burr-on-the-breville-barista-express",
-      "weGiveThatTheyDont": "The correct direction for fast shots (toward FINE, where SCG says coarser), checks to do before opening the grinder, the undocumented range and factory position stated honestly, the PDC part-number check, and the route through the warranty or manufacturer before buying."
+      "weGiveThatTheyDont": "An order of checks backed by the manual, with a stopping point. The thread gives scattered replies (inner burr steps, burr clash, light roasts, buy a grinder), and a reader can't tell which one applies to them."
     },
     {
       "url": "https://singletrackworld.com/forum/off-topic/sage-breville-barista-pro-grinder/",
-      "weGiveThatTheyDont": "It turns one owner's fix (clean the burrs, internal burr to 1, free burr from the manufacturer) into a general procedure grounded in the manual. It also settles the 'shim it / don't touch it / buy a grinder' split that the thread leaves open."
+      "weGiveThatTheyDont": "It turns that thread's one fix (clean the grinder, move the inner burr to 1, ask for a free burr) into a repeatable procedure. It adds the basket and dose checks the thread skips, and it labels the fix as one owner's report."
+    },
+    {
+      "url": "https://www.seattlecoffeegear.com/blogs/scg-blog/adjusting-the-top-burr-on-the-breville-barista-express",
+      "weGiveThatTheyDont": "The correct direction for fast shots (toward FINE, where SCG says coarser), the checks to do before touching the burr, the date-code part check, the warranty route, and when to buy a separate grinder."
     }
   ],
-  "blockingActions": [
-    "Shorten the title to 70 characters or fewer, counting the longest filled-in product name (GB names are longer). Make it one problem-first promise, not two clauses with two product tokens, e.g. 'Built-in grinder still too fast at setting 1? Check these before buying'. Keep the machine names in the description.",
-    "Add a seoTitle of 60 characters or fewer that leads with the search problem, e.g. 'Barista Express too fast at grind setting 1? Fix it first'. Check it is 60 or fewer with product names filled in if you use a token."
-  ],
+  "blockingActions": [],
   "optionalImprovements": [
-    "Publish gate for the human: build and publish the grinder-for-barista-express-and-pro guide before this post ships. Until then, 'our guide to choosing a grinder… answers it' renders as plain text and promises the reader something that doesn't exist. Grinder offers for this post also need new research: the Express and Pro portafilter size, dosing fit, and variants sold in both the US and GB.",
-    "Check the description length with product names filled in. Two product tokens may push it past what a search snippet shows.",
-    "Methods: the raw source URLs are fine in the collapsed section, but check the renderer doesn't turn them into body links that count against the two-link limit.",
-    "'dialled in' is British spelling in a post whose market field is US. That's fine for a post shown in every market, but keep the spelling consistent."
+    "Before publishing (human or research item): publish the grinder-for-barista-express-and-pro guide, or both guide references render as plain text and the ending promises a guide the reader can't open. Once grinder research covering both markets exists, add those picks to offerIds, which is what the owner asked for.",
+    "The Sources list in the methods section shows raw URLs. Check that the layout renders them as links in a collapsed section, so they don't count against the 2-inline-link limit."
   ]
 }
