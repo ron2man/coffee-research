@@ -3,11 +3,11 @@
   "id": "breville-builtin-grinder-wont-grind-fine-enough",
   "type": "new-post",
   "niche": "coffee",
-  "status": "briefed",
+  "status": "drafted",
   "attempts": 0,
   "revisions": 0,
   "createdAt": "2026-11-21T17:35:36.159Z",
-  "updatedAt": "2026-11-22T17:31:37.131Z",
+  "updatedAt": "2026-11-23T04:49:54.530Z",
   "artifacts": {
     "idea": "data/ideas/breville-builtin-grinder-wont-grind-fine-enough.json",
     "idea-judge": "data/idea-scores/breville-builtin-grinder-wont-grind-fine-enough.json",
@@ -114,6 +114,13 @@
       "to": "briefed",
       "by": "human:ron",
       "reason": "Lint fix: 'more hands-on per shot' is workflow wording, not a testing claim. Retry the rewrite."
+    },
+    {
+      "at": "2026-11-23T04:49:54.530Z",
+      "from": "briefed",
+      "to": "drafted",
+      "by": "writer",
+      "reason": "This revision keeps the article and its diagnosis order, which the judge scored 5/5/5/4/5. The latest human note asked for offers or links that help readers buy a separate grinder. I applied the closest honest version of that. The decision section now says plainly that the next purchase is a separate grinder, not a new machine and not a new burr. It points to {{guide:grinder-for-barista-express-and-pro|…}} there, and again in 'When I'd choose differently' for light-roast drinkers and readers planning to upgrade. offerIds is still empty. Grinder cards now exist (Encore ESP, Sette 270, DF54, J-Ultra and others), but they were researched for the Bambino. No card supports a claim about fit or grind range for the Barista Express or Pro, and the cards don't record the Express/Pro portafilter size. Some of those grinders also have only a US variant, so GB readers would get no offer. Offering one now would mean recommending a grinder no claim backs for this reader, and the brief's leaveOut rules that out. To add offers, someone needs to research a standalone espresso grinder for {{product:barista-express}} / {{product:barista-pro}} owners: the portafilter size of both machines, whether the grinder doses into that portafilter, an espresso range fine enough for light roasts, and a variant sold in both US and GB. Then publish the guide at slug grinder-for-barista-express-and-pro, and the picks can go into this post's offerIds. Other changes: I applied the judge's optional fix and cut the repeated 'my judgement' labels, so 'When I'd choose differently' carries one label in its intro. The tools field is empty because grind-fault-tree and upper-burr-direction-diagram don't exist in content/tools and the body doesn't use them. The post contains no 'hands-on' wording."
     }
   ]
 }

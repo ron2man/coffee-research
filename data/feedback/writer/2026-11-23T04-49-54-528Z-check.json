@@ -1,0 +1,24 @@
+{
+  "id": "2026-11-23T04-49-54-528Z-check",
+  "agent": "writer",
+  "source": "check",
+  "at": "2026-11-23T04:49:54.528Z",
+  "itemIds": [
+    "breville-builtin-grinder-wont-grind-fine-enough"
+  ],
+  "findings": [
+    {
+      "severity": "minor",
+      "problem": "breville-builtin-grinder-wont-grind-fine-enough: links to guide grinder-for-barista-express-and-pro, which doesn't exist yet (rendered as plain text)",
+      "evidence": "deterministic check",
+      "suggestion": "Address in the prompt if it recurs."
+    },
+    {
+      "severity": "minor",
+      "problem": "breville-builtin-grinder-wont-grind-fine-enough: links to guide grinder-for-barista-express-and-pro, which doesn't exist yet (rendered as plain text)",
+      "evidence": "deterministic check",
+      "suggestion": "Address in the prompt if it recurs."
+    }
+  ],
+  "addressedBy": null
+}
