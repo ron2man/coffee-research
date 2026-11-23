@@ -1,7 +1,0 @@
-# Research and propose one article
-
-Review the product queue, existing drafts, content/opportunities and the output of node agent/research-plan.mjs. Look for new equipment and recurring owner questions. Revisit open article research tasks when new evidence is available. For a queued task without an existing draft, update its opportunity file. When a narrower article already exists, revisit the original proposal at the same slug if new evidence could resolve the broader decision. The runner can then commission an update at its existing URL.
-
-Compare at least two plausible queries for the intended language and market using current search results. Record competing answers, demand signals, evidence limits and the reason for selecting the topic. Research the decisive facts and store verified claims in the relevant product cards. Preserve sources, dates and model scope.
-
-Write one research proposal at content/opportunities/<slug>.md. Include the reader question, proposed answer, exact evidence that changes the decision, missing evidence, and supported dependencies in backticks as product-id/claim-id. The proposal will become the starting brief for an independent commissioning decision. If no viable topic exists, explain the best candidate's missing evidence in the proposal. Write only this proposal and relevant cards. Finish before writing a draft. The runner owns commissioning decisions, research tasks, version control and publication.

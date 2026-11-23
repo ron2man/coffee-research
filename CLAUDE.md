@@ -8,23 +8,22 @@ This repo is being rebuilt per [rebuild-spec.md](rebuild-spec.md). It's an auton
   - `state/`: item store (`data/items/<id>.json`), status machine, JSON Schema validation, niche loader.
   - `scheduler/tick.mjs`: one deterministic tick. Picks the highest-priority runnable agent, runs it once, validates, applies status changes and logs them to `.backoffice/runs.jsonl`. One tick per checkout at a time (`.backoffice/tick.lock`). Schedule state is committed in `data/scheduler/state.json`.
   - `runner/`: runner abstraction (`fake` for tests; `claude.mjs` runs `claude -p` with read-only tools, a JSON Schema for the output, and refuses API-key auth).
-  - `state/item-cli.mjs`: human actions on items (resume, reject, park, reopen). `state/knowledge.mjs`: card validation (moved from `agent/`).
+  - `state/item-cli.mjs`: human actions on items (resume, reject, park, reopen). `state/knowledge.mjs`: card validation; `state/validate-knowledge.mjs` checks every card.
   - `publish/`: the publishing pull request (`requestPublish`) and the passed → published sync each tick.
   - `scheduler/assist.mjs`: assist agents (the toolsmith) work on an item without changing its status.
   - `feedback/`: deterministic checks on every output (`checks.mjs`), the feedback store, the critic/tuner loop, and `cli.mjs` (`npm run feedback`, `npm run prompt`). Agents `critic` and `tuner` review outputs and propose prompt changes; a human applies them.
   - `agents/<name>/`: `agent.json` (mode, input status, outcomes → statuses, caps), `artifact.schema.json`, `fixtures/valid.json` + `fixtures/invalid.json`, and `prompt.md` once written. Agents get read-only tools only; the tick writes every file from their validated output, and any file an agent changes itself fails the run.
 - `niches/coffee/`: `niche.json` (categories, markets, sellers, disclosures), `style.md`, and `agents/<agent>.md` niche guidance appended to that agent's prompt. Engine prompts stay niche-agnostic; coffee specifics go here.
 - `knowledge/<category>/<product>.md`: product cards (evidence layer, schemaVersion 1, see `knowledge/README.md`).
-- `data/`: agent artifacts (`ideas/`, `idea-scores/`, `research/`, `briefs/`, `reviews/`, …). `content/drafts/`: writer output. `content/archive/drafts/`: legacy pipeline drafts (Bambino grinder guide is the quality reference).
-- `agent/`: legacy Codex editorial pipeline. Being replaced (spec section 11), so don't extend it.
-- `backoffice/`: loopback dashboard. `site/`: the Astro website for yourcoffeesetup.com (`src/` pages and layout, `lib/` data layer and HTML components, `public/assets/`); deploy, GA4 and Search Console setup in `docs/deploy.md`. Legacy `render.mjs`/`article.mjs` remain for the old `agent/` pipeline. Tools live in `content/tools/<id>.json`.
+- `data/`: agent artifacts (`ideas/`, `idea-scores/`, `research/`, `briefs/`, `reviews/`, …). `content/drafts/`: writer output. `content/archive/`: drafts and decisions from the removed legacy pipeline (Bambino grinder guide is the quality reference).
+- `backoffice/`: loopback dashboard. `site/`: the Astro website for yourcoffeesetup.com (`src/` pages and layout, `lib/` data layer and HTML components, `public/assets/`); deploy, GA4 and Search Console setup in `docs/deploy.md`.  Tools live in `content/tools/<id>.json`.
 - `ops/`: `tick.sh` and the launchd installer (`npm run schedule`). See `docs/operations.md`.
 
 ## Commands
 
 ```sh
 npm install
-npm test                                   # all tests (engine + legacy)
+npm test                                   # all tests
 npm run validate                           # niche, agents, items, artifacts, knowledge cards
 npm run tick -- --dry-run                  # show what the scheduler would run next
 npm run tick -- --commit                   # run one tick, commit + push internal changes to main

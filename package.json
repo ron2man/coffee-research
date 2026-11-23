@@ -7,7 +7,7 @@
   },
   "scripts": {
     "test": "node --test",
-    "validate": "node engine/state/validate-repo.mjs && node agent/validate-knowledge.mjs",
+    "validate": "node engine/state/validate-repo.mjs && node engine/state/validate-knowledge.mjs",
     "tick": "node engine/scheduler/tick.mjs",
     "item": "node engine/state/item-cli.mjs",
     "feedback": "FEEDBACK_TOOL=feedback node engine/feedback/cli.mjs",
