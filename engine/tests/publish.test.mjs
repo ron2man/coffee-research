@@ -8,7 +8,7 @@ import { newItem, transition } from '../state/machine.mjs';
 import { repoRoot } from '../state/niche.mjs';
 import { loadItems, saveItem, writeJsonAtomic } from '../state/store.mjs';
 import { parseFrontmatter } from '../../site/lib/markdown.mjs';
-import { publishProblems, publishedMarkdown, requestPublish, syncPublished } from '../publish/publish.mjs';
+import { processPublishQueue, publishProblems, publishedMarkdown, queuePublish, requestPublish, syncPublished } from '../publish/publish.mjs';
 import { pushFilesToBranch } from '../scheduler/git.mjs';
 
 const writer = () => JSON.parse(readFileSync(join(repoRoot, 'engine/agents/writer/fixtures/valid.json'), 'utf8')).artifact;
@@ -78,4 +78,15 @@ test('approve opens a branch with the post on top of main; the item turns publis
   assert.deepEqual(syncPublished(root, loadItems(root).items), ['data/items/post-a.json']);
   assert.equal(loadItems(root).items[0].status, 'published');
   assert.ok(pushFilesToBranch);
+});
+
+test('a queued approval is turned into a pull request by the next tick that can push', (t) => {
+  const { root, remoteGit } = repo(t);
+  queuePublish(root, 'post-a', { by: 'assistant' });
+  assert.equal(JSON.parse(readFileSync(join(root, 'data/publish/post-a.json'), 'utf8')).status, 'queued');
+  const written = processPublishQueue(root, { openPr: () => null });
+  assert.deepEqual(written, ['data/publish/post-a.json']);
+  assert.equal(JSON.parse(readFileSync(join(root, 'data/publish/post-a.json'), 'utf8')).status, 'open');
+  assert.ok(remoteGit('rev-parse', 'publish/post-a'));
+  assert.deepEqual(processPublishQueue(root, { openPr: () => null }), [], 'only once');
 });

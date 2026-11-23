@@ -22,7 +22,7 @@ import { runChecks } from '../feedback/checks.mjs';
 import { addFeedback, openFeedback, readReviewState } from '../feedback/store.mjs';
 import { applyAssist, assistCandidates, buildAssistInput, checkAssistArtifact } from './assist.mjs';
 import { listTools } from '../state/tools.mjs';
-import { syncPublished } from '../publish/publish.mjs';
+import { processPublishQueue, syncPublished } from '../publish/publish.mjs';
 import { applyReview, applyTune, buildReviewInput, buildTuneInput, checkTuneArtifact, reviewCandidates, tuneCandidates } from '../feedback/loop.mjs';
 import { newItem, transition } from '../state/machine.mjs';
 import { defaultNicheId, loadNiche, repoRoot } from '../state/niche.mjs';
@@ -548,6 +548,11 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
       else if (values['dry-run']) freshness = remoteStatus(root);
       else freshness = assertFresh(root);
       const result = await tick({ root, dryRun: values['dry-run'], nicheId: values.niche, lock: false, ignoreSchedule: values['ignore-schedule'] });
+      // Approvals queued from elsewhere: open their pull requests from this machine (it can push).
+      if (commit) {
+        const queued = processPublishQueue(root);
+        if (queued.length) result.changedFiles = [...(result.changedFiles ?? []), ...queued];
+      }
       if (freshness?.behind > 0) result.warning = `checkout is ${freshness.behind} commit(s) behind the remote; a real tick here would refuse to run`;
       if (freshness?.unknown) result.warning = `could not check the remote (${freshness.reason}); this checkout may be stale`;
       if (commit && result.changedFiles?.length) result.commit = commitInternal(root, result.changedFiles, commitMessage(result));

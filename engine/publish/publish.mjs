@@ -2,7 +2,7 @@
 // pull request that a human merges. When the file reaches main, the next tick marks the item
 // `published`.
 import { spawnSync } from 'node:child_process';
-import { existsSync } from 'node:fs';
+import { existsSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { transition } from '../state/machine.mjs';
 import { categoryIds, defaultNicheId, loadNiche } from '../state/niche.mjs';
@@ -89,7 +89,7 @@ export function requestPublish(root, itemId, { by = 'human', now = new Date(), p
   const body = `Approved for publishing by ${by}.\n\n- Item: \`${itemId}\`\n- Post: \`${PUBLISHED_DIR}/${draft.slug}.md\`\n\nMerging this publishes the guide. The scheduler marks the item published at its next tick.`;
   const prUrl = openPr(root, { branch, title, body }) ?? (repo ? `${repo}/compare/main...${branch}?expand=1` : null);
   const path = `${REQUESTS_DIR}/${itemId}.json`;
-  writeJsonAtomic(join(root, path), { itemId, slug: draft.slug, branch, sha, prUrl, requestedBy: by, at: now.toISOString() });
+  writeJsonAtomic(join(root, path), { itemId, slug: draft.slug, status: 'open', branch, sha, prUrl, requestedBy: by, at: now.toISOString() });
   return { written: [path], prUrl, branch };
 }
 
@@ -109,6 +109,39 @@ export function syncPublished(root, items) {
     if (!draft || !existsSync(join(root, PUBLISHED_DIR, `${draft.slug}.md`))) continue;
     saveItem(root, transition(item, 'published', { by: 'scheduler', reason: `${PUBLISHED_DIR}/${draft.slug}.md is on main` }));
     written.push(`data/items/${item.id}.json`);
+  }
+  return written;
+}
+
+/**
+ * Approve without pushing: writes a queued request (internal data). The scheduler opens the pull
+ * request at its next tick, from the machine that can push. Used where git can't push (e.g. an
+ * assistant working in a sandbox).
+ */
+export function queuePublish(root, itemId, { by = 'human', now = new Date() } = {}) {
+  const item = loadItems(root).items.find((i) => i.id === itemId);
+  if (!item) throw new Error(`No item ${itemId}`);
+  const problems = publishProblems(root, item);
+  if (problems.length) throw new Error(`Can't publish yet: ${problems.join(' ')}`);
+  const path = `${REQUESTS_DIR}/${itemId}.json`;
+  writeJsonAtomic(join(root, path), { itemId, status: 'queued', requestedBy: by, at: now.toISOString() });
+  return path;
+}
+
+/** Open the pull requests for queued approvals. Returns the files written. */
+export function processPublishQueue(root, options = {}) {
+  const dir = join(root, REQUESTS_DIR);
+  if (!existsSync(dir)) return [];
+  const written = [];
+  for (const name of readdirSync(dir).filter((n) => n.endsWith('.json'))) {
+    const request = readJson(join(dir, name));
+    if (request.status !== 'queued') continue;
+    try {
+      written.push(...requestPublish(root, request.itemId, { by: request.requestedBy, ...options }).written);
+    } catch (error) {
+      writeJsonAtomic(join(dir, name), { ...request, status: 'failed', error: error.message });
+      written.push(`${REQUESTS_DIR}/${name}`);
+    }
   }
   return written;
 }
