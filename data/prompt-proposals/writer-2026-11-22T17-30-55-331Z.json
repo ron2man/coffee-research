@@ -1,7 +1,7 @@
 {
   "id": "writer-2026-11-22T17-30-55-331Z",
   "agent": "writer",
-  "status": "open",
+  "status": "applied",
   "at": "2026-11-22T17:30:55.331Z",
   "summary": "Two small changes to the writer prompt. First, the banned first-hand-testing phrases now fail the draft even when they are negated or quoted, so the honesty line should be written as \"we did not test these products\". Second, when the purchase the post recommends isn't in the cards yet, the writer must name the missing product or guide in `reason`, so the gap that left the post without offers gets researched.",
   "changes": [
@@ -27,5 +27,7 @@
       "why": "This is the intended behaviour. The human asked for a link to the grinder guide that doesn't exist yet, and the prompt says to write such links. The link becomes live once the guide is published, so this needs content work, not a prompt change."
     }
   ],
-  "niche": "coffee"
+  "niche": "coffee",
+  "appliedAt": "2026-11-23T04:48:07.541Z",
+  "appliedBy": "ronshtaiman"
 }

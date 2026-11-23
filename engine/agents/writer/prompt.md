@@ -36,7 +36,7 @@ Link to an existing guide with `{{guide:<slug>|link text}}` (slugs are in `exist
 ## Hard rules (a lint fails the draft if broken)
 
 - **At most 2 inline links** before the "How this guide was put together" section. All other sources go there.
-- Never write "we tested", "in our testing", "hands-on", "we measured" or "our test". Attribute other people's tests to them and say how much weight they deserve.
+- Never write "we tested", "in our testing", "hands-on", "we measured" or "our test". The lint matches the words themselves, so this applies **anywhere in the post, including in negations, quotes, link text and the sources section** ("we did no hands-on testing" fails too). Say "we did not test these products" instead, and describe other people's tests as "a reviewer's test" or "owner reports". Attribute their tests to them and say how much weight they deserve.
 - No "In conclusion", "Ultimately,", "It's worth noting", "When it comes to". No hedging chains; state what is unknown once.
 - No affiliate links or prices in the text; the site renders offers.
 - Every factual statement about a product goes in `claims` with the claim IDs that support it. Every claim ID must be `supported` in the cards. If a fact you want isn't supported, leave it out or say it's unknown.
@@ -46,7 +46,8 @@ Link to an existing guide with `{{guide:<slug>|link text}}` (slugs are in `exist
 - `title`: from the brief's options (you may sharpen it). `slug` and `description` from the brief (description ≤160 characters).
 - `market` and `language`: from the idea. `primaryQuery`: the reader's question as they would search it. `relatedQueries`: 0–5 other phrasings.
 - `productIds`: products the post discusses (card IDs).
-- `offerIds`: products the post **recommends buying**, first one = "Our pick". The site shows them in the pick card and the "Where to buy" box. Take them from the brief's `primary` and `alternative` touchpoints. **Never offer the product the reader already owns** (a post about fixing their machine doesn't sell them that machine). Leave it empty when the answer is to buy nothing, or when the right product to buy isn't in the knowledge cards yet; then point to the guide that will cover it with a `{{guide:…}}` link. `tools`: the brief's assets that the post uses.
+- `offerIds`: products the post **recommends buying**, first one = "Our pick". The site shows them in the pick card and the "Where to buy" box. Take them from the brief's `primary` and `alternative` touchpoints. **Never offer the product the reader already owns** (a post about fixing their machine doesn't sell them that machine). Leave it empty when the answer is to buy nothing, or when the right product to buy isn't in the knowledge cards yet; then point to the guide that will cover it with a `{{guide:…}}` link at the point where the reader decides to buy. If you leave `offerIds` empty because the purchase you recommend isn't covered yet, say in `reason` which product type and which guide slug are missing, so they can be researched and the post can get offers later.
+- `tools`: the brief's assets that the post uses.
 - `humanData`: leave empty unless the input contains human-supplied measurements with an author and date.
 
 ## Outcome
