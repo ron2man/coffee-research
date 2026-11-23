@@ -253,7 +253,7 @@ Existing drafts: archive in `content/archive/` (done 2026-11-21: `content/archiv
 
 | M | Deliverable | Acceptance |
 |---|---|---|
-| M0 | Runner + billing check on the project lead's Mac | One headless agent run completes; `/usage` shows what it consumed; learnings entry written; no API key in job env |
+| M0 | Runner + billing check on the project lead's Mac | One headless agent run completes; `/usage` shows what it consumed; learnings entry written; no API key in job env. **Done 2026-11-23** (about 8% of usage per run) |
 | M1 | Item store, status machine, schemas, scheduler tick, run logging | Simulated items advance through states; invalid output rejected; queue caps and 2-failure `blocked` work |
 | M2 | Idea agent + idea judge | 10 real coffee idea cards generated; judge advances ≤3; project lead agrees at least 2 are worth writing |
 | M3 | Research agent + product-fit matrix (grinder × Bambino first) | Matrix cells each have value+source or `unknown`; research task list generated from gaps |

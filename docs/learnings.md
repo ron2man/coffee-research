@@ -69,6 +69,12 @@ The first post's title was 110 characters and named two interactive tools that d
 
 [Toolsmith](../engine/agents/toolsmith/prompt.md) · [Publishing](../engine/publish/publish.mjs) · [Operations](operations.md)
 
+### 2026-11-23 · M0 · Done: headless runs draw from the subscription
+
+One real agent run uses about 8% of the subscription's usage, as the project lead observed on `/usage`. The first measurement: one research tick (27 turns, 4.2 minutes, CLI estimate $1.46 at API prices) moved current usage from 10% to 18%. So `claude -p` runs count against the subscription, not a separate pool and not API billing. The runner strips API keys from the job environment and refuses non-subscription sign-ins. `--json-schema` structured output and `--permission-mode dontAsk` work on the installed CLI: every real run since 2026-11-21 returned validated output. The budget is about 10 to 12 runs of this size per usage window, fewer when the lead uses Claude at the same time. Hourly ticks can't use up the limit on their own, because a tick with nothing due uses nothing, but a busy pipeline can reach it. The scheduler runs as the lead's user in a dedicated clone rather than under a dedicated OS user; we accept that for the pilot.
+
+Follow-up: watch the weekly limit, and lengthen the tick interval (`npm run schedule -- install --interval-minutes 120`) if runs start to crowd out the lead's own use.
+
 ## Decisions
 
 - **2026-11-21 · Git flow.** Internal changes (items, research, briefs, drafts, knowledge cards) are committed straight to `main` by `npm run tick -- --commit`, with no approval, so the pipeline never waits on a merge. Reader-facing paths (`content/published/`, `site/`, `data/offers/`) are never committed by a tick and need their own PR. The boundary is [git-policy.json](../engine/scheduler/git-policy.json). The publish step that opens content PRs arrives with M4/M5.
@@ -87,12 +93,13 @@ The first post's title was 110 characters and named two interactive tools that d
 
 - **2026-11-22 · One post for every market.** Per-market differences are data (card variants, offers, disclosures), not prose.
 
+- **2026-11-23 · M0 done.** Subscription billing, about 8% of usage per run; the job environment has no API key.
+
 ## Open questions
 
 - **Disclosure text per market (blocks the first publish):** `niches/coffee/niche.json` `disclosures` is empty. Decide the wording for US and GB after checking the affiliate programs you will join.
 
 - **Offers as public paths:** `data/offers/` is treated as reader-facing because prices appear on the site, which would mean a PR for every daily price refresh. Revisit at M7: one option is to have the site read offers at build time from an internal file.
-- **M0 billing (first measurement, 2026-11-22):** one research tick (27 turns, 4.2 min, CLI estimate $1.46 at API prices) moved the subscription's current-session usage from 10% to 18%. So `claude -p` runs do draw from the subscription, at roughly 8 points per research run. That allows about 10 to 12 runs of this size per session window, fewer if the lead uses Claude at the same time. Still open: the reading may include other Claude use in the same window, so repeat once with nothing else running; check the weekly limit too; and confirm `--json-schema` and `--permission-mode dontAsk` on the installed CLI.
 - **Scheduler on macOS:** the launchd job runs `ops/tick.sh` from its own clone (`npm run schedule -- install`). At about 8% of a session per research run, hourly ticks use most of a session window when every tick runs a heavy agent. Consider every 2 hours, or a daily cap on heavy runs, and revisit after a week. Don't run manual ticks in a second checkout while it runs: on 2026-11-22 a manual tick in the working copy re-ran research on a stale checkout (the scheduler had already done research and angle) and its autostash conflicted on pull. Fixed the same day: a plain tick now fetches and refuses to run when the checkout is behind `origin/main` (dry runs only warn), and the `--commit` sync no longer pulls over local edits to files the remote changed. It stops with the file list and touches nothing.
 - **Untested prompts:** angle, writer, post-judge and tuner have not run for real (idea, idea-judge, research and critic have). Expect the first proposals from the tuner within a day of hourly runs.
 - **Writer output to Markdown:** writer drafts are JSON in `content/drafts/`; the site reads them directly. The publish step (draft → `content/published/<slug>.md` in a PR) is not built yet.
