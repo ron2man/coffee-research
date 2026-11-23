@@ -42,7 +42,7 @@ export function buildArgs(request) {
   const config = { ...DEFAULTS, ...agent.runner };
   const args = [
     '-p',
-    '--output-format', 'json',
+    '--output-format', 'stream-json', '--verbose', // events let us keep a trace of searches and fetches
     '--no-session-persistence',
     '--permission-mode', 'dontAsk', // anything not pre-approved is denied; nobody is there to answer
     '--tools', tools.join(','), // only these built-in tools exist in the session
@@ -95,6 +95,44 @@ export function parseResult(stdout) {
   return { output, usage };
 }
 
+const FAILED_FETCH = /\b(403|404|429|5\d\d|forbidden|blocked|access denied|unable to fetch|failed to fetch|could not fetch|timed out|captcha)\b/i;
+const resultText = (content) => (typeof content === 'string' ? content : Array.isArray(content) ? content.map((c) => c.text ?? '').join(' ') : '');
+
+/**
+ * What the agent did, from the stream-json events: every tool call (search query, fetched URL,
+ * file read) and whether it worked. Kept even when a run times out.
+ */
+export function traceFromEvents(lines) {
+  const calls = [];
+  const byId = new Map();
+  for (const line of lines) {
+    let event;
+    try {
+      event = JSON.parse(line);
+    } catch {
+      continue;
+    }
+    for (const part of event.message?.content ?? []) {
+      if (event.type === 'assistant' && part.type === 'tool_use') {
+        const input = part.input ?? {};
+        const call = { tool: part.name, target: String(input.query ?? input.url ?? input.file_path ?? input.pattern ?? JSON.stringify(input)).slice(0, 200), ok: null };
+        byId.set(part.id, call);
+        calls.push(call);
+      } else if (event.type === 'user' && part.type === 'tool_result' && byId.has(part.tool_use_id)) {
+        const call = byId.get(part.tool_use_id);
+        const text = resultText(part.content);
+        call.ok = !part.is_error && !(call.tool === 'WebFetch' && FAILED_FETCH.test(text.slice(0, 400)));
+        if (!call.ok) call.note = text.replace(/\s+/g, ' ').slice(0, 160);
+      }
+    }
+  }
+  const count = (tool, ok) => calls.filter((c) => c.tool === tool && (ok === undefined || c.ok === ok)).length;
+  return {
+    calls: calls.slice(0, 200),
+    summary: { searches: count('WebSearch'), fetches: count('WebFetch'), failedFetches: count('WebFetch', false), reads: count('Read'), unanswered: calls.filter((c) => c.ok === null).length },
+  };
+}
+
 export function claudeRunner({ bin = process.env.CLAUDE_BIN ?? 'claude', env = process.env } = {}) {
   return {
     type: 'claude',
@@ -104,13 +142,19 @@ export function claudeRunner({ bin = process.env.CLAUDE_BIN ?? 'claude', env = p
       const runEnv = childEnv(env);
       checkAuth({ bin, env: runEnv });
       const timeoutMs = (agent.runner.timeoutMinutes ?? DEFAULTS.timeoutMinutes) * 60_000;
+      const lines = [];
       const stdout = await new Promise((resolve, reject) => {
         const child = spawn(bin, buildArgs(request), { cwd: root, env: runEnv, stdio: ['pipe', 'pipe', 'pipe'] });
         let out = '';
         let err = '';
+        let pending = '';
+        const fail = (error) => {
+          error.trace = traceFromEvents(lines);
+          reject(error);
+        };
         const timer = setTimeout(() => {
           child.kill('SIGTERM');
-          reject(new Error(`claude -p timed out after ${timeoutMs / 60_000} minutes`));
+          fail(new Error(`claude -p timed out after ${timeoutMs / 60_000} minutes`));
         }, timeoutMs);
         // Progress on the terminal only (never in cron logs or tests): a real run takes minutes.
         const started = Date.now();
@@ -119,7 +163,13 @@ export function claudeRunner({ bin = process.env.CLAUDE_BIN ?? 'claude', env = p
           : null;
         if (process.stderr.isTTY) process.stderr.write(`Running ${agent.name} with claude -p (timeout ${timeoutMs / 60_000} min). Output appears when it finishes.\n`);
         child.on('close', () => clearInterval(progress));
-        child.stdout.on('data', (chunk) => { out += chunk; });
+        child.stdout.on('data', (chunk) => {
+          out += chunk;
+          pending += chunk;
+          const parts = pending.split('\n');
+          pending = parts.pop();
+          lines.push(...parts.filter(Boolean));
+        });
         child.stderr.on('data', (chunk) => { err += chunk; });
         child.on('error', (error) => {
           clearTimeout(timer);
@@ -127,12 +177,28 @@ export function claudeRunner({ bin = process.env.CLAUDE_BIN ?? 'claude', env = p
         });
         child.on('close', (code) => {
           clearTimeout(timer);
+          if (pending.trim()) lines.push(pending.trim());
           if (code === 0 || out.trim().startsWith('{')) resolve(out);
-          else reject(new Error(`claude -p exited ${code}: ${(err || out).trim().slice(0, 500)}`));
+          else fail(new Error(`claude -p exited ${code}: ${(err || out).trim().slice(0, 500)}`));
         });
         child.stdin.end(buildPrompt(request));
       });
-      return parseResult(stdout);
+      const trace = traceFromEvents(lines);
+      // stream-json ends with a "result" event; older CLIs print one JSON object.
+      const isResult = (line) => {
+        try {
+          return JSON.parse(line).type === 'result';
+        } catch {
+          return false;
+        }
+      };
+      const resultLine = [...lines].reverse().find(isResult) ?? stdout;
+      try {
+        return { ...parseResult(resultLine), trace };
+      } catch (error) {
+        error.trace = trace;
+        throw error;
+      }
     },
   };
 }

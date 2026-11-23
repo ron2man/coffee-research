@@ -5,7 +5,7 @@ import { spawnSync } from 'node:child_process';
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { loadAgents, isPipelineAgent } from '../engine/agents/registry.mjs';
-import { loadItems, readJson, readRuns } from '../engine/state/store.mjs';
+import { loadItems, readJson, readRunLogs, readRuns } from '../engine/state/store.mjs';
 import { listFeedback, listProposals } from '../engine/feedback/store.mjs';
 import { lockPath, isStale } from '../engine/scheduler/lock.mjs';
 import { tick } from '../engine/scheduler/tick.mjs';
@@ -156,7 +156,8 @@ export async function todayData(root) {
     proposals: proposals.slice(-10).reverse().map(({ id, agent, status, summary, at }) => ({ id, agent, status, summary, at })),
     articles: articles(root),
     openProposals: openProposals(root),
-    seeds: listSeeds(root).reverse().slice(0, 15).map(({ id, text, status, considered, itemIds }) => ({ id, text, status, considered, itemIds })),
+    seeds: listSeeds(root).reverse().slice(0, 15).map(({ id, text, status, considered, itemIds, attempts }) => ({ id, text, status, considered, itemIds, lastWhy: attempts?.at(-1)?.why ?? null })),
+    runLogs: readRunLogs(root, { limit: 10 }).map(({ at, agent, itemIds, status, error, durationMs, usage, trace }) => ({ at, agent, itemIds, status, error, minutes: durationMs ? Math.round(durationMs / 6000) / 10 : null, costUsd: usage?.costUsd ?? null, summary: trace?.summary ?? null, calls: trace?.calls?.slice(0, 80) ?? [] })),
     costs: costs(runs),
     recentRuns: runs.slice(-25).reverse().map(({ timestamp, agent, itemId, status, outcome, error, to, durationMs, usage }) => ({ timestamp, agent, itemId, status, outcome, error, to, minutes: durationMs ? Math.round(durationMs / 6000) / 10 : null, costUsd: usage?.costUsd ?? null })),
   };

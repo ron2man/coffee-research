@@ -377,3 +377,21 @@ test('toolsmith builds missing tools for briefed items before the writer, and th
   assert.ok(input.availableTools.some((x) => x.id === 'fast-shot-check'));
   assert.match(missing.error, /uses tool other-tool, which doesn't exist/);
 });
+
+test('each run leaves a log with its trace; seed notes say why a seed did not become a card', async (t) => {
+  const { addSeed, listSeeds } = await import('../state/seeds.mjs');
+  const { readRunLogs } = await import('../state/store.mjs');
+  const root = sandbox(t);
+  addSeed(root, { text: 'Which grinder for my machine?' });
+  const [seed] = listSeeds(root);
+  const trace = { calls: [{ tool: 'WebFetch', target: 'https://www.reddit.com/r/x/', ok: false, note: '403' }], summary: { searches: 0, fetches: 1, failedFetches: 1, reads: 0, unanswered: 0 } };
+  const runner = { type: 'fake', run: async () => ({ output: { items: [], seedNotes: [{ seedId: seed.id, why: 'Reddit returned 403; found nothing elsewhere' }] }, usage: null, trace }) };
+  await tick({ root, agents: agents.filter((a) => a.name === 'idea'), runner });
+  const [log] = readRunLogs(root);
+  assert.equal(log.agent, 'idea');
+  assert.equal(log.trace.summary.failedFetches, 1);
+  assert.match(listSeeds(root)[0].attempts[0].why, /Reddit returned 403/);
+  const failing = { type: 'fake', run: async () => { const e = new Error('claude -p timed out after 30 minutes'); e.trace = trace; throw e; } };
+  await tick({ root, agents: agents.filter((a) => a.name === 'idea'), runner: failing, ignoreSchedule: true });
+  assert.equal(readRunLogs(root)[0].status, 'failed');
+});

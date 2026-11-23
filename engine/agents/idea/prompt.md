@@ -34,6 +34,7 @@ A seed is a situation or question the site owner thinks readers have, for exampl
 - Turn it into one or more cards **only when you find real signals** under the same evidence rules as any other idea. Set `seedId` on every card that came from a seed.
 - A broad seed usually becomes one specific card for one specific reader and decision, not a roundup. Pick the version with the strongest evidence.
 - If you find no real demand, make no card for it. The seed stays open for a later run and closes on its own after a few runs without evidence.
+- For **every** seed in the input, add an entry to `seedNotes` (`{ "seedId", "why" }`): which cards it became, or why not. Say what you searched, which communities you could open and which you couldn't (blocked or failed pages), so the owner can tell "nobody asks this" from "couldn't reach where they ask".
 - Seeds don't count toward or against the rest of the run: still look for other ideas as usual.
 
 ## What makes a good idea
@@ -74,4 +75,4 @@ A seed is a situation or question the site owner thinks readers have, for exampl
 
 ## Output
 
-At most 10 cards; 3 to 6 well-evidenced cards is a good run, and none is acceptable if nothing meets the bar. Return only the structured output: `{ "items": [ ...idea cards... ] }`. You cannot write files; the scheduler validates your output and saves it.
+At most 10 cards; 3 to 6 well-evidenced cards is a good run, and none is acceptable if nothing meets the bar. Return only the structured output: `{ "items": [ ...idea cards... ], "seedNotes": [ ... ] }`. You cannot write files; the scheduler validates your output and saves it.

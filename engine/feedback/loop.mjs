@@ -3,7 +3,7 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { instructionsFor, isPipelineAgent } from '../agents/registry.mjs';
-import { readJson } from '../state/store.mjs';
+import { readJson, readRunLogs } from '../state/store.mjs';
 import { addFeedback, listProposals, openFeedback, proposalId, readReviewState, writeProposal, writeReviewState } from './store.mjs';
 
 const hourMs = 3_600_000;
@@ -66,6 +66,12 @@ export function buildReviewInput({ root, niche, agents, candidate }) {
         ? readJson(join(root, item.artifacts[target.name])) : null,
     })),
     openFeedback: openFeedback(root, target.name).map(entryView),
+    // What the agent actually searched, fetched and read in its recent runs, and what failed.
+    recentRuns: readRunLogs(root, { agent: target.name, limit: 5 }).map((log) => ({
+      at: log.at, status: log.status, error: log.error ?? null, summary: log.trace?.summary ?? null,
+      failed: (log.trace?.calls ?? []).filter((c) => c.ok === false).slice(0, 15),
+      searches: (log.trace?.calls ?? []).filter((c) => c.tool === 'WebSearch').map((c) => c.target).slice(0, 20),
+    })),
   };
 }
 

@@ -56,6 +56,24 @@ export function saveItem(root, item) {
   return item;
 }
 
+/**
+ * Full record of one agent run (what it searched, fetched and read, from the runner's trace) in
+ * the gitignored .backoffice/run-logs/. Returns the path. Read by the dashboard and the critic.
+ */
+export function writeRunLog(root, entry) {
+  const at = entry.at ?? new Date().toISOString();
+  const path = join('.backoffice', 'run-logs', `${at.replace(/[:.]/g, '-')}-${entry.agent}.json`);
+  writeJsonAtomic(join(root, path), { ...entry, at });
+  return path;
+}
+
+export function readRunLogs(root, { agent, limit = 10 } = {}) {
+  const dir = join(root, '.backoffice', 'run-logs');
+  if (!existsSync(dir)) return [];
+  return readdirSync(dir).filter((n) => n.endsWith('.json') && (!agent || n.endsWith(`-${agent}.json`))).sort().slice(-limit).reverse()
+    .map((n) => ({ ...readJson(join(dir, n)), file: n }));
+}
+
 /** Append one event to the local run history (gitignored .backoffice/runs.jsonl). */
 export function appendRun(root, event) {
   const path = join(root, '.backoffice', 'runs.jsonl');

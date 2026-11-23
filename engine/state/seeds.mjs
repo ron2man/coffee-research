@@ -33,11 +33,12 @@ export function addSeed(root, { text, note = '', by = 'human', at = new Date().t
  * After an idea run: seeds that produced cards become `used`; the rest of the seeds that were in
  * the input count one more consideration and close as `no-demand` after MAX_CONSIDERED runs.
  */
-export function settleSeeds(root, offered, cards) {
+export function settleSeeds(root, offered, cards, notes = []) {
   const written = [];
   for (const seed of offered) {
     const itemIds = cards.filter((card) => card.seedId === seed.id).map((card) => card.id);
-    const next = { ...seed, considered: seed.considered + 1, itemIds: [...seed.itemIds, ...itemIds] };
+    const why = notes.find((n) => n.seedId === seed.id)?.why ?? (itemIds.length ? 'became a card' : 'no reason given');
+    const next = { ...seed, considered: seed.considered + 1, itemIds: [...seed.itemIds, ...itemIds], attempts: [...(seed.attempts ?? []), { at: new Date().toISOString(), cards: itemIds, why }] };
     if (itemIds.length) next.status = 'used';
     else if (next.considered >= MAX_CONSIDERED) next.status = 'no-demand';
     const path = `${SEEDS_DIR}/${seed.id}.json`;

@@ -69,3 +69,15 @@ test('agent definitions cannot request write tools', () => {
     assert.ok((agent.runner.tools ?? []).every((tool) => ['Read', 'Grep', 'Glob', 'WebSearch', 'WebFetch'].includes(tool)), agent.name);
   }
 });
+
+test('claude runner keeps a trace of searches and fetches, even when the run times out', async (t) => {
+  const { runner, request } = setup(t);
+  const { trace } = await runner.run(request);
+  assert.deepEqual(trace.summary, { searches: 1, fetches: 1, failedFetches: 1, reads: 0, unanswered: 0 });
+  assert.equal(trace.calls[1].target, 'https://www.reddit.com/r/x/');
+  assert.match(trace.calls[1].note, /403/);
+
+  const hang = setup(t, { FAKE_CLAUDE_HANG: '1' });
+  const quick = { ...hang.request, agent: { ...hang.request.agent, runner: { ...hang.request.agent.runner, timeoutMinutes: 0.02 } } };
+  await assert.rejects(hang.runner.run(quick), (error) => /timed out/.test(error.message) && error.trace.summary.fetches === 1);
+});

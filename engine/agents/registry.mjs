@@ -16,7 +16,14 @@ function envelopeSchema(agent) {
   if (agent.mode === 'generate') {
     return {
       type: 'object', additionalProperties: false, required: ['items'],
-      properties: { items: { type: 'array', maxItems: agent.maxItems, items: { type: 'object' } } },
+      properties: {
+        items: { type: 'array', maxItems: agent.maxItems, items: { type: 'object' } },
+        // Why each seed did or didn't become a card (agents that accept seeds).
+        seedNotes: {
+          type: 'array',
+          items: { type: 'object', additionalProperties: false, required: ['seedId', 'why'], properties: { seedId: { type: 'string' }, why: { type: 'string', minLength: 1 } } },
+        },
+      },
     };
   }
   const decision = {

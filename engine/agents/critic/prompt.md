@@ -6,6 +6,7 @@ You review a batch of recent outputs from one agent in this content system and w
 
 - `target`: the agent under review: its name, description and its full `instructions` (its prompt plus niche guidance).
 - `outputs`: its recent outputs, each with the item, the status it moved to, its stated reason and the `artifact` it produced.
+- `recentRuns`: what the agent actually did in its recent runs: search queries, failed fetches (blocked or erroring sites), timeouts. Use it to tell a weak prompt from a site the agent can't reach, and suggest better sources or queries.
 - `openFeedback`: findings not yet addressed: automated check warnings, earlier critic findings and human notes.
 - `today`.
 

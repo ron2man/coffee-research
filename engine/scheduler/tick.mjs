@@ -26,7 +26,7 @@ import { syncPublished } from '../publish/publish.mjs';
 import { applyReview, applyTune, buildReviewInput, buildTuneInput, checkTuneArtifact, reviewCandidates, tuneCandidates } from '../feedback/loop.mjs';
 import { newItem, transition } from '../state/machine.mjs';
 import { defaultNicheId, loadNiche, repoRoot } from '../state/niche.mjs';
-import { appendRun, loadItems, readJson, readRuns, saveItem, writeJsonAtomic, writeTextAtomic } from '../state/store.mjs';
+import { appendRun, loadItems, readJson, readRuns, saveItem, writeJsonAtomic, writeRunLog, writeTextAtomic } from '../state/store.mjs';
 import { assertValid } from '../state/validate.mjs';
 import { RunnerUnavailableError, runnerFor } from '../runner/index.mjs';
 import { assertFresh, commitInternal, commitMessage, remoteStatus, syncMain } from './git.mjs';
@@ -429,6 +429,9 @@ export async function tick({ root = repoRoot, runner, now = new Date(), nicheId,
     };
     response = await runnerFor(agent, runner).run(request);
   } catch (error) {
+    if (!(error instanceof RunnerUnavailableError)) {
+      writeRunLog(root, { agent: agent.name, itemIds: chosenItems.map((i) => i.id), status: 'failed', error: error.message, durationMs: Date.now() - started, trace: error.trace ?? null });
+    }
     if (error instanceof RunnerUnavailableError) {
       appendRun(root, { ...meta(), itemId: null, status: 'failed', error: error.message, runnerUnavailable: true });
       return { ...summary, error: error.message, runnerUnavailable: true };
@@ -437,6 +440,10 @@ export async function tick({ root = repoRoot, runner, now = new Date(), nicheId,
     return { ...summary, error: error.message, failures: recordFailure(root, agent, chosenItems, error, meta(), maxAttempts, written) };
   }
   recordScheduledRun(root, agent, new Date().toISOString(), 'completed', written);
+  const runLog = writeRunLog(root, {
+    agent: agent.name, itemIds: chosenItems.map((i) => i.id), status: 'returned', durationMs: Date.now() - started,
+    usage: response.usage ?? null, trace: response.trace ?? null, seedNotes: response.output?.seedNotes ?? undefined,
+  });
 
   let checked;
   let cardChanges = [];
@@ -490,10 +497,10 @@ export async function tick({ root = repoRoot, runner, now = new Date(), nicheId,
     // Keep what the agent returned (a real run costs usage) so a human can inspect or reuse it.
     const kept = `.backoffice/rejected/${agent.name}-${new Date().toISOString().replace(/[:.]/g, '-')}.json`;
     writeJsonAtomic(join(root, kept), { agent: agent.name, error: error.message, usage: response.usage ?? null, output: response.output });
-    const failureMeta = { ...meta(), usage: response.usage ?? null, rejectedOutput: kept };
+    const failureMeta = { ...meta(), usage: response.usage ?? null, rejectedOutput: kept, runLog };
     return { ...summary, error: error.message, rejectedOutput: kept, failures: recordFailure(root, agent, chosenItems, error, failureMeta, maxAttempts, written) };
   }
-  const eventMeta = { ...meta(), usage: response.usage ?? null };
+  const eventMeta = { ...meta(), usage: response.usage ?? null, trace: response.trace?.summary ?? null, runLog };
   if (candidate) {
     const result = agent.mode === 'review' ? applyReview({ root, candidate, artifact: checked, written })
       : agent.mode === 'assist' ? applyAssist({ root, agent, candidate, artifact: checked, written })
@@ -517,7 +524,7 @@ export async function tick({ root = repoRoot, runner, now = new Date(), nicheId,
   }
   const extra = { ...(warnings.length ? { warnings } : {}), ...(cardChanges.length ? { cardsChanged: cardChanges.map((c) => c.path) } : {}) };
   if (agent.mode === 'generate') {
-    if (agent.acceptsSeeds) written.push(...settleSeeds(root, request.input.seeds ? openSeeds(root).filter((seed) => request.input.seeds.some((s) => s.id === seed.id)) : [], checked));
+    if (agent.acceptsSeeds) written.push(...settleSeeds(root, request.input.seeds ? openSeeds(root).filter((seed) => request.input.seeds.some((s) => s.id === seed.id)) : [], checked, response.output.seedNotes ?? []));
     return { ...summary, created: applyGenerated(root, niche, agent, checked, eventMeta, written), ...extra };
   }
   return { ...summary, results: applyDecisions(root, agent, checked, chosenItems, eventMeta, written), ...extra };
