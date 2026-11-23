@@ -1,6 +1,10 @@
 {
   "itemId": "breville-builtin-grinder-wont-grind-fine-enough",
-  "status": "queued",
+  "slug": "breville-builtin-grinder-wont-grind-fine-enough",
+  "status": "open",
+  "branch": "publish/breville-builtin-grinder-wont-grind-fine-enough",
+  "sha": "ac7a75185812522dd7018ff9f21f807fd6d476b8",
+  "prUrl": "https://github.com/ron2man/coffee-research/compare/main...publish/breville-builtin-grinder-wont-grind-fine-enough?expand=1",
   "requestedBy": "ron (via Claude)",
-  "at": "2026-11-23T12:24:59.005Z"
+  "at": "2026-11-23T12:38:15.470Z"
 }
