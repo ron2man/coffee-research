@@ -50,9 +50,10 @@ export function publishProblems(root, item) {
   const draft = read(root, item, 'writer');
   if (!draft) return [...problems, 'it has no draft'];
   const niche = loadNiche(defaultNicheId(root), root);
+  // Disclosure is only required for a post that sells something (affiliate offers).
   const missing = niche.markets.filter((m) => !niche.disclosures?.[m.id]).map((m) => m.id);
-  if (missing.length) {
-    problems.push(`niche.json has no disclosure text for ${missing.join(', ')}. The live site refuses to build without it. Add it once the affiliate program terms for each market are checked (rebuild-spec section 8).`);
+  if (draft.offerIds?.length && missing.length) {
+    problems.push(`this post has offers, and niche.json has no disclosure text for ${missing.join(', ')}. The live site refuses to build without it. Add it once the affiliate program terms for each market are checked (rebuild-spec section 8).`);
   }
   const { cards } = loadCardsSync(join(root, 'knowledge'), categoryIds(niche));
   const checks = runChecks('writer', [{ itemId: item.id, artifact: draft }], {

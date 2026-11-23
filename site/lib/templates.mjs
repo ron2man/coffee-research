@@ -210,7 +210,8 @@ export function postPage({ site, market, post: source, offers, now, preview }) {
   const pickId = post.pick ?? post.offerIds?.[0] ?? null;
   const toc = headings.length ? `<nav class="toc" aria-label="On this page"><strong>On this page</strong><ol>${headings.map((h) => `<li><a href="#${h.id}">${inline(h.text)}</a></li>`).join('')}</ol></nav>` : '';
   const honesty = post.humanData?.length ? '' : 'We haven’t tested these products ourselves. This guide is built from manuals, published tests and owner reports; how it was put together is at the end.';
-  const notes = [post.disclosure ? escape(site.disclosure(market)) : '', honesty].filter(Boolean);
+  const disclosureText = post.disclosure && post.offerIds?.length ? site.disclosure(market) : null;
+  const notes = [disclosureText ? escape(disclosureText) : '', honesty].filter(Boolean);
   const topNotes = notes.length ? `<div class="post-notes">${notes.map((n) => `<p>${n}</p>`).join('')}</div>` : '';
   // The guide's keep-what-you-have section, linked from the pick card.
   const keep = headings.find((h) => /already (own|have)|keep (yours|what you have)|try this first/i.test(h.text));

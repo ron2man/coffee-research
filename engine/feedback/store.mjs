@@ -13,7 +13,9 @@ const stamp = (at) => at.replace(/[:.]/g, '-');
 
 /** Write one feedback entry. Returns its repo-relative path. */
 export function addFeedback(root, { agent, source, findings, itemIds = [], at = new Date().toISOString(), extra = {} }) {
-  const id = `${stamp(at)}-${source}`;
+  // Two entries in the same millisecond (a comment and a revise) must not overwrite each other.
+  let id = `${stamp(at)}-${source}`;
+  for (let n = 2; existsSync(join(root, FEEDBACK_DIR, agent, `${id}.json`)); n += 1) id = `${stamp(at)}-${source}-${n}`;
   const path = `${FEEDBACK_DIR}/${agent}/${id}.json`;
   writeJsonAtomic(join(root, path), { id, agent, source, at, itemIds, findings, addressedBy: null, ...extra });
   return path;

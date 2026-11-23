@@ -113,12 +113,14 @@ test('production with no published guides: holding homes, indexable, GTM with co
   assert.match(read('en-us/how-we-work/index.html'), /We don’t use affiliate links yet/);
 });
 
-test('production refuses to build a live guide without verified disclosures', (t) => {
+test('production refuses to build a live guide with offers without verified disclosures', (t) => {
   const root = mkdtempSync(join(tmpdir(), 'site-root-'));
   t.after(() => rmSync(root, { recursive: true, force: true }));
   for (const dir of ['niches', 'knowledge', 'engine']) cpSync(join(repoRoot, dir), join(root, dir), { recursive: true });
   mkdirSync(join(root, 'content/published'), { recursive: true });
-  writeFileSync(join(root, 'content/published/live.md'), '# A live guide\n\nGet the X.\n');
+  writeFileSync(join(root, 'content/published/live.md'), '# A live guide\n\nKeep yours.\n');
+  assert.equal(loadSiteData({ root, mode: 'production' }).posts.length, 1, 'a guide that sells nothing needs no disclosure');
+  writeFileSync(join(root, 'content/published/live.md'), '---\noffers: 1\nofferIds: ["bambino-plus"]\n---\n# A live guide\n\nGet the X.\n');
   assert.throws(() => loadSiteData({ root, mode: 'production' }), /No disclosure text/);
   assert.equal(loadSiteData({ root, mode: 'preview' }).posts[0].slug, 'live');
 });

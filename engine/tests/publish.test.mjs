@@ -54,10 +54,12 @@ test('the published file carries frontmatter the site can read', () => {
   assert.match(body, /Start with the basket/);
 });
 
-test('publishing is refused without disclosure text for every market', (t) => {
+test('a post with offers needs disclosure text for every market; a post that sells nothing does not', (t) => {
   const { root } = repo(t, { disclosures: false });
   const [item] = loadItems(root).items;
-  assert.ok(publishProblems(root, item).some((p) => /no disclosure text for US, GB/.test(p)));
+  assert.deepEqual(publishProblems(root, item), []);
+  writeJsonAtomic(join(root, 'content/drafts/post-a.json'), { ...writer(), slug: 'post-a', offerIds: ['bambino-plus'] });
+  assert.ok(publishProblems(root, item).some((p) => /has offers, and niche.json has no disclosure text for US, GB/.test(p)));
   assert.throws(() => requestPublish(root, 'post-a', { openPr: () => null }), /Can't publish yet/);
 });
 

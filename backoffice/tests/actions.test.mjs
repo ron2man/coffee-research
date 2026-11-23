@@ -31,7 +31,7 @@ test('articles list and detail resolve product names and show what the human may
   assert.doesNotMatch(a.title, /\{\{/);
   const detail = articleDetail(root, 'post-a');
   assert.deepEqual(detail.allowed, { publish: true, comment: true, revise: true, resume: false, reject: true });
-  assert.ok(detail.publishBlockers.some((p) => /disclosure text/.test(p)), 'no disclosures yet');
+  assert.deepEqual(detail.publishBlockers, [], 'sells nothing, so no disclosure needed');
   assert.match(detail.draft.html, /<h2 id="when-id-choose-differently">/);
 });
 

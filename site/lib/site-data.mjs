@@ -52,16 +52,17 @@ export function loadSiteData({ root = repoRoot, mode = siteMode(), now = Date.no
   for (const post of posts) post.markets = markets.map((m) => m.id);
   for (const post of posts) post.category = post.category ?? cards.get(post.productIds[0])?.card?.category ?? null;
 
-  // A live guide may carry affiliate links, so production refuses to build without verified
-  // disclosure text for every market. With no guides live there is nothing to disclose yet.
+  // Disclosure is needed once a live guide carries affiliate offers, so production refuses to build
+  // without verified disclosure text then. Guides that sell nothing (no offerIds) can go live first.
+  const affiliate = posts.some((p) => p.offerIds?.length);
   const disclosure = (market) => {
     const text = niche.disclosures?.[market.id];
     if (text) return text;
-    if (production && posts.length) throw new Error(`No disclosure text for ${market.id} in niche.json; verify affiliate terms first (rebuild-spec 8).`);
+    if (production && affiliate) throw new Error(`No disclosure text for ${market.id} in niche.json, and a live guide has offers; verify affiliate terms first (rebuild-spec 8).`);
     if (production) return null;
     return 'Disclosure placeholder: affiliate terms for this market are not verified yet, so the final disclosure text is pending.';
   };
-  if (production && posts.length) markets.forEach(disclosure);
+  if (production && affiliate) markets.forEach(disclosure);
 
   const productIds = [...new Set(posts.flatMap((p) => p.offerIds ?? []))];
   const mockPrices = join(siteDir, 'mock-prices.json');
