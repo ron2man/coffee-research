@@ -90,3 +90,25 @@ test('a queued approval is turned into a pull request by the next tick that can 
   assert.ok(remoteGit('rev-parse', 'publish/post-a'));
   assert.deepEqual(processPublishQueue(root, { openPr: () => null }), [], 'only once');
 });
+
+test('with gh signed in, passed posts get a publishing PR automatically; merging stays human', async (t) => {
+  const { autoPullRequests } = await import('../publish/autopr.mjs');
+  const { root } = repo(t);
+  const calls = [];
+  let prOpen = false;
+  const gh = (_root, args) => {
+    calls.push(args.join(' '));
+    if (args[0] === 'auth') return { ok: true, out: '' };
+    if (args[1] === 'view') return prOpen ? { ok: true, out: JSON.stringify({ url: 'https://github.com/o/r/pull/7', state: 'OPEN' }) } : { ok: false, out: '', err: 'no pull requests found' };
+    if (args[1] === 'create') { prOpen = true; return { ok: true, out: 'https://github.com/o/r/pull/7' }; }
+    return { ok: false, out: '' };
+  };
+  const first = autoPullRequests(root, loadItems(root).items, { gh });
+  assert.deepEqual(first.events, ['queued post-a']);
+  processPublishQueue(root, { openPr: () => null });
+  const second = autoPullRequests(root, loadItems(root).items, { gh });
+  assert.deepEqual(second.events, ['opened PR for post-a']);
+  assert.equal(JSON.parse(readFileSync(join(root, 'data/publish/post-a.json'), 'utf8')).prUrl, 'https://github.com/o/r/pull/7');
+  assert.ok(!calls.some((c) => c.startsWith('pr merge')), 'never merges');
+  assert.deepEqual(autoPullRequests(root, loadItems(root).items, { gh: () => ({ ok: false }) }).events, [], 'nothing without gh');
+});

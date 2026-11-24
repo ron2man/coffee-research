@@ -200,5 +200,5 @@ test('sync fast-forwards past unrelated local edits', (t) => {
 
 test('commit messages describe toolsmith runs and publish-queue ticks', () => {
   assert.equal(commitMessage({ ran: 'toolsmith', assist: { target: 'x', built: ['picker-a'], skipped: ['diagram'] } }), 'tick(toolsmith): x: built picker-a, skipped diagram');
-  assert.equal(commitMessage({ ran: null, changedFiles: ['data/publish/x.json'] }), 'tick: opened publishing pull requests');
+  assert.equal(commitMessage({ ran: null, changedFiles: ['data/publish/x.json'], publishing: ['opened PR for x'] }), 'tick: publishing (opened PR for x)');
 });

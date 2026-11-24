@@ -128,7 +128,7 @@ export function commitInternal(root, paths, message, { remote = policy.remote, b
 
 export function commitMessage(result) {
   if (result.assist) return `tick(${result.ran}): ${result.assist.target}: built ${result.assist.built.join(', ') || 'nothing'}${result.assist.skipped.length ? `, skipped ${result.assist.skipped.join(', ')}` : ''}`;
-  if (!result.ran && result.changedFiles?.some((p) => p.startsWith('data/publish/'))) return 'tick: opened publishing pull requests';
+  if (!result.ran && result.changedFiles?.some((p) => p.startsWith('data/publish/'))) return `tick: publishing (${result.publishing?.join('; ') ?? 'pull requests'})`;
   if (!result.ran && result.published?.length) return `tick: published ${result.published.map((p) => p.split('/').pop().replace('.json', '')).join(', ')}`;
   if (result.review) return `tick(${result.ran}): reviewed ${result.review.target} (${result.review.findings} findings)`;
   if (result.tune) return `tick(${result.ran}): proposed ${result.tune.proposal} for ${result.tune.target}`;
