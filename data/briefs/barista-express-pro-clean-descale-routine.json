@@ -1,0 +1,104 @@
+{
+  "thesis": "Your Barista Express or Pro already tells you which cleaning job it wants, except the UK Express, which never asks for a descale. Learn your panel's signal, do the two-minute daily care, and descale before you treat weak steam or a dripping shot as a fault.",
+  "reader": "A beginner who owns a Barista Express or Barista Pro (Breville in the US, Sage in the UK). They are confused by a maintenance light or alert that won't go away, or they have let cleaning slip and now get weak steam, dripping shots or leaks and wonder whether the machine is failing.",
+  "readerDecision": "Which maintenance job their machine is asking for right now, which jobs to put on a routine, and whether a symptom is overdue maintenance (free fix) or a real fault worth a repair.",
+  "whatCompetitorsMiss": [
+    "No page sorts owners by panel. The US Express has one CLEAN / DESCALE light (flashing = cleaning cycle, solid = descale). The UK Sage C21 Express has a CLEAN ME light for cleaning only and 'will not automatically prompt' for a descale. The Pro shows FLUSH and DESCALE on its LCD. Generic guides give one answer that is wrong for at least one of these.",
+    "UK Express owners are never told they need a calendar descale (every 90 days at hardness 4, every 60 days at hardness 6) because their light will never ask for one.",
+    "Nobody explains that a new Barista Pro shows FLUSH for its first-use cycle, so FLUSH on day one doesn't mean anything is dirty.",
+    "No page maps fault-looking symptoms to maintenance using the manufacturer troubleshooting tables. Breville lists 'machine needs to be descaled' as a cause of no flow, espresso only dripping, no steam and (Express) coffee not hot enough. It lists a worn shower-screen seal (Express) as the cause of espresso running out around the portafilter edge and of leaks.",
+    "No page says plainly that the manufacturer gives no shot-count or calendar interval for the cleaning cycle, and that the '3 months or 300 coffees' figure that circulates isn't in the booklets. Competitors repeat invented intervals.",
+    "Guides skip the fact that the water filter doesn't replace descaling. Breville says scale builds up even with the filter in place.",
+    "Grinder burr cleaning, the seal and the filter are left out of descaling guides, so readers never get one routine."
+  ],
+  "ourContribution": "diagnosis",
+  "contributionDetail": "Two parts. (1) A 'what is my machine asking for?' key, built as an interactive troubleshooter. Q1: Which machine and panel do you see? (Express with a CLEAN / DESCALE light / Express with a CLEAN ME light / Pro with an LCD.) Q2: What is it showing? (Express: flashing / solid. CLEAN ME: lit. Pro: FLUSH / DESCALE, or FLUSH on a brand-new machine.) Q3: Is anything else wrong? (Weak or no steam / espresso only drips or won't flow / coffee not hot / espresso escaping around the portafilter edge or water leaking / nothing.) Answers: run the cleaning cycle (tablet, disc, 1 CUP basket); run descale; run the first-use flush (nothing is due); CLEAN ME owners: run the cleaning cycle and also put descaling on a 60/90-day calendar because the machine won't ask; leaks at the portafilter edge on the Express: replace the shower-screen seal using the supplied Allen key; on the Pro, where no seal procedure is documented, contact Breville/Sage support. Rule for a light that stays on: run the cycle it points to. If it is still on, run the other cycle too, which is what cleared it for the owner in the OzBargain thread. If it is still on after both, contact support. Say plainly that the manual documents no reset. (2) A short routine, organised as 'when X happens' rather than invented intervals. After every milk drink: wipe and purge the wand. After every session: rinse the basket and portafilter, wipe the group and shower screen, purge. When the drip-tray float or EMPTY ME! shows: empty the tray. When the light or alert appears: run that cycle. Filter: replace on the reminder dial (US booklets: every 2 months, sooner in hard water; Sage: every 3 months, UK Express also 40 L), and remove it if you use bottled or filtered water. Grinder burrs: brush them when grinding slows, the grinder gets noisy or no grounds come out (Breville gives no interval). Advanced burr removal only for a blockage. Seal: replace it when you see the leak symptoms. Before you call for repair, rule out each symptom against this list.",
+  "mustInclude": [
+    "Recommendation in the first paragraph: the light/LCD tells you which cycle to run (except the UK CLEAN ME Express, which needs a calendar descale), and weak steam, dripping shots or lukewarm coffee mean 'descale first', not 'it's broken'.",
+    "A test the reader can run on the machine they own right now: look at the panel (CLEAN / DESCALE, CLEAN ME, or LCD), note flashing vs solid or FLUSH vs DESCALE, and run the matching cycle. Then check the symptom list (steam, flow, temperature, leaks at the portafilter edge).",
+    "The panel key covering all three variants. Market difference, stated plainly: the US Breville Express manual describes CLEAN / DESCALE (flashing = cleaning cycle, solid = descale). The UK Sage C21 guide describes CLEAN ME, cleaning only, with no descale prompt, and descaling every 90 days at hardness 4 or 60 days at hardness 6. Say that newer UK units may have the US-style light, so readers should go by the label they actually see, not by their country.",
+    "The Barista Pro first-use FLUSH note: on a new machine it is a priming cycle, not a cleaning alert.",
+    "The cleaning cycle steps (Express: 1 CUP basket + disc + tablet, machine off, hold 1 CUP + 2 CUP + POWER about 10 s, about 5 min, 2 beeps, repeat if the tablet hasn't dissolved; Pro: MENU → FLUSH → 1 CUP, repeat if tablet remains). Keep them brief, in a collapsible or numbered block.",
+    "The descale steps, brief, for both machines. On the Express, enter with 2-CUP + POWER, do coffee, steam and hot water, then a full-tank rinse. On the Pro, use MENU → DESCALE, 3 stages plus a 3-stage rinse, and turn the steam dial by hand when prompted. Both: remove the water filter first (the Sage guide and the Pro booklet say so; the US Express booklet doesn't, so say removing it is the safe move). Don't remove or empty the tank mid-cycle. Don't use bottled water for descaling (Sage).",
+    "The stuck-light rule. Run the cycle the signal points to. If it's still on, run the other one too (one owner's light cleared only after both). If it's still on after both, contact Breville/Sage support. Be honest that the manual describes no reset and that what triggers the light is not documented.",
+    "Honesty about intervals: the manufacturer gives no shot count or calendar interval for the cleaning cycle (either machine) or for descaling the US Express and the Pro, because they are alert-driven. Don't repeat '3 months / 300 coffees' or 'weekly backflush' as manufacturer advice.",
+    "The water filter reduces descaling but doesn't replace it (Breville). Give the filter intervals per manual (US: 2 months, sooner in hard water; Sage: 3 months, UK Express also 40 L), and say to remove the filter when using filtered or bottled water.",
+    "Cautions from the Pro booklet: no alkaline cleaning agents. Don't use highly filtered, demineralised or distilled water. No parts in the dishwasher (both machines).",
+    "A note on weak steam: Breville lists scale as a cause of 'no steam'. That descaling fixes weak steam comes from owner reports only, so present it as 'worth trying first', not as a promise.",
+    "Grinder burr cleaning as an on-symptom job (slow or no grounds, loud grinder), with the sharp-burr warning. If shots are still fast or slow after maintenance, point readers to the grind troubleshooter (the existing grind-fault-tree tool) rather than more cleaning.",
+    "Express seal replacement as the fix for espresso escaping around the portafilter edge or water leaking (supplied Allen key, flat side first, don't overtighten). For the Pro, say no manufacturer procedure is published and point to support.",
+    "A 'When I'd choose differently' section. Hard water: descale on the shorter UK interval even if a US light hasn't come on yet (framed as the Sage guidance applied by analogy, not a Breville US rule). Bottled or filtered water: pull the filter. The light is still on after both cycles, or a symptom is still there after descaling: it's a support/repair question, not more cleaning.",
+    "Ending, the smallest sensible purchase: if the free steps don't fix it, the only things to buy are consumables (cleaning tablets, descaler, a replacement filter, and a shower-screen seal for Express edge leaks). Don't buy a new machine or a repair before descaling. Describe these generically; no accessory cards exist yet, so no product links or prices.",
+    "A 'don't buy / keep yours' path that is the main message: the machine is almost certainly fine. Keep it and run the cycle.",
+    "Name products only via {{model:barista-express}} and {{model:barista-pro}} so Breville/Sage resolve per market. No retailers, prices or market-specific brands in the text.",
+    "Internal links: none of the existingContent guides are live (all archived), so don't link them. At most 2 inline links. Sources (Breville US X26 and Q26 booklets, Sage C21 and UG5 guides, the Breville tutorials, the OzBargain owner thread) go in the collapsed 'How this guide was put together' section."
+  ],
+  "leaveOut": [
+    "Invented intervals ('weekly backflush', '3 months or 300 coffees', 'every 200 shots') presented as manufacturer advice.",
+    "Any claim about how to reset the light (for example, a PROGRAM-button reset), because it is unverified.",
+    "Descaler chemistry, vinegar or citric acid DIY recipes, and comparisons between descaler brands.",
+    "Spec tables, machine history and the differences between models beyond the maintenance panel.",
+    "Upper-burr adjustment and burr part numbers (that is the grind guide's topic).",
+    "A seal replacement interval or a Pro seal procedure (not documented).",
+    "How much descaler the Pro takes (not stated). Say 'fill to the DESCALE line and add the agent per its pack'.",
+    "Any 'we tested' or 'in our experience' language. No owner claims beyond the attributed OzBargain report.",
+    "Generic espresso cleaning tips not tied to these machines (for example, Cafiza-style backflushing for E61 machines, or group-brush scrubbing routines).",
+    "Prices, retailer names and SKUs for tablets, descaler or filters."
+  ],
+  "assets": [
+    "barista-maintenance-alert-key"
+  ],
+  "offerTouchpoints": [
+    {
+      "productId": "barista-express",
+      "role": "dont-buy"
+    },
+    {
+      "productId": "barista-pro",
+      "role": "dont-buy"
+    }
+  ],
+  "claimIds": [
+    "barista-express/clean-descale-light-us",
+    "barista-express/cleaning-cycle-procedure-us",
+    "barista-express/descale-procedure-us",
+    "barista-express/descale-symptoms-us",
+    "barista-express/water-filter-interval-us",
+    "barista-express/daily-care-us",
+    "barista-express/shower-seal-replacement",
+    "barista-express/clean-me-light-and-descale-interval-gb",
+    "barista-express/owner-solid-light-confusion",
+    "barista-express/burr-cleaning-cycle",
+    "barista-pro/flush-alert-cleaning-cycle",
+    "barista-pro/first-use-flush",
+    "barista-pro/descale-alert-procedure",
+    "barista-pro/descale-symptoms",
+    "barista-pro/water-filter-interval-us",
+    "barista-pro/water-filter-interval-sage",
+    "barista-pro/filter-does-not-replace-descale",
+    "barista-pro/daily-care",
+    "barista-pro/cleaning-cautions",
+    "barista-pro/burr-cleaning-cycle"
+  ],
+  "competitorsReviewed": [
+    {
+      "url": "https://www.breville.com/inspiration/en-ca/tutorials/the-barista-express/cleaning-guides/how-to-perform-a-cleaning-cycle",
+      "summary": "Breville's own Barista Express cleaning tutorial: a short video saying the machine 'will notify you when to perform the next cleaning cycle'. The FAQs about a blinking vs solid maintenance light have no answer text. There is no schedule, no descale link, no UK CLEAN ME difference and no symptom guide. For this reader it doesn't answer 'what does my light mean'."
+    },
+    {
+      "url": "https://www.appliancesonline.com.au/article/how-to-descale-breville-barista-express-machine/",
+      "summary": "Retailer descaling walkthrough for the Barista Express. It explains the descale-mode indicator sequence well and separates the cleaning cycle from descaling. But it says the clean/descale light means descale and only clears after a descale, ignoring that flashing means the cleaning cycle. It gives no interval, no Pro or UK coverage, no symptoms beyond the light, and no grinder, seal or daily care. It would mislead an owner whose light is flashing."
+    },
+    {
+      "url": "https://www.ozbargain.com.au/node/955798",
+      "summary": "Owner thread (Apr 2026): an owner read a solid light wrongly for about two years, and commenters contradicted each other. One gave the manual-correct flashing = backflush, solid = descale. The light cleared after both cycles, and descaling reportedly revived weak steam. Useful evidence, but there is no consensus, no Pro or UK panel coverage and no routine, so a reader leaves still unsure."
+    }
+  ],
+  "titleOptions": [
+    "Barista Express or Pro clean light: which cycle it wants and when",
+    "What your Barista Express or Pro maintenance alert is asking for",
+    "Clean, descale or flush? Reading your Barista Express or Pro alerts"
+  ],
+  "slug": "barista-express-pro-clean-descale-routine",
+  "metaDescription": "What the Barista Express light and Barista Pro FLUSH/DESCALE alerts mean, the routine that matters, and the symptoms that are overdue descaling, not faults."
+}
