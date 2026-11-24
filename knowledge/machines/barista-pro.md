@@ -1,6 +1,6 @@
 # Barista Pro
 
-These claims were researched for the built-in grinder troubleshooter. The current US instruction booklet (BES878 USCM Q26) was read page by page. It documents the upper-burr adjustment, but it does not give the number range, a factory position or a burr-contact warning.
+These claims were researched for the built-in grinder troubleshooter and the standalone-grinder guide. The current US instruction booklet (BES878 USCM Q26) was read page by page. It documents the upper-burr adjustment, but it does not give the number range, a factory position or a burr-contact warning.
 
 ```json
 {
@@ -8,7 +8,7 @@ These claims were researched for the built-in grinder troubleshooter. The curren
   "id": "barista-pro",
   "name": "Barista Pro",
   "category": "machines",
-  "updatedAt": "2026-11-23",
+  "updatedAt": "2026-11-24",
   "variants": [
     {
       "id": "bes878-us",
@@ -71,6 +71,18 @@ These claims were researched for the built-in grinder troubleshooter. The curren
       "url": "https://www.ricambi.com.au/breville-coffee-machine-outer-upper-burr-grinder-k",
       "type": "merchant",
       "accessedAt": "2026-11-22"
+    },
+    {
+      "id": "breville-us-bes878",
+      "url": "https://www.breville.com/en-us/product/bes878",
+      "type": "manufacturer",
+      "accessedAt": "2026-11-24"
+    },
+    {
+      "id": "sage-uk-bes878",
+      "url": "https://www.sageappliances.com/en-gb/product/BES878",
+      "type": "manufacturer",
+      "accessedAt": "2026-11-24"
     }
   ],
   "claims": [
@@ -295,6 +307,37 @@ These claims were researched for the built-in grinder troubleshooter. The curren
         }
       ],
       "note": "The booklet presents upper-burr adjustment as an owner feature (page 18), which makes it unlikely that adjustment alone voids the warranty, but the warranty paragraph (page 2) says nothing about burrs. In the Singletrack report, Breville offered a free upper burr to a refurbished-unit owner. A direct answer from Breville US support is still needed."
+    },
+    {
+      "id": "portafilter-54mm-gb",
+      "variantId": "ses878-gb",
+      "statement": "Sage lists a '54mm Portafilter' in the Barista Pro's accessories, so a standalone grinder's cradle or dosing cup has to suit 54 mm.",
+      "status": "supported",
+      "verifiedAt": "2026-11-24",
+      "evidence": [
+        {
+          "sourceId": "sage-uk-bes878",
+          "locator": "Accessories list: '54mm Portafilter'"
+        }
+      ],
+      "note": "The US product page (read 2026-11-24) doesn't state the included portafilter size. It only promotes a separate 'Naked Portafilter 54mm' accessory. The US and UK machines share model number BES878, but the size was not confirmed on a US Breville page."
+    },
+    {
+      "id": "builtin-grinder-baratza-burrs",
+      "statement": "Breville and Sage describe the Barista Pro's integrated conical burr grinder as having 'Baratza European Precision Burrs with 30 grind settings'.",
+      "status": "supported",
+      "verifiedAt": "2026-11-24",
+      "evidence": [
+        {
+          "sourceId": "breville-us-bes878",
+          "locator": "Section heading 'Baratza European Precision Burrs with 30 grind settings'"
+        },
+        {
+          "sourceId": "sage-uk-bes878",
+          "locator": "'Baratza European Precision Burrs with 30 grind settings'"
+        }
+      ],
+      "note": "No burr diameter is given. Whether these burrs match the Smart Grinder Pro's or the Barista Express's is not stated by any source checked."
     }
   ]
 }

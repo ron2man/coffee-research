@@ -1,6 +1,6 @@
 # Barista Express
 
-These claims were researched for the built-in grinder troubleshooter. The current US instruction booklet (BES870 USCM X26) was read page by page. It documents the upper-burr adjustment, but it does not give the number range, a factory position or a burr-contact warning.
+These claims were researched for the built-in grinder troubleshooter and the standalone-grinder guide. The current US instruction booklet (BES870 USCM X26) was read page by page. It documents the upper-burr adjustment, but it does not give the number range, a factory position or a burr-contact warning.
 
 ```json
 {
@@ -8,7 +8,7 @@ These claims were researched for the built-in grinder troubleshooter. The curren
   "id": "barista-express",
   "name": "Barista Express",
   "category": "machines",
-  "updatedAt": "2026-11-23",
+  "updatedAt": "2026-11-24",
   "variants": [
     {
       "id": "bes870xl-us",
@@ -70,7 +70,13 @@ These claims were researched for the built-in grinder troubleshooter. The curren
       "id": "sage-uk-bes875",
       "url": "https://www.sageappliances.com/en-gb/product/BES875",
       "type": "manufacturer",
-      "accessedAt": "2026-11-23"
+      "accessedAt": "2026-11-24"
+    },
+    {
+      "id": "breville-us-bes870",
+      "url": "https://www.breville.com/en-us/product/bes870",
+      "type": "manufacturer",
+      "accessedAt": "2026-11-24"
     }
   ],
   "claims": [
@@ -271,6 +277,39 @@ These claims were researched for the built-in grinder troubleshooter. The curren
         }
       ],
       "note": "This claim was previously disputed between two Seattle Coffee Gear pages: the product guide mentions using 'the included Allen key' for the upper burr, and the blog describes a tool-free procedure. The manufacturer booklet resolves it in favour of tool-free; in the booklet the Allen key is for the shower-screen seal."
+    },
+    {
+      "id": "portafilter-54mm",
+      "statement": "The Barista Express comes with a 54 mm stainless steel portafilter in both markets, so a standalone grinder's cradle or dosing cup has to suit 54 mm.",
+      "status": "supported",
+      "verifiedAt": "2026-11-24",
+      "evidence": [
+        {
+          "sourceId": "breville-us-bes870",
+          "locator": "'54 mm stainless steel portafilter delivers full flavor with dual and single wall filters'; Accessories '54mm Stainless Steel Portafilter'"
+        },
+        {
+          "sourceId": "sage-uk-bes875",
+          "locator": "Product page (BES875, 'the Barista Express with Milk Jug Thermal'): '54 mm stainless steel portafilter'"
+        }
+      ]
+    },
+    {
+      "id": "builtin-grinder-16-settings",
+      "statement": "Breville and Sage describe the Barista Express grinder as an 'integrated conical burr grinder with 16 grind settings' that grinds and doses automatically.",
+      "status": "supported",
+      "verifiedAt": "2026-11-24",
+      "evidence": [
+        {
+          "sourceId": "breville-us-bes870",
+          "locator": "'Auto grind & dose with an integrated conical burr grinder with 16 grind settings'"
+        },
+        {
+          "sourceId": "sage-uk-bes875",
+          "locator": "Heading 'Auto grind & dose with an integrated conical burr grinder with 16 grind settings'"
+        }
+      ],
+      "note": "Neither page states a burr diameter. CoffeeGeek ties the Express burr group to the Smart Grinder Pro's 40 mm burr; see breville-smart-grinder-pro/burr-group-shared-with-barista-express."
     }
   ]
 }
