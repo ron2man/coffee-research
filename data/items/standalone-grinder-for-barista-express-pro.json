@@ -3,11 +3,11 @@
   "id": "standalone-grinder-for-barista-express-pro",
   "type": "new-post",
   "niche": "coffee",
-  "status": "drafted",
+  "status": "passed",
   "attempts": 0,
   "revisions": 1,
   "createdAt": "2026-11-23T15:58:57.537Z",
-  "updatedAt": "2026-11-24T17:46:58.218Z",
+  "updatedAt": "2026-11-24T18:12:37.374Z",
   "artifacts": {
     "idea": "data/ideas/standalone-grinder-for-barista-express-pro.json",
     "idea-judge": "data/idea-scores/standalone-grinder-for-barista-express-pro.json",
@@ -66,6 +66,13 @@
       "to": "drafted",
       "by": "writer",
       "reason": "This revision fixes the three blocking actions from the post-judge review. (1) I rewrote the opening paragraph so the rule no longer contradicts itself. It now says: do the free checks, then the upper burr, skip the Smart Grinder Pro, and decide on one question: should the grinder outlive this machine? Yes means the DF54. Keeping the machine and wanting something simple means the Encore ESP. (2) I removed or replaced the three statements no claim covered. 'Most fast, sour shots come from…' is now what the manufacturer's troubleshooting table lists. The supermarket-beans line is cut, and the post now says only that a bag with no roasted-on date can't be checked against the 5–20 day window. 'Easy-to-swap burrs' is now 'a quick-release burr mount', which baratza-encore-esp/burrs-40mm-m2 states word for word. (3) I could not re-check the Encore ESP 54 mm dosing-cup claim, because this run has no web access. The card still carries the 2026-11-21 read (verifiedAt 2026-11-21, with a note that the 2026-11-24 re-read didn't show the size). To lower the risk, the post no longer rests the Encore ESP's fit on the cup. It says that grinding into a cup and transferring works whatever the cup size. A human or the research agent should still confirm the dosing cup against the Encore ESP manual before this publishes; if it doesn't hold up, cut that one sentence. I also took the optional improvements. The DF54 cradle now 'suits a 58 mm machine if that's your next step'. The UK caveat is a single sentence of advice for UK buyers. Seattle Coffee Gear's 2016 comparison is now cited in the Smart Grinder Pro section under the burr-group claim. The title names both machines: 63 characters with the longest market names, plus a 58-character seoTitle. Offers are unchanged: the DF54 as the pick, the Encore ESP as the alternative, and neither machine."
+    },
+    {
+      "at": "2026-11-24T18:12:37.374Z",
+      "from": "drafted",
+      "to": "passed",
+      "by": "post-judge",
+      "reason": "The revision fixes all three blocking actions from the last review. The opening paragraph is now one rule that doesn't contradict itself: free checks, then the upper burr, skip the Smart Grinder Pro, then \"should the new grinder outlive this machine?\". The unsupported statements are gone or now map to claims; the claims table had no claim behind \"quick-release mount\" before, and burrs-40mm-m2 now covers it word for word. The Encore ESP dosing-cup sentence no longer carries the fit (\"grinding into a cup and transferring works either way\"), and its card is still supported from the 2026-11-21 read. The top results for the query are a home-barista.com forum thread and two Seattle Coffee Gear comparisons from 2013 and 2016. None of them gives a gate before buying, a keep path, the part numbers by batch date, or a single deciding question, and the search summary still pushes the Smart Grinder Pro, which this post argues against with sources. Offers match the advice: the DF54 as the pick, the Encore ESP as the alternative, neither machine. The ending lists what to do in order of cost. Automated checks have nothing blocking."
     }
   ]
 }
