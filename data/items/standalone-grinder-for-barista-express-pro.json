@@ -7,12 +7,13 @@
   "attempts": 0,
   "revisions": 0,
   "createdAt": "2026-11-23T15:58:57.537Z",
-  "updatedAt": "2026-11-24T06:18:34.039Z",
+  "updatedAt": "2026-11-24T06:35:34.782Z",
   "artifacts": {
     "idea": "data/ideas/standalone-grinder-for-barista-express-pro.json",
     "idea-judge": "data/idea-scores/standalone-grinder-for-barista-express-pro.json",
     "research": "data/research/standalone-grinder-for-barista-express-pro.json",
-    "angle": "data/briefs/standalone-grinder-for-barista-express-pro.json"
+    "angle": "data/briefs/standalone-grinder-for-barista-express-pro.json",
+    "toolsmith": "data/tools/standalone-grinder-for-barista-express-pro.json"
   },
   "history": [
     {
