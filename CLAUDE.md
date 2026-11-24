@@ -45,7 +45,7 @@ node backoffice/server.mjs                 # dashboard
 4. "Don't buy" is a valid output. Every recommendation has a keep-what-you-have path.
 5. State lives in files. No hidden memory.
 6. Scheduling is deterministic; AI is used only for judgement work.
-7. Humans approve what ships. Internal changes (items, research, briefs, drafts, knowledge) are committed straight to `main`. Anything that can reach a reader (`content/published/`, `site/`, `data/offers/`) needs its own PR. The list lives in `engine/scheduler/git-policy.json`. The idea judge's picks are final.
+7. Humans can stop what ships (changed 2026-11-24). Internal changes (items, research, briefs, drafts, knowledge) are committed straight to `main`. Anything that can reach a reader (`content/published/`, `site/`, `data/offers/`) goes through its own PR (`engine/scheduler/git-policy.json`). A passed post's PR merges itself after a 24-hour veto window with green checks unless it gets the `hold` label; site code still needs a human merge. The idea judge's picks are final.
 8. Measure before optimizing (60–90 days of data).
 
 ## Style rules (spec section 7; full guide in `niches/coffee/style.md`)

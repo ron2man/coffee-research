@@ -40,7 +40,9 @@ It finds the scheduler's clone next to your working copy and reads the live stat
 
 ## Publishing
 
-A passed article gets an **Approve for publishing** button in the dashboard. It pushes branch `publish/<slug>` with `content/published/<slug>.md` (and its claims file) on top of `main`, without touching either checkout, and opens the pull request with the GitHub CLI if `gh` is installed and signed in (otherwise the dashboard links to GitHub's "open a pull request" page). The GitHub checks run on the PR; merging it publishes the guide (Cloudflare deploys `main`), and the next tick marks the item `published`.
+**Auto-publishing with a veto window** (`niches/coffee/niche.json` `publishing`, decision 2026-11-24): with the GitHub CLI signed in (`gh auth status`), each tick queues every passed article that nothing blocks, pushes `publish/<slug>` and opens its pull request. The PR merges itself after 24 hours if its checks are green, unless it has the `hold` label (the dashboard's **Hold publishing** button adds it) or was closed. Merged posts go live through Cloudflare, and the next tick marks them `published`. Set `autoMerge` to false to go back to merging by hand.
+
+A passed article also has an **Approve for publishing** button in the dashboard. It pushes branch `publish/<slug>` with `content/published/<slug>.md` (and its claims file) on top of `main`, without touching either checkout, and opens the pull request with the GitHub CLI if `gh` is installed and signed in (otherwise the dashboard links to GitHub's "open a pull request" page). The GitHub checks run on the PR; merging it publishes the guide (Cloudflare deploys `main`), and the next tick marks the item `published`.
 
 The button stays disabled while something blocks publishing: the draft fails today's writer checks, or `niches/coffee/niche.json` has no disclosure text for a market (the live site refuses to build without it; add it once each market's affiliate terms are checked).
 
@@ -79,7 +81,10 @@ The target is one guide a day: about 6 agent runs per guide (research, angle, to
 
 Before the idea agent runs, the scheduler collects demand data without AI: search-autocomplete suggestions per market for the focus products and your English seeds, and posts from the niche's subreddits (`niche.json` `demand`). It's saved in `data/demand/` and given to the idea agent.
 
-Reddit works best through its API. Create a "script" app at https://www.reddit.com/prefs/apps (name it anything, redirect URI `http://localhost`), then put its ID and secret in `~/.config/yourcoffeesetup/env` on the scheduler's Mac (never in the repo):
+Reddit is the hard one. Since November 2025 Reddit's Data API needs a manual approval under its Responsible Builder Policy (self-service app keys were closed), and since May 2026 its public JSON returns 403, which is what our runs see. The route that respects Reddit's rules:
+
+1. Read the Responsible Builder Policy (Reddit Help Center) and file a Data API access request through Reddit's developer support form: a small, non-commercial-scale research use (reading public posts in r/espresso and r/Coffee to find common owner questions; low volume; no redistribution of content; links back to threads).
+2. If approved, create a "script" app at https://www.reddit.com/prefs/apps (redirect URI `http://localhost`) and put its ID and secret in `~/.config/yourcoffeesetup/env` on the scheduler's Mac (never in the repo):
 
 ```sh
 mkdir -p ~/.config/yourcoffeesetup
@@ -90,7 +95,7 @@ END
 chmod 600 ~/.config/yourcoffeesetup/env
 ```
 
-Without it, the scheduler tries Reddit's public JSON once per run and records whether it was blocked (see `sources` in `data/demand/*.json` and the run traces in the dashboard).
+Approval is uncertain and small projects are often refused. Until then the scheduler records Reddit as blocked (`sources` in `data/demand/*.json`, and the run traces in the dashboard), and the other sources carry the load.
 
 ## Costs
 

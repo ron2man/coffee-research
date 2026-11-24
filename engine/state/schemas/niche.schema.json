@@ -199,6 +199,20 @@
           "minimum": 1
         }
       }
+    },
+    "publishing": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Publishing policy. autoMerge: a publishing PR merges itself after vetoHours with green checks unless it carries the hold label.",
+      "properties": {
+        "autoMerge": {
+          "type": "boolean"
+        },
+        "vetoHours": {
+          "type": "number",
+          "minimum": 1
+        }
+      }
     }
   }
 }

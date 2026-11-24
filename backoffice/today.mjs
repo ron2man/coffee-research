@@ -104,7 +104,7 @@ export async function todayData(root) {
         ? { kind: 'Publishing queued', itemId: item.id, title: draft?.title ?? item.id, reason: 'Approved. The next tick opens the pull request.', at: requested.at, commands: [] }
         : requested.status === 'failed'
           ? { kind: 'Publishing failed', itemId: item.id, title: draft?.title ?? item.id, reason: requested.error, at: requested.at, commands: [] }
-          : { kind: 'Merge to publish', itemId: item.id, title: draft?.title ?? item.id, reason: 'The pull request is open. Merge it on GitHub to publish; the scheduler marks it published at its next tick.', link: requested.prUrl, at: requested.at, commands: [] });
+          : { kind: requested.held ? 'Publishing on hold' : 'Publishing soon', itemId: item.id, title: draft?.title ?? item.id, reason: requested.held ? 'On hold: it will not merge itself. Merge it on GitHub when ready, or remove the hold label.' : 'The pull request merges itself 24 hours after it opened if the checks pass. Open it and press Hold to stop it.', link: requested.prUrl, at: requested.prOpenedAt ?? requested.at, commands: [] });
       continue;
     }
     inbox.push({ kind: 'Draft to read', itemId: item.id, title: draft?.title ?? item.id, reason: 'Passed the post judge. Would you send it to a friend?', at: item.updatedAt,
@@ -220,6 +220,7 @@ export function articleDetail(root, id) {
     publishBlockers: item.status === 'passed' ? publishProblems(root, item) : [],
     allowed: {
       publish: item.status === 'passed' && (!publishRequest || publishRequest.status === 'failed'),
+      hold: item.status === 'passed' && publishRequest?.status === 'open' && !publishRequest.held,
       comment: true,
       revise: item.status === 'passed',
       resume: ['blocked', 'needs_human'].includes(item.status),

@@ -112,3 +112,39 @@ test('with gh signed in, passed posts get a publishing PR automatically; merging
   assert.ok(!calls.some((c) => c.startsWith('pr merge')), 'never merges');
   assert.deepEqual(autoPullRequests(root, loadItems(root).items, { gh: () => ({ ok: false }) }).events, [], 'nothing without gh');
 });
+
+test('auto-merge after the veto window, unless held or checks are red', async (t) => {
+  const { autoPullRequests, holdPublish } = await import('../publish/autopr.mjs');
+  const { root } = repo(t);
+  requestPublish(root, 'post-a', { openPr: () => null });
+  let pr = { number: 7, url: 'https://github.com/o/r/pull/7', state: 'OPEN', labels: [], createdAt: '2026-11-24T00:00:00Z', statusCheckRollup: [{ conclusion: 'SUCCESS' }] };
+  const merges = [];
+  const gh = (_r, args) => {
+    if (args[0] === 'auth') return { ok: true, out: '' };
+    if (args[1] === 'view') return { ok: true, out: JSON.stringify(pr) };
+    if (args[1] === 'merge') { merges.push(args[2]); return { ok: true, out: '' }; }
+    if (args[0] === 'label') return { ok: true, out: '' };
+    if (args[1] === 'edit') { pr = { ...pr, labels: [{ name: 'hold' }] }; return { ok: true, out: '' }; }
+    return { ok: false, out: '', err: '' };
+  };
+  const policy = { autoMerge: true, vetoHours: 24 };
+  autoPullRequests(root, loadItems(root).items, { gh, policy, now: new Date('2026-11-24T20:00:00Z') });
+  assert.deepEqual(merges, [], 'not before 24 hours');
+  pr = { ...pr, statusCheckRollup: [{ conclusion: 'FAILURE' }] };
+  autoPullRequests(root, loadItems(root).items, { gh, policy, now: new Date('2026-11-25T01:00:00Z') });
+  assert.deepEqual(merges, [], 'not with red checks');
+  pr = { ...pr, statusCheckRollup: [{ conclusion: 'SUCCESS' }] };
+  holdPublish(root, 'post-a', { gh });
+  autoPullRequests(root, loadItems(root).items, { gh, policy, now: new Date('2026-11-25T01:00:00Z') });
+  assert.deepEqual(merges, [], 'not when held');
+  pr = { ...pr, labels: [] };
+  const done = autoPullRequests(root, loadItems(root).items, { gh, policy, now: new Date('2026-11-25T01:00:00Z') });
+  assert.deepEqual(merges, ['7']);
+  assert.deepEqual(done.events, ['merged post-a after the veto window']);
+  assert.equal(JSON.parse(readFileSync(join(root, 'data/publish/post-a.json'), 'utf8')).status, 'merged');
+  // Without autoMerge, nothing merges.
+  merges.length = 0;
+  writeJsonAtomic(join(root, 'data/publish/post-a.json'), { itemId: 'post-a', slug: 'post-a', status: 'open', branch: 'publish/post-a' });
+  autoPullRequests(root, loadItems(root).items, { gh, policy: {}, now: new Date('2026-11-26T00:00:00Z') });
+  assert.deepEqual(merges, []);
+});

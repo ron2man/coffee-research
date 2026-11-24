@@ -572,9 +572,10 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
       const result = await tick({ root, dryRun: values['dry-run'], nicheId: values.niche, lock: false, ignoreSchedule: values['ignore-schedule'] });
       // Approvals queued from elsewhere: open their pull requests from this machine (it can push).
       if (commit) {
-        const auto = autoPullRequests(root, loadItems(root).items);
+        const policy = loadNiche(values.niche ?? defaultNicheId(root), root).publishing ?? {};
+        const auto = autoPullRequests(root, loadItems(root).items, { policy });
         const queued = processPublishQueue(root);
-        const pr = autoPullRequests(root, loadItems(root).items); // a PR for what was just pushed
+        const pr = autoPullRequests(root, loadItems(root).items, { policy }); // a PR for what was just pushed
         const more = [...new Set([...auto.written, ...queued, ...pr.written])];
         if (auto.events.length || pr.events.length) result.publishing = [...auto.events, ...pr.events];
         if (more.length) result.changedFiles = [...(result.changedFiles ?? []), ...more];

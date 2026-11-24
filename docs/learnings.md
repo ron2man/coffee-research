@@ -105,6 +105,9 @@ The project lead set the goal: one guide a day, built around equipment, with "my
 
 - **2026-11-23 · M0 done.** Subscription billing, about 8% of usage per run; the job environment has no API key.
 
+- **2026-11-24 · Humans can stop what ships.** Passed posts merge themselves after a 24-hour veto window with green checks unless held (approved by the project lead). Site code and offers still need a human merge.
+- **2026-11-24 · Reddit.** The Data API needs approval under Reddit's Responsible Builder Policy and the public JSON is blocked; apply, and lean on other sources until then.
+
 ## Open questions
 
 - **Disclosure text per market (blocks the first publish):** `niches/coffee/niche.json` `disclosures` is empty. Decide the wording for US and GB after checking the affiliate programs you will join.
