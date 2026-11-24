@@ -3,17 +3,18 @@
   "id": "standalone-grinder-for-barista-express-pro",
   "type": "new-post",
   "niche": "coffee",
-  "status": "briefed",
+  "status": "drafted",
   "attempts": 0,
   "revisions": 0,
   "createdAt": "2026-11-23T15:58:57.537Z",
-  "updatedAt": "2026-11-24T06:35:34.782Z",
+  "updatedAt": "2026-11-24T06:43:01.599Z",
   "artifacts": {
     "idea": "data/ideas/standalone-grinder-for-barista-express-pro.json",
     "idea-judge": "data/idea-scores/standalone-grinder-for-barista-express-pro.json",
     "research": "data/research/standalone-grinder-for-barista-express-pro.json",
     "angle": "data/briefs/standalone-grinder-for-barista-express-pro.json",
-    "toolsmith": "data/tools/standalone-grinder-for-barista-express-pro.json"
+    "toolsmith": "data/tools/standalone-grinder-for-barista-express-pro.json",
+    "writer": "content/drafts/standalone-grinder-for-barista-express-pro.json"
   },
   "history": [
     {
@@ -43,6 +44,13 @@
       "to": "briefed",
       "by": "angle",
       "reason": "There is a distinct contribution the top pages don't make: a decision rule that starts from a diagnosis. First rule out beans and dose, then clean the burrs and step the upper burr. Only after that does it pick between keeping the built-in grinder, a budget replacement and a single-dose grinder that outlives the machine. Two points from our sources set it apart. Balance Journal and others recommend the Smart Grinder Pro, but CoffeeGeek says it uses the same 40 mm burr group as the Express. And neither the Encore ESP nor the DF54 has been tested head-to-head against the built-in grinder, so the brief keeps the Encore ESP as a working replacement, not a proven upgrade. Every claim the post needs is supported. Mignon picks are left out because their market variants aren't on file. The slug matches the wanted guide."
+    },
+    {
+      "at": "2026-11-24T06:43:01.599Z",
+      "from": "briefed",
+      "to": "drafted",
+      "by": "writer",
+      "reason": "I wrote the post to the brief: four free checks as the gate, then a replacement upper burr as the smallest purchase, then a three-way grinder rule built around the picker tool. The Smart Grinder Pro point is limited to the Express, and I say outright that it isn't established for the Pro. The Impress is excluded from all Express-specific claims. Offers follow the brief: the DF54 as the pick, the Encore ESP as the alternative, and neither machine. The post has no inline links; the diagnosis guide is linked with a guide token and shows as plain text until it is published. One open item before publishing: the Encore ESP dosing-cup size (54 mm) rests on the 2026-11-21 page read, and the 2026-11-24 re-read didn't show it. Please re-check it against the Encore ESP manual. The title is 61 characters with the longest market names, so it also has a 58-character seoTitle."
     }
   ]
 }
