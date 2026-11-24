@@ -3,14 +3,15 @@
   "id": "barista-express-pro-clean-descale-routine",
   "type": "new-post",
   "niche": "coffee",
-  "status": "idea_approved",
+  "status": "researched",
   "attempts": 0,
   "revisions": 0,
   "createdAt": "2026-11-23T15:58:57.541Z",
-  "updatedAt": "2026-11-23T18:02:49.761Z",
+  "updatedAt": "2026-11-24T20:08:22.485Z",
   "artifacts": {
     "idea": "data/ideas/barista-express-pro-clean-descale-routine.json",
-    "idea-judge": "data/idea-scores/barista-express-pro-clean-descale-routine.json"
+    "idea-judge": "data/idea-scores/barista-express-pro-clean-descale-routine.json",
+    "research": "data/research/barista-express-pro-clean-descale-routine.json"
   },
   "history": [
     {
@@ -26,6 +27,13 @@
       "to": "idea_approved",
       "by": "idea-judge",
       "reason": "Verified, specific confusion: in OzBargain node/955798 (Apr 2026) an owner misread a solid light for two years and owners in the thread contradicted each other. Breville pages split the cycles up and third-party light guides skip one combined schedule. Maintenance guide in the focus cluster."
+    },
+    {
+      "at": "2026-11-24T20:08:22.485Z",
+      "from": "idea_approved",
+      "to": "researched",
+      "by": "research",
+      "reason": "The maintenance schedule and the light meanings can be answered from manufacturer booklets for both machines in both markets. They cover daily care, the alert-driven cleaning and descale cycles with their steps, filter intervals, scale symptoms, and the Express seal replacement. One market difference matters for the single post. The US Barista Express has a combined CLEAN / DESCALE light: flashing means run a cleaning cycle, solid means descale. The UK Sage guide (C21) has a CLEAN ME light, says the machine will not prompt for descaling, and gives 60- or 90-day intervals by water hardness. The remaining gaps are recorded as unknown claims: the light's trigger and reset logic, a shot-count interval, the seal replacement interval, and a seal procedure for the Pro. The writer can cover these with 'when X happens' rules."
     }
   ]
 }
