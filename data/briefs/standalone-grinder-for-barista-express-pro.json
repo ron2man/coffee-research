@@ -1,0 +1,114 @@
+{
+  "thesis": "Don't buy a grinder until you've ruled out beans, dose and the upper burr. If the built-in grinder still can't keep up, skip Breville's own Smart Grinder Pro (on the Express it's the same burrs in a separate box) and buy the grinder that suits your next machine, not this one.",
+  "reader": "An owner of a Breville/Sage Barista Express or Barista Pro, a few years in, who has already turned the grind dial to the fine end. Shots still run fast or are hard to dial in, or the built-in grinder fails now and then. They've been told to 'just get a separate grinder' and don't know which one suits a 54 mm machine, or whether they need one at all.",
+  "readerDecision": "Keep the built-in grinder after the free checks, add a budget espresso-capable grinder to keep using with this machine, or add a single-dose flat-burr grinder that will carry over to a future machine.",
+  "whatCompetitorsMiss": [
+    "None of the top pages start with the free checks: bean roast date, dose (the tamper cap level with the basket rim), cleaning the burrs, and moving the adjustable upper burr one step at a time, which Breville documents as an owner feature in both booklets. Our post makes these the gate before any purchase.",
+    "Balance Journal and the retailer comparisons offer the Smart Grinder Pro as the easy option. None say that CoffeeGeek's 2023 review found it uses the same burr group as the Barista Express, or that the same review calls it clumpy for espresso and high in retention. We explain why it's a sideways move for Express owners, and say honestly that this isn't established for the Pro.",
+    "No page asks whether the reader will replace the machine. Complete Home Barista says upgrade the grinder first and Balance Journal mentions it only for the Niche, but neither turns 'will this grinder outlive the machine?' into the deciding question.",
+    "No page explains the 54 mm workflow on a single-dose grinder. The DF54's cradle reportedly suits 58 mm (one owner says a 54 mm portafilter can be held in it), and grinding into the cup and then transferring the coffee works on any machine.",
+    "Nobody says plainly that no head-to-head test shows a 40 mm conical Encore ESP beating the 40 mm conical built-in grinder. We present it as a dependable separate replacement when the built-in grinder is failing, not a proven grind-quality upgrade.",
+    "Nobody tells readers that a replacement upper burr is a keep-path option and that the right part depends on the batch date on the sticker under the machine (SP0027464 from PDC 1926, SP0001801 before that)."
+  ],
+  "ourContribution": "decision-rule",
+  "contributionDetail": "A gate followed by a three-way rule. Gate (free, about 30 minutes, uses what you own): (1) Check the bag for a roasted-on date. Breville says to use beans 5–20 days after roasting, and stale beans run fast. (2) Dose until the tamper's metal cap sits level with the basket rim, and use a single-wall basket. (3) Run Breville's burr cleaning procedure. (4) Move the upper burr one number finer, one adjustment at a time, and pull a shot after each. Rule: if the shots come back into range, keep the built-in grinder and buy nothing. If the grinder still can't get fine enough and you've already gone to the finest upper-burr position, find the batch date on the sticker under the machine and price the matching upper burr. That is the smallest purchase. If it still fails, or the grinder fails mechanically, or you want better than the built-in grinder can do: (a) you'll keep this machine for years and mostly make milk drinks: a budget espresso-range grinder with a 54 mm dosing cup ({{product:baratza-encore-esp}}), framed as a dependable separate replacement, not a proven better grind; (b) you expect to move to a bigger machine, or you drink mostly straight espresso and will weigh each dose: a stepless single-dose flat-burr grinder ({{product:turin-df54}}), which carries over to a 58 mm machine. On the 54 mm Breville, grind into the cup and transfer. (c) In every case: not the Smart Grinder Pro if you own an Express. The picker asks: which machine (Express / Pro / Impress / not sure); have you done the four free checks, and did they fix it; is the grinder failing mechanically (stalls, intermittent) or just not fine enough; milk drinks or straight espresso; will you replace the machine in the next couple of years; will you weigh each dose. It returns one answer: keep and fix / order the upper burr / budget grinder / single-dose grinder.",
+  "mustInclude": [
+    "The recommendation in the first paragraph: do the free checks first; if they fail, skip the Smart Grinder Pro and choose by whether the grinder should outlive the machine.",
+    "A test the reader can run on what they own, before any purchase: roasted-on date (5–20 days), tamper cap level with the rim in a single-wall basket, Breville's burr cleaning, then the upper burr moved one number finer, one adjustment at a time, pulling a shot after each (barista-express/upper-burr-adjustment-documented, barista-pro/upper-burr-adjustment-documented, *-beans-roasted-on-5-20-days, burr-cleaning-cycle).",
+    "Point out that Breville's own 'runs too quickly' troubleshooting lists grind, dose and tamp, not the burrs. Most fast shots aren't a reason to buy a grinder.",
+    "The keep path's smallest purchase: a replacement upper burr, with the part depending on the batch date on the sticker under the machine (SP0027464 from PDC 1926 onwards, SP0001801 before). These are listed by a parts seller, so tell readers to confirm with Breville/Sage or a local parts seller before ordering.",
+    "Why the Smart Grinder Pro is a sideways move for Express owners: CoffeeGeek says it uses the same 40 mm burr group, and the same review calls it clumpy for espresso and high in retention. Attribute both to the review. For Barista Pro owners, say plainly that no source compares its Baratza-branded burrs with the Smart Grinder Pro, so the 'same burrs' argument doesn't apply; the review's espresso criticisms still do.",
+    "Be honest about the Encore ESP: 40 mm M2 conical burrs, settings 1–20 for espresso, and a dosing cup Baratza lists as intended for 54 mm. No test shows it grinding better than the built-in grinder, so recommend it as a separate, serviceable replacement when the built-in grinder is failing, not as a quality leap. Ask the writer to check the dosing-cup size before publishing, since the 2026-11-24 page read didn't show it.",
+    "DF54 facts, attributed: 54 mm stainless flat burrs, stepless adjustment, and retention of 0.1 g or less from the third use in Coffeeblog's review (their measurement, not ours). Single-dose workflow: weigh the beans, grind into the cup, then transfer. The cradle reportedly suits 58 mm, and one reader says a 54 mm portafilter can be held in it.",
+    "Per-market notes, kept out of the main text where possible: the machines and the Smart Grinder Pro are sold as Sage in the UK. The DF54 is sold as the Turin DF54 in the US and the MiiCoffee DF54 in the UK. UK buyers should buy from a UK retailer, because overseas sellers may ship an EU plug with no UK warranty and import fees. Name products only with {{product:...}} or {{model:...}}. No prices or retailers in the text.",
+    "Do not extend Express-specific claims to the Barista Express Impress. If the picker answer is 'Impress', the free checks still apply, but the burr-sharing point does not.",
+    "A 'When I'd choose differently' section: someone who can't face weighing doses each morning and drinks mostly milk drinks may prefer the budget grinder even if they plan to upgrade later. Someone whose free checks worked should stop reading and buy nothing.",
+    "A 'keep yours' ending: what to do if the free fixes don't work, in order of cost: the upper burr part, then the budget grinder, then the single-dose grinder.",
+    "Link our diagnosis guide with {{guide:breville-builtin-grinder-wont-grind-fine-enough|our built-in grinder diagnosis}}, if it is published by then, and reuse the grind-fault-tree tool for the gate step. The archived Bambino grinder guide is a quality reference only, not a link target.",
+    "At most 2 inline links. Put the sources (Breville/Sage booklets and product pages, CoffeeGeek, Coffeeblog, Baratza, the parts seller, OzBargain) in the collapsed 'How this guide was put together' section."
+  ],
+  "leaveOut": [
+    "Spec tables and lists of price tiers.",
+    "Eureka Mignon, Niche Zero, DF64, Sette 270 and hand grinders: either their market variants aren't on file or the cards don't exist.",
+    "Any burr diameter for the Barista Pro, and any claim that the Pro's built-in grinder and the Smart Grinder Pro share burrs.",
+    "Balance Journal's claim that 54 mm flat burrs 'match' a 54 mm basket and reduce channelling. It isn't supported, and burr size has nothing to do with basket size.",
+    "Any 'we tested', 'in our experience' or taste comparisons, and any claim that the Encore ESP or DF54 grinds better than the built-in grinder, beyond attributed reviewer statements.",
+    "The upper burr's factory position, number range or contact warnings (unknown), and warranty claims about burr adjustment (unknown).",
+    "Prices, retailers and discount talk in the body.",
+    "Machine upgrade recommendations, which belong to the separate upgrade-from-barista-express post.",
+    "Grinder history and generic grinder-type explainers (blade vs burr, conical vs flat theory)."
+  ],
+  "assets": [
+    "grind-fault-tree",
+    "barista-standalone-grinder-picker"
+  ],
+  "offerTouchpoints": [
+    {
+      "productId": "barista-express",
+      "role": "dont-buy"
+    },
+    {
+      "productId": "barista-pro",
+      "role": "dont-buy"
+    },
+    {
+      "productId": "turin-df54",
+      "role": "primary"
+    },
+    {
+      "productId": "baratza-encore-esp",
+      "role": "alternative"
+    }
+  ],
+  "claimIds": [
+    "barista-express/portafilter-54mm",
+    "barista-express/builtin-grinder-16-settings",
+    "barista-express/upper-burr-adjustment-documented",
+    "barista-express/upper-burr-part-sp0027464",
+    "barista-express/upper-burr-part-sp0001801",
+    "barista-express/troubleshooting-runs-too-quickly",
+    "barista-express/burr-cleaning-cycle",
+    "barista-express/beans-roasted-on-5-20-days",
+    "barista-pro/portafilter-54mm-gb",
+    "barista-pro/builtin-grinder-baratza-burrs",
+    "barista-pro/upper-burr-adjustment-documented",
+    "barista-pro/upper-burr-part-sp0027464",
+    "barista-pro/beans-roasted-on-5-20-days",
+    "barista-pro/troubleshooting-runs-too-quickly",
+    "breville-smart-grinder-pro/sixty-settings-conical",
+    "breville-smart-grinder-pro/portafilter-cradles",
+    "breville-smart-grinder-pro/burr-group-shared-with-barista-express",
+    "breville-smart-grinder-pro/espresso-limitations-review",
+    "breville-smart-grinder-pro/owner-not-an-upgrade",
+    "baratza-encore-esp/burrs-40mm-m2",
+    "baratza-encore-esp/espresso-settings",
+    "baratza-encore-esp/us-dosing-cup",
+    "turin-df54/burrs-54mm-flat-stepless",
+    "turin-df54/retention-review",
+    "turin-df54/us-stepless-adjustment",
+    "turin-df54/us-single-dose-workflow",
+    "turin-df54/uk-buying-caveat",
+    "turin-df54/cradle-58mm-owner-comment"
+  ],
+  "competitorsReviewed": [
+    {
+      "url": "https://balancejournal.co/food-drink/best-grinder-for-sage-barista-express",
+      "summary": "A UK list of eight grinders, which the author says were tested with a stock BES875UK: the Mignon Specialità as best overall, plus Niche Zero, DF64, DF54, Encore ESP, Smart Grinder Pro ('stay in the Sage ecosystem'), J-Ultra and C3 ESP. It publishes few numbers. It misses the upper-burr and bean checks, gives the Smart Grinder Pro's burr as 38 mm without noting CoffeeGeek's finding that it shares the Express's burr group, makes an unsupported claim that 54 mm burrs 'match' the basket, and has no buy-nothing path."
+    },
+    {
+      "url": "https://completehomebarista.com/progression/upgrade-from-barista-express/",
+      "summary": "Says to upgrade the grinder first and use the Express only for brewing. It names the Mignon Silenzio, Sette 270, Mignon Specialità and Niche Zero, with US prices. It never mentions the upper burr, beans or dose, never mentions the Smart Grinder Pro, doesn't explain how to dose into a 54 mm portafilter, and has no keep-the-built-in-grinder option."
+    },
+    {
+      "url": "https://www.seattlecoffeegear.com/blogs/scg-blog/breville-compare-smart-grinder-vs-barista-express-grinder",
+      "summary": "A 2013 'Legacy' retailer post. It says the older BES860 grinder didn't go fine enough and points to a comparison video, with no verdict. It's dated, has no diagnosis, says nothing about upper-burr adjustment, and gives no advice on which grinder to buy."
+    }
+  ],
+  "titleOptions": [
+    "Do you need a separate grinder for your Barista Express or Pro?",
+    "Which grinder to add to a Barista Express or Pro, and when not to",
+    "Barista Express grinder struggling? Check this before buying one"
+  ],
+  "slug": "grinder-for-barista-express-and-pro",
+  "metaDescription": "Four free checks before you buy a grinder for a Barista Express or Pro, why the Smart Grinder Pro is a sideways move, and which grinder suits your next machine."
+}

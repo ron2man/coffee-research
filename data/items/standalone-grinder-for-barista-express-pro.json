@@ -3,15 +3,16 @@
   "id": "standalone-grinder-for-barista-express-pro",
   "type": "new-post",
   "niche": "coffee",
-  "status": "researched",
+  "status": "briefed",
   "attempts": 0,
   "revisions": 0,
   "createdAt": "2026-11-23T15:58:57.537Z",
-  "updatedAt": "2026-11-24T06:16:08.382Z",
+  "updatedAt": "2026-11-24T06:18:34.039Z",
   "artifacts": {
     "idea": "data/ideas/standalone-grinder-for-barista-express-pro.json",
     "idea-judge": "data/idea-scores/standalone-grinder-for-barista-express-pro.json",
-    "research": "data/research/standalone-grinder-for-barista-express-pro.json"
+    "research": "data/research/standalone-grinder-for-barista-express-pro.json",
+    "angle": "data/briefs/standalone-grinder-for-barista-express-pro.json"
   },
   "history": [
     {
@@ -34,6 +35,13 @@
       "to": "researched",
       "by": "research",
       "reason": "The decision (keep the built-in grinder after the burr checks, add a budget espresso grinder, or add a single-dose grinder) can be answered from supported claims. Both machines use 54 mm portafilters. The Express's built-in grinder shares its 40 mm burr group with the Smart Grinder Pro (CoffeeGeek), which makes that grinder a sideways move. The Pro instead uses Baratza burrs. The Encore ESP has a 40 mm M2 espresso range and is sold in the US and GB, and the DF54 (54 mm flat, stepless, low retention per the reviewer) is sold in both markets. The keep path is already carded through the upper-burr adjustment and part claims. Gaps are listed below. None blocks the decision rule."
+    },
+    {
+      "at": "2026-11-24T06:18:34.039Z",
+      "from": "researched",
+      "to": "briefed",
+      "by": "angle",
+      "reason": "There is a distinct contribution the top pages don't make: a decision rule that starts from a diagnosis. First rule out beans and dose, then clean the burrs and step the upper burr. Only after that does it pick between keeping the built-in grinder, a budget replacement and a single-dose grinder that outlives the machine. Two points from our sources set it apart. Balance Journal and others recommend the Smart Grinder Pro, but CoffeeGeek says it uses the same 40 mm burr group as the Express. And neither the Encore ESP nor the DF54 has been tested head-to-head against the built-in grinder, so the brief keeps the Encore ESP as a working replacement, not a proven upgrade. Every claim the post needs is supported. Mignon picks are left out because their market variants aren't on file. The slug matches the wanted guide."
     }
   ]
 }
