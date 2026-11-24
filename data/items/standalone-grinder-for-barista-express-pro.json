@@ -3,18 +3,19 @@
   "id": "standalone-grinder-for-barista-express-pro",
   "type": "new-post",
   "niche": "coffee",
-  "status": "drafted",
+  "status": "briefed",
   "attempts": 0,
-  "revisions": 0,
+  "revisions": 1,
   "createdAt": "2026-11-23T15:58:57.537Z",
-  "updatedAt": "2026-11-24T06:43:01.599Z",
+  "updatedAt": "2026-11-24T09:08:21.275Z",
   "artifacts": {
     "idea": "data/ideas/standalone-grinder-for-barista-express-pro.json",
     "idea-judge": "data/idea-scores/standalone-grinder-for-barista-express-pro.json",
     "research": "data/research/standalone-grinder-for-barista-express-pro.json",
     "angle": "data/briefs/standalone-grinder-for-barista-express-pro.json",
     "toolsmith": "data/tools/standalone-grinder-for-barista-express-pro.json",
-    "writer": "content/drafts/standalone-grinder-for-barista-express-pro.json"
+    "writer": "content/drafts/standalone-grinder-for-barista-express-pro.json",
+    "post-judge": "data/reviews/standalone-grinder-for-barista-express-pro.json"
   },
   "history": [
     {
@@ -51,6 +52,13 @@
       "to": "drafted",
       "by": "writer",
       "reason": "I wrote the post to the brief: four free checks as the gate, then a replacement upper burr as the smallest purchase, then a three-way grinder rule built around the picker tool. The Smart Grinder Pro point is limited to the Express, and I say outright that it isn't established for the Pro. The Impress is excluded from all Express-specific claims. Offers follow the brief: the DF54 as the pick, the Encore ESP as the alternative, and neither machine. The post has no inline links; the diagnosis guide is linked with a guide token and shows as plain text until it is published. One open item before publishing: the Encore ESP dosing-cup size (54 mm) rests on the 2026-11-21 page read, and the 2026-11-24 re-read didn't show it. Please re-check it against the Encore ESP manual. The title is 61 characters with the longest market names, so it also has a 58-character seoTitle."
+    },
+    {
+      "at": "2026-11-24T09:08:21.275Z",
+      "from": "drafted",
+      "to": "briefed",
+      "by": "post-judge",
+      "reason": "This is the strongest page for the query. None of the top three results runs the free checks first, has a buy-nothing path, mentions the upper burr, or says the Smart Grinder Pro shares the Express's burr group. Balance Journal even recommends the Smart Grinder Pro. Two fixable problems hold the draft back. The opening paragraph contradicts itself: it says to buy for your next machine, then offers the Encore ESP for people keeping this one. And three statements have no claim behind them."
     }
   ]
 }

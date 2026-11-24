@@ -1,0 +1,50 @@
+{
+  "scores": {
+    "readerValueVsCompetitors": {
+      "score": 4,
+      "reason": "It settles the decision better than any top result. It gates any purchase behind the four free checks, gives the upper-burr part with the batch-date rule as the smallest purchase, and turns the choice into one question: 'should this grinder outlive the machine?' Balance Journal, Arielle and Whole Latte Love all have none of this. It falls short of 5 only because the opening paragraph states the rule confusingly."
+    },
+    "distinctivenessVoice": {
+      "score": 4,
+      "reason": "It holds one clear opinion and says it with conviction: 'For an Express owner it's a sideways move.' The voice is human: 'I'll be straight about this one', 'A grinder you'll actually use beats a better one you resent.' Sections vary in structure. It switches between 'I' and 'we', but that doesn't get in the way."
+    },
+    "honestyAboutLimits": {
+      "score": 5,
+      "reason": "It states each limit once, plainly. 'nobody has published a head-to-head against the built-in grinder.' 'That's their measurement, and one reviewer's sample.' The Pro and Impress caveats are scoped correctly. 'We did not test any of these grinders or machines.' None of this turns into a chain of hedges."
+    },
+    "evidenceIntegrity": {
+      "score": 3,
+      "reason": "Most statements map to claims, and the attributions are correct: CoffeeGeek quotes, Coffeeblog retention, the parts-seller listings, which the cards support for both machines. Three statements have no supporting claim. 'Most fast, sour shots on these machines come from the beans, the dose or a burr setting' is a frequency claim with nothing behind it. 'Supermarket beans with only a best-before date are the most common culprit' is invented. 'a separate grinder with easy-to-swap burrs' doesn't appear on the Encore ESP card. One smaller speculation: 'the 58 mm cradle will suit a bigger machine later' assumes the next machine is 58 mm."
+    },
+    "topicFit": {
+      "score": 5,
+      "reason": "It follows the brief's thesis and every mustInclude: the gate, Breville's 'runs too quickly' list, the upper-burr part by batch date, the Smart Grinder Pro point limited to the Express with the Pro handled honestly, the Encore ESP framed as a replacement rather than an upgrade, the DF54 workflow, the Impress exclusion, 'When I'd choose differently', and an ordered ending. It leaves out everything in leaveOut."
+    }
+  },
+  "wouldForward": true,
+  "competitorComparison": [
+    {
+      "url": "https://arielle.com.au/types-of-coffee-grinders/",
+      "weGiveThatTheyDont": "Arielle doesn't answer the Barista Express question at all, and it recommends the Smart Grinder Pro to beginners. We give the free checks, the upper-burr keep path, the reason the Smart Grinder Pro is a sideways move on the Express, and a single rule for choosing a grinder."
+    },
+    {
+      "url": "https://balancejournal.co/food-drink/best-grinder-for-sage-barista-express",
+      "weGiveThatTheyDont": "Balance Journal recommends a grinder at every budget, with no upper-burr or bean checks and no buy-nothing path. It offers the Smart Grinder Pro for 'Sage ecosystem' continuity without noting the shared burr group, and it makes the unsupported claim that 54 mm burrs 'match' the basket. We give a gate before any purchase, an honest Smart Grinder Pro verdict, and 'will it outlive the machine?' as the deciding question."
+    },
+    {
+      "url": "https://www.wholelattelove.com/blogs/reviews/best-espresso-grinder",
+      "weGiveThatTheyDont": "Whole Latte Love's page is a generic retailer list that never mentions the Barista Express, the built-in grinder or a reason not to buy. Everything machine-specific in our post is missing from it: the diagnosis, the part number, the 54 mm workflow and the Pro/Impress caveats."
+    }
+  ],
+  "blockingActions": [
+    "Rewrite the opening paragraph's rule so it doesn't contradict itself. 'buy the grinder you'd want on your *next* machine' followed by the Encore ESP 'if you plan to keep this machine' reads as a contradiction. State the actual rule: if the grinder should outlive this machine, get {{product:turin-df54}}; if you're keeping this machine and want simple, get {{product:baratza-encore-esp}}.",
+    "Cut or support three statements that no claim covers: 'Most fast, sour shots on these machines come from…' (reword as what Breville's troubleshooting lists), 'Supermarket beans with only a best-before date are the most common culprit' (cut it, or say only that a bag with no roasted-on date can't be checked against the 5–20 day window), and 'easy-to-swap burrs' for the Encore ESP (cut it, or add a supported claim).",
+    "Before publishing, re-verify the Encore ESP 54 mm dosing-cup claim (baratza-encore-esp/us-dosing-cup) against the Baratza manual or product page, as the writer flagged. The '54 mm dosing cup' is the main reason the post fits the Encore ESP to these machines, so it must hold up on the current page."
+  ],
+  "optionalImprovements": [
+    "Soften 'the 58 mm cradle will suit a bigger machine later' to 'will suit a 58 mm machine if that's your next step'. The post shouldn't assume the next machine is 58 mm.",
+    "'In the UK it's sold through UK retailers' reads oddly. Move the UK buying caveat into a market-variant note, or reword it as advice: 'UK buyers: buy from a UK retailer; Coffeeblog warns…'.",
+    "Seattle Coffee Gear's 2016 comparison is listed in the sources but no claim uses it. Either cite what it contributed or drop it from the list.",
+    "Consider a title that names both machines, since Pro owners are half the audience. Check the title against the 70-character limit with the longest market names."
+  ]
+}
