@@ -42,3 +42,8 @@ test('page title prefers the SEO title and drops the site name when it would not
   assert.equal(pageTitle({ title: 'Short title' }, 'YourCoffeeSetup'), 'Short title | YourCoffeeSetup');
   assert.equal(pageTitle({ title: 'A very long title that goes on', seoTitle: 'Fast shots on a Barista Express: what to check' }, 'YourCoffeeSetup'), 'Fast shots on a Barista Express: what to check');
 });
+
+test('guide links follow slug aliases', () => {
+  const s = { ...site, pages: new Set(['/en-gb/guides/new-slug/']), guideAliases: { 'old-slug': 'new-slug' } };
+  assert.equal(resolveTokens('See {{guide:old-slug|the guide}}.', { site: s, market: GB }), 'See [the guide](/en-gb/guides/new-slug/).');
+});

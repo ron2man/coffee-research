@@ -1,0 +1,6 @@
+{
+  "description": "Guide links whose slug changed: {{guide:<old>}} resolves to the new slug. Keys are slugs used in drafts, values are the real guide slugs.",
+  "aliases": {
+    "grinder-for-barista-express-and-pro": "standalone-grinder-for-barista-express-pro"
+  }
+}

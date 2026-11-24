@@ -7,6 +7,7 @@ import { join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { defaultNicheId, loadNiche, categoryIds } from '../../engine/state/niche.mjs';
 import { loadCardsSync } from '../../engine/state/knowledge.mjs';
+import { guideAliases } from '../../engine/state/content.mjs';
 import { categoryCounts, collectPosts, listed, loadTools } from './content.mjs';
 import { loadOffers, mockOffers } from './offers.mjs';
 
@@ -74,6 +75,7 @@ export function loadSiteData({ root = repoRoot, mode = siteMode(), now = Date.no
   const site = {
     name: niche.name, markets, cards, tools: loadTools(root), disclosure, categories,
     allCategories: niche.categories ?? [], mock: preview ? loadMock() : null, pages: new Set(),
+    guideAliases: guideAliases(root),
   };
   // Every path the build will produce, so the market switcher only links to pages that exist.
   for (const market of markets) {

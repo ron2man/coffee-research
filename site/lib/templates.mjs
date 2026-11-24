@@ -20,7 +20,7 @@ export function resolveTokens(text, { site, market, links = true }) {
     cards: site.cards,
     market,
     guideLink: (slug, label) => {
-      const path = postPath(market, slug);
+      const path = postPath(market, site.guideAliases?.[slug] ?? slug);
       return links && site.pages?.has(path) ? `[${label}](${path})` : label;
     },
   });
