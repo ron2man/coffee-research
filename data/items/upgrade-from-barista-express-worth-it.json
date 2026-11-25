@@ -3,14 +3,15 @@
   "id": "upgrade-from-barista-express-worth-it",
   "type": "new-post",
   "niche": "coffee",
-  "status": "idea_approved",
+  "status": "researched",
   "attempts": 0,
   "revisions": 0,
   "createdAt": "2026-11-23T15:58:57.539Z",
-  "updatedAt": "2026-11-23T18:02:49.762Z",
+  "updatedAt": "2026-11-25T13:35:45.325Z",
   "artifacts": {
     "idea": "data/ideas/upgrade-from-barista-express-worth-it.json",
-    "idea-judge": "data/idea-scores/upgrade-from-barista-express-worth-it.json"
+    "idea-judge": "data/idea-scores/upgrade-from-barista-express-worth-it.json",
+    "research": "data/research/upgrade-from-barista-express-worth-it.json"
   },
   "history": [
     {
@@ -26,6 +27,13 @@
       "to": "idea_approved",
       "by": "idea-judge",
       "reason": "Two recent verified OzBargain threads (Apr and Nov 2026) ask exactly this, and the replies converge on a rule (grinder first, dual boiler only for heavy milk use). It is a machine-level decision for a different reader than the grinder guide. The writer should link to the grinder guide rather than repeat it."
+    },
+    {
+      "at": "2026-11-25T13:35:45.325Z",
+      "from": "idea_approved",
+      "to": "researched",
+      "by": "research",
+      "reason": "The decision can be answered from supported claims. Manufacturer pages and booklets show four things. The Express uses a single thermocoil that has to heat for steam and purge afterwards. The Pro uses a ThermoJet that heats in 3 seconds. The Dual Boiler brews and steams at the same time and has no grinder, so leaving the Express means buying a grinder as well. The Oracle Jet automates grind, dose, tamp and milk on a ThermoJet, not a boiler, while the Oracle Dual Boiler adds dual boilers. The grinder-first path rests on Breville's own fast-shot troubleshooting and the earlier grinder research. Owner threads support the rule that a dual boiler is mainly for milk-drink volume and that the grinder should come first. No measured steaming times exist, so the post has to frame steaming waits as a symptom the owner recognises, not a number."
     }
   ]
 }
