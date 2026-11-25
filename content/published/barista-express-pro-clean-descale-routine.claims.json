@@ -1,0 +1,109 @@
+{
+  "slug": "barista-express-pro-clean-descale-routine",
+  "itemId": "barista-express-pro-clean-descale-routine",
+  "claims": [
+    {
+      "statement": "On the US Barista Express CLEAN / DESCALE light, flashing means a cleaning cycle is due and solid means descaling is due; the cleaning cycle is separate from descaling.",
+      "claimIds": [
+        "barista-express/clean-descale-light-us"
+      ]
+    },
+    {
+      "statement": "The UK Sage Barista Express CLEAN ME light only asks for the cleaning cycle, the machine will not prompt for descaling, and Sage recommends descaling every 90 days at hardness 4 and every 60 days at hardness 6, with the filter removed and no bottled water.",
+      "claimIds": [
+        "barista-express/clean-me-light-and-descale-interval-gb"
+      ]
+    },
+    {
+      "statement": "The Barista Pro LCD shows FLUSH for a cleaning cycle and DESCALE for descaling.",
+      "claimIds": [
+        "barista-pro/flush-alert-cleaning-cycle",
+        "barista-pro/descale-alert-procedure"
+      ]
+    },
+    {
+      "statement": "A new Barista Pro shows FLUSH for a first-use cycle that rinses the machine and primes the heater; press 1 CUP and it counts down to READY.",
+      "claimIds": [
+        "barista-pro/first-use-flush"
+      ]
+    },
+    {
+      "statement": "An owner read a solid light as a back-flush reminder for almost two years, commenters disagreed, and the light went off after running both a cleaning and a descale cycle; another said descaling revives weak steam.",
+      "claimIds": [
+        "barista-express/owner-solid-light-confusion"
+      ]
+    },
+    {
+      "statement": "Express cleaning cycle: 1 CUP basket, cleaning disc and one tablet, container under spouts, tank filled and tray emptied, machine off, hold 1 CUP, 2 CUP and POWER about 10 seconds; about 5 minutes, 2 beeps, repeat if the tablet hasn't dissolved.",
+      "claimIds": [
+        "barista-express/cleaning-cycle-procedure-us"
+      ]
+    },
+    {
+      "statement": "Pro cleaning cycle: disc and tablet in the basket, empty tray, tank to MAX, MENU, select FLUSH, press 1 CUP, repeat if tablet remains.",
+      "claimIds": [
+        "barista-pro/flush-alert-cleaning-cycle"
+      ]
+    },
+    {
+      "statement": "Express descale: one sachet in 1 L, hold 2-CUP then POWER, descale coffee, steam and hot water, repeat until empty, rinse with a full 2 L tank; never remove or empty the tank mid-cycle; auto-off after 5 minutes without input. The US booklet does not say to remove the filter.",
+      "claimIds": [
+        "barista-express/descale-procedure-us"
+      ]
+    },
+    {
+      "statement": "Pro descale: remove the filter, fill to the DESCALE line and add descaler, MENU, DESCALE, 1 CUP; 3 stages with the steam dial turned by hand, then a 3-stage rinse with the tank at MAX.",
+      "claimIds": [
+        "barista-pro/descale-alert-procedure"
+      ]
+    },
+    {
+      "statement": "Overdue descaling is listed as a cause of no water flow, espresso only dripping, no steam and (Express) coffee not hot enough; scale reduces flow, temperature, power and taste.",
+      "claimIds": [
+        "barista-express/descale-symptoms-us",
+        "barista-pro/descale-symptoms"
+      ]
+    },
+    {
+      "statement": "The Express shower-screen seal needs replacing over time using the included Allen key, fitted flat side first without overtightening; a worn seal causes espresso running around the portafilter edge and water leaking.",
+      "claimIds": [
+        "barista-express/shower-seal-replacement"
+      ]
+    },
+    {
+      "statement": "Grinder burr cleaning: empty and run the grinder, remove the top burr, brush both burrs and the chute to remove oil build-up; remove the lower burr only for a blockage; burrs are very sharp.",
+      "claimIds": [
+        "barista-express/burr-cleaning-cycle",
+        "barista-pro/burr-cleaning-cycle"
+      ]
+    },
+    {
+      "statement": "Daily care: wipe and purge the wand, rinse baskets and portafilter, wipe the group and shower screen, purge with an empty basket, empty the drip tray when the float or EMPTY ME! shows, soak blocked baskets in a dissolved tablet about 20 minutes, hand-wash only.",
+      "claimIds": [
+        "barista-express/daily-care-us",
+        "barista-pro/daily-care"
+      ]
+    },
+    {
+      "statement": "Water filter intervals: US booklets every 2 months, sooner in hard water; Sage every 3 months, UK Express also 40 L; remove the filter with filtered or bottled water.",
+      "claimIds": [
+        "barista-express/water-filter-interval-us",
+        "barista-pro/water-filter-interval-us",
+        "barista-pro/water-filter-interval-sage",
+        "barista-express/clean-me-light-and-descale-interval-gb"
+      ]
+    },
+    {
+      "statement": "Minerals build up even with the water filter in place.",
+      "claimIds": [
+        "barista-pro/filter-does-not-replace-descale"
+      ]
+    },
+    {
+      "statement": "The Pro booklet warns against alkaline cleaning agents and highly filtered, demineralised or distilled water.",
+      "claimIds": [
+        "barista-pro/cleaning-cautions"
+      ]
+    }
+  ]
+}
