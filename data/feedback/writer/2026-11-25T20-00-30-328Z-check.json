@@ -1,0 +1,18 @@
+{
+  "id": "2026-11-25T20-00-30-328Z-check",
+  "agent": "writer",
+  "source": "check",
+  "at": "2026-11-25T20:00:30.328Z",
+  "itemIds": [
+    "upgrade-from-barista-express-worth-it"
+  ],
+  "findings": [
+    {
+      "severity": "minor",
+      "problem": "upgrade-from-barista-express-worth-it: links to guide barista-express-pro-clean-descale-routine, which doesn't exist yet (rendered as plain text)",
+      "evidence": "deterministic check",
+      "suggestion": "Address in the prompt if it recurs."
+    }
+  ],
+  "addressedBy": null
+}

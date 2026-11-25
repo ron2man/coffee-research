@@ -3,17 +3,18 @@
   "id": "upgrade-from-barista-express-worth-it",
   "type": "new-post",
   "niche": "coffee",
-  "status": "briefed",
+  "status": "drafted",
   "attempts": 0,
   "revisions": 0,
   "createdAt": "2026-11-23T15:58:57.539Z",
-  "updatedAt": "2026-11-25T14:05:28.069Z",
+  "updatedAt": "2026-11-25T20:00:30.329Z",
   "artifacts": {
     "idea": "data/ideas/upgrade-from-barista-express-worth-it.json",
     "idea-judge": "data/idea-scores/upgrade-from-barista-express-worth-it.json",
     "research": "data/research/upgrade-from-barista-express-worth-it.json",
     "angle": "data/briefs/upgrade-from-barista-express-worth-it.json",
-    "toolsmith": "data/tools/upgrade-from-barista-express-worth-it.json"
+    "toolsmith": "data/tools/upgrade-from-barista-express-worth-it.json",
+    "writer": "content/drafts/upgrade-from-barista-express-worth-it.json"
   },
   "history": [
     {
@@ -43,6 +44,13 @@
       "to": "briefed",
       "by": "angle",
       "reason": "I found a distinct contribution. The top pages either list next machines by price (Complete Home Barista, Seattle Coffee Gear's Breville lineup guide) or compare two machines as if you were buying new (Coffee Chronicler, Seattle Coffee Gear 2013). None of them helps an owner work out whether their frustration comes from the grinder, the thermocoil's steaming workflow or the amount of hands-on work. None treats \"keep it\" as an answer, and none splits Express owners from Pro owners. The supported claims back a clear rule: grinder first, a dual boiler only for back-to-back milk drinks, an Oracle only if you want less work. Every step can be stated without measured numbers."
+    },
+    {
+      "at": "2026-11-25T20:00:30.329Z",
+      "from": "briefed",
+      "to": "drafted",
+      "by": "writer",
+      "reason": "I wrote the post from the brief's decision rule. It is built around the bottleneck picker, and it adds a five-step owner test, an Express vs Pro split, a \"which Oracle\" explanation, a descale check for older machines, the 54 mm vs 58 mm note and a keep-it path. The DF54 is the pick, followed by the Dual Boiler, Oracle Jet and Oracle Dual Boiler as alternatives. The reader's own machines are not offered. The guide for the built-in grinder's fast-shot problem (breville-builtin-grinder-wont-grind-fine-enough) isn't in existingContent, so I used the grind-fault-tree tool there, as the brief says to. I linked the clean and descale guide with a {{guide:}} link (barista-express-pro-clean-descale-routine). It passed review but isn't listed in existingContent yet, so it will show as plain text until it is published. The body has no inline links, prices, steaming times or claims about simultaneous brewing on the Pro or Jet. The Express heating details come from the US booklet, and the sources section says so."
     }
   ]
 }
