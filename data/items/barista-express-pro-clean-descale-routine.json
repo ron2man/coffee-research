@@ -3,18 +3,19 @@
   "id": "barista-express-pro-clean-descale-routine",
   "type": "new-post",
   "niche": "coffee",
-  "status": "drafted",
+  "status": "passed",
   "attempts": 0,
   "revisions": 0,
   "createdAt": "2026-11-23T15:58:57.541Z",
-  "updatedAt": "2026-11-25T04:57:51.294Z",
+  "updatedAt": "2026-11-25T08:42:56.544Z",
   "artifacts": {
     "idea": "data/ideas/barista-express-pro-clean-descale-routine.json",
     "idea-judge": "data/idea-scores/barista-express-pro-clean-descale-routine.json",
     "research": "data/research/barista-express-pro-clean-descale-routine.json",
     "angle": "data/briefs/barista-express-pro-clean-descale-routine.json",
     "toolsmith": "data/tools/barista-express-pro-clean-descale-routine.json",
-    "writer": "content/drafts/barista-express-pro-clean-descale-routine.json"
+    "writer": "content/drafts/barista-express-pro-clean-descale-routine.json",
+    "post-judge": "data/reviews/barista-express-pro-clean-descale-routine.json"
   },
   "history": [
     {
@@ -51,6 +52,13 @@
       "to": "drafted",
       "by": "writer",
       "reason": "This revision fixes the attempt-1 lint failure. The claims list now cites only supported claim IDs. The things the manuals don't say (no cleaning or descale interval, no documented light trigger or reset, no seal procedure for the Pro) are written once in the prose as unknowns and are not entered as claims. offerIds is empty because the answer is to keep the machine. The only purchases are consumables, and no knowledge cards exist yet for cleaning tablets, descaler, water filter cartridges or the Barista Express shower-screen seal. Research them, plus a possible guide such as 'barista-express-pro-cleaning-supplies', so the post can get offers later. One deviation from the brief: products are named with {{product:…}}, not {{model:…}}, because the model token resolves to a SKU and would read badly as a name. The grind-fault-tree tool is embedded where the brief asks the post to point readers to the grind troubleshooter."
+    },
+    {
+      "at": "2026-11-25T08:42:56.544Z",
+      "from": "drafted",
+      "to": "passed",
+      "by": "post-judge",
+      "reason": "The draft answers the reader's question in its first paragraph: the machine is fine, read your panel, and descale before calling a weak-steam or dripping-shot problem a fault. It then gives the one thing no top result has, a key for all three panels. That covers the US Express CLEAN / DESCALE light, the UK Express CLEAN ME light (which never asks for a descale) and the Pro LCD. It also maps \"broken\"-looking symptoms to manufacturer troubleshooting causes. It is honest about the missing intervals and the undocumented reset, the automated checks are clean, and the ending names the smallest purchase (consumables only). An owner with a light that won't go off would forward this."
     }
   ]
 }
