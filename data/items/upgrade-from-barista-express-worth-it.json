@@ -7,12 +7,13 @@
   "attempts": 0,
   "revisions": 0,
   "createdAt": "2026-11-23T15:58:57.539Z",
-  "updatedAt": "2026-11-25T13:59:14.516Z",
+  "updatedAt": "2026-11-25T14:05:28.069Z",
   "artifacts": {
     "idea": "data/ideas/upgrade-from-barista-express-worth-it.json",
     "idea-judge": "data/idea-scores/upgrade-from-barista-express-worth-it.json",
     "research": "data/research/upgrade-from-barista-express-worth-it.json",
-    "angle": "data/briefs/upgrade-from-barista-express-worth-it.json"
+    "angle": "data/briefs/upgrade-from-barista-express-worth-it.json",
+    "toolsmith": "data/tools/upgrade-from-barista-express-worth-it.json"
   },
   "history": [
     {
