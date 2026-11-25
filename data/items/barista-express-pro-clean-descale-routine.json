@@ -7,12 +7,13 @@
   "attempts": 0,
   "revisions": 0,
   "createdAt": "2026-11-23T15:58:57.541Z",
-  "updatedAt": "2026-11-24T20:11:21.367Z",
+  "updatedAt": "2026-11-25T04:43:20.152Z",
   "artifacts": {
     "idea": "data/ideas/barista-express-pro-clean-descale-routine.json",
     "idea-judge": "data/idea-scores/barista-express-pro-clean-descale-routine.json",
     "research": "data/research/barista-express-pro-clean-descale-routine.json",
-    "angle": "data/briefs/barista-express-pro-clean-descale-routine.json"
+    "angle": "data/briefs/barista-express-pro-clean-descale-routine.json",
+    "toolsmith": "data/tools/barista-express-pro-clean-descale-routine.json"
   },
   "history": [
     {
