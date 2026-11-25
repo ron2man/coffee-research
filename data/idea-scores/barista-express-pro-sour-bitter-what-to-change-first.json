@@ -1,0 +1,28 @@
+{
+  "scores": {
+    "demandEvidence": {
+      "score": 4,
+      "reason": "I opened the OzBargain 916284 thread (July 2025) and the Lemmy post. Both are Barista Express owners with fast sour or bitter shots, but they come from small forums."
+    },
+    "competitorGap": {
+      "score": 3,
+      "reason": "Clive, Seattle Coffee Gear and Beanbox are generic. A Fluent in Coffee problem list and home-barista threads only partly cover the Express traps."
+    },
+    "valueAddWithoutExperience": {
+      "score": 4,
+      "reason": "An ordered decision tree from taste, time and gauge reading can be built from the manual and owner reports without testing."
+    },
+    "evidenceFeasibility": {
+      "score": 4,
+      "reason": "The Breville manuals document the inner burr, the basket types and the program and temperature modes, and owner fixes agree."
+    },
+    "commercialFit": {
+      "score": 3,
+      "reason": "The honest answer is mostly to buy nothing, with a scale as a possible purchase and a grinder only once the inner burr has run out."
+    },
+    "overlap": {
+      "score": 3,
+      "reason": "It partly overlaps the grind-fault-tree and standalone-grinder tools, but its taste-first diagnosis is a separate entry point."
+    }
+  }
+}
