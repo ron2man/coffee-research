@@ -4,10 +4,10 @@
   "type": "new-post",
   "niche": "coffee",
   "status": "briefed",
-  "attempts": 0,
+  "attempts": 1,
   "revisions": 0,
   "createdAt": "2026-11-23T15:58:57.541Z",
-  "updatedAt": "2026-11-25T04:43:20.152Z",
+  "updatedAt": "2026-11-25T04:49:09.286Z",
   "artifacts": {
     "idea": "data/ideas/barista-express-pro-clean-descale-routine.json",
     "idea-judge": "data/idea-scores/barista-express-pro-clean-descale-routine.json",
@@ -44,5 +44,6 @@
       "by": "angle",
       "reason": "There is a real contribution to make. Each top page gets part of the answer, and some get it wrong. Breville's tutorials are video-only and their FAQ about the light has no answers. Appliances Online says the light only means descale. A retailer blog contradicts the manual. The owner thread argues with itself. None of them handles the three panels an owner can actually have: the US Express CLEAN / DESCALE light, the UK Sage CLEAN ME light (which never asks for a descale), and the Pro LCD with FLUSH and DESCALE. None of them maps the 'it's broken' symptoms to overdue descaling. The research supports one rule per panel, plus a symptom diagnosis taken from the manufacturer troubleshooting tables. No purchase is needed."
     }
-  ]
+  ],
+  "lastError": "quality checks failed: barista-express-pro-clean-descale-routine \"The manuals give no trigger or reset for the light and no sh\": claim barista-express/light-trigger-and-reset is unknown, not supported; barista-express-pro-clean-descale-routine \"The manuals give no trigger or reset for the light and no sh\": claim barista-express/maintenance-interval-not-stated is unknown, not supported; barista-express-pro-clean-descale-routine \"The manuals give no trigger or reset for the light and no sh\": claim barista-pro/maintenance-interval-not-stated is unknown, not supported; barista-express-pro-clean-descale-routine \"The Pro booklets have no seal procedure and don't list the s\": claim barista-pro/shower-seal-not-documented is unknown, not supported"
 }
