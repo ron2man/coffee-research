@@ -1,0 +1,124 @@
+{
+  "id": "2026-11-26T16-01-22-757Z-critic",
+  "agent": "idea",
+  "source": "critic",
+  "at": "2026-11-26T16:01:22.757Z",
+  "itemIds": [
+    "uk-nespresso-to-beans-bean-to-cup-or-espresso-machine",
+    "uk-coffee-machine-gift-for-partner-non-coffee-drinker",
+    "standalone-grinder-for-barista-express-pro",
+    "upgrade-from-barista-express-worth-it",
+    "barista-express-pro-clean-descale-routine",
+    "barista-express-pro-steam-wand-microfoam",
+    "barista-express-pro-sour-bitter-what-to-change-first"
+  ],
+  "findings": [
+    {
+      "severity": "major",
+      "itemIds": [
+        "barista-express-pro-steam-wand-microfoam"
+      ],
+      "problem": "One of the two signals is a reply in a thread about something else, so the card really has one asking signal. The note reads as if a Barista Pro owner raised steaming as their problem. In fact the thread is a Sunbeam owner asking whether to buy a grinder or a new machine.",
+      "evidence": "I opened https://www.ozbargain.com.au/node/967390. It is titled 'Coffee Machine or Coffee Grinder- Coffee Lovers Help', and the original poster owns a Sunbeam and later bought an Encore ESP. Commenter Excelsior adds as an aside: 'Learn how to steam your milk just right; this was the steepest learning curve for me'. Nobody in the thread asks about watery milk or a spitting wand.",
+      "suggestion": "Count a reply as a signal only when the reply itself describes the card's problem in some detail, and then say 'a reply in a thread about X' in the note. With one real asking signal, either find a second one or mark the card `unmeasured`. This thread fits the grinder-or-machine (upgrade) question better."
+    },
+    {
+      "severity": "major",
+      "itemIds": [
+        "barista-express-pro-clean-descale-routine"
+      ],
+      "problem": "The second signal comes from a would-be buyer asking whether the machine is worth buying. It is not an owner confused by cleaning. The maintenance point is one commenter's general remark.",
+      "evidence": "I opened https://www.ozbargain.com.au/node/887057, 'Barista Coffee Machine - Need Advice'. The poster is a barista-course graduate deciding whether to buy. mjwills says buyers 'don't run the clean cycles often enough'. UltimateAI's 'long daily cleaning routine' is really a per-cup workflow (warm-up shot, WDT, a rinse). It is not a maintenance schedule.",
+      "suggestion": "Paraphrase what the thread is about first, then the part that supports the card. Don't count a thread as demand for question X when its poster is asking question Y."
+    },
+    {
+      "severity": "major",
+      "itemIds": [
+        "uk-nespresso-to-beans-bean-to-cup-or-espresso-machine",
+        "uk-coffee-machine-gift-for-partner-non-coffee-drinker",
+        "standalone-grinder-for-barista-express-pro",
+        "upgrade-from-barista-express-worth-it",
+        "barista-express-pro-clean-descale-routine",
+        "barista-express-pro-steam-wand-microfoam"
+      ],
+      "problem": "Six of the seven cards take every signal from one site (Mumsnet or OzBargain). The OzBargain cards are mostly deal-thread comment sections. This is a pattern, not a one-off slip, so the deterministic single-site warnings are valid and should stay open. The runs show why: reddit.com and old.reddit.com are blocked for both WebFetch and WebSearch, and Home-Barista and Slickdeals return 403. The prompt keeps sending the agent there, so each run spends 14 to 17 failed fetches on them.",
+      "evidence": "In recentRuns, 'Claude Code is unable to fetch from old.reddit.com', 'API Error: 400 ... not accessible to our user agent: [reddit.com]', and every home-barista.com URL returned 403. Of the seven cards, only barista-express-pro-sour-bitter-what-to-change-first uses more than one site (Lemmy, OzBargain, CoffeeForums.com).",
+      "suggestion": "Use the Reddit posts in `demandSignals` (fetched by the scheduler) as the Reddit source, and stop trying reddit.com or Home-Barista directly. Aim for signals from at least two sites per card, and say in the note when only one site could be reached."
+    },
+    {
+      "severity": "minor",
+      "itemIds": [
+        "uk-nespresso-to-beans-bean-to-cup-or-espresso-machine"
+      ],
+      "problem": "One signal's poster is in a different situation from the card's audience. The card is about long-time Nespresso owners leaving pods. This poster is on a tight budget, has never owned a Nespresso and asks whether to buy one. The replies that support the card are side remarks.",
+      "evidence": "I opened https://www.mumsnet.com/talk/_chat/5390852-nespresso-machine-worth-it. Leedssdeel asks whether a Nespresso is worth buying as a treat and whether Tesco sells pods. Replies say pods are expensive, and one says 'I have a bean to cup machine but never use it'. The quotes are accurate; the fit is loose.",
+      "suggestion": "When the poster's situation differs from `audience`, say so in the note ('a would-be pod buyer; replies discuss...'), and don't count the thread toward the two-signal minimum unless a reply states the card's problem directly."
+    },
+    {
+      "severity": "minor",
+      "itemIds": [
+        "uk-nespresso-to-beans-bean-to-cup-or-espresso-machine",
+        "uk-coffee-machine-gift-for-partner-non-coffee-drinker",
+        "upgrade-from-barista-express-worth-it"
+      ],
+      "problem": "Some `competitorGap` claims seem to rest on search results, not pages the agent opened. 'Found in search' and 'coffeenerd upgrade pages' give no sign that those guides were read. That weakens the gap the judge is scoring.",
+      "evidence": "Phrasing such as 'Retailer \"upgrading from Nespresso\" guides found in search (Clive Coffee, Complete Home Barista)', 'Gift guides found in search (... Which? and T3 ...)' and 'coffeenerd upgrade pages'.",
+      "suggestion": "Open at least one or two of the top competing pages before describing what they leave out, name them exactly, and say when a page could only be seen as a snippet."
+    },
+    {
+      "severity": "minor",
+      "itemIds": [
+        "standalone-grinder-for-barista-express-pro",
+        "upgrade-from-barista-express-worth-it",
+        "barista-express-pro-sour-bitter-what-to-change-first"
+      ],
+      "problem": "Three cards share the same core decision, 'is the grinder the bottleneck, and should I add one?', and the overlap isn't fully declared. The upgrade card, created in the same run as the standalone-grinder card, lists only the built-in-grinder item in `overlapsWith`.",
+      "evidence": "upgrade-from-barista-express-worth-it: \"Keep the machine and upgrade the grinder ...\"; its overlapsWith is [\"breville-builtin-grinder-wont-grind-fine-enough\"] and doesn't include standalone-grinder-for-barista-express-pro.",
+      "suggestion": "Check the cards from the same run against each other as well as `existing`, list sibling ids in `overlapsWith`, and state in `decision` how each card's reader differs."
+    },
+    {
+      "severity": "minor",
+      "itemIds": [
+        "uk-nespresso-to-beans-bean-to-cup-or-espresso-machine",
+        "uk-coffee-machine-gift-for-partner-non-coffee-drinker",
+        "standalone-grinder-for-barista-express-pro",
+        "upgrade-from-barista-express-worth-it",
+        "barista-express-pro-clean-descale-routine",
+        "barista-express-pro-steam-wand-microfoam",
+        "barista-express-pro-sour-bitter-what-to-change-first"
+      ],
+      "problem": "Every card in the batch carries a `seedId`. The agent seems to answer seeds and nothing else, although the prompt says seeds don't count toward the run and it should still look for other ideas. The 2026-11-25 run produced one card from 21 searches, all of them seed-driven.",
+      "evidence": "All 7 artifacts have seedId set. The 2026-11-25 searches all target Barista Express seed topics: sour shots, grinder jams, accessories.",
+      "suggestion": "Each run, spend part of the search budget on unseeded problems in the focus cluster and report them, even when the seeds use most of the run."
+    },
+    {
+      "severity": "minor",
+      "itemIds": [
+        "barista-express-pro-sour-bitter-what-to-change-first"
+      ],
+      "problem": "Close this open check warning: the old signal is handled correctly. The 2024-01-06 CoffeeForums signal is marked 'Older:', and the card has three other signals within 24 months (2024-12-10, 2025-05-30, 2025-07-20) from three different sites. The earlier critic findings on single-signal 'qualitative' cards, reused URLs and unmarked old threads have also been addressed in this batch.",
+      "evidence": "The note begins \"Older: Barista Express owner at grind 8 ...\". No URL appears on more than one card in the batch, and every card has two or more signals.",
+      "suggestion": "No change needed. The tuner can close 2026-11-25T20-08-27-715Z-check and the reuse/age findings from 2026-11-21."
+    }
+  ],
+  "addressedBy": null,
+  "summary": "Better than the last batch. Every card now has at least two signals, no URL appears on two cards, the older thread is marked, and the questions stay specific and decision-led with honest keep-yours paths. The remaining weakness is how strong the signals are. Several \"signals\" are side remarks in threads about something else, not people asking the card's question, and almost every card rests on a single site. The most important fix is to count a signal only when its poster asks the card's question or describes the problem as their own.",
+  "keep": [
+    "Questions are in the owner's voice, about one named machine and one concrete decision. 'Keep it / change nothing / keep your pods' is a real outcome in each `decision` or `valueAdd`.",
+    "`valueAdd` is always a diagnosis order, decision rule or quiz that needs no hands-on testing.",
+    "`commercialPath` stays modest: tablets, a jug, a 0.1 g scale, and a grinder 'only after the inner adjustment has run out'.",
+    "Older signals are labelled 'Older:', and the two-signal and no-reuse rules are now followed.",
+    "Breville/Sage naming and cross-market phrasing follow the niche guidance, and `audience` says where the evidence came from (OzBargain, Mumsnet).",
+    "Overlap with existing items is declared and explained (the built-in grinder diagnosis, Bambino Plus cleaning)."
+  ],
+  "promptChanges": [
+    "Add to Evidence rules: 'A signal counts only if its original poster asks this card's question or describes this problem as their own. A reply in a thread about something else may be supporting evidence: say \"reply in a thread about X\" in the note, and don't count it toward the two-signal minimum.'",
+    "Add: 'Each note starts with what the thread is about (who is posting and what they ask), then the part that supports the card.'",
+    "Add: 'Aim for signals from at least two different sites per card. If every signal comes from one site, say so in `audience` or the last note, with the sites you tried and couldn't reach.'",
+    "Add to Overlap: 'Check cards from this run against each other as well as `existing`, and list sibling ids in `overlapsWith` when they share a decision.'",
+    "Add to the Field guide for `competitorGap`: 'Name only pages you opened. If a competing page was seen only as a search snippet, say so.'",
+    "Add to Seeds: 'Seeds don't replace the normal search. Spend part of each run on unseeded problems in `niche.focus`.'",
+    "[niche] Replace the Reddit and Home-Barista advice: 'reddit.com, old.reddit.com, Reddit mirrors and home-barista.com can't be fetched or searched by this agent. Use the Reddit posts in `demandSignals` instead, and don't spend fetches on those domains. Sites that have loaded: ozbargain.com.au threads, mumsnet.com, coffeeforums.com, lemmy instances. Slickdeals, JustAnswer and boards.ie return 403.'",
+    "[niche] Add: 'Mumsnet is a good source for UK first-machine and gift buyers. For an owner's technical problem, prefer an enthusiast forum (Coffee Forums UK at www.coffeeforums.co.uk, not the tollbit. subdomain) or the Reddit posts in `demandSignals`. OzBargain deal-thread comments are fine, but quote the person who has the problem.'"
+  ]
+}
