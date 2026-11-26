@@ -3,11 +3,11 @@
   "id": "barista-express-pro-sour-bitter-what-to-change-first",
   "type": "new-post",
   "niche": "coffee",
-  "status": "idea_approved",
-  "attempts": 1,
+  "status": "blocked",
+  "attempts": 2,
   "revisions": 0,
   "createdAt": "2026-11-25T20:08:27.717Z",
-  "updatedAt": "2026-11-25T20:57:12.580Z",
+  "updatedAt": "2026-11-26T07:15:59.675Z",
   "artifacts": {
     "idea": "data/ideas/barista-express-pro-sour-bitter-what-to-change-first.json",
     "idea-judge": "data/idea-scores/barista-express-pro-sour-bitter-what-to-change-first.json"
@@ -26,7 +26,16 @@
       "to": "idea_approved",
       "by": "idea-judge",
       "reason": "This is in the focus cluster and the signals check out. Top results are generic sour/bitter guides. The writer should link the grind-fault-tree tool and not rebuild it."
+    },
+    {
+      "at": "2026-11-26T07:15:59.675Z",
+      "from": "idea_approved",
+      "to": "blocked",
+      "by": "scheduler",
+      "reason": "research failed 2 times: claude -p timed out after 30 minutes"
     }
   ],
-  "lastError": "claude -p timed out after 30 minutes"
+  "lastError": "claude -p timed out after 30 minutes",
+  "resumeStatus": "idea_approved",
+  "blockedReason": "research failed 2 times: claude -p timed out after 30 minutes"
 }
