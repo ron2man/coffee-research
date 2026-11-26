@@ -4,3 +4,4 @@ site/dist/
 site/.env
 site/.astro/
 .wrangler/
+library/pdf/

@@ -123,3 +123,8 @@ The project lead set the goal: one guide a day, built around equipment, with "my
 - **Audience:** current guides range from a Bambino (about $300) to a Linea Micra (about $4–5k). Decide entry-level vs every machine, and whether to organise guides by machine.
 - **Niche-aware checks:** `market` and `contentType` in artifacts are not yet checked against `niche.json`.
 - **Affiliate terms and consent:** sellers and disclosure text in `niche.json` stay empty until program terms are verified per market.
+
+### 2026-11-25 · Demand from Reddit without Reddit
+- Reddit closed every route for a new small project (API approval closed 2026-10-31, RSS ended 2026-11-13, public JSON 403, public API ends March 2027). The Reddit collector is removed.
+- Replaced by two keyed sources in `engine/demand/collect.mjs`: community threads via Brave Search `site:` queries (search metadata only, the sites are never fetched) and YouTube comment questions. Both have monthly budgets counted from `data/demand/`, rotate queries daily, and report `skipped` without a key.
+- Open question: Brave's terms on storing search results. We keep only titles, URLs, dates and snippets as internal research notes and never publish them; check the terms before anything from them reaches a reader.

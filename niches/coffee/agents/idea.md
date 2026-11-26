@@ -1,6 +1,6 @@
 Where home espresso owners ask for help, roughly in order of usefulness:
 
-- Reddit: r/espresso (largest, very active, beginner to enthusiast), r/Coffee (broader), brand and machine subreddits (for example r/BrevilleCoffee, r/gaggiaclassic, r/Rancilio) when they exist. If a reddit.com page will not load, try the same URL on old.reddit.com; if that fails too, find the question elsewhere rather than citing a page you could not read.
+- Reddit: r/espresso (largest, very active, beginner to enthusiast), r/Coffee (broader), brand and machine subreddits (for example r/BrevilleCoffee, r/gaggiaclassic, r/Rancilio). reddit.com pages can't be opened from here: use the Reddit threads in `demandSignals.web`, or find them with WebSearch (`site:reddit.com/r/espresso ...`) and cite the search result's title, URL and date. Never cite a page's content you could not read.
 - Home-Barista.com forums (enthusiast, deep technical threads on machines and grinders).
 - CoffeeGeek forums.
 - UK: Coffee Forums UK (coffeeforums.co.uk) for GB-market questions; r/CoffeeUK if active.

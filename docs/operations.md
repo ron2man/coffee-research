@@ -77,25 +77,31 @@ The target is one guide a day: about 6 agent runs per guide (research, angle, to
 - **Daily budget:** a tick doesn't start an agent once 12 agent runs happened in the last 24 hours (each is about 8% of a usage window). Change it with `TICK_MAX_RUNS_PER_DAY` in `~/.config/yourcoffeesetup/env`.
 - The critic and tuner run only when the pipeline has nothing else to do; the idea agent runs when fewer than 4 ideas are waiting (seeds bring it forward).
 
-## Demand data (Reddit, autocomplete)
+## Demand data (autocomplete, community search, YouTube)
 
-Before the idea agent runs, the scheduler collects demand data without AI: search-autocomplete suggestions per market for the focus products and your English seeds, and posts from the niche's subreddits (`niche.json` `demand`). It's saved in `data/demand/` and given to the idea agent.
+Before the idea agent runs, the scheduler collects demand data without AI and saves it in `data/demand/` (`niche.json` `demand`):
 
-Reddit is the hard one. Since November 2025 Reddit's Data API needs a manual approval under its Responsible Builder Policy (self-service app keys were closed), and since May 2026 its public JSON returns 403, which is what our runs see. The route that respects Reddit's rules:
+- **Search autocomplete** per market for the focus products and your English seeds. No key.
+- **Community threads through web search** (`demand.webSearch.sites`: r/espresso, r/Coffee, Home-Barista, CoffeeGeek, Coffee Forums UK). A search API (Brave Search) is asked `<query> site:<site>`; we keep the result's title, URL, date and snippet and never open the site itself. Queries rotate daily across product × site pairs, at most `maxQueries` per run and `monthlyMax` per month (counted from earlier `data/demand/` files). Brave charges about $5 per 1,000 searches and gives $5 of credit a month (a card is required), so the default 900 a month stays inside the credit.
+- **YouTube**: videos for the focus products and the question-like comments under them (YouTube Data API, free quota of 10,000 units a day; one run uses about 300).
 
-1. Read the Responsible Builder Policy (Reddit Help Center) and file a Data API access request through Reddit's developer support form: a small, non-commercial-scale research use (reading public posts in r/espresso and r/Coffee to find common owner questions; low volume; no redistribution of content; links back to threads).
-2. If approved, create a "script" app at https://www.reddit.com/prefs/apps (redirect URI `http://localhost`) and put its ID and secret in `~/.config/yourcoffeesetup/env` on the scheduler's Mac (never in the repo):
+Reddit itself is closed to us: its Data API needs approval and stopped taking new requests on 2026-10-31, the public JSON returns 403, RSS ended on 2026-11-13, and the remaining public API ends in March 2027. Search results that point at Reddit threads are the route that's left, plus your own seeds from the dashboard.
+
+Keys live on the scheduler's Mac, never in the repo:
 
 ```sh
 mkdir -p ~/.config/yourcoffeesetup
 cat >> ~/.config/yourcoffeesetup/env <<'END'
-REDDIT_CLIENT_ID=...
-REDDIT_CLIENT_SECRET=...
+BRAVE_SEARCH_API_KEY=...
+YOUTUBE_API_KEY=...
 END
 chmod 600 ~/.config/yourcoffeesetup/env
 ```
 
-Approval is uncertain and small projects are often refused. Until then the scheduler records Reddit as blocked (`sources` in `data/demand/*.json`, and the run traces in the dashboard), and the other sources carry the load.
+- Brave: sign up at https://api-dashboard.search.brave.com, pick the Search plan, create a key. Set a spending limit of $5 in the dashboard so it can't bill beyond the free credit.
+- YouTube: in Google Cloud Console create a project, enable "YouTube Data API v3", create an API key and restrict it to that API.
+
+A missing key isn't an error: the source shows as `skipped` in `sources`, and the other sources carry the load.
 
 ## Costs
 

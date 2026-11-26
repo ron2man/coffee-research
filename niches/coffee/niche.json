@@ -64,10 +64,6 @@
     ]
   },
   "demand": {
-    "subreddits": [
-      "espresso",
-      "Coffee"
-    ],
     "querySuffixes": [
       "",
       " problems",
@@ -77,7 +73,23 @@
       " not working",
       " vs"
     ],
-    "maxQueries": 24
+    "maxQueries": 24,
+    "webSearch": {
+      "sites": [
+        "reddit.com/r/espresso",
+        "reddit.com/r/Coffee",
+        "home-barista.com",
+        "coffeegeek.com",
+        "coffeeforums.co.uk"
+      ],
+      "maxQueries": 8,
+      "monthlyMax": 900
+    },
+    "youtube": {
+      "maxSearches": 3,
+      "videosPerSearch": 3,
+      "commentsPerVideo": 50
+    }
   },
   "publishing": {
     "autoMerge": true,

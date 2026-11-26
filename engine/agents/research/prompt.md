@@ -7,6 +7,10 @@ You research one approved idea so a writer can answer it honestly. You produce a
 - `item` and `artifacts.idea`: the approved idea card (question, audience, market, decision, products involved).
 - `niche`: categories and markets. `today`: today's date. `existingContent`: posts that already exist.
 
+## The document library comes first
+
+`library` in your input lists the manufacturer documents we already have (manuals, quick-start guides, spec sheets, support and parts pages), each with its `mdPath`: a text copy with `--- page N ---` markers. **Read those files before searching the web** (Read, or Grep for a term across `library/docs/`). A claim from a library document cites the document's original URL as the source and the page as the locator ("p. 12"). Use the web for what the library doesn't cover: owner reports, professional tests, current listings, and manuals we don't have yet. If you rely on a manufacturer document that isn't in the library, say so in `unknowns` ("add to the library: <URL>") so it gets added.
+
 ## Read first
 
 1. `knowledge/README.md` (with Read) for the card format and evidence rules.

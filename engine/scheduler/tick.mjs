@@ -22,9 +22,10 @@ import { runChecks } from '../feedback/checks.mjs';
 import { addFeedback, openFeedback, readReviewState } from '../feedback/store.mjs';
 import { applyAssist, assistCandidates, buildAssistInput, checkAssistArtifact } from './assist.mjs';
 import { listTools } from '../state/tools.mjs';
+import { libraryCatalog } from '../library/library.mjs';
 import { processPublishQueue, syncPublished } from '../publish/publish.mjs';
 import { autoPullRequests } from '../publish/autopr.mjs';
-import { collectDemand } from '../demand/collect.mjs';
+import { collectDemand, demandUsage } from '../demand/collect.mjs';
 import { applyReview, applyTune, buildReviewInput, buildTuneInput, checkTuneArtifact, reviewCandidates, tuneCandidates } from '../feedback/loop.mjs';
 import { newItem, transition } from '../state/machine.mjs';
 import { defaultNicheId, loadNiche, repoRoot } from '../state/niche.mjs';
@@ -181,7 +182,8 @@ function buildInput(root, niche, agent, chosenItems, allItems) {
   const existingContent = contentIndex(root);
   const wanted = wantedGuides(root);
   const availableTools = listTools(root).map(({ id, title }) => ({ id, title }));
-  return agent.mode === 'batch' ? { niche, today, existingContent, wantedGuides: wanted, availableTools, items: entries } : { niche, today, existingContent, wantedGuides: wanted, availableTools, ...entries[0] };
+  const library = libraryCatalog(root);
+  return agent.mode === 'batch' ? { niche, today, existingContent, wantedGuides: wanted, availableTools, library, items: entries } : { niche, today, existingContent, wantedGuides: wanted, availableTools, library, ...entries[0] };
 }
 
 function validateArtifact(agent, artifact, label) {
@@ -421,12 +423,12 @@ export async function tick({ root = repoRoot, runner, now = new Date(), nicheId,
     return { ran: null, skipped: [{ agent: agent.name, reason: `daily budget: ${recent.size} agent runs in the last 24h (max ${maxRunsPerDay})` }], changedFiles: written };
   }
 
-  // Demand data for the idea agent, collected without AI (autocomplete, Reddit). Real runs only.
+  // Demand data for the idea agent, collected without AI (autocomplete, community search, YouTube). Real runs only.
   const collector = demandCollector === undefined ? (runner ? null : collectDemand) : demandCollector;
   let demandSignals = null;
   if (agent.acceptsSeeds && collector) {
     const { cards } = loadCardsSync(join(root, 'knowledge'), categoryIds(niche));
-    demandSignals = await collector(niche, { cards, seeds: openSeeds(root) });
+    demandSignals = await collector(niche, { cards, seeds: openSeeds(root), usage: demandUsage(root) });
     const path = `data/demand/${new Date().toISOString().replace(/[:.]/g, '-')}.json`;
     writeJsonAtomic(join(root, path), demandSignals);
     written.push(path);
