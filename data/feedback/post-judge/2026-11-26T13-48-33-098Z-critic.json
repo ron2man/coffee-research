@@ -1,0 +1,100 @@
+{
+  "id": "2026-11-26T13-48-33-098Z-critic",
+  "agent": "post-judge",
+  "source": "critic",
+  "at": "2026-11-26T13:48:33.098Z",
+  "itemIds": [
+    "breville-builtin-grinder-wont-grind-fine-enough",
+    "standalone-grinder-for-barista-express-pro",
+    "barista-express-pro-clean-descale-routine",
+    "upgrade-from-barista-express-worth-it"
+  ],
+  "findings": [
+    {
+      "severity": "major",
+      "problem": "The competitor comparison is not based on pages opened in the run. Three runs made 0 fetches, yet they returned detailed claims about what each competitor says. One of those runs judged a new item (upgrade-from-barista-express-worth-it) whose three competitors had never been reviewed before.",
+      "evidence": "recentRuns 2026-11-25T20:01 (the upgrade item): searches 1, fetches 0. Its competitorComparison still says SCG and Sur La Table 'profile each machine for a new buyer' and that Arielle is 'a ranked list of Australian machines'. The runs at 2026-11-24T18:12 and 2026-11-23T12:00 also show 0 fetches.",
+      "suggestion": "Before filling competitorComparison, open each of the top 3 results in the current run. If a page can't be fetched, either replace it with the next result or mark the row 'not opened'. Never describe a page's content from the search snippet or from an earlier review.",
+      "itemIds": [
+        "upgrade-from-barista-express-worth-it",
+        "standalone-grinder-for-barista-express-pro",
+        "breville-builtin-grinder-wont-grind-fine-enough"
+      ]
+    },
+    {
+      "severity": "major",
+      "problem": "A competitor that returns a 404 is described as if it had been read, and the post's main advantage is argued against it.",
+      "evidence": "recentRuns 2026-11-25T08:42 shows the WebFetch of baristalife.co/blogs/blog/breville-barista-express-lights-meaning failing with HTTP 404, and my own fetch also returned 404. The output still says 'Barista Life gives flashing vs solid for the US Express only' and lists the page as a competitorComparison row.",
+      "suggestion": "Treat a failed fetch as 'unknown content'. Drop the URL and open the next search result, so the readerValueVsCompetitors score rests on three pages that were actually read.",
+      "itemIds": [
+        "barista-express-pro-clean-descale-routine"
+      ]
+    },
+    {
+      "severity": "major",
+      "problem": "Scores and reasons are copied unchanged across revisions, so the judge isn't judging the current draft. For breville-builtin all four reviews have identical score reasons, competitor rows and optionalImprovements, even though the title, the ending and offerIds changed between drafts. The optional note about an unbuilt troubleshooter tool stays the same after the reason says 'grind-fault-tree now exists'.",
+      "evidence": "breville-builtin-grinder-wont-grind-fine-enough: the readerValueVsCompetitors.reason is the same in the 11-22T14:07, 11-22T15:35, 11-23T10:56 and 11-23T12:00 outputs. The standalone-grinder second pass also repeats the first pass's optional item 'confirm the Encore ESP dosing-cup size', although its reason says that sentence no longer carries the fit.",
+      "suggestion": "Re-read the body on every run. Write new score reasons that quote the current draft. Drop optionalImprovements that the revision already handled.",
+      "itemIds": [
+        "breville-builtin-grinder-wont-grind-fine-enough",
+        "standalone-grinder-for-barista-express-pro"
+      ]
+    },
+    {
+      "severity": "major",
+      "problem": "A revise outcome was returned with an empty blockingActions list. The reason itself names blocking automated title failures, and the instructions require them to appear in blockingActions. The writer gets no concrete action to fix.",
+      "evidence": "The 2026-11-23T10:56 output moved to 'briefed' and its reason says 'the automated title checks are blocking… 128 characters (the limit is 70), and there is no seoTitle', but artifact.blockingActions is [].",
+      "suggestion": "When the outcome is revise, blockingActions must be non-empty. Copy every automatedChecks.blocking entry into it as a concrete instruction, for example 'Shorten the title to ≤70 characters with the longest market names; add a seoTitle ≤60'.",
+      "itemIds": [
+        "breville-builtin-grinder-wont-grind-fine-enough"
+      ]
+    },
+    {
+      "severity": "major",
+      "problem": "Posts pass even though the ending sends the reader to a guide that doesn't exist. The instructions' 'complete ending' rule says the reader must know what to do next. The judge files the missing guide under 'optional, before publishing' every time, and with the 24-hour auto-merge, posts can ship with dead promises.",
+      "evidence": "In all three breville-builtin passes, the optional item reads 'publish the grinder-for-barista-express-and-pro guide, or both guide references render as plain text and the ending promises a guide the reader can't open'. The upgrade post has the same issue with the descale guide.",
+      "suggestion": "If the ending's next step depends on a {{guide:}} or {{tool}} that isn't published or present in content/tools, make it a blocking action. Either rewrite the ending so it stands alone, or note in the reason that the post needs a human `hold` until that guide ships.",
+      "itemIds": [
+        "breville-builtin-grinder-wont-grind-fine-enough",
+        "upgrade-from-barista-express-worth-it"
+      ]
+    },
+    {
+      "severity": "minor",
+      "problem": "The scores barely discriminate. Every output scores 5/4-5/5/4/5, so the rubric isn't separating strong drafts from adequate ones. Issues the judge finds itself, such as 'two unsupported generalisations, a wrong season', are mentioned in the reason but never listed or reflected in a score.",
+      "evidence": "The first breville-builtin reason names 'two unsupported generalisations, a wrong season', but the optionalImprovements don't name them and evidenceIntegrity stays at 4 with a reason that says 'Every factual statement maps to a claim ID'.",
+      "suggestion": "Every issue named in the reason must appear as either a blocking action or an optional improvement, quoting the sentence. An unsupported factual statement should lower evidenceIntegrity, and the score reason should name it.",
+      "itemIds": [
+        "breville-builtin-grinder-wont-grind-fine-enough"
+      ]
+    },
+    {
+      "severity": "minor",
+      "problem": "Market-specific wording gets only an optional note, although the instructions make advice tied to one market a blocking action.",
+      "evidence": "In the clean-descale post the optional item reads 'Replace \"the Sage guide\" with \"the UK guide\" in the prose so US readers don't meet an unfamiliar brand name'. In the upgrade post, temperature appears only in °F ('Give the temperature adjustment in °C as well').",
+      "suggestion": "A market brand name in the prose, or units for one market only, is blocking when it affects what the reader does. Use optional only when the mention is incidental.",
+      "itemIds": [
+        "barista-express-pro-clean-descale-routine",
+        "upgrade-from-barista-express-worth-it"
+      ]
+    }
+  ],
+  "addressedBy": null,
+  "summary": "The judge's verdicts look sensible, and its competitor framing is often sharp. The SCG burr-direction and Balance Journal claims both checked out. But in this batch the comparison and the scores are mostly not re-done on each run. Score reasons and competitor rows are copied word for word across revisions. Three of the five recorded runs opened no competitor page at all. One competitor that is described in detail returns a 404. The most important fix: every review must open the top results in that run and score the current draft from scratch, and any page that can't be opened must be marked as unread.",
+  "keep": [
+    "The competitor framing is specific about what we add, such as the correct burr direction against SCG's 'adjust the burr coarser' (verified) and the Express vs Pro split, rather than a vague 'more thorough'.",
+    "It correctly says offerIds should be empty when no card supports a purchase, and it checks that the reader's own machine isn't offered.",
+    "Its claim spot-checks against knowledge cards are named in the reason (the tamp figure, the Pro flow timing, the Allen key).",
+    "Its Balance Journal characterisation (it recommends the Smart Grinder Pro as the in-ecosystem pick) is accurate.",
+    "It passes short, decisive posts and doesn't ask for more length or citations."
+  ],
+  "promptChanges": [
+    "In step 2: \"Open each of the top 3 results in this run, even on a re-review. If a page fails to load, replace it with the next result; never describe a page you did not open. Don't reuse competitor rows from an earlier review.\"",
+    "Add: \"On a revision, re-read the whole body and write new score reasons that quote the current draft. Remove optionalImprovements that the revision has already handled.\"",
+    "In Outcome: \"`revise` requires at least one blockingAction. Every entry in automatedChecks.blocking becomes a blockingAction, phrased as a concrete instruction.\"",
+    "In step 8: \"If the ending's next step points to a {{guide:}} or tool that is not published or present, that is a blocking action. Either rewrite the ending so it stands alone, or say in the reason that the post needs a human hold until the guide exists.\"",
+    "Add: \"Every problem you mention in `reason` must appear in blockingActions or optionalImprovements, with the sentence quoted.\"",
+    "In step 5: \"A market-specific brand name or units for one market only in the prose is blocking when it changes what the reader does or understands.\"",
+    "[niche] Use \"the UK guide\" / \"the US guide\" in prose rather than \"the Sage guide\", and give temperatures in both °C and °F."
+  ]
+}
