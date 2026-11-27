@@ -201,7 +201,61 @@ ${keep ? `<p class="pick-keep">Keep yours? <a href="#${keep.id}">${inline(keep.t
 </section>`;
 }
 
-export function postPage({ site, market, post: source, offers, now, preview }) {
+// --- Internal links and structured data (SEO) ---------------------------------------------
+
+const guideTokens = (text) => [...(text ?? '').matchAll(/\{\{guide:([a-z0-9-]+)/g)].map((m) => m[1]);
+
+/**
+ * Guides to link from the end of a guide: other guides in this market, ranked by shared products,
+ * links between the two, and category. Grows on its own as guides are published.
+ */
+export function relatedPosts({ post, posts, market, max = 4 }) {
+  const mine = new Set(post.productIds ?? []);
+  const linksOut = new Set(guideTokens(post.body));
+  return posts
+    .filter((p) => p.slug !== post.slug && p.markets?.includes(market.id))
+    .map((p) => {
+      const shared = (p.productIds ?? []).filter((id) => mine.has(id)).length;
+      const linked = (linksOut.has(p.slug) ? 1 : 0) + (guideTokens(p.body).includes(post.slug) ? 1 : 0);
+      return { p, score: shared * 3 + linked * 2 + (p.category && p.category === post.category ? 1 : 0) };
+    })
+    .filter((x) => x.score > 0)
+    .sort((a, b) => b.score - a.score || (b.p.updatedAt ?? '').localeCompare(a.p.updatedAt ?? ''))
+    .slice(0, max)
+    .map((x) => x.p);
+}
+
+/** Home › Category › Guide, for the page and for BreadcrumbList. */
+export function breadcrumbItems({ site, market, post }) {
+  const items = [{ name: 'Home', path: `/${market.locale}/` }];
+  const category = site.allCategories?.find((c) => c.id === post.category);
+  const categoryPath = category ? `/${market.locale}/${category.id}/` : null;
+  if (category && site.pages?.has(categoryPath)) items.push({ name: navLabel(category), path: categoryPath });
+  else items.push({ name: 'Guides', path: `/${market.locale}/guides/` });
+  items.push({ name: post.title, path: postPath(market, post.slug) });
+  return items;
+}
+
+const jsonLd = (data) => `<script type="application/ld+json">${JSON.stringify(data).replace(/</g, '\\u003c')}</script>`;
+
+/** Article + BreadcrumbList structured data. No author person: the site does not claim one. */
+export function postStructuredData({ site, market, post, siteUrl, crumbs }) {
+  const url = `${siteUrl}${postPath(market, post.slug)}`;
+  const org = { '@type': 'Organization', name: site.name ?? '', url: `${siteUrl}/` };
+  const article = {
+    '@context': 'https://schema.org', '@type': 'Article', headline: post.title, description: post.description,
+    inLanguage: `${market.language}-${market.id}`, mainEntityOfPage: url, url, author: org, publisher: org,
+    ...(post.publishedAt ? { datePublished: post.publishedAt } : {}),
+    ...(post.updatedAt ? { dateModified: post.updatedAt } : {}),
+  };
+  const breadcrumbs = {
+    '@context': 'https://schema.org', '@type': 'BreadcrumbList',
+    itemListElement: crumbs.map((c, i) => ({ '@type': 'ListItem', position: i + 1, name: c.name, item: `${siteUrl}${c.path}` })),
+  };
+  return jsonLd(article) + jsonLd(breadcrumbs);
+}
+
+export function postPage({ site, market, post: source, offers, now, preview, posts = [], siteUrl = '' }) {
   const post = localize(source, site, market);
   const { html, headings } = postBody({ post, site, market, offers, now });
   const elsewhere = ''; // one post for every market: no "written for another market" notice
@@ -220,9 +274,15 @@ export function postPage({ site, market, post: source, offers, now, preview }) {
   let placed = false;
   const withNotes = html.replace(/<p class="lead">[\s\S]*?<\/p>/, (lead) => { placed = true; return lead + topNotes; });
   const notesFirst = placed ? '' : topNotes;
+  const crumbs = breadcrumbItems({ site, market, post });
+  const breadcrumbNav = `<nav class="breadcrumbs" aria-label="Breadcrumb"><ol>${crumbs.map((c, i) => (i === crumbs.length - 1 ? `<li aria-current="page">${escape(c.name)}</li>` : `<li><a href="${c.path}">${escape(c.name)}</a></li>`)).join('')}</ol></nav>`;
+  const related = relatedPosts({ post: source, posts, market });
+  const relatedSection = related.length ? `<section class="wrap related" aria-labelledby="related-title"><h2 id="related-title">Related guides</h2>${guideRows({ site, market, posts: related })}</section>` : '';
   return `<article class="post">
+${postStructuredData({ site, market, post, siteUrl, crumbs })}
 <header class="wrap post-head">
 <div class="post-head-main">
+${breadcrumbNav}
 <p class="kicker">${badge}${escape(post.type)}</p>
 <h1>${escape(post.title)}</h1>
 </div>
@@ -241,6 +301,7 @@ ${elsewhere}
 </div>
 ${pick || toc ? `<aside class="post-rail" aria-label="Guide tools"><div class="rail-sticky">${pick}${toc}</div></aside>` : ''}
 </div>
+${relatedSection}
 </article>`;
 }
 

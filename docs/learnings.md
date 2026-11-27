@@ -139,3 +139,9 @@ The project lead set the goal: one guide a day, built around equipment, with "my
 - Decision (project lead): one generic disclosure in the footer of every page (`DEFAULT_DISCLOSURE` in `site/lib/site-data.mjs`), overridden per market by `niche.json` `disclosures`. It no longer blocks the build or publishing, and nothing is shown above the content.
 - Why it mattered: the three passed guides without offers had publishing PRs since 2026-11-24, but their `checks` failed because those branches were cut from a main where the production build refused to run without disclosure text. They need their branch updated from main to re-run checks.
 - Open question, for when real affiliate links go live: Amazon Associates requires its own statement on the site, and UK advertising guidance (ASA/CAP) expects affiliate content to be identifiable as advertising, usually with an upfront label. A footer-only note may not be enough then; revisit before joining a programme.
+
+### 2026-11-27 · SEO: internal links and structured data
+- Each guide now ends with up to 4 "Related guides" (same products ×3, a guide link either way ×2, same category ×1), so internal links grow with every published guide without touching the writer's 2-inline-link rule.
+- Breadcrumbs (Home › Category › Guide) on the page, plus Article and BreadcrumbList JSON-LD. The author is the site as an Organization: no invented person (principle 3).
+- Sitemap entries for guides carry `lastmod` from the guide's `updatedAt`. x-default on a guide points to the primary market's copy (en-us) instead of the root chooser; market homes keep the chooser.
+- To measure (principle 8): impressions and clicks per guide in Search Console after 4–6 weeks; check whether related-guide clicks show in GA4 before adding more link blocks.

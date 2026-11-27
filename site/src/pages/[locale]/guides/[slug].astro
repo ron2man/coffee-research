@@ -8,8 +8,8 @@ export async function getStaticPaths() {
     .map((post) => ({ params: { locale: market.locale, slug: post.slug }, props: { market, post } })));
 }
 const { market, post } = Astro.props;
-const { data, t } = await site();
+const { data, t, SITE_URL } = await site();
 ---
 <Base title={t.pageTitle(t.localize(post, data.site, market), data.site.name)} description={t.localize(post, data.site, market).description} path={`/${market.locale}/guides/${post.slug}/`} market={market} pageId={post.slug}>
-  <Fragment set:html={t.postPage({ site: data.site, market, post, offers: data.offers, now: data.now, preview: data.preview })} />
+  <Fragment set:html={t.postPage({ site: data.site, market, post, offers: data.offers, now: data.now, preview: data.preview, posts: data.posts, siteUrl: SITE_URL })} />
 </Base>
