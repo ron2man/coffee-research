@@ -164,9 +164,16 @@ th { font-weight: 700; }
 .prose .picker-title, .picker-title { margin: 0 0 .5rem; font: 800 1.5rem/1.15 var(--sans); letter-spacing: -.02em; }
 .picker-q { border: 0; padding: 0; margin: 1.25rem 0 0; } .picker-q legend { font-weight: 700; padding: 0; margin-bottom: .6rem; }
 .picker-opts { display: grid; grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr)); gap: .5rem; }
-.picker-opts button { font: inherit; text-align: left; min-height: 52px; padding: .5rem .9rem; background: var(--bg); color: var(--fg); border: 1px solid #cfcfcb; border-radius: 2px; cursor: pointer; }
-.picker-opts button:hover { border-color: var(--fg); }
-.picker-opts button[aria-pressed="true"] { border: 2px solid var(--fg); font-weight: 700; }
+/* Each option is a label wrapping a radio. The radio stays in the page for keyboards and screen
+   readers (arrow keys move within a question) but is drawn as a dot inside the card. */
+.picker-opt { position: relative; display: flex; align-items: center; gap: .65rem; min-height: 52px; padding: .5rem .9rem; background: var(--bg); color: var(--fg); border: 2px solid #cfcfcb; border-radius: 2px; cursor: pointer; line-height: 1.35; }
+.picker-opt[hidden] { display: none; }
+.picker-opt:hover { border-color: var(--fg); }
+.picker-opt input { appearance: none; flex: none; width: 1.15rem; height: 1.15rem; margin: 0; border: 2px solid var(--fg); border-radius: 50%; background: var(--bg); }
+.picker-opt input:checked { background: var(--fg); box-shadow: inset 0 0 0 3px var(--bg); }
+.picker-opt:has(input:checked) { border-color: var(--fg); background: var(--fg); color: var(--bg); font-weight: 700; }
+.picker-opt:has(input:checked) input { border-color: var(--bg); background: var(--bg); box-shadow: inset 0 0 0 3px var(--fg); }
+.picker-opt:has(input:focus-visible) { outline: 3px solid var(--acc); outline-offset: 2px; }
 .picker-result { margin-top: 1.25rem; padding: 1.1rem 1.25rem; background: var(--bg); border-top: 4px solid var(--acc); }
 .picker-result strong { display: block; font-size: 1.5rem; line-height: 1.2; font-weight: 800; letter-spacing: -.02em; }
 .picker-result p { margin: .4rem 0 .8rem; }
