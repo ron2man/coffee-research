@@ -4,10 +4,10 @@
   "type": "new-post",
   "niche": "coffee",
   "status": "briefed",
-  "attempts": 0,
+  "attempts": 1,
   "revisions": 0,
   "createdAt": "2026-11-25T20:08:27.717Z",
-  "updatedAt": "2026-11-27T04:57:04.407Z",
+  "updatedAt": "2026-11-27T06:03:19.736Z",
   "artifacts": {
     "idea": "data/ideas/barista-express-pro-sour-bitter-what-to-change-first.json",
     "idea-judge": "data/idea-scores/barista-express-pro-sour-bitter-what-to-change-first.json",
@@ -57,5 +57,6 @@
       "by": "angle",
       "reason": "There is something distinct to add. The top pages for this question either cover only the Express and give generic advice (\"grind finer, dose up\"), or they state gauge bar values and fault causes that don't trace to Breville. One of them blames a still gauge on a worn gasket. None of them puts the Express/Pro traps in order: dual-wall basket, time-based dosing that leaves the basket underfilled when you grind finer, preset buttons that stop at a volume, inner burr, then temperature last. None says that Breville's own booklet uses 'bitter' for fast shots too, and none covers the Pro, which has no gauge. The research claims support an ordered decision rule from start to finish. For the one gap, a test that proves a machine fault, the plan is to say plainly that none is documented and send owners to support."
     }
-  ]
+  ],
+  "lastError": "tool barista-fast-shot-next-step: /questions/0/options/0/1 must NOT have more than 80 characters; /questions/0/options/1/1 must NOT have more than 80 characters; /questions/0/options/2/1 must NOT have more than 80 characters"
 }
