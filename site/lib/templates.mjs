@@ -210,14 +210,13 @@ export function postPage({ site, market, post: source, offers, now, preview }) {
   const pickId = post.pick ?? post.offerIds?.[0] ?? null;
   const toc = headings.length ? `<nav class="toc" aria-label="On this page"><strong>On this page</strong><ol>${headings.map((h) => `<li><a href="#${h.id}">${inline(h.text)}</a></li>`).join('')}</ol></nav>` : '';
   const honesty = post.humanData?.length ? '' : 'We haven’t tested these products ourselves. This guide is built from manuals, published tests and owner reports; how it was put together is at the end.';
-  const disclosureText = post.disclosure && post.offerIds?.length ? site.disclosure(market) : null;
-  const notes = [disclosureText ? escape(disclosureText) : '', honesty].filter(Boolean);
+  // The disclosure lives in the page footer only (Base layout), never above the content.
+  const notes = [honesty].filter(Boolean);
   const topNotes = notes.length ? `<div class="post-notes">${notes.map((n) => `<p>${n}</p>`).join('')}</div>` : '';
   // The guide's keep-what-you-have section, linked from the pick card.
   const keep = headings.find((h) => /already (own|have)|keep (yours|what you have)|try this first/i.test(h.text));
   const pick = pickCard({ site, market, productId: pickId, offers, now, keep });
-  // Notes go right after the opening answer: still before the first affiliate link in the text column
-  // (the PriceBox), and the sidebar card carries its own disclosure above its button.
+  // Notes go right after the opening answer.
   let placed = false;
   const withNotes = html.replace(/<p class="lead">[\s\S]*?<\/p>/, (lead) => { placed = true; return lead + topNotes; });
   const notesFirst = placed ? '' : topNotes;
@@ -299,7 +298,7 @@ export function howWeWorkPage({ site, market }) {
 <h2>Buying, or not</h2>
 <p>Every guide includes a way to keep what you have. When we recommend buying, the recommendation doesn’t depend on which shop pays us.</p>
 <h2 id="disclosure">Disclosure</h2>
-<p>${escape(site.disclosure(market) ?? 'We don’t use affiliate links yet. When we do, this section will name the programmes and how they pay us, and every page with a link will say so before it.')}</p>
+<p>${escape(site.disclosure(market))}</p>
 </div>
 </article>`;
 }
