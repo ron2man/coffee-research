@@ -182,3 +182,9 @@ The project lead set the goal: one guide a day, built around equipment, with "my
 - The writer prompt now says how to describe a real difference: by what the reader sees (the panel label, `{{model:id}}`, "one edition of the manual"), and `{{brand:id}}` when the brand matters (support). The two guides were reworded that way, and 19 tool texts now say "the manufacturer".
 - Found on the way: the cleaning-cycle steps showed as one paragraph because the site's Markdown parser made a list only when every line of a block was a list item. A list right after a line of text ("**Cleaning cycle:**" then "1. …") is now a list, as in CommonMark. Only a list starting at 1 interrupts text, so "Released in\n2019." stays a sentence.
 - Not covered: drafts already waiting in items were written before this check; they are checked again only if the writer revises them.
+
+### 2026-11-27 · Page polish from the audit
+- "Prices for the UK/US" under a guide's summary now shows only when the guide has a pick (offers). Guides without offers had promised prices they never showed.
+- Home: the H1 ("Straight answers for home espresso…") is now the largest heading. The featured guide's title, an H2, had been about twice its size.
+- Category pages no longer repeat the category tag on every row. "Browse by category" shows once there are two categories (with one, the nav link already covers it).
+- Accessibility: nav links get padding to a 38 px target (WCAG 2.5.8 asks for 24 px), and "Read the answer" carries the guide title for screen readers. Breadcrumbs already had `aria-current`, and the CSS has no motion, so nothing was needed for reduced motion.

@@ -82,10 +82,15 @@ function dateLabel(post, market) {
 const byDate = (a, b) => (b.updatedAt ?? '').localeCompare(a.updatedAt ?? '');
 
 /** Compact guide rows: tag, title, one-line summary, date. */
-export function guideRows({ site, market, posts }) {
+export function guideRows({ site, market, posts, showTag = true }) {
   if (!posts.length) return '<p class="empty">No guides here yet.</p>';
-  return `<ol class="guide-rows">${posts.map((source) => localize(source, site, market)).map((post) => `<li><a href="${postPath(market, post.slug)}">
-<span class="gr-tag">${escape(navLabel({ label: categoryLabel(site, post.category) ?? post.type }))}${STATUS_BADGE[post.status] ? ' · preview' : ''}</span>
+  const tag = (post) => {
+    const label = showTag ? escape(navLabel({ label: categoryLabel(site, post.category) ?? post.type })) : '';
+    const badge = STATUS_BADGE[post.status] ? (label ? ' · preview' : 'Preview') : '';
+    return label || badge ? `<span class="gr-tag">${label}${badge}</span>` : '';
+  };
+  return `<ol class="guide-rows${showTag ? '' : ' no-tag'}">${posts.map((source) => localize(source, site, market)).map((post) => `<li><a href="${postPath(market, post.slug)}">
+${tag(post)}
 <span class="gr-main"><span class="gr-title">${escape(post.title)}</span><span class="gr-summary">${escape(post.description)}</span></span>
 <span class="gr-date">${dateLabel(post, market)}</span>
 </a></li>`).join('')}</ol>`;
@@ -96,7 +101,7 @@ export function guideListPage({ site, market, posts, category }) {
   return `<section class="wrap list-page">
 <h1 class="list-title">${escape(category ? navLabel(category) : 'All guides')}</h1>
 <p class="meta">${list.length} ${list.length === 1 ? 'guide' : 'guides'}, newest first</p>
-${guideRows({ site, market, posts: list })}
+${guideRows({ site, market, posts: list, showTag: !category })}
 </section>`;
 }
 
@@ -321,7 +326,7 @@ ${breadcrumbNav}
 </div>
 <div class="post-head-side">
 <p class="post-summary">${escape(post.description)}</p>
-<p class="meta">${updated}Prices for the ${escape(shortLabel(market))}</p>
+<p class="meta">${(updated + (pickId ? `Prices for the ${escape(shortLabel(market))}` : '')).replace(/ · $/, '')}</p>
 ${pickId ? `<a class="jump-pick" href="#buy-${escape(pickId)}">Jump to the pick</a>` : ''}
 </div>
 </header>
@@ -352,12 +357,13 @@ export function homePage({ site, market, posts }) {
 </div>
 <div class="feature-side">
 <p class="feature-answer">${escape(lead.description)}</p>
-<a class="feature-link" href="${postPath(market, lead.slug)}">Read the answer</a>
+<a class="feature-link" href="${postPath(market, lead.slug)}">Read the answer<span class="sr-only">: ${escape(lead.title)}</span></a>
 </div>
 </div>
 ${mockPhoto(site.mock?.home ?? postPhoto(site, lead.slug), 'feature-photo')}` : '<p class="empty">No guides for this market yet.</p>';
   const latest = rest.sort(byDate).slice(0, 8);
-  const tiles = site.categories.map((c) => `<a class="tile" href="/${market.locale}/${c.id}/"><span class="tile-title">${escape(navLabel(c))}</span><span class="tile-count">${c.count} guides</span></a>`).join('');
+  // One category is already the nav link; tiles help once there are two to choose from.
+  const tiles = site.categories.length < 2 ? '' : site.categories.map((c) => `<a class="tile" href="/${market.locale}/${c.id}/"><span class="tile-title">${escape(navLabel(c))}</span><span class="tile-count">${c.count} guides</span></a>`).join('');
   return `<section class="wrap" id="guides" aria-labelledby="guides-title">
 <h1 class="intro" id="guides-title">Straight answers for home espresso in the ${escape(shortLabel(market))}. Including when to buy nothing.</h1>
 ${feature}

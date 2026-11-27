@@ -201,6 +201,21 @@ test('asset URLs carry a content hash, and assets have one year-long Cache-Contr
   assert.match(headers, /\/assets\/\*\n  Cache-Control: public, max-age=31536000, immutable/);
 });
 
+test('page polish: prices line only with a pick, no category tag on its own page, one category means no tiles', () => {
+  const prod = build('production');
+  const guide = readdirSync(join(repoRoot, 'content/published')).find((f) => f.endsWith('.md')).slice(0, -3);
+  const head = prod.read(`en-gb/guides/${guide}/index.html`).match(/<div class="post-head-side">[\s\S]*?<\/div>/)[0];
+  if (!/jump-pick/.test(head)) assert.doesNotMatch(head, /Prices for the/, 'no prices promised on a guide without offers');
+  const withPick = build('preview').read('en-gb/guides/which-grinder-for-bambino/index.html');
+  assert.match(withPick, /Prices for the UK<\/p>/, 'a guide with a pick still says which market its prices are for');
+  const category = prod.read('en-gb/machines/index.html');
+  assert.match(category, /<ol class="guide-rows no-tag">/);
+  assert.doesNotMatch(category, /class="gr-tag">Machines/);
+  const home = prod.read('en-gb/index.html');
+  assert.match(home, /Read the answer<span class="sr-only">: [^<]+<\/span><\/a>/, 'the link names its guide for screen readers');
+  if (!/class="tile"/.test(home)) assert.doesNotMatch(home, /Browse by category/);
+});
+
 test('consent banner: production pages with GTM carry it hidden, previews do not', () => {
   const home = build('production').read('en-gb/index.html');
   assert.match(home, /<section class="consent" id="consent" aria-label="Cookie choice" hidden>/);
