@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
-import { cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { cpSync, existsSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { DEFAULT_DISCLOSURE, loadSiteData, repoRoot, siteMode } from '../lib/site-data.mjs';
@@ -89,6 +89,29 @@ test('home page links all guides and lists them as compact rows', () => {
   assert.match(home, /<a href="\/en-us\/guides\/">All guides<\/a>/);
   assert.doesNotMatch(home, /class="nav"[\s\S]*?How we work[\s\S]*?<\/nav>/, 'How we work lives in the footer, not the nav');
   assert.match(home, /class="band-link" href="\/en-us\/how-we-work\/"/);
+});
+
+test('no built page shows an unresolved token or "<Brand> the <Model>"', () => {
+  for (const mode of ['preview', 'production']) {
+    const { outDir } = build(mode);
+    const pages = readdirSync(outDir, { recursive: true }).filter((f) => f.endsWith('.html'));
+    assert.ok(pages.length > 0, `${mode}: no pages built`);
+    for (const page of pages) {
+      const html = readFileSync(join(outDir, page), 'utf8');
+      assert.doesNotMatch(html, /\{\{[a-z]+:[^}]*\}\}/, `${mode} ${page}: unresolved {{token}}`);
+      assert.doesNotMatch(html, /\b(Sage|Breville) the /, `${mode} ${page}: "<Brand> the <Model>"`);
+    }
+  }
+});
+
+test('home feature resolves product names for each market', () => {
+  const { read } = build('preview');
+  for (const [locale, brand] of [['en-us', 'Breville'], ['en-gb', 'Sage']]) {
+    const feature = read(`${locale}/index.html`).match(/<div class="feature">[\s\S]*?<\/div>\s*<\/div>/)?.[0] ?? '';
+    assert.ok(feature, `${locale}: home has a feature`);
+    assert.doesNotMatch(feature, /\{\{/);
+    if (/Barista Express/.test(feature)) assert.match(feature, new RegExp(`${brand} Barista Express`));
+  }
 });
 
 test('production with no published guides: holding homes, indexable, GTM with consent defaults', () => {

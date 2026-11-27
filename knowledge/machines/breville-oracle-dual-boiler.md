@@ -10,8 +10,8 @@ The current dual-boiler Oracle. The original Oracle (BES980) is listed as discon
   "category": "machines",
   "updatedAt": "2026-11-25",
   "variants": [
-    {"id": "bes995-us", "markets": ["US"], "name": "Breville the Oracle Dual Boiler", "brand": "Breville", "sku": "BES995"},
-    {"id": "ses995-gb", "markets": ["GB"], "name": "Sage the Oracle Dual Boiler", "brand": "Sage", "sku": "SES995"}
+    {"id": "bes995-us", "markets": ["US"], "name": "Breville Oracle Dual Boiler", "brand": "Breville", "sku": "BES995"},
+    {"id": "ses995-gb", "markets": ["GB"], "name": "Sage Oracle Dual Boiler", "brand": "Sage", "sku": "SES995"}
   ],
   "sources": [
     {"id": "breville-us-bes995", "url": "https://www.breville.com/en-us/product/bes995", "type": "manufacturer", "accessedAt": "2026-11-25"},

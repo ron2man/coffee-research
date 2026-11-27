@@ -309,7 +309,9 @@ export function homePage({ site, market, posts }) {
   // Superseded drafts stay reachable by URL in previews but are left off the home lists.
   const local = posts.filter((p) => p.markets.includes(market.id) && !p.supersededBy);
   const kicker = (post) => `${escape(post.type)}${STATUS_BADGE[post.status] ? ' · preview' : ''}`;
-  const [lead, ...rest] = local;
+  const [first, ...rest] = local;
+  // Resolve {{product:…}} tokens for this market, as guideRows does for the list below.
+  const lead = first ? localize(first, site, market) : null;
   const feature = lead ? `<div class="feature">
 <div class="feature-main">
 <p class="kicker">${kicker(lead)}</p>

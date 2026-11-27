@@ -10,8 +10,8 @@ Sold as Breville the Dual Boiler (BES920) in the US and Sage the Dual Boiler in 
   "category": "machines",
   "updatedAt": "2026-11-25",
   "variants": [
-    {"id": "dual-boiler-gb", "markets": ["GB"], "name": "Sage the Dual Boiler", "brand": "Sage", "sku": "SES920"},
-    {"id": "dual-boiler-us", "markets": ["US"], "name": "Breville the Dual Boiler", "brand": "Breville", "sku": "BES920"}
+    {"id": "dual-boiler-gb", "markets": ["GB"], "name": "Sage Dual Boiler", "brand": "Sage", "sku": "SES920"},
+    {"id": "dual-boiler-us", "markets": ["US"], "name": "Breville Dual Boiler", "brand": "Breville", "sku": "BES920"}
   ],
   "sources": [
     {"id": "manufacturer-product", "url": "https://www.sageappliances.com/en-gb/product/bes920", "type": "manufacturer", "accessedAt": "2026-11-25"},

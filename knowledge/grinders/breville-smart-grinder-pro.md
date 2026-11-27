@@ -10,8 +10,8 @@ Researched for the standalone-grinder guide for Barista Express and Pro owners. 
   "category": "grinders",
   "updatedAt": "2026-11-24",
   "variants": [
-    {"id": "bcg820-us", "sku": "BCG820BSSXL", "markets": ["US"], "name": "Breville the Smart Grinder Pro", "brand": "Breville"},
-    {"id": "bcg820-gb", "sku": "BCG820BSSUK", "markets": ["GB"], "name": "Sage the Smart Grinder Pro", "brand": "Sage"}
+    {"id": "bcg820-us", "sku": "BCG820BSSXL", "markets": ["US"], "name": "Breville Smart Grinder Pro", "brand": "Breville"},
+    {"id": "bcg820-gb", "sku": "BCG820BSSUK", "markets": ["GB"], "name": "Sage Smart Grinder Pro", "brand": "Sage"}
   ],
   "sources": [
     {"id": "breville-us-bcg820", "url": "https://www.breville.com/en-us/product/bcg820", "type": "manufacturer", "accessedAt": "2026-11-24"},
