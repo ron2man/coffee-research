@@ -3,14 +3,15 @@
   "id": "barista-pro-stops-after-seconds-three-beeps",
   "type": "new-post",
   "niche": "coffee",
-  "status": "idea_approved",
+  "status": "researched",
   "attempts": 0,
   "revisions": 0,
   "createdAt": "2026-11-27T11:20:26.781Z",
-  "updatedAt": "2026-11-27T15:42:03.603Z",
+  "updatedAt": "2026-11-27T16:04:48.576Z",
   "artifacts": {
     "idea": "data/ideas/barista-pro-stops-after-seconds-three-beeps.json",
-    "idea-judge": "data/idea-scores/barista-pro-stops-after-seconds-three-beeps.json"
+    "idea-judge": "data/idea-scores/barista-pro-stops-after-seconds-three-beeps.json",
+    "research": "data/research/barista-pro-stops-after-seconds-three-beeps.json"
   },
   "history": [
     {
@@ -26,6 +27,13 @@
       "to": "idea_approved",
       "by": "idea-judge",
       "reason": "Verified demand that goes beyond the card's signals (iFixit BES878 question with only a bare video link, plus several home-barista.com threads on the same cut-out). Answers are scattered across Breville's generic support page, forum anecdotes and JustAnswer. A diagnosis order with a warranty and repair-or-replace rule is a clear gain, and it sits in the focus cluster."
+    },
+    {
+      "at": "2026-11-27T16:04:48.576Z",
+      "from": "idea_approved",
+      "to": "researched",
+      "by": "research",
+      "reason": "The diagnosis order can be built from supported claims. The US booklet gives the free checks: tank seated and above MIN, a descale, a 5-minute water-filter soak, RESET DEFAULTS, and the 60-second hot-water stop. It has no row for a cut-out with beeps; its only escalation is the thermal cut-out row. Breville's warranty page gives the claim process and exclusions. Owner and repair-shop reports point to the flow meter when the cut-out persists, and one owner saw a flow-control repair fail again after seven months. Gaps are recorded as unknown claims: the text of Breville's own support article, the US warranty length, the flow-meter part number and price, and repair costs. Without those the writer can't give a numeric repair-or-replace threshold. The rule has to stay qualitative (in warranty, claim it; out of warranty, get a quote and compare it with the price of the machine), unless a human supplies the article text and a quote."
     }
   ]
 }
