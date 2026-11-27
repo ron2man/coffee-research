@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "id": "barista-pro-stops-after-seconds-three-beeps",
+  "type": "new-post",
+  "niche": "coffee",
+  "status": "idea",
+  "attempts": 0,
+  "revisions": 0,
+  "createdAt": "2026-11-27T11:20:26.781Z",
+  "updatedAt": "2026-11-27T11:20:26.781Z",
+  "artifacts": {
+    "idea": "data/ideas/barista-pro-stops-after-seconds-three-beeps.json"
+  },
+  "history": [
+    {
+      "at": "2026-11-27T11:20:26.781Z",
+      "from": null,
+      "to": "idea",
+      "by": "idea",
+      "reason": "generated"
+    }
+  ]
+}
