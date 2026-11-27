@@ -3,13 +3,14 @@
   "id": "barista-pro-stops-after-seconds-three-beeps",
   "type": "new-post",
   "niche": "coffee",
-  "status": "idea",
+  "status": "idea_approved",
   "attempts": 0,
   "revisions": 0,
   "createdAt": "2026-11-27T11:20:26.781Z",
-  "updatedAt": "2026-11-27T11:20:26.781Z",
+  "updatedAt": "2026-11-27T15:42:03.603Z",
   "artifacts": {
-    "idea": "data/ideas/barista-pro-stops-after-seconds-three-beeps.json"
+    "idea": "data/ideas/barista-pro-stops-after-seconds-three-beeps.json",
+    "idea-judge": "data/idea-scores/barista-pro-stops-after-seconds-three-beeps.json"
   },
   "history": [
     {
@@ -18,6 +19,13 @@
       "to": "idea",
       "by": "idea",
       "reason": "generated"
+    },
+    {
+      "at": "2026-11-27T15:42:03.603Z",
+      "from": "idea",
+      "to": "idea_approved",
+      "by": "idea-judge",
+      "reason": "Verified demand that goes beyond the card's signals (iFixit BES878 question with only a bare video link, plus several home-barista.com threads on the same cut-out). Answers are scattered across Breville's generic support page, forum anecdotes and JustAnswer. A diagnosis order with a warranty and repair-or-replace rule is a clear gain, and it sits in the focus cluster."
     }
   ]
 }
