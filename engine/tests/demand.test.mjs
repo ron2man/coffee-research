@@ -98,6 +98,81 @@ test('demandUsage counts this month\'s keyed searches from earlier collections',
   writeFileSync(join(root, 'data', 'demand', 'a.json'), JSON.stringify({ date: '2026-11-02', sources: { web: { ok: 5, failed: 1 }, youtube: { units: 303 } } }));
   writeFileSync(join(root, 'data', 'demand', 'b.json'), JSON.stringify({ date: '2026-10-30', sources: { web: { ok: 7 } } }));
   writeFileSync(join(root, 'data', 'demand', 'c.json'), 'not json');
-  assert.deepEqual(demandUsage(root, '2026-11'), { month: '2026-11', web: 6, youtube: 303 });
-  assert.deepEqual(demandUsage(join(root, 'missing'), '2026-11'), { month: '2026-11', web: 0, youtube: 0 });
+  writeFileSync(join(root, 'data', 'demand', 'd.json'), JSON.stringify({ date: '2026-11-03', sources: { web: { ok: 3, failed: 1, byProvider: { tavily: 3, serper: 1 } }, questions: { provider: 'serper', ok: 4, failed: 0 } } }));
+  assert.deepEqual(demandUsage(root, '2026-11'), { month: '2026-11', web: 10, youtube: 303, providers: { brave: 6, tavily: 3, serper: 5 } });
+  assert.deepEqual(demandUsage(join(root, 'missing'), '2026-11'), { month: '2026-11', web: 0, youtube: 0, providers: {} });
+});
+
+test('question prefixes ask autocomplete how people start a problem', () => {
+  const q = demandQueries({ ...niche, demand: { ...niche.demand, querySuffixes: [''], queryPrefixes: ['why is my '], maxQueries: 10 } }, { cards });
+  assert.deepEqual(q.map((x) => `${x.market}:${x.q}`), ['US:brand m', 'US:why is my brand m', 'GB:other m', 'GB:why is my other m']);
+});
+
+const providerNiche = {
+  ...niche,
+  demand: {
+    ...niche.demand,
+    webSearch: { sites: ['forum.example', 'reddit.com/r/x'], maxQueries: 4, providers: ['tavily', 'serper', 'brave'] },
+    searchBudgets: { tavily: 2, serper: 10, brave: 10 },
+    peopleAlsoAsk: { maxQueries: 2 },
+  },
+};
+
+function providerFetch(calls, { tavilyStatus } = {}) {
+  return async (url, options = {}) => {
+    const body = options.body ? JSON.parse(options.body) : null;
+    calls.push({ url, headers: options.headers ?? {}, body });
+    const ok = (data) => ({ ok: true, json: async () => data });
+    if (url.includes('suggestqueries')) return ok(['q', []]);
+    if (url.includes('api.tavily.com')) {
+      if (tavilyStatus) return { ok: false, status: tavilyStatus };
+      const domain = body.include_domains[0];
+      return ok({ results: [{ title: 'Grind <b>help</b>', url: `https://${domain}/r/x/comments/1`, content: 'sour shots', published_date: '2026-09-01T00:00:00Z' }, { title: 'Other sub', url: `https://${domain}/r/y/2`, content: 'x' }] });
+    }
+    if (url.includes('google.serper.dev')) {
+      if (body.q.includes('site:')) {
+        const site = body.q.split('site:')[1];
+        return ok({ organic: [{ title: 'Thread', link: `https://www.${site}/t/9`, snippet: 'channeling', date: '3 weeks ago' }] });
+      }
+      return ok({ peopleAlsoAsk: [{ question: 'Why is my espresso sour?', snippet: 'Under-extracted', link: 'https://a.example/x' }], relatedSearches: [{ query: 'brand m sour shots' }] });
+    }
+    return { ok: false, status: 403 };
+  };
+}
+
+test('web search uses the first provider with a key and budget, then falls back; Serper adds People also ask', async () => {
+  const calls = [];
+  const env = { TAVILY_API_KEY: 't', SERPER_API_KEY: 's' };
+  const result = await collectDemand(providerNiche, { cards, fetchImpl: providerFetch(calls), env, today: '2026-11-25' });
+  assert.equal(result.sources.web.ok, 4);
+  assert.deepEqual(result.sources.web.byProvider, { tavily: 2, serper: 2 }, 'tavily until its budget is used, then serper');
+  const tavily = calls.find((c) => c.url.includes('tavily'));
+  assert.equal(tavily.headers.Authorization, 'Bearer t');
+  const redditTavily = result.web.find((w) => w.provider === 'tavily' && w.site === 'reddit.com/r/x');
+  if (redditTavily) assert.deepEqual(redditTavily.results.map((r) => r.url), ['https://reddit.com/r/x/comments/1'], 'only the subreddit asked for');
+  const serperThread = result.web.find((w) => w.provider === 'serper').results[0];
+  assert.deepEqual([serperThread.date, serperThread.age], [null, '3 weeks ago']);
+
+  assert.equal(result.sources.questions.ok, 2);
+  assert.equal(result.questions[0].questions[0].question, 'Why is my espresso sour?');
+  assert.deepEqual(result.questions[0].related, ['brand m sour shots']);
+  assert.ok(!calls.some((c) => /reddit\.com|forum\.example/.test(new URL(c.url).host)), 'community sites are never fetched');
+});
+
+test('a provider out of credit hands the same query to the next one', async () => {
+  const calls = [];
+  const env = { TAVILY_API_KEY: 't', SERPER_API_KEY: 's' };
+  const result = await collectDemand({ ...providerNiche, demand: { ...providerNiche.demand, peopleAlsoAsk: undefined } }, { cards, fetchImpl: providerFetch(calls, { tavilyStatus: 432 }), env, today: '2026-11-25' });
+  assert.equal(calls.filter((c) => c.url.includes('tavily')).length, 1, 'tavily is not asked again after refusing');
+  assert.equal(result.sources.web.ok, 4);
+  assert.equal(result.sources.web.failed, 1);
+  assert.match(result.sources.web.error, /tavily: HTTP 432/);
+  assert.match(result.sources.questions.skipped, /peopleAlsoAsk/);
+});
+
+test('budgets come from earlier collections this month', async () => {
+  const env = { TAVILY_API_KEY: 't', SERPER_API_KEY: 's' };
+  const spent = await collectDemand(providerNiche, { cards, fetchImpl: providerFetch([]), env, today: '2026-11-25', usage: { web: 0, youtube: 0, providers: { tavily: 2, serper: 10 } } });
+  assert.match(spent.sources.web.skipped, /budget reached/);
+  assert.match(spent.sources.questions.skipped, /serper budget/);
 });

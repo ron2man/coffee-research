@@ -1,9 +1,13 @@
 // Demand collection: real data, no AI, gathered by the scheduler before the idea agent runs.
 //  - Search autocomplete per market: how people actually phrase searches (not volumes).
 //  - Web search restricted to the niche's community sites (forums, subreddits) through a search
-//    API (Brave Search, BRAVE_SEARCH_API_KEY). The community pages themselves are never fetched:
-//    we keep the search engine's title, URL, date and snippet. This is how forum and Reddit
+//    API: Tavily (TAVILY_API_KEY, free monthly credits), Serper (SERPER_API_KEY, Google results,
+//    one-time free credits) or Brave (BRAVE_SEARCH_API_KEY), in the order niche.json lists them,
+//    falling back to the next when one is out of credit. The community pages themselves are never
+//    fetched: we keep the search engine's title, URL, date and snippet. This is how forum and Reddit
 //    threads reach the idea agent now that Reddit's API, JSON and RSS are closed to new projects.
+//  - "People also ask" questions and related searches from Google results (Serper): the questions
+//    Google itself groups around a query.
 //  - YouTube: videos for the focus products and the questions owners leave in their comments
 //    (YouTube Data API, YOUTUBE_API_KEY).
 // Every source reports what worked, what failed and what was skipped, so a gap is visible.
@@ -23,12 +27,15 @@ const YT_COMMENTS_UNITS = 1;
 /** Search phrases to look up: focus products per market, plus English seeds. */
 export function demandQueries(niche, { cards, seeds = [] }) {
   const suffixes = niche.demand?.querySuffixes ?? [''];
+  const prefixes = niche.demand?.queryPrefixes ?? [];
   const max = niche.demand?.maxQueries ?? 24;
   const queries = [];
   for (const productId of niche.focus?.products ?? []) {
     for (const market of niche.markets) {
       const name = productName(cards, market, productId).toLowerCase();
       for (const suffix of suffixes) queries.push({ market: market.id, q: `${name}${suffix}`, source: `focus:${productId}` });
+      // Question openings ("why is my <product>"): autocomplete then completes the problems people type.
+      for (const prefix of prefixes) queries.push({ market: market.id, q: `${prefix.trim()} ${name}`, source: `focus:${productId}` });
     }
   }
   for (const seed of seeds) {
@@ -47,17 +54,26 @@ export function rotate(list, count, today) {
   return Array.from({ length: Math.min(count, list.length) }, (_, i) => list[(start + i) % list.length]);
 }
 
-/** Keyed-source usage this month, from earlier collections: { web: queries, youtube: units }. */
+/**
+ * Keyed-source usage this month, from earlier collections:
+ * { web: community searches, youtube: units, providers: { <search provider>: requests } }.
+ */
 export function demandUsage(root, month = new Date().toISOString().slice(0, 7)) {
   const dir = join(root, 'data', 'demand');
-  const usage = { month, web: 0, youtube: 0 };
+  const usage = { month, web: 0, youtube: 0, providers: {} };
   if (!existsSync(dir)) return usage;
+  const add = (id, n) => { if (n) usage.providers[id] = (usage.providers[id] ?? 0) + n; };
   for (const file of readdirSync(dir)) {
     if (!file.endsWith('.json')) continue;
     try {
       const data = JSON.parse(readFileSync(join(dir, file), 'utf8'));
       if (!String(data.date ?? '').startsWith(month)) continue;
-      usage.web += (data.sources?.web?.ok ?? 0) + (data.sources?.web?.failed ?? 0);
+      const web = data.sources?.web ?? {};
+      usage.web += (web.ok ?? 0) + (web.failed ?? 0);
+      if (web.byProvider) for (const [id, n] of Object.entries(web.byProvider)) add(id, n);
+      else add('brave', (web.ok ?? 0) + (web.failed ?? 0)); // collections before providers were Brave only
+      const questions = data.sources?.questions ?? {};
+      add(questions.provider ?? 'serper', (questions.ok ?? 0) + (questions.failed ?? 0));
       usage.youtube += data.sources?.youtube?.units ?? 0;
     } catch { /* a broken file doesn't block collection */ }
   }
@@ -76,21 +92,59 @@ export async function autocomplete(fetchImpl, { q, market }) {
   return (data?.[1] ?? []).filter((s) => s.toLowerCase() !== q.toLowerCase()).slice(0, 10);
 }
 
-/** One web search limited to a site (Brave Search API). Returns search-engine metadata only. */
-export async function webSearch(fetchImpl, { q, site, key, country = 'us' }) {
+const bareSite = (site) => site.replace(/^www\./, '');
+const onSite = (site) => (r) => r.url && r.url.replace(/^https?:\/\/(www\.|old\.)?/, '').startsWith(bareSite(site));
+const thread = ({ title, url, date, age, excerpt }) => ({ title: clip(title, 200), url, date: date ? String(date).slice(0, 10) : null, age: age ?? null, excerpt: clip(excerpt) });
+
+/** Brave Search API: `<q> site:<site>`. */
+async function braveSearch(fetchImpl, { q, site, key, country }) {
   const query = `${q} site:${site}`;
   const url = `https://api.search.brave.com/res/v1/web/search?q=${encodeURIComponent(query)}&count=10&freshness=py&country=${country.toLowerCase()}&search_lang=en&safesearch=moderate`;
   const data = await getJson(fetchImpl, url, { headers: { Accept: 'application/json', 'X-Subscription-Token': key } });
-  return (data?.web?.results ?? [])
-    .filter((r) => r.url && r.url.replace(/^https?:\/\/(www\.|old\.)?/, '').startsWith(site.replace(/^www\./, '')))
-    .map((r) => ({
-      title: clip(r.title, 200),
-      url: r.url,
-      date: r.page_age ? String(r.page_age).slice(0, 10) : null,
-      age: r.age ?? null,
-      excerpt: clip([r.description, ...(r.extra_snippets ?? [])].join(' ')),
-    }));
+  return (data?.web?.results ?? []).filter(onSite(site))
+    .map((r) => thread({ title: r.title, url: r.url, date: r.page_age, age: r.age, excerpt: [r.description, ...(r.extra_snippets ?? [])].join(' ') }));
 }
+
+/** Tavily: domain filter plus the site's path (a subreddit) as words in the query; results are re-filtered to the site. */
+async function tavilySearch(fetchImpl, { q, site, key }) {
+  const [domain, ...path] = bareSite(site).split('/');
+  const body = { query: path.length ? `${q} ${path.join('/')}` : q, include_domains: [domain], search_depth: 'basic', max_results: 10, time_range: 'year', topic: 'general' };
+  const data = await getJson(fetchImpl, 'https://api.tavily.com/search', { method: 'POST', headers: { Authorization: `Bearer ${key}`, 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+  return (data?.results ?? []).filter(onSite(site))
+    .map((r) => thread({ title: r.title, url: r.url, date: r.published_date, excerpt: r.content }));
+}
+
+/** Serper (Google results): `<q> site:<site>`, past year. Google gives relative dates ("3 weeks ago"), kept as `age`. */
+async function serperSearch(fetchImpl, { q, site, key, country }) {
+  const body = { q: `${q} site:${site}`, gl: country.toLowerCase(), hl: 'en', num: 10, tbs: 'qdr:y' };
+  const data = await getJson(fetchImpl, 'https://google.serper.dev/search', { method: 'POST', headers: { 'X-API-KEY': key, 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+  return (data?.organic ?? []).map((r) => ({ ...r, url: r.link })).filter(onSite(site))
+    .map((r) => thread({ title: r.title, url: r.url, age: r.date ?? null, excerpt: r.snippet }));
+}
+
+/** Search providers in the order of preference niche.json gives; each needs its key in the environment. */
+export const SEARCH_PROVIDERS = {
+  tavily: { env: 'TAVILY_API_KEY', search: tavilySearch },
+  serper: { env: 'SERPER_API_KEY', search: serperSearch },
+  brave: { env: 'BRAVE_SEARCH_API_KEY', search: braveSearch },
+};
+
+/** One web search limited to a site. Returns search-engine metadata only. */
+export async function webSearch(fetchImpl, { q, site, key, country = 'us', provider = 'brave' }) {
+  return SEARCH_PROVIDERS[provider].search(fetchImpl, { q, site, key, country });
+}
+
+/** Google's "People also ask" questions and related searches for a query (Serper). */
+export async function peopleAlsoAsk(fetchImpl, { q, key, country = 'us' }) {
+  const data = await getJson(fetchImpl, 'https://google.serper.dev/search', { method: 'POST', headers: { 'X-API-KEY': key, 'Content-Type': 'application/json' }, body: JSON.stringify({ q, gl: country.toLowerCase(), hl: 'en', num: 10 }) });
+  return {
+    questions: (data?.peopleAlsoAsk ?? []).map((x) => ({ question: clip(x.question, 200), answerSnippet: clip(x.snippet), url: x.link ?? null })).filter((x) => x.question),
+    related: (data?.relatedSearches ?? []).map((x) => clip(x.query, 120)).filter(Boolean).slice(0, 10),
+  };
+}
+
+// Errors that mean "this provider can't serve more today" (bad key, no credit, rate limit): use the next one.
+const EXHAUSTED = /HTTP (400|401|402|403|429|432|433)/;
 
 const QUESTION = /\?|^(how|why|what|which|is|are|can|does|do|should|any|my|mine|i can't|i cant|help)\b/i;
 
@@ -122,7 +176,7 @@ export async function youtubeQuestions(fetchImpl, { q, key, videos = 3, comments
 }
 
 /** Collect demand data. Never throws: failures are recorded per source. */
-export async function collectDemand(niche, { cards, seeds = [], fetchImpl = fetch, env = process.env, today = new Date().toISOString().slice(0, 10), usage = { web: 0, youtube: 0 } } = {}) {
+export async function collectDemand(niche, { cards, seeds = [], fetchImpl = fetch, env = process.env, today = new Date().toISOString().slice(0, 10), usage = { web: 0, youtube: 0, providers: {} } } = {}) {
   const queries = demandQueries(niche, { cards, seeds });
   const first = niche.markets[0].id;
   const englishQueries = [...new Set(queries.filter((x) => x.market === first).map((x) => x.q))];
@@ -130,10 +184,12 @@ export async function collectDemand(niche, { cards, seeds = [], fetchImpl = fetc
     date: today,
     queries: [],
     web: [],
+    questions: [],
     youtube: [],
     sources: {
       autocomplete: { ok: 0, failed: 0 },
       web: { ok: 0, failed: 0, error: null, skipped: null },
+      questions: { provider: 'serper', ok: 0, failed: 0, error: null, skipped: null },
       youtube: { ok: 0, failed: 0, units: 0, error: null, skipped: null },
     },
   };
@@ -148,25 +204,66 @@ export async function collectDemand(niche, { cards, seeds = [], fetchImpl = fetc
     }
   }
 
-  // Community threads through web search.
+  // Search providers: monthly budgets per provider, shared by every use in this collection.
   const web = niche.demand?.webSearch;
+  const budgets = niche.demand?.searchBudgets ?? {};
+  const used = { ...(usage.providers ?? { brave: usage.web ?? 0 }) };
+  const room = (id) => Math.max(0, (budgets[id] ?? web?.monthlyMax ?? 900) - (used[id] ?? 0));
+  const dead = new Set();
+  const spend = (id) => { used[id] = (used[id] ?? 0) + 1; };
+
+  // Community threads through web search.
   const webState = result.sources.web;
+  webState.byProvider = {};
+  const order = (web?.providers ?? Object.keys(SEARCH_PROVIDERS)).filter((id) => SEARCH_PROVIDERS[id]);
+  const keyed = order.filter((id) => env[SEARCH_PROVIDERS[id].env]);
+  const nextProvider = () => keyed.find((id) => !dead.has(id) && room(id) > 0);
   if (!web?.sites?.length) webState.skipped = 'no demand.webSearch.sites in niche.json';
-  else if (!env.BRAVE_SEARCH_API_KEY) webState.skipped = 'BRAVE_SEARCH_API_KEY not set';
+  else if (!keyed.length) webState.skipped = `no search API key set (${order.map((id) => SEARCH_PROVIDERS[id].env).join(', ')})`;
   else {
-    const monthly = web.monthlyMax ?? 900;
-    const room = Math.max(0, monthly - (usage.web ?? 0));
     const pairs = englishQueries.flatMap((q) => web.sites.map((site) => ({ q, site })));
-    const picked = rotate(pairs, Math.min(web.maxQueries ?? 8, room), today);
-    if (!picked.length) webState.skipped = room ? 'no queries' : `monthly budget reached (${monthly} searches)`;
+    const capacity = keyed.reduce((sum, id) => sum + room(id), 0);
+    const picked = rotate(pairs, Math.min(web.maxQueries ?? 8, capacity), today);
+    if (!picked.length) webState.skipped = capacity ? 'no queries' : 'monthly search budget reached for every provider';
     for (const { q, site } of picked) {
+      let provider = nextProvider();
+      while (provider) {
+        spend(provider);
+        webState.byProvider[provider] = (webState.byProvider[provider] ?? 0) + 1;
+        try {
+          result.web.push({ site, q, provider, results: await webSearch(fetchImpl, { q, site, key: env[SEARCH_PROVIDERS[provider].env], country: first, provider }) });
+          webState.ok += 1;
+          break;
+        } catch (error) {
+          webState.failed += 1;
+          webState.error = `${provider}: ${error.message}`;
+          if (!EXHAUSTED.test(error.message)) break; // a one-off failure: move on to the next query
+          dead.add(provider); // out of credit or bad key: try this query with the next provider
+          provider = nextProvider();
+        }
+      }
+      if (!provider) break;
+    }
+  }
+
+  // "People also ask" and related searches (Serper only: Google's own question boxes).
+  const paa = niche.demand?.peopleAlsoAsk;
+  const paaState = result.sources.questions;
+  if (!paa) paaState.skipped = 'no demand.peopleAlsoAsk in niche.json';
+  else if (!env.SERPER_API_KEY) paaState.skipped = 'SERPER_API_KEY not set';
+  else if (dead.has('serper')) paaState.skipped = 'serper refused earlier in this collection';
+  else {
+    const picked = rotate(englishQueries, Math.min(paa.maxQueries ?? 4, room('serper')), today);
+    if (!picked.length) paaState.skipped = room('serper') ? 'no queries' : 'monthly serper budget reached';
+    for (const q of picked) {
+      spend('serper');
       try {
-        result.web.push({ site, q, results: await webSearch(fetchImpl, { q, site, key: env.BRAVE_SEARCH_API_KEY, country: first }) });
-        webState.ok += 1;
+        result.questions.push({ q, ...(await peopleAlsoAsk(fetchImpl, { q, key: env.SERPER_API_KEY, country: first })) });
+        paaState.ok += 1;
       } catch (error) {
-        webState.failed += 1;
-        webState.error = error.message;
-        if (/HTTP (401|403|429)/.test(error.message)) break; // bad key, out of credit or rate limited: stop
+        paaState.failed += 1;
+        paaState.error = error.message;
+        if (EXHAUSTED.test(error.message)) break;
       }
     }
   }

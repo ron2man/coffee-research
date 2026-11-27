@@ -5,3 +5,5 @@ site/.env
 site/.astro/
 .wrangler/
 library/pdf/
+# Product catalog mirror (separate repo, refreshed by every tick; read-only here)
+/catalog/
