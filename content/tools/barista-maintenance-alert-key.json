@@ -126,7 +126,7 @@
       "text": "A new Barista Pro shows FLUSH for its first-use cycle, which rinses the machine and primes the heater. It isn't a cleaning alert. Press 1 CUP, let it count down, and it goes to READY."
     },
     "support": {
-      "title": "Contact Breville or Sage support",
+      "title": "Contact the manufacturer's support",
       "text": "You've run both the cleaning cycle and a descale and the signal is still there. The manual describes no reset step and doesn't say what triggers the light, so more cleaning won't help. This is a question for support, not something to buy."
     },
     "run-other": {
@@ -135,11 +135,11 @@
     },
     "seal": {
       "title": "Replace the shower-screen seal",
-      "text": "Breville lists a worn shower-screen seal as the cause of espresso running out around the portafilter edge and of water leaking. Unplug the machine, loosen the screen with the Allen key that came with it, pull out the old seal, fit the new one flat side first, and don't overtighten. If a cycle is also due, run that too."
+      "text": "The manufacturer lists a worn shower-screen seal as the cause of espresso running out around the portafilter edge and of water leaking. Unplug the machine, loosen the screen with the Allen key that came with it, pull out the old seal, fit the new one flat side first, and don't overtighten. If a cycle is also due, run that too."
     },
     "pro-leak": {
       "title": "Leak on the Pro: contact support",
-      "text": "Breville and Sage publish no seal-replacement procedure for the Barista Pro, and its troubleshooting table doesn't list the seal as a cause of leaks. Run any cycle the screen asks for, then contact support about the leak before buying parts."
+      "text": "The manufacturer publishes no seal-replacement procedure for the Barista Pro, and its troubleshooting table doesn't list the seal as a cause of leaks. Run any cycle the screen asks for, then contact support about the leak before buying parts."
     },
     "descale": {
       "title": "Run a descale",
@@ -151,15 +151,15 @@
     },
     "clean-me": {
       "title": "Run the cleaning cycle, then put descaling on a calendar",
-      "text": "CLEAN ME only asks for the cleaning cycle (1 CUP basket, disc and tablet, machine off, hold 1 CUP, 2 CUP and POWER for about 10 seconds). Sage says this machine never prompts for a descale, so set your own reminder: every 90 days at water hardness 4, every 60 days at hardness 6."
+      "text": "CLEAN ME only asks for the cleaning cycle (1 CUP basket, disc and tablet, machine off, hold 1 CUP, 2 CUP and POWER for about 10 seconds). The manufacturer says this machine never prompts for a descale, so set your own reminder: every 90 days at water hardness 4, every 60 days at hardness 6."
     },
     "descale-first": {
       "title": "Descale before you call it a fault",
-      "text": "Breville lists overdue descaling as a cause of no water flow, espresso only dripping, no steam and, on the Express, coffee that isn't hot enough. Descale first: it's free apart from the descaler. That descaling also fixes weak steam comes only from owner reports, so treat it as the first thing to try, not a guaranteed fix. If the symptom is still there afterwards, contact support."
+      "text": "The manufacturer lists overdue descaling as a cause of no water flow, espresso only dripping, no steam and, on the Express, coffee that isn't hot enough. Descale first: it's free apart from the descaler. That descaling also fixes weak steam comes only from owner reports, so treat it as the first thing to try, not a guaranteed fix. If the symptom is still there afterwards, contact support."
     },
     "burrs": {
       "title": "Clean the grinder burrs",
-      "text": "Empty the hopper, run the grinder empty, remove the top burr and brush both burrs and the chute. Breville says this removes oil build-up that can impede performance. Only take out the lower burr if there's a blockage, and watch out because the burrs are very sharp. If shots are still too fast or slow after that, it's a grind setting problem, not a cleaning one."
+      "text": "Empty the hopper, run the grinder empty, remove the top burr and brush both burrs and the chute. The manufacturer says this removes oil build-up that can impede performance. Only take out the lower burr if there's a blockage, and watch out because the burrs are very sharp. If shots are still too fast or slow after that, it's a grind setting problem, not a cleaning one."
     },
     "cm-calendar": {
       "title": "Nothing is due, but your light won't remind you to descale",

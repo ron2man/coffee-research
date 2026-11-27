@@ -60,10 +60,35 @@ export function parseMarkdown(markdown) {
       const [head, , ...body] = rows;
       blocks.push({ type: 'html', html: `<div class="table-scroll" tabindex="0"><table><thead><tr>${head.map((c) => `<th scope="col">${inline(c)}</th>`).join('')}</tr></thead><tbody>${body.map((r) => `<tr>${r.map((c) => `<td>${inline(c)}</td>`).join('')}</tr>`).join('')}</tbody></table></div>` });
     } else {
-      blocks.push({ type: 'html', html: `<p>${inline(lines.join(' '))}</p>` });
+      blocks.push({ type: 'html', html: mixedBlock(lines) });
     }
   }
   return { blocks, headings };
+}
+
+/**
+ * A block that mixes text and list lines, e.g. "**Cleaning cycle:**" followed by "1. …" lines with
+ * no blank line between. As in CommonMark, a bullet or an ordered list starting at 1 may follow a
+ * paragraph directly, and a plain line right after a list item continues that item.
+ */
+function mixedBlock(lines) {
+  const runs = [];
+  for (const line of lines) {
+    const kind = /^[-*]\s+/.test(line) ? 'ul' : /^\d+[.)]\s+/.test(line) ? 'ol' : 'p';
+    const last = runs.at(-1);
+    if (kind === 'p') {
+      if (last?.kind === 'p') last.lines.push(line);
+      else if (last) last.lines[last.lines.length - 1] += ` ${line.trim()}`;
+      else runs.push({ kind, lines: [line] });
+    } else if (last?.kind === kind) last.lines.push(line);
+    else if (kind === 'ol' && last?.kind === 'p' && !/^1[.)]\s/.test(line)) last.lines.push(line);
+    else runs.push({ kind, lines: [line] });
+  }
+  return runs.map(({ kind, lines: run }) => {
+    if (kind === 'p') return `<p>${inline(run.join(' '))}</p>`;
+    const marker = kind === 'ul' ? /^[-*]\s+/ : /^\d+[.)]\s+/;
+    return `<${kind}>${run.map((l) => `<li>${inline(l.replace(marker, ''))}</li>`).join('')}</${kind}>`;
+  }).join('');
 }
 
 /** Parse `---` frontmatter (key: value; JSON values allowed). Returns { data, body }. */

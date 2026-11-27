@@ -74,7 +74,7 @@
   "results": {
     "descale": {
       "title": "Descale before you decide anything",
-      "text": "Weak steam, shots that only drip and coffee that isn't hot enough are all listed as descale symptoms in Breville's own troubleshooting table. Run a full descale, then answer again. No source gives a lifespan for these machines, so these symptoms alone don't prove yours is worn out."
+      "text": "Weak steam, shots that only drip and coffee that isn't hot enough are all listed as descale symptoms in the manufacturer's own troubleshooting table. Run a full descale, then answer again. No source gives a lifespan for these machines, so these symptoms alone don't prove yours is worn out."
     },
     "keep": {
       "title": "Keep it and change nothing",
@@ -82,7 +82,7 @@
     },
     "beans-test": {
       "title": "Run the fresh-beans test first",
-      "text": "Breville lists a coarse grind, too small a dose and a light tamp as the causes of fast shots, and says stale beans run fast too. Buy beans with a 'Roasted On' date, use them 5–20 days after roasting, dose so the tamper cap sits level with the rim, then pull three shots in a row. You can also adjust shot temperature on both machines."
+      "text": "The manufacturer lists a coarse grind, too small a dose and a light tamp as the causes of fast shots, and says stale beans run fast too. Buy beans with a 'Roasted On' date, use them 5–20 days after roasting, dose so the tamper cap sits level with the rim, then pull three shots in a row. You can also adjust shot temperature on both machines."
     },
     "grinder": {
       "title": "Keep the machine, add a standalone grinder",

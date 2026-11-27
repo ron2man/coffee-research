@@ -4,6 +4,7 @@ import { fileURLToPath } from 'node:url';
 import { join } from 'node:path';
 import { readJson } from './store.mjs';
 import { compileFile } from './validate.mjs';
+import { marketWords } from './market-text.mjs';
 
 export const TOOLS_DIR = 'content/tools';
 const schemaPath = fileURLToPath(new URL('./schemas/tool.schema.json', import.meta.url));
@@ -32,7 +33,7 @@ function combinations(questions) {
 }
 
 /** Problems with a tool, beyond its schema: references between questions, rules and results. */
-export function toolProblems(tool, { cards } = {}) {
+export function toolProblems(tool, { cards, markets = [] } = {}) {
   const validate = compileFile(schemaPath);
   if (!validate(tool)) return validate.errors.map((e) => `${e.instancePath || '/'} ${e.message}`);
   const problems = [];
@@ -75,6 +76,16 @@ export function toolProblems(tool, { cards } = {}) {
     }
   });
   for (const key of results) if (!used.has(key)) problems.push(`result "${key}" can never be reached`);
+  // Tools are shown in every market as written (no tokens), so no market's brand or name.
+  const text = [tool.title, ...tool.questions.flatMap((q) => [q.text, ...q.options.map((o) => o[1])]),
+    ...Object.values(tool.results).flatMap((r) => [r.title, r.text])].join('\n');
+  for (const w of marketWords(text, { cards: cards ?? new Map(), markets })) {
+    problems.push(w.kind === 'brand'
+      ? `names "${w.word}", ${w.productId}'s brand in only some markets ("…${w.excerpt}…"); say "the manufacturer"`
+      : w.kind === 'price'
+      ? `has a price ("…${w.excerpt}…"); tools are shown in every market, so describe the budget without a currency`
+      : `names the ${w.marketId} market ("${w.word}": "…${w.excerpt}…"); tools are shown in every market`);
+  }
   if (cards) {
     for (const [key, result] of Object.entries(tool.results)) {
       if (result.productId && !cards.has(result.productId)) problems.push(`result "${key}" names product ${result.productId}, which has no knowledge card`);

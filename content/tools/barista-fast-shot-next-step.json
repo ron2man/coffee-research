@@ -146,11 +146,11 @@
     },
     "coarser": {
       "title": "Slow shot: go one grind step coarser",
-      "text": "A dripping, very slow shot is over-extracted, which Breville describes as bitter and burnt. Go one grind step coarser, or turn GRIND AMOUNT down a little. Make one change per shot. Nothing is wrong with the machine."
+      "text": "A dripping, very slow shot is over-extracted, which the manufacturer describes as bitter and burnt. Go one grind step coarser, or turn GRIND AMOUNT down a little. Make one change per shot. Nothing is wrong with the machine."
     },
     "swap-basket": {
       "title": "Switch to the single-wall basket first",
-      "text": "Breville says dual-wall baskets regulate the pressure whatever the grind, dose or tamp, so you can't dial in with one. Fit the single-wall 2-cup basket (the Pro ships with it fitted; your booklet shows which is which) and pull the next shot before changing anything else."
+      "text": "The manufacturer says dual-wall baskets regulate the pressure whatever the grind, dose or tamp, so you can't dial in with one. Fit the single-wall 2-cup basket (the Pro ships with it fitted; your booklet shows which is which) and pull the next shot before changing anything else."
     },
     "raise-dose": {
       "title": "Raise GRIND AMOUNT before you touch the grind",
@@ -158,7 +158,7 @@
     },
     "trim": {
       "title": "Bring the dose down to the rim",
-      "text": "Breville's guide is a tamper cap level with the rim, and owners often blame an overfilled basket for channeling. Turn GRIND AMOUNT down a little, or trim with the Razor tool, until the cap sits level after tamping. Then pull the next shot."
+      "text": "The manufacturer's guide is a tamper cap level with the rim, and owners often blame an overfilled basket for channeling. Turn GRIND AMOUNT down a little, or trim with the Razor tool, until the cap sits level after tamping. Then pull the next shot."
     },
     "manual-shot": {
       "title": "Pull a manual shot so you can read it",
@@ -170,15 +170,15 @@
     },
     "inner-burr": {
       "title": "Move the inner burr one number finer",
-      "text": "With the outer dial at 1, Breville's booklet shows how to move the upper (inner) burr: empty the hopper, run the grinder empty, lift out the burr and turn it one number finer. Do one number at a time, then retest the shot and the tamper-cap level."
+      "text": "With the outer dial at 1, the manufacturer's booklet shows how to move the upper (inner) burr: empty the hopper, run the grinder empty, lift out the burr and turn it one number finer. Do one number at a time, then retest the shot and the tamper-cap level."
     },
     "fresh-beans": {
       "title": "Try fresh beans with a Roasted On date",
-      "text": "Breville says to use beans 5–20 days after their Roasted On date, and that stale coffee pours too quickly and tastes bitter and watery. Old beans or a bag with no roast date are the most likely cause left. Change the beans before anything else."
+      "text": "The manufacturer says to use beans 5–20 days after their Roasted On date, and that stale coffee pours too quickly and tastes bitter and watery. Old beans or a bag with no roast date are the most likely cause left. Change the beans before anything else."
     },
     "routine": {
       "title": "Preheat, purge and dry before each shot",
-      "text": "Breville says a cold portafilter and basket can cool the shot enough to hurt it, and moisture in the basket encourages channeling. Run water through the group, warm the portafilter and basket, wipe the basket dry, then dose, tamp and brew straight away."
+      "text": "The manufacturer says a cold portafilter and basket can cool the shot enough to hurt it, and moisture in the basket encourages channeling. Run water through the group, warm the portafilter and basket, wipe the basket dry, then dose, tamp and brew straight away."
     },
     "temperature": {
       "title": "Now try one step hotter",
@@ -189,8 +189,8 @@
       "text": "Single-wall basket, full dose, fresh beans, finest outer setting and the inner burr at its finest, and light roasts still run fast: that points to the grinder, not the machine. Keep the machine. A standalone grinder is the one purchase that makes sense, and the grinder picker narrows it down."
     },
     "support": {
-      "title": "Stop adjusting and contact Breville or Sage support",
-      "text": "You've done every check the booklet gives. Breville documents no owner test for a pressure fault, so contact support while the machine is under warranty and list what you checked. If they find no fault, the built-in grinder is the limit, and a standalone grinder is the next step."
+      "title": "Stop adjusting and contact the manufacturer's support",
+      "text": "You've done every check the booklet gives. The manufacturer documents no owner test for a pressure fault, so contact support while the machine is under warranty and list what you checked. If they find no fault, the built-in grinder is the limit, and a standalone grinder is the next step."
     }
   },
   "rules": [

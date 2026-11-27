@@ -25,9 +25,9 @@ You write the post a knowledgeable friend would send: opinionated, plain, short 
 The same post is shown in every market the site serves. Write it once, so it reads correctly everywhere:
 
 - **Name products with tokens**, never by a market's brand name: `{{product:<product-id>}}` for the product name and `{{model:<product-id>}}` for its model or SKU. The site fills in each market's own name and model from the knowledge card (a product can be sold under a different brand or model number elsewhere). Use the tokens in `title` and `description` too. Every product you name must be in `productIds`.
-- Talk about the manufacturer as "the manual" or "the manufacturer" rather than repeating a market-specific brand.
+- Talk about the manufacturer as "the manual" or "the manufacturer" rather than repeating a market-specific brand. When the brand itself matters (contacting support), write `{{brand:<product-id>}}`.
 - Keep prices, currencies, voltages, retailers and stock out of the text: the site's offers box shows them per market. If something really does differ by market (a variant has a different part or feature), say so once in one sentence, scoped to that variant.
-- Don't write "US", "UK" or another market into the advice unless it is that kind of real difference.
+- Never name a market ("US", "UK", "American"…) or a brand that is only that market's ("the X guide says") outside the sources section: a reader in the other market reads the same words, and the scheduler rejects them. When editions really differ, describe the difference by what the reader can see on their own product or manual: the label on the panel, the model number (`{{model:<product-id>}}`), or "one edition of the manual says…, the other…". Cite the specific editions in the sources section.
 
 ## Interactive tools
 

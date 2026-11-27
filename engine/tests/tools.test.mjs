@@ -55,3 +55,16 @@ test('a tool with showIf passes, and its mistakes are reported', () => {
   malformed.questions[1].options[0][2] = {};
   assert.ok(toolProblems(malformed).length > 0, 'an empty showIf fails the schema');
 });
+
+test('tool text: no market-only brand, market name or price (tools are shown in every market)', () => {
+  const cards = new Map([['machine-a', { card: { variants: [{ id: 'u', markets: ['US'], brand: 'Northco' }, { id: 'g', markets: ['GB'], brand: 'Southco' }] } }]]);
+  const markets = [{ id: 'US', names: ['US'] }, { id: 'GB', names: ['UK'] }];
+  const tool = base();
+  tool.results.clean.text = 'Contact Northco support.';
+  assert.match(toolProblems(tool, { cards, markets }).join('\n'), /names "Northco", machine-a's brand in only some markets/);
+  tool.results.clean.text = 'The UK guide says so.';
+  assert.match(toolProblems(tool, { cards, markets }).join('\n'), /names the GB market/);
+  tool.questions[0].options[0][1] = 'Around $200';
+  assert.match(toolProblems(tool, { cards, markets }).join('\n'), /has a price/);
+  assert.deepEqual(toolProblems(base(), { cards, markets }), []);
+});

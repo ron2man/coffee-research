@@ -505,7 +505,7 @@ export async function tick({ root = repoRoot, runner, now = new Date(), nicheId,
       }
       validateArtifact(agent, response.output.artifact, `${agent.name} artifact`);
       const problem = agent.mode === 'tune' ? checkTuneArtifact(response.output.artifact, request.input)
-        : agent.mode === 'assist' ? checkAssistArtifact(response.output.artifact, request.input, { cards: cardsWith(root, niche, []) })
+        : agent.mode === 'assist' ? checkAssistArtifact(response.output.artifact, request.input, { cards: cardsWith(root, niche, []), markets: niche.markets })
           : null;
       if (problem) throw new OutputError(problem);
       checked = response.output.artifact;
