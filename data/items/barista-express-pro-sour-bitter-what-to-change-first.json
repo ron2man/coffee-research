@@ -3,17 +3,18 @@
   "id": "barista-express-pro-sour-bitter-what-to-change-first",
   "type": "new-post",
   "niche": "coffee",
-  "status": "briefed",
-  "attempts": 1,
+  "status": "drafted",
+  "attempts": 0,
   "revisions": 0,
   "createdAt": "2026-11-25T20:08:27.717Z",
-  "updatedAt": "2026-11-27T06:34:41.138Z",
+  "updatedAt": "2026-11-27T06:54:54.412Z",
   "artifacts": {
     "idea": "data/ideas/barista-express-pro-sour-bitter-what-to-change-first.json",
     "idea-judge": "data/idea-scores/barista-express-pro-sour-bitter-what-to-change-first.json",
     "research": "data/research/barista-express-pro-sour-bitter-what-to-change-first.json",
     "angle": "data/briefs/barista-express-pro-sour-bitter-what-to-change-first.json",
-    "toolsmith": "data/tools/barista-express-pro-sour-bitter-what-to-change-first.json"
+    "toolsmith": "data/tools/barista-express-pro-sour-bitter-what-to-change-first.json",
+    "writer": "content/drafts/barista-express-pro-sour-bitter-what-to-change-first.json"
   },
   "history": [
     {
@@ -57,7 +58,13 @@
       "to": "briefed",
       "by": "angle",
       "reason": "There is something distinct to add. The top pages for this question either cover only the Express and give generic advice (\"grind finer, dose up\"), or they state gauge bar values and fault causes that don't trace to Breville. One of them blames a still gauge on a worn gasket. None of them puts the Express/Pro traps in order: dual-wall basket, time-based dosing that leaves the basket underfilled when you grind finer, preset buttons that stop at a volume, inner burr, then temperature last. None says that Breville's own booklet uses 'bitter' for fast shots too, and none covers the Pro, which has no gauge. The research claims support an ordered decision rule from start to finish. For the one gap, a test that proves a machine fault, the plan is to say plainly that none is documented and send owners to support."
+    },
+    {
+      "at": "2026-11-27T06:54:54.412Z",
+      "from": "briefed",
+      "to": "drafted",
+      "by": "writer",
+      "reason": "I wrote the post from the brief's ordered decision rule: basket, dose, shot mode, grind, inner burr, beans, routine, temperature, then support. All three tools in the brief exist and are placed in the post: barista-fast-shot-next-step, grind-fault-tree and barista-standalone-grinder-picker. Every product fact maps to a supported claim on the barista-express or barista-pro card. The fault section says plainly that the manufacturer documents no test for a pressure fault. It gives no bar figures and no dual-wall gauge test.\n\nofferIds is empty on purpose. For most readers the answer is to buy nothing. A standalone grinder only makes sense once the inner burr has run out, and the post sends those readers to the barista-standalone-grinder-picker tool. The brief lists turin-df54 as an alternative, but putting it in the 'Our pick' card would contradict the post's main point. Its card also has no claims tying it to these machines' fine-grind problem; the only fit evidence is a reader comment about the 58 mm cradle.\n\nThe two overlap guides aren't published yet, so the post uses the tools instead of guide links: breville-builtin-grinder-wont-grind-fine-enough and standalone-grinder-for-barista-express-pro. Once standalone-grinder-for-barista-express-pro is researched, the grinder step could take offers.\n\nThe temperature steps in °F come from the US booklet and are labelled that way. The Sage GB booklets were not checked.\n\nTitle is 63 characters with the longest names filled in. seoTitle is 58 and description is about 150."
     }
-  ],
-  "lastError": "tool barista-fast-shot-next-step: /questions/0/options/0/1 must NOT have more than 80 characters; /questions/0/options/1/1 must NOT have more than 80 characters; /questions/0/options/2/1 must NOT have more than 80 characters"
+  ]
 }
