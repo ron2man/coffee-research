@@ -232,6 +232,23 @@ test('security headers and manifest: HSTS, a report-only CSP that allows what th
   for (const icon of manifest.icons) assert.ok(has(icon.src.slice(1)), `manifest icon ${icon.src} is built`);
 });
 
+test('each guide has its own share image per market, with the title for that market', () => {
+  const { read, has } = build('production');
+  const guide = readdirSync(join(repoRoot, 'content/published')).find((f) => f.endsWith('.md')).slice(0, -3);
+  const og = (locale) => read(`${locale}/guides/${guide}/index.html`).match(/<meta property="og:image" content="https:\/\/yourcoffeesetup\.com([^"]+)">/)[1];
+  assert.equal(og('en-gb'), `/og/en-gb/${guide}.png`);
+  assert.equal(og('en-us'), `/og/en-us/${guide}.png`);
+  for (const locale of ['en-gb', 'en-us']) {
+    assert.ok(has(`og/${locale}/${guide}.png`), `${locale} image is built`);
+    const html = read(`${locale}/guides/${guide}/index.html`);
+    const title = html.match(/<h1>([^<]+)<\/h1>/)[1];
+    assert.ok(html.includes(`<meta property="og:image:alt" content="${title}">`), 'alt is the guide title');
+    const article = [...html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)].map((m) => JSON.parse(m[1])).find((d) => d['@type'] === 'Article');
+    assert.deepEqual(article.image, [`https://yourcoffeesetup.com/og/${locale}/${guide}.png`]);
+  }
+  assert.notDeepEqual(readFileSync(join(build('production').outDir, `og/en-gb/${guide}.png`)), readFileSync(join(build('production').outDir, `og/en-us/${guide}.png`)), 'markets differ when product names do');
+});
+
 test('consent banner: production pages with GTM carry it hidden, previews do not', () => {
   const home = build('production').read('en-gb/index.html');
   assert.match(home, /<section class="consent" id="consent" aria-label="Cookie choice" hidden>/);

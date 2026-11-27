@@ -281,7 +281,7 @@ export function postStructuredData({ site, market, post, siteUrl, crumbs }) {
   const org = organization(site, siteUrl);
   const article = {
     '@context': 'https://schema.org', '@type': 'Article', headline: post.title, description: post.description,
-    image: [`${siteUrl}${SHARE_IMAGE.src}`],
+    image: [`${siteUrl}/og/${market.locale}/${post.slug}.png`], // rendered by src/pages/og/
     inLanguage: `${market.language}-${market.id}`, mainEntityOfPage: url, url, author: org, publisher: org,
     ...(post.publishedAt ? { datePublished: post.publishedAt } : {}),
     ...(post.updatedAt ? { dateModified: post.updatedAt } : {}),
