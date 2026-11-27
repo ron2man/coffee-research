@@ -26,6 +26,10 @@ const robots = preview || noindex ? 'noindex, nofollow' : null;
 const alternates = market
   ? markets.map((m) => ({ m, href: path.replace(`/${market.locale}/`, `/${m.locale}/`) })).filter(({ href }) => siteInfo.pages.has(href))
   : markets.map((m) => ({ m, href: `/${m.locale}/` }));
+// x-default: the same page in the first (primary) market when it exists; market homes keep the root chooser.
+const primaryHref = market ? path.replace(`/${market.locale}/`, `/${markets[0].locale}/`) : null;
+const isHome = market && path === `/${market.locale}/`;
+const xDefault = !isHome && primaryHref && siteInfo.pages.has(primaryHref) ? primaryHref : '/';
 const lang = market ? `${market.language}-${market.id}` : 'en';
 const ogLocale = market ? `${market.language}_${market.id}` : 'en_US';
 const switcher = market ? markets.map((m) => {
@@ -45,7 +49,7 @@ const hasGuides = siteInfo.pages.has(`/${market?.locale}/guides/`);
 {robots && <meta name="robots" content={robots}>}
 <link rel="canonical" href={`${SITE_URL}${path}`}>
 {alternates.map(({ m, href }) => <link rel="alternate" hreflang={`${m.language}-${m.id}`} href={`${SITE_URL}${href}`}>)}
-<link rel="alternate" hreflang="x-default" href={`${SITE_URL}/`}>
+<link rel="alternate" hreflang="x-default" href={`${SITE_URL}${xDefault}`}>
 <meta property="og:type" content={pageId ? 'article' : 'website'}>
 <meta property="og:site_name" content={siteInfo.name}>
 <meta property="og:title" content={title}>

@@ -33,6 +33,7 @@ function fromMarkdown(root, dir, name, status) {
     // What the guide recommends buying (pick card, PriceBox). Older frontmatter without it offered its products.
     offerIds: data.offerIds ?? data.productIds ?? [],
     tools: data.tools ?? [],
+    publishedAt: data.publishedAt ?? null,
     updatedAt: data.updatedAt ?? data.publishedAt ?? null,
     disclosure: data.disclosure !== false,
     humanData: data.humanData ?? [],
