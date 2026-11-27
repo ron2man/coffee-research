@@ -59,6 +59,13 @@ export function validateCard(markdown, category, filename) {
     for (const field of ['name', 'brand', 'sku']) {
       requireCondition(variant[field] === undefined || nonempty(variant[field]), `Variant ${variant.id} has an empty ${field}`);
     }
+    // Reader-facing names are "<Brand> <Model>". A manufacturer's styling like "the Model" reads as
+    // "your Brand the Model" once a token puts it in a sentence.
+    const brandThe = variant.brand ? `${variant.brand} the `.toLowerCase() : null;
+    requireCondition(
+      !variant.name || !(brandThe ? variant.name.toLowerCase().startsWith(brandThe) : /^\S+ the /i.test(variant.name)),
+      `Variant ${variant.id} name "${variant.name}" puts "the" after the brand; use "<Brand> <Model>"`,
+    );
   }
 
   for (const source of card.sources) {

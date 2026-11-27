@@ -1,9 +1,9 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
-import { cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { cpSync, existsSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, symlinkSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
-import { join } from 'node:path';
+import { basename, join } from 'node:path';
 import { DEFAULT_DISCLOSURE, loadSiteData, repoRoot, siteMode } from '../lib/site-data.mjs';
 import { offersFor, mockOffers } from '../lib/offers.mjs';
 import { parseMarkdown } from '../lib/markdown.mjs';
@@ -91,10 +91,32 @@ test('home page links all guides and lists them as compact rows', () => {
   assert.match(home, /class="band-link" href="\/en-us\/how-we-work\/"/);
 });
 
-test('production with no published guides: holding homes, indexable, GTM with consent defaults', () => {
+test('no built page shows an unresolved token or "<Brand> the <Model>"', () => {
+  for (const mode of ['preview', 'production']) {
+    const { outDir } = build(mode);
+    const pages = readdirSync(outDir, { recursive: true }).filter((f) => f.endsWith('.html'));
+    assert.ok(pages.length > 0, `${mode}: no pages built`);
+    for (const page of pages) {
+      const html = readFileSync(join(outDir, page), 'utf8');
+      assert.doesNotMatch(html, /\{\{[a-z]+:[^}]*\}\}/, `${mode} ${page}: unresolved {{token}}`);
+      assert.doesNotMatch(html, /\b(Sage|Breville) the /, `${mode} ${page}: "<Brand> the <Model>"`);
+    }
+  }
+});
+
+test('home feature resolves product names for each market', () => {
+  const { read } = build('preview');
+  for (const [locale, brand] of [['en-us', 'Breville'], ['en-gb', 'Sage']]) {
+    const feature = read(`${locale}/index.html`).match(/<div class="feature">[\s\S]*?<\/div>\s*<\/div>/)?.[0] ?? '';
+    assert.ok(feature, `${locale}: home has a feature`);
+    assert.doesNotMatch(feature, /\{\{/);
+    if (/Barista Express/.test(feature)) assert.match(feature, new RegExp(`${brand} Barista Express`));
+  }
+});
+
+test('production build: published guides only, indexable, GTM with consent defaults', () => {
   const { read, has } = build('production');
   const home = read('en-us/index.html');
-  assert.match(home, /Fix it, upgrade it, <em>or keep it\.<\/em>/);
   assert.doesNotMatch(home, /name="robots"/);
   assert.doesNotMatch(home, /Preview build/);
   assert.match(home, /googletagmanager\.com\/gtm\.js\?id=GTM-TEST0001/);
@@ -104,14 +126,43 @@ test('production with no published guides: holding homes, indexable, GTM with co
   assert.match(home, /<link rel="canonical" href="https:\/\/yourcoffeesetup\.com\/en-us\/">/);
   assert.match(home, /hreflang="en-GB" href="https:\/\/yourcoffeesetup\.com\/en-gb\/"/);
   assert.match(home, /hreflang="x-default" href="https:\/\/yourcoffeesetup\.com\/"/);
-  assert.match(read('en-gb/index.html'), /Coming soon for the UK/);
-  assert.ok(!has('en-us/guides/index.html'), 'no guide list without guides');
+  // Every published guide is built for every market; drafts, references and mock photos are not.
+  const published = readdirSync(join(repoRoot, 'content/published')).filter((f) => f.endsWith('.md')).map((f) => f.slice(0, -3));
+  assert.ok(published.length > 0, 'this test expects published guides; the empty case is covered below');
+  for (const locale of ['en-us', 'en-gb']) {
+    assert.ok(has(`${locale}/guides/index.html`), `${locale}: guide list`);
+    for (const slug of published) assert.ok(has(`${locale}/guides/${slug}/index.html`), `${locale}: ${slug}`);
+    assert.doesNotMatch(read(`${locale}/index.html`), /class="holding"|Coming soon for the/, `${locale}: real home, not the holding page`);
+  }
   assert.ok(!has('en-us/guides/which-grinder-for-bambino/index.html'), 'drafts and references stay out of production');
   assert.ok(!has('assets/mock'), 'mock photos never ship');
   assert.match(read('robots.txt'), /Allow: \/\n\nSitemap: https:\/\/yourcoffeesetup\.com\/sitemap-index\.xml/);
   assert.match(read('sitemap-0.xml'), /<loc>https:\/\/yourcoffeesetup\.com\/en-us\/<\/loc>/);
   assert.match(read('en-us/how-we-work/index.html'), /may earn us a commission/);
   assert.match(home, /<p class="disclosure">Some links on this site may earn us a commission/, 'placeholder in the footer');
+});
+
+test('production with no published guides: holding homes and no guide list', (t) => {
+  // A copy of the repo with content/published emptied, built the way the live site is built.
+  const root = mkdtempSync(join(tmpdir(), 'site-empty-'));
+  const outDir = join(root, 'out');
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const skip = new Set(['node_modules', 'dist', '.astro']);
+  for (const dir of ['engine', 'niches', 'knowledge', 'content', 'data', 'site']) {
+    cpSync(join(repoRoot, dir), join(root, dir), { recursive: true, filter: (src) => !skip.has(basename(src)) });
+  }
+  cpSync(join(repoRoot, 'package.json'), join(root, 'package.json'));
+  symlinkSync(join(repoRoot, 'node_modules'), join(root, 'node_modules'), 'dir');
+  rmSync(join(root, 'content/published'), { recursive: true, force: true });
+  mkdirSync(join(root, 'content/published'));
+  const env = { ...process.env, SITE_MODE: 'production', PUBLIC_GTM_ID: 'GTM-TEST0001', ASTRO_TELEMETRY_DISABLED: '1' };
+  delete env.WORKERS_CI_BRANCH;
+  execFileSync(astro, ['build', '--root', 'site', '--outDir', outDir], { cwd: root, env, stdio: 'pipe' });
+  const read = (path) => readFileSync(join(outDir, path), 'utf8');
+  assert.match(read('en-us/index.html'), /Fix it, upgrade it, <em>or keep it\.<\/em>/);
+  assert.match(read('en-gb/index.html'), /Coming soon for the UK/);
+  assert.doesNotMatch(read('en-us/index.html'), /name="robots"/, 'the holding page is indexable');
+  assert.ok(!existsSync(join(outDir, 'en-us/guides/index.html')), 'no guide list without guides');
 });
 
 test('disclosure never blocks a build: the footer shows the placeholder until a market has its own text', (t) => {

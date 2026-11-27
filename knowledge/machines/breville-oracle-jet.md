@@ -10,8 +10,8 @@ Automated machine with a built-in grinder and auto milk, heated by a ThermoJet r
   "category": "machines",
   "updatedAt": "2026-11-25",
   "variants": [
-    {"id": "bes985-us", "markets": ["US"], "name": "Breville the Oracle Jet", "brand": "Breville", "sku": "BES985"},
-    {"id": "ses985-gb", "markets": ["GB"], "name": "Sage the Oracle Jet", "brand": "Sage", "sku": "SES985"}
+    {"id": "bes985-us", "markets": ["US"], "name": "Breville Oracle Jet", "brand": "Breville", "sku": "BES985"},
+    {"id": "ses985-gb", "markets": ["GB"], "name": "Sage Oracle Jet", "brand": "Sage", "sku": "SES985"}
   ],
   "sources": [
     {"id": "breville-us-bes985", "url": "https://www.breville.com/en-us/product/bes985", "type": "manufacturer", "accessedAt": "2026-11-25"},
