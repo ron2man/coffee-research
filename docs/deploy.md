@@ -55,6 +55,11 @@ production does, including `_headers`).
 2. Sitemaps: submit `https://yourcoffeesetup.com/sitemap-index.xml`.
 3. In GA4 (Admin > Product links > Search Console links), link the property so queries show in GA4.
 
+## Assets and share image
+
+- `/assets/*` is cached for a year (`site/public/_headers`). Every asset URL in the HTML carries a content hash (`?v=…`, `assetUrl` in `site/lib/templates.mjs`), so a changed file gets a new URL. Fonts keep fixed names; rename the file to change one.
+- The default share image and the logo are rendered from `site/og/default.html` and `site/public/assets/icon.svg` by `python3 site/og/render.py` (Playwright for Python; set `CHROME` to a Chrome binary if Playwright has no browser). Commit the PNGs it writes.
+
 ## Analytics: GTM and GA4
 
 The site loads Google Tag Manager (container `GTM-P6P44F42`, from `PUBLIC_GTM_ID`) in production

@@ -3,6 +3,18 @@
 import { escape, inline, parseMarkdown } from './markdown.mjs';
 import { formatPrice, offersFor } from './offers.mjs';
 import { productName as engineProductName, resolveTokens as engineResolveTokens } from '../../engine/state/tokens.mjs';
+import { createHash } from 'node:crypto';
+import { readFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
+
+// Static assets are cached for a year (public/_headers), so every URL the HTML uses carries a hash
+// of the file: a changed file gets a new URL. Fonts keep a fixed name; rename the file to change one.
+const publicDir = fileURLToPath(new URL('../public', import.meta.url));
+const versions = new Map();
+export function assetUrl(path) {
+  if (!versions.has(path)) versions.set(path, createHash('sha256').update(readFileSync(publicDir + path)).digest('hex').slice(0, 10));
+  return `${path}?v=${versions.get(path)}`;
+}
 
 const region = new Intl.DisplayNames(['en'], { type: 'region' });
 export const marketLabel = (market) => region.of(market.id === 'GB' ? 'GB' : market.id);
@@ -63,7 +75,9 @@ const categoryLabel = (site, id) => site.allCategories?.find((c) => c.id === id)
 function dateLabel(post, market) {
   if (!post.updatedAt) return post.status === 'published' ? '' : 'Draft';
   const d = new Date(`${post.updatedAt}T12:00:00Z`);
-  return Number.isNaN(d.getTime()) ? escape(post.updatedAt) : new Intl.DateTimeFormat(`${market.language}-${market.id}`, { day: 'numeric', month: 'short', year: 'numeric' }).format(d);
+  if (Number.isNaN(d.getTime())) return escape(post.updatedAt);
+  const text = new Intl.DateTimeFormat(`${market.language}-${market.id}`, { day: 'numeric', month: 'short', year: 'numeric' }).format(d);
+  return `<time datetime="${escape(post.updatedAt.slice(0, 10))}">${text}</time>`;
 }
 const byDate = (a, b) => (b.updatedAt ?? '').localeCompare(a.updatedAt ?? '');
 
@@ -238,12 +252,31 @@ export function breadcrumbItems({ site, market, post }) {
 
 const jsonLd = (data) => `<script type="application/ld+json">${JSON.stringify(data).replace(/</g, '\\u003c')}</script>`;
 
+/** Default share image (rendered by site/og/render.py) and the logo used in structured data. */
+export const SHARE_IMAGE = { src: assetUrl('/assets/og-default.png'), width: 1200, height: 630, alt: 'YourCoffeeSetup: straight answers for home espresso' };
+export const LOGO = { src: assetUrl('/assets/logo-512.png'), width: 512, height: 512 };
+const organization = (site, siteUrl) => ({
+  '@type': 'Organization', name: site.name ?? '', url: `${siteUrl}/`,
+  logo: { '@type': 'ImageObject', url: `${siteUrl}${LOGO.src}`, width: LOGO.width, height: LOGO.height },
+});
+
+/** WebSite + Organization, for the root chooser and the market homes. */
+export function siteStructuredData({ site, siteUrl, market }) {
+  const url = market ? `${siteUrl}/${market.locale}/` : `${siteUrl}/`;
+  return jsonLd({
+    '@context': 'https://schema.org', '@type': 'WebSite', name: site.name ?? '', url,
+    ...(market ? { inLanguage: `${market.language}-${market.id}` } : {}),
+    publisher: organization(site, siteUrl),
+  }) + jsonLd({ '@context': 'https://schema.org', ...organization(site, siteUrl), email: 'hello@yourcoffeesetup.com' });
+}
+
 /** Article + BreadcrumbList structured data. No author person: the site does not claim one. */
 export function postStructuredData({ site, market, post, siteUrl, crumbs }) {
   const url = `${siteUrl}${postPath(market, post.slug)}`;
-  const org = { '@type': 'Organization', name: site.name ?? '', url: `${siteUrl}/` };
+  const org = organization(site, siteUrl);
   const article = {
     '@context': 'https://schema.org', '@type': 'Article', headline: post.title, description: post.description,
+    image: [`${siteUrl}${SHARE_IMAGE.src}`],
     inLanguage: `${market.language}-${market.id}`, mainEntityOfPage: url, url, author: org, publisher: org,
     ...(post.publishedAt ? { datePublished: post.publishedAt } : {}),
     ...(post.updatedAt ? { dateModified: post.updatedAt } : {}),
@@ -260,7 +293,7 @@ export function postPage({ site, market, post: source, offers, now, preview, pos
   const { html, headings } = postBody({ post, site, market, offers, now });
   const elsewhere = ''; // one post for every market: no "written for another market" notice
   const badge = STATUS_BADGE[post.status] ? `<span class="badge">${STATUS_BADGE[post.status]}</span>` : '';
-  const updated = post.updatedAt ? `Updated ${escape(post.updatedAt)} · ` : '';
+  const updated = post.updatedAt ? `Updated ${dateLabel(post, market)} · ` : '';
   const pickId = post.pick ?? post.offerIds?.[0] ?? null;
   const toc = headings.length ? `<nav class="toc" aria-label="On this page"><strong>On this page</strong><ol>${headings.map((h) => `<li><a href="#${h.id}">${inline(h.text)}</a></li>`).join('')}</ol></nav>` : '';
   const honesty = post.humanData?.length ? '' : 'We haven’t tested these products ourselves. This guide is built from manuals, published tests and owner reports; how it was put together is at the end.';

@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
+import { createHash } from 'node:crypto';
 import { cpSync, existsSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, symlinkSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { basename, join } from 'node:path';
@@ -142,13 +143,71 @@ test('production build: published guides only, indexable, GTM with consent defau
   assert.match(home, /<p class="disclosure">Some links on this site may earn us a commission/, 'placeholder in the footer');
 });
 
+test('every production page: one h1, valid JSON-LD, a share image; indexable pages also a self canonical', () => {
+  const { outDir, read } = build('production');
+  const pages = readdirSync(outDir, { recursive: true }).filter((f) => f.endsWith('.html'));
+  // PNG width and height live at bytes 16–23 of the IHDR chunk.
+  const pngSize = (file) => { const b = readFileSync(join(outDir, file)); return [b.readUInt32BE(16), b.readUInt32BE(20)]; };
+  for (const page of pages) {
+    const html = read(page);
+    const at = `${page}:`;
+    assert.equal((html.match(/<h1[\s>]/g) ?? []).length, 1, `${at} exactly one <h1>`);
+    for (const [, json] of html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)) assert.doesNotThrow(() => JSON.parse(json), `${at} JSON-LD parses`);
+    const og = html.match(/<meta property="og:image" content="https:\/\/yourcoffeesetup\.com(\/[^"?]+)(?:\?v=[0-9a-f]+)?">/)?.[1];
+    assert.ok(og, `${at} absolute og:image`);
+    assert.ok(existsSync(join(outDir, og)), `${at} og:image ${og} is built`);
+    const [w, h] = pngSize(og);
+    assert.match(html, new RegExp(`<meta property="og:image:width" content="${w}">`), `${at} og:image:width matches the file`);
+    assert.match(html, new RegExp(`<meta property="og:image:height" content="${h}">`), `${at} og:image:height matches the file`);
+    assert.match(html, /<meta property="og:image:alt" content="[^"]+">/, `${at} og:image:alt`);
+    assert.match(html, /<meta name="twitter:card" content="summary_large_image">/, `${at} large card`);
+    const noindex = /<meta name="robots" content="[^"]*noindex/.test(html);
+    const canonical = html.match(/<link rel="canonical" href="https:\/\/yourcoffeesetup\.com([^"]*)">/)?.[1];
+    if (noindex) assert.equal(canonical, undefined, `${at} no canonical on a noindex page`);
+    else assert.equal(canonical, `/${page.replace(/index\.html$/, '')}`.replace(/^\/\//, '/'), `${at} canonical points to itself`);
+  }
+});
+
+test('structured data: market homes carry WebSite + Organization with a logo; guides an Article image', () => {
+  const { read, has } = build('production');
+  const ld = (html) => [...html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)].map((m) => JSON.parse(m[1]));
+  const home = ld(read('en-gb/index.html'));
+  const website = home.find((d) => d['@type'] === 'WebSite');
+  assert.equal(website.url, 'https://yourcoffeesetup.com/en-gb/');
+  assert.equal(website.inLanguage, 'en-GB');
+  const org = home.find((d) => d['@type'] === 'Organization');
+  assert.ok(has(new URL(org.logo.url).pathname.slice(1)), 'the logo file is built');
+  assert.ok(ld(read('index.html')).some((d) => d['@type'] === 'WebSite' && d.url === 'https://yourcoffeesetup.com/'), 'root chooser');
+  const guide = readdirSync(join(repoRoot, 'content/published')).find((f) => f.endsWith('.md')).slice(0, -3);
+  const html = read(`en-gb/guides/${guide}/index.html`);
+  const article = ld(html).find((d) => d['@type'] === 'Article');
+  assert.ok(article.image?.length, 'Article has an image');
+  assert.ok(article.publisher.logo?.url, 'publisher has a logo');
+  assert.match(html, /Updated <time datetime="\d{4}-\d{2}-\d{2}">\d{1,2} [A-Z][a-z]{2,3} \d{4}<\/time>/, 'readable date with a machine date');
+});
+
+test('asset URLs carry a content hash, and assets have one year-long Cache-Control rule', () => {
+  const { read } = build('production');
+  const home = read('en-us/index.html');
+  for (const asset of ['site.css', 'site.js', 'consent.js', 'icon.svg', 'logo-512.png', 'og-default.png']) {
+    const version = home.match(new RegExp(`/assets/${asset.replace('.', '\\.')}\\?v=([0-9a-f]{10})`))?.[1];
+    assert.ok(version, `${asset} is versioned`);
+    const hash = createHash('sha256').update(readFileSync(join(repoRoot, 'site/public/assets', asset))).digest('hex').slice(0, 10);
+    assert.equal(version, hash, `${asset} version is its content hash`);
+  }
+  assert.doesNotMatch(home, /\/assets\/(?!fonts\/)[^"?]+"/, 'no unversioned asset URL apart from fonts');
+  const headers = read('_headers');
+  assert.equal((headers.match(/^\/assets\//gm) ?? []).length, 1, 'one /assets rule, so one Cache-Control header');
+  assert.match(headers, /\/assets\/\*\n  Cache-Control: public, max-age=31536000, immutable/);
+});
+
 test('consent banner: production pages with GTM carry it hidden, previews do not', () => {
   const home = build('production').read('en-gb/index.html');
   assert.match(home, /<section class="consent" id="consent" aria-label="Cookie choice" hidden>/);
   assert.match(home, /<button type="button" id="consent-accept">Accept<\/button>/);
   assert.match(home, /<button type="button" id="consent-reject">Reject<\/button>/);
   assert.match(home, /id="consent-settings" hidden>Cookie settings<\/button>/, 'a way back to the choice in the footer');
-  assert.match(home, /<script src="\/assets\/consent\.js" defer><\/script>/);
+  assert.match(home, /<script src="\/assets\/consent\.js\?v=[0-9a-f]{10}" defer><\/script>/);
   const saved = home.indexOf("localStorage.getItem('analytics-consent')");
   assert.ok(saved > home.indexOf("gtag('consent', 'default'") && saved < home.indexOf('gtm.js?id='), 'a saved choice is applied after the defaults and before GTM loads');
   const preview = build('preview').read('en-gb/index.html');

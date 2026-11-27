@@ -160,3 +160,11 @@ The project lead set the goal: one guide a day, built around equipment, with "my
 - Accept and Reject are equal buttons with equal styling, no pre-ticked choice and no cookie wall. The choice is kept in `localStorage` and applied before GTM loads on later visits.
 - Not legal advice, and still open: the banner wording was drafted here, not checked against ICO guidance; there is no privacy notice to link to yet; and whether the choice should expire (for example after 12 months) is undecided.
 - To measure (principle 8): the share of UK/EEA sessions that accept (GA4 consent reporting) over 4 weeks, and whether UK users in GA4 rise compared with the modeled numbers before.
+
+### 2026-11-27 · Share image, structured data and asset caching
+- No page had an `og:image`, so shared links showed no picture. Every page now has a default 1200×630 share image (`site/og/default.html`, rendered by `site/og/render.py`) and a `summary_large_image` card. Article JSON-LD gains `image` and a publisher logo (512×512), and the root and market homes carry WebSite + Organization. 404 has no canonical.
+- A site test now checks every production page: one `<h1>`, JSON-LD that parses, an absolute `og:image` whose file exists and whose width and height match it, alt text, and a self-referencing canonical unless the page is noindex.
+- Guide dates are `<time datetime>` with one readable format ("25 Nov 2026") in the header and the lists.
+- Cause found while auditing: the live breadcrumbs looked like a numbered list because browsers kept the old `site.css` for 24 hours (`max-age=86400`, no version in the URL). Asset URLs now carry a content hash (`assetUrl`), and `/assets/*` is cached for a year in one rule (two overlapping rules had sent the font two `Cache-Control` headers).
+- Next, not done: a share image per guide (title on the card). That needs either a build-time renderer or images committed with each publish.
+- To measure (principle 8): shares are hard to see directly. Watch referral sessions from social and messaging apps in GA4 over 4–6 weeks.
