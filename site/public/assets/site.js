@@ -65,49 +65,84 @@
   function matches(when, answers) {
     return Object.keys(when).every(function (k) { return answers[k] === when[k]; });
   }
+  // [value, label, showIf]: hidden once a showIf question is answered with a value it doesn't list;
+  // shown until then. Same rule as optionVisible in engine/state/tools.mjs; a test keeps them equal.
+  function optionVisible(option, answers) {
+    var showIf = option[2];
+    if (!showIf) return true;
+    return Object.keys(showIf).every(function (k) {
+      return answers[k] === undefined || [].concat(showIf[k]).indexOf(answers[k]) !== -1;
+    });
+  }
+  function resultFor(tool, answers) {
+    var rule = tool.rules.filter(function (r) { return matches(r.when, answers); })[0];
+    return rule ? rule.result : tool['default'];
+  }
+  window.YCSPicker = { optionVisible: optionVisible, resultFor: resultFor };
 
+  var pickerCount = 0;
+  // One fieldset of radio buttons per question, built once. Changing an answer hides the options it
+  // rules out (and clears them if chosen); the result appears once every question is answered.
   function mountPicker(root) {
     var tool = JSON.parse(root.querySelector('.picker-data').textContent);
+    var prefix = 'pk' + (++pickerCount) + '-';
     var answers = {};
+    var lastResult = null;
     var form = document.createElement('div');
     form.className = 'picker-questions';
     var result = document.createElement('div');
     result.className = 'picker-result';
     result.setAttribute('role', 'status');
     result.setAttribute('aria-live', 'polite');
+    result.hidden = true;
+    var inputs = [];
+
+    tool.questions.forEach(function (q, i) {
+      var group = document.createElement('fieldset');
+      group.className = 'picker-q';
+      var legend = document.createElement('legend');
+      legend.textContent = (i + 1) + '. ' + q.text;
+      group.appendChild(legend);
+      var opts = document.createElement('div');
+      opts.className = 'picker-opts';
+      q.options.forEach(function (o) {
+        var label = document.createElement('label');
+        label.className = 'picker-opt';
+        var input = document.createElement('input');
+        input.type = 'radio';
+        input.name = prefix + q.key;
+        input.value = o[0];
+        input.addEventListener('change', function () { if (input.checked) { answers[q.key] = o[0]; update(); } });
+        var text = document.createElement('span');
+        text.textContent = o[1];
+        label.appendChild(input);
+        label.appendChild(text);
+        opts.appendChild(label);
+        inputs.push({ q: q, o: o, input: input, label: label });
+      });
+      group.appendChild(opts);
+      form.appendChild(group);
+    });
     root.appendChild(form);
     root.appendChild(result);
 
-    function draw() {
-      form.innerHTML = '';
-      tool.questions.forEach(function (q, i) {
-        var group = document.createElement('fieldset');
-        group.className = 'picker-q';
-        var legend = document.createElement('legend');
-        legend.textContent = (i + 1) + '. ' + q.text;
-        group.appendChild(legend);
-        var opts = document.createElement('div');
-        opts.className = 'picker-opts';
-        q.options.forEach(function (o) {
-          var b = document.createElement('button');
-          b.type = 'button';
-          b.textContent = o[1];
-          b.setAttribute('aria-pressed', String(answers[q.key] === o[0]));
-          b.addEventListener('click', function () { answers[q.key] = o[0]; draw(); });
-          opts.appendChild(b);
-        });
-        group.appendChild(opts);
-        form.appendChild(group);
+    function update() {
+      inputs.forEach(function (it) {
+        var visible = optionVisible(it.o, answers);
+        it.label.hidden = !visible;
+        it.input.disabled = !visible;
+        if (!visible && it.input.checked) { it.input.checked = false; delete answers[it.q.key]; }
       });
       var done = tool.questions.every(function (q) { return answers[q.key]; });
-      result.innerHTML = '';
-      result.hidden = !done;
-      if (!done) return;
-      var rule = tool.rules.filter(function (r) { return matches(r.when, answers); })[0];
-      var resultKey = rule ? rule.result : tool['default'];
+      if (!done) { result.hidden = true; result.innerHTML = ''; lastResult = null; return; }
+      var resultKey = resultFor(tool, answers);
+      result.hidden = false;
+      if (resultKey === lastResult) return;
+      lastResult = resultKey;
       var r = tool.results[resultKey];
       if (r.productId) toolState[r.productId] = tool.id + ':' + resultKey;
       track('tool_complete', { tool_id: tool.id, result: resultKey });
+      result.innerHTML = '';
       var h = document.createElement('strong');
       h.textContent = r.title;
       var p = document.createElement('p');
@@ -124,10 +159,15 @@
       reset.type = 'button';
       reset.className = 'picker-reset';
       reset.textContent = 'Start over';
-      reset.addEventListener('click', function () { answers = {}; draw(); form.querySelector('button').focus(); });
+      reset.addEventListener('click', function () {
+        answers = {};
+        inputs.forEach(function (it) { it.input.checked = false; });
+        update();
+        inputs[0].input.focus();
+      });
       result.appendChild(reset);
     }
-    draw();
+    update();
   }
 
   // Sidebar "On this page": mark the section being read.

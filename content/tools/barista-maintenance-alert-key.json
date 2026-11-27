@@ -26,23 +26,44 @@
       "options": [
         [
           "flash",
-          "The light is flashing"
+          "The light is flashing",
+          {
+            "panel": [
+              "express-cd",
+              "express-cm"
+            ]
+          }
         ],
         [
           "solid",
-          "The light is on steadily"
+          "The light is on steadily",
+          {
+            "panel": [
+              "express-cd",
+              "express-cm"
+            ]
+          }
         ],
         [
           "flush",
-          "The screen shows FLUSH"
+          "The screen shows FLUSH",
+          {
+            "panel": "pro"
+          }
         ],
         [
           "descale",
-          "The screen shows DESCALE"
+          "The screen shows DESCALE",
+          {
+            "panel": "pro"
+          }
         ],
         [
           "new",
-          "FLUSH on a brand-new Pro I've just set up"
+          "FLUSH on a brand-new Pro I've just set up",
+          {
+            "panel": "pro"
+          }
         ],
         [
           "none",
@@ -104,10 +125,6 @@
       "title": "Nothing is due: run the first-use flush",
       "text": "A new Barista Pro shows FLUSH for its first-use cycle, which rinses the machine and primes the heater. It isn't a cleaning alert. Press 1 CUP, let it count down, and it goes to READY."
     },
-    "recheck": {
-      "title": "Check the label on your panel again",
-      "text": "That signal doesn't belong to the panel you picked. The Express has a light (CLEAN / DESCALE or CLEAN ME). The Pro shows FLUSH or DESCALE on its screen. Go by the label you can actually see on the machine, not by the country you bought it in, and answer again."
-    },
     "support": {
       "title": "Contact Breville or Sage support",
       "text": "You've run both the cleaning cycle and a descale and the signal is still there. The manual describes no reset step and doesn't say what triggers the light, so more cleaning won't help. This is a question for support, not something to buy."
@@ -160,62 +177,6 @@
         "signal": "new"
       },
       "result": "first-use"
-    },
-    {
-      "when": {
-        "panel": "pro",
-        "signal": "flash"
-      },
-      "result": "recheck"
-    },
-    {
-      "when": {
-        "panel": "pro",
-        "signal": "solid"
-      },
-      "result": "recheck"
-    },
-    {
-      "when": {
-        "panel": "express-cd",
-        "signal": "flush"
-      },
-      "result": "recheck"
-    },
-    {
-      "when": {
-        "panel": "express-cd",
-        "signal": "descale"
-      },
-      "result": "recheck"
-    },
-    {
-      "when": {
-        "panel": "express-cd",
-        "signal": "new"
-      },
-      "result": "recheck"
-    },
-    {
-      "when": {
-        "panel": "express-cm",
-        "signal": "flush"
-      },
-      "result": "recheck"
-    },
-    {
-      "when": {
-        "panel": "express-cm",
-        "signal": "descale"
-      },
-      "result": "recheck"
-    },
-    {
-      "when": {
-        "panel": "express-cm",
-        "signal": "new"
-      },
-      "result": "recheck"
     },
     {
       "when": {
