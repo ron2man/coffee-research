@@ -8,7 +8,7 @@ import { newItem, transition } from '../state/machine.mjs';
 import { repoRoot } from '../state/niche.mjs';
 import { loadItems, saveItem, writeJsonAtomic } from '../state/store.mjs';
 import { parseFrontmatter } from '../../site/lib/markdown.mjs';
-import { publishProblems, publishedMarkdown, requestPublish, syncPublished } from '../publish/publish.mjs';
+import { processPublishQueue, publishProblems, publishedMarkdown, queuePublish, requestPublish, syncPublished } from '../publish/publish.mjs';
 import { pushFilesToBranch } from '../scheduler/git.mjs';
 
 const writer = () => JSON.parse(readFileSync(join(repoRoot, 'engine/agents/writer/fixtures/valid.json'), 'utf8')).artifact;
@@ -54,11 +54,12 @@ test('the published file carries frontmatter the site can read', () => {
   assert.match(body, /Start with the basket/);
 });
 
-test('publishing is refused without disclosure text for every market', (t) => {
+test('disclosure text never blocks publishing, with or without offers', (t) => {
   const { root } = repo(t, { disclosures: false });
   const [item] = loadItems(root).items;
-  assert.ok(publishProblems(root, item).some((p) => /no disclosure text for US, GB/.test(p)));
-  assert.throws(() => requestPublish(root, 'post-a', { openPr: () => null }), /Can't publish yet/);
+  assert.deepEqual(publishProblems(root, item), []);
+  writeJsonAtomic(join(root, 'content/drafts/post-a.json'), { ...writer(), slug: 'post-a', offerIds: ['bambino-plus'] });
+  assert.deepEqual(publishProblems(root, item), []);
 });
 
 test('approve opens a branch with the post on top of main; the item turns published once it is merged', (t) => {
@@ -76,4 +77,73 @@ test('approve opens a branch with the post on top of main; the item turns publis
   assert.deepEqual(syncPublished(root, loadItems(root).items), ['data/items/post-a.json']);
   assert.equal(loadItems(root).items[0].status, 'published');
   assert.ok(pushFilesToBranch);
+});
+
+test('a queued approval is turned into a pull request by the next tick that can push', (t) => {
+  const { root, remoteGit } = repo(t);
+  queuePublish(root, 'post-a', { by: 'assistant' });
+  assert.equal(JSON.parse(readFileSync(join(root, 'data/publish/post-a.json'), 'utf8')).status, 'queued');
+  const written = processPublishQueue(root, { openPr: () => null });
+  assert.deepEqual(written, ['data/publish/post-a.json']);
+  assert.equal(JSON.parse(readFileSync(join(root, 'data/publish/post-a.json'), 'utf8')).status, 'open');
+  assert.ok(remoteGit('rev-parse', 'publish/post-a'));
+  assert.deepEqual(processPublishQueue(root, { openPr: () => null }), [], 'only once');
+});
+
+test('with gh signed in, passed posts get a publishing PR automatically; merging stays human', async (t) => {
+  const { autoPullRequests } = await import('../publish/autopr.mjs');
+  const { root } = repo(t);
+  const calls = [];
+  let prOpen = false;
+  const gh = (_root, args) => {
+    calls.push(args.join(' '));
+    if (args[0] === 'auth') return { ok: true, out: '' };
+    if (args[1] === 'view') return prOpen ? { ok: true, out: JSON.stringify({ url: 'https://github.com/o/r/pull/7', state: 'OPEN' }) } : { ok: false, out: '', err: 'no pull requests found' };
+    if (args[1] === 'create') { prOpen = true; return { ok: true, out: 'https://github.com/o/r/pull/7' }; }
+    return { ok: false, out: '' };
+  };
+  const first = autoPullRequests(root, loadItems(root).items, { gh });
+  assert.deepEqual(first.events, ['queued post-a']);
+  processPublishQueue(root, { openPr: () => null });
+  const second = autoPullRequests(root, loadItems(root).items, { gh });
+  assert.deepEqual(second.events, ['opened PR for post-a']);
+  assert.equal(JSON.parse(readFileSync(join(root, 'data/publish/post-a.json'), 'utf8')).prUrl, 'https://github.com/o/r/pull/7');
+  assert.ok(!calls.some((c) => c.startsWith('pr merge')), 'never merges');
+  assert.deepEqual(autoPullRequests(root, loadItems(root).items, { gh: () => ({ ok: false }) }).events, [], 'nothing without gh');
+});
+
+test('auto-merge after the veto window, unless held or checks are red', async (t) => {
+  const { autoPullRequests, holdPublish } = await import('../publish/autopr.mjs');
+  const { root } = repo(t);
+  requestPublish(root, 'post-a', { openPr: () => null });
+  let pr = { number: 7, url: 'https://github.com/o/r/pull/7', state: 'OPEN', labels: [], createdAt: '2026-11-24T00:00:00Z', statusCheckRollup: [{ conclusion: 'SUCCESS' }] };
+  const merges = [];
+  const gh = (_r, args) => {
+    if (args[0] === 'auth') return { ok: true, out: '' };
+    if (args[1] === 'view') return { ok: true, out: JSON.stringify(pr) };
+    if (args[1] === 'merge') { merges.push(args[2]); return { ok: true, out: '' }; }
+    if (args[0] === 'label') return { ok: true, out: '' };
+    if (args[1] === 'edit') { pr = { ...pr, labels: [{ name: 'hold' }] }; return { ok: true, out: '' }; }
+    return { ok: false, out: '', err: '' };
+  };
+  const policy = { autoMerge: true, vetoHours: 24 };
+  autoPullRequests(root, loadItems(root).items, { gh, policy, now: new Date('2026-11-24T20:00:00Z') });
+  assert.deepEqual(merges, [], 'not before 24 hours');
+  pr = { ...pr, statusCheckRollup: [{ conclusion: 'FAILURE' }] };
+  autoPullRequests(root, loadItems(root).items, { gh, policy, now: new Date('2026-11-25T01:00:00Z') });
+  assert.deepEqual(merges, [], 'not with red checks');
+  pr = { ...pr, statusCheckRollup: [{ conclusion: 'SUCCESS' }] };
+  holdPublish(root, 'post-a', { gh });
+  autoPullRequests(root, loadItems(root).items, { gh, policy, now: new Date('2026-11-25T01:00:00Z') });
+  assert.deepEqual(merges, [], 'not when held');
+  pr = { ...pr, labels: [] };
+  const done = autoPullRequests(root, loadItems(root).items, { gh, policy, now: new Date('2026-11-25T01:00:00Z') });
+  assert.deepEqual(merges, ['7']);
+  assert.deepEqual(done.events, ['merged post-a after the veto window']);
+  assert.equal(JSON.parse(readFileSync(join(root, 'data/publish/post-a.json'), 'utf8')).status, 'merged');
+  // Without autoMerge, nothing merges.
+  merges.length = 0;
+  writeJsonAtomic(join(root, 'data/publish/post-a.json'), { itemId: 'post-a', slug: 'post-a', status: 'open', branch: 'publish/post-a' });
+  autoPullRequests(root, loadItems(root).items, { gh, policy: {}, now: new Date('2026-11-26T00:00:00Z') });
+  assert.deepEqual(merges, []);
 });

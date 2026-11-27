@@ -1,0 +1,18 @@
+{
+  "id": "2026-11-25T20-08-27-715Z-check",
+  "agent": "idea",
+  "source": "check",
+  "at": "2026-11-25T20:08:27.715Z",
+  "itemIds": [
+    "barista-express-pro-sour-bitter-what-to-change-first"
+  ],
+  "findings": [
+    {
+      "severity": "minor",
+      "problem": "barista-express-pro-sour-bitter-what-to-change-first: signal from 2024-01-06 is older than 24 months (https://www.coffeeforums.com/threads/help-sage-breville-barista-express-adjustment.23528/)",
+      "evidence": "deterministic check",
+      "suggestion": "Address in the prompt if it recurs."
+    }
+  ],
+  "addressedBy": null
+}

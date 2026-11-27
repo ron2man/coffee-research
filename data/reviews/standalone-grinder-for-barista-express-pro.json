@@ -1,0 +1,46 @@
+{
+  "scores": {
+    "readerValueVsCompetitors": {
+      "score": 5,
+      "reason": "It settles the decision in a way no top result does. It starts with four free checks taken from the manufacturer's own 'runs too quickly' table, then \"Price a new burr before a new grinder\" with SP0027464/SP0001801 by PDC batch date, then one deciding question. The competitors are a forum thread and dated retailer comparisons with no verdict or diagnosis."
+    },
+    "distinctivenessVoice": {
+      "score": 4,
+      "reason": "It has one clear opinion (\"skip {{product:breville-smart-grinder-pro}}\") and a human voice (\"I'll be straight about this one\", \"A grinder you'll actually use beats a better one you resent\"). The sections vary in shape. The closing 'What to do, in order' list repeats the rule a little, but that's the brief's required ending, not filler."
+    },
+    "honestyAboutLimits": {
+      "score": 5,
+      "reason": "It says plainly \"nobody has published a head-to-head test against the built-in grinder\" for the Encore ESP, calls the DF54 retention \"the reviewer's measurement, on one sample\", says the cradle fit is from one reader comment, and limits the burr-sharing argument to the Express and not the Pro or the Impress. Each limit is stated once, without hedging chains."
+    },
+    "evidenceIntegrity": {
+      "score": 4,
+      "reason": "Every factual sentence maps to a claim and the quotes are attributed (CoffeeGeek, Seattle Coffee Gear 2016, Coffeeblog, OzBargain). The one soft spot is the Encore ESP 54 mm dosing cup. It rests on a 2026-11-21 read that the 2026-11-24 re-read didn't confirm. The post no longer depends on it, but it should be re-checked against the manual."
+    },
+    "topicFit": {
+      "score": 5,
+      "reason": "It delivers the brief's thesis exactly: the gate first, the Smart Grinder Pro as a sideways move for Express owners, the choice made by whether the grinder will outlive the machine. It covers all the mustInclude points, including the Impress exclusion and the 'When I'd choose differently' section, and leaves out the tiers, Mignon/Niche and the machine-upgrade advice."
+    }
+  },
+  "wouldForward": true,
+  "competitorComparison": [
+    {
+      "url": "https://www.home-barista.com/advice/breville-barista-express-built-in-grinder-is-less-than-optimal-which-grinder-goes-best-with-it-budget-400-700-cad-t70871.html",
+      "weGiveThatTheyDont": "A single decision rule instead of a forum thread of mixed suggestions, with free checks and an upper-burr keep path (with part numbers by batch date) before any purchase."
+    },
+    {
+      "url": "https://www.seattlecoffeegear.com/blogs/scg-blog/breville-compare-smart-grinder-vs-barista-express-grinder",
+      "weGiveThatTheyDont": "A verdict. The 2013 post gives none, while we say the Smart Grinder Pro is a sideways move for Express owners and back it with CoffeeGeek's burr-group finding and its espresso criticisms. We also name what to buy instead."
+    },
+    {
+      "url": "https://www.seattlecoffeegear.com/blogs/scg-blog/crew-comparison-breville-barista-express-vs-smart-grinder-pro",
+      "weGiveThatTheyDont": "We use its burr observation as supporting evidence, then go on to a diagnosis, a buy-nothing path, a note that the burr point doesn't carry over to the Barista Pro, and a choice between the DF54 and the Encore ESP based on the reader's next machine."
+    }
+  ],
+  "blockingActions": [],
+  "optionalImprovements": [
+    "Before the PR merges, confirm the Encore ESP dosing-cup size (54 mm) against the Baratza manual. If it doesn't hold up, cut the sentence \"Baratza lists a dosing cup intended for 54 mm portafilters\" and keep \"grinding into a cup and transferring works\".",
+    "The title's \"Check first\" is a little terse. Consider \"{{product:barista-express}} or Pro grinder struggling? Check this before buying\" if it fits within 70 characters with the longest market names.",
+    "The 'What to do, in order' list repeats the rule almost word for word. It could be cut to three short lines to avoid a repeated summary.",
+    "Publish the diagnosis guide (breville-builtin-grinder-wont-grind-fine-enough) so the guide token renders as a link and not plain text."
+  ]
+}

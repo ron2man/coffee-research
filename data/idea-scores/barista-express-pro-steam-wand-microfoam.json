@@ -1,0 +1,28 @@
+{
+  "scores": {
+    "demandEvidence": {
+      "score": 2,
+      "reason": "The verified thread is a Sunbeam Barista Max owner asking about upgrading, and the wand complaint comes from one reply. The other signal is an aside about a learning curve, not a question."
+    },
+    "competitorGap": {
+      "score": 3,
+      "reason": "Breville's unblocking guide, SCG's poor-steaming article and Fluent in Coffee's troubleshooting cover purge, tip holes and scale, but not Express vs Pro."
+    },
+    "valueAddWithoutExperience": {
+      "score": 3,
+      "reason": "An ordered check list is feasible, but telling technique apart from a fault without hands-on testing is limited."
+    },
+    "evidenceFeasibility": {
+      "score": 4,
+      "reason": "The manuals, Breville support pages and owner reports cover the wand tips and descaling."
+    },
+    "commercialFit": {
+      "score": 3,
+      "reason": "Mostly no purchase beyond a jug or descaler, which is honest but thin."
+    },
+    "overlap": {
+      "score": 4,
+      "reason": "No existing post, though it would partly repeat the descale content of the clean/descale guide."
+    }
+  }
+}

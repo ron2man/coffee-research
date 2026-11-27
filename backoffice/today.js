@@ -138,6 +138,7 @@ async function openArticle(id) {
       <div class="actions">
         <button type="button" data-act="comment">Add comment</button>
         ${a.allowed.revise ? '<button type="button" data-act="revise">Send back to the writer</button>' : ''}
+        ${a.allowed.hold ? '<button type="button" class="danger" data-act="hold">Hold publishing</button>' : ''}
         ${a.allowed.publish ? `<button type="button" data-act="publish" ${a.publishBlockers.length ? 'disabled title="See what blocks publishing below"' : ''}>Approve for publishing</button>` : ''}
         ${a.allowed.resume ? '<button type="button" data-act="resume">Resume</button>' : ''}
         ${a.allowed.reject ? '<button type="button" class="danger" data-act="reject">Reject article</button>' : ''}

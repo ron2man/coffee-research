@@ -1,0 +1,224 @@
+{
+  "tools": [
+    {
+      "id": "barista-standalone-grinder-picker",
+      "title": "Do you need a separate grinder for your Barista Express or Pro?",
+      "questions": [
+        {
+          "key": "machine",
+          "text": "Which machine do you have?",
+          "options": [
+            [
+              "express",
+              "Barista Express"
+            ],
+            [
+              "pro",
+              "Barista Pro"
+            ],
+            [
+              "impress",
+              "Barista Express Impress"
+            ],
+            [
+              "unsure",
+              "Not sure"
+            ]
+          ]
+        },
+        {
+          "key": "checks",
+          "text": "Have you done the four free checks (fresh beans, full dose, burr cleaning, upper burr one step finer)?",
+          "options": [
+            [
+              "fixed",
+              "Yes, and shots are back in range"
+            ],
+            [
+              "failed",
+              "Yes, and it still isn't right"
+            ],
+            [
+              "notdone",
+              "Not yet, or only some of them"
+            ]
+          ]
+        },
+        {
+          "key": "fault",
+          "text": "What is the grinder doing now?",
+          "options": [
+            [
+              "notfine",
+              "It can't go fine enough"
+            ],
+            [
+              "failing",
+              "It stalls or stops working now and then"
+            ],
+            [
+              "wantmore",
+              "It works, but I want better than it can do"
+            ]
+          ]
+        },
+        {
+          "key": "burr",
+          "text": "Where is the upper burr?",
+          "options": [
+            [
+              "notfinest",
+              "Not at its finest position yet"
+            ],
+            [
+              "finest",
+              "At its finest position, original burr"
+            ],
+            [
+              "replaced",
+              "I've already replaced the upper burr"
+            ]
+          ]
+        },
+        {
+          "key": "drinks",
+          "text": "What do you mostly make?",
+          "options": [
+            [
+              "milk",
+              "Milk drinks"
+            ],
+            [
+              "straight",
+              "Straight espresso"
+            ]
+          ]
+        },
+        {
+          "key": "replace",
+          "text": "Do you expect to replace this machine in the next couple of years?",
+          "options": [
+            [
+              "yes",
+              "Yes, probably"
+            ],
+            [
+              "no",
+              "No, I'm keeping it"
+            ]
+          ]
+        },
+        {
+          "key": "weigh",
+          "text": "Would you weigh the beans for every shot?",
+          "options": [
+            [
+              "yes",
+              "Yes, that's fine"
+            ],
+            [
+              "no",
+              "No, I want to just press a button"
+            ]
+          ]
+        }
+      ],
+      "results": {
+        "keep": {
+          "title": "Keep your built-in grinder and buy nothing",
+          "text": "The free checks worked, so the grinder was never the problem. Keep using fresh beans and a full dose, and run the burr cleaning now and then. Come back here only if shots start running fast again."
+        },
+        "do-checks": {
+          "title": "Do the free checks before you buy anything",
+          "text": "Check the bag for a roasted-on date (Breville says 5–20 days after roasting). Dose until the tamper cap sits level with the rim of a single-wall basket. Run the burr cleaning from your booklet. Then move the upper burr one number finer and pull a shot. The manual's 'runs too quickly' list blames grind, dose and tamp, not the burrs."
+        },
+        "step-burr": {
+          "title": "Keep stepping the upper burr finer",
+          "text": "You still have room on the upper burr. Move it one more number finer, pull a shot, and repeat, one adjustment at a time as the booklet says. Stop as soon as shots run in range. It's free, and it's what the adjustable burr is for."
+        },
+        "order-burr": {
+          "title": "Price a replacement upper burr first",
+          "text": "It's the smallest purchase. Find the batch date on the sticker under the machine: a parts seller lists SP0027464 for PDC 1926 onwards and SP0001801 for earlier machines. Confirm the part with the manufacturer or a local parts seller before ordering. If a new burr doesn't fix it, come back and choose a grinder."
+        },
+        "impress-burr": {
+          "title": "Ask the manufacturer about the upper burr for your model",
+          "text": "Your free checks still apply, but we haven't confirmed which upper burr fits the Impress, so don't order a part listed for the Express or Pro. Ask the manufacturer's support with the model and batch date from the sticker under the machine. If no part fixes it, come back and choose a grinder."
+        },
+        "budget": {
+          "title": "Add a budget espresso grinder: Baratza Encore ESP",
+          "text": "40 mm steel conical burrs, settings 1–20 for espresso, and a dosing cup Baratza lists for 54 mm portafilters. No test shows it grinds better than your built-in grinder, so treat it as a dependable separate replacement. Skip the Smart Grinder Pro: CoffeeGeek's review calls it clumpy for espresso and says it holds a lot of grounds.",
+          "productId": "baratza-encore-esp"
+        },
+        "single": {
+          "title": "Add a single-dose flat-burr grinder (DF54)",
+          "text": "54 mm flat burrs, stepless adjustment, and Coffeeblog measured 0.1 g or less retention from the third use. Weigh the beans, grind into the cup, then tip it into your 54 mm portafilter. Its cradle reportedly suits 58 mm, so it carries over to a bigger machine. Not the Smart Grinder Pro: on the Express, CoffeeGeek says it's the same burr group.",
+          "productId": "turin-df54"
+        }
+      },
+      "rules": [
+        {
+          "when": {
+            "checks": "fixed"
+          },
+          "result": "keep"
+        },
+        {
+          "when": {
+            "checks": "notdone"
+          },
+          "result": "do-checks"
+        },
+        {
+          "when": {
+            "fault": "notfine",
+            "burr": "notfinest"
+          },
+          "result": "step-burr"
+        },
+        {
+          "when": {
+            "machine": "impress",
+            "fault": "notfine",
+            "burr": "finest"
+          },
+          "result": "impress-burr"
+        },
+        {
+          "when": {
+            "fault": "notfine",
+            "burr": "finest"
+          },
+          "result": "order-burr"
+        },
+        {
+          "when": {
+            "weigh": "no",
+            "drinks": "milk"
+          },
+          "result": "budget"
+        },
+        {
+          "when": {
+            "replace": "yes"
+          },
+          "result": "single"
+        },
+        {
+          "when": {
+            "weigh": "no"
+          },
+          "result": "budget"
+        },
+        {
+          "when": {
+            "drinks": "straight",
+            "weigh": "yes"
+          },
+          "result": "single"
+        }
+      ],
+      "default": "budget"
+    }
+  ],
+  "skipped": []
+}

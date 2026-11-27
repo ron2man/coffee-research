@@ -1,0 +1,288 @@
+{
+  "tools": [
+    {
+      "id": "barista-fast-shot-next-step",
+      "title": "Fast or sour Barista Express/Pro shot: your next change",
+      "questions": [
+        {
+          "key": "shot",
+          "text": "How does your last shot run? (Express: total time and gauge. Pro: when flow starts on the shot clock.)",
+          "options": [
+            [
+              "fast",
+              "Fast: under 20 s, gauge under range, or flow before 7 s (Pro)"
+            ],
+            [
+              "ok",
+              "In range: 25–30 s (Express) or flow starts at 8–12 s (Pro)"
+            ],
+            [
+              "slow",
+              "Slow: drips, over 35 s, or no flow after 13 s (Pro)"
+            ]
+          ]
+        },
+        {
+          "key": "basket",
+          "text": "Which filter basket is in the portafilter?",
+          "options": [
+            [
+              "single",
+              "Single-wall"
+            ],
+            [
+              "dual",
+              "Dual-wall (pressurised)"
+            ],
+            [
+              "unsure",
+              "Not sure"
+            ]
+          ]
+        },
+        {
+          "key": "cap",
+          "text": "After tamping, where does the tamper's metal cap sit?",
+          "options": [
+            [
+              "level",
+              "Level with the basket rim"
+            ],
+            [
+              "below",
+              "Below the rim"
+            ],
+            [
+              "above",
+              "Above the rim, or I can't tamp it down that far"
+            ]
+          ]
+        },
+        {
+          "key": "mode",
+          "text": "How do you start and stop the shot?",
+          "options": [
+            [
+              "preset",
+              "Press 1 CUP or 2 CUP once and let it stop itself"
+            ],
+            [
+              "manual",
+              "Press and hold, release, then press again to stop"
+            ]
+          ]
+        },
+        {
+          "key": "grind",
+          "text": "Where is the grind size?",
+          "options": [
+            [
+              "mid",
+              "Not at the finest setting (1) yet"
+            ],
+            [
+              "finest",
+              "At 1, and I've never moved the inner burr"
+            ],
+            [
+              "inner",
+              "At 1, inner burr moved finer and it can still go finer"
+            ],
+            [
+              "innermax",
+              "At 1, and the inner burr won't go any finer"
+            ]
+          ]
+        },
+        {
+          "key": "beans",
+          "text": "What beans are you using?",
+          "options": [
+            [
+              "fresh",
+              "Roasted 5–20 days ago (Roasted On date on the bag)"
+            ],
+            [
+              "light",
+              "Fresh, and a very light roast"
+            ],
+            [
+              "stale",
+              "Older than that, or no Roasted On date"
+            ]
+          ]
+        },
+        {
+          "key": "routine",
+          "text": "Before each shot, do you preheat the portafilter, purge the group and wipe the basket dry?",
+          "options": [
+            [
+              "yes",
+              "Yes, every time"
+            ],
+            [
+              "no",
+              "No, or not always"
+            ]
+          ]
+        },
+        {
+          "key": "temp",
+          "text": "Have you tried one step hotter on the shot temperature?",
+          "options": [
+            [
+              "no",
+              "Not yet"
+            ],
+            [
+              "yes",
+              "Yes, still fast"
+            ]
+          ]
+        }
+      ],
+      "results": {
+        "keep": {
+          "title": "Your shot is in range: leave the machine alone",
+          "text": "A shot in range (about 25–30 s on the Express, flow starting at 8–12 s on the Pro) means the machine, grinder and dose are working. Buy nothing. If the taste is still off, change one thing per shot, starting with fresher beans or a single grind step."
+        },
+        "coarser": {
+          "title": "Slow shot: go one grind step coarser",
+          "text": "A dripping, very slow shot is over-extracted, which Breville describes as bitter and burnt. Go one grind step coarser, or turn GRIND AMOUNT down a little. Make one change per shot. Nothing is wrong with the machine."
+        },
+        "swap-basket": {
+          "title": "Switch to the single-wall basket first",
+          "text": "Breville says dual-wall baskets regulate the pressure whatever the grind, dose or tamp, so you can't dial in with one. Fit the single-wall 2-cup basket (the Pro ships with it fitted; your booklet shows which is which) and pull the next shot before changing anything else."
+        },
+        "raise-dose": {
+          "title": "Raise GRIND AMOUNT before you touch the grind",
+          "text": "An underfilled basket runs fast whatever the grind. Turn GRIND AMOUNT up (towards MORE on the Express, a longer grind time on the Pro) until the tamper's metal cap sits level with the rim after tamping. If you own any kitchen scale, aim for 16–19 g in the 2-cup basket."
+        },
+        "trim": {
+          "title": "Bring the dose down to the rim",
+          "text": "Breville's guide is a tamper cap level with the rim, and owners often blame an overfilled basket for channeling. Turn GRIND AMOUNT down a little, or trim with the Razor tool, until the cap sits level after tamping. Then pull the next shot."
+        },
+        "manual-shot": {
+          "title": "Pull a manual shot so you can read it",
+          "text": "1 CUP and 2 CUP stop at a preset volume (about 30 and 60 ml), so what lands in the cup shifts as you dial in. Press and hold the button, release for full pressure, and press again to stop. Time it (phone on the Express, shot clock on the Pro), then come back here."
+        },
+        "finer": {
+          "title": "Grind one step finer, then recheck the dose",
+          "text": "Go one number finer. GRIND AMOUNT runs by time, so a finer grind can leave the basket underfilled: check the tamper cap again and raise GRIND AMOUNT if it sits below the rim. Skipping this is why 'finer made it worse' for many owners. One change per shot."
+        },
+        "inner-burr": {
+          "title": "Move the inner burr one number finer",
+          "text": "With the outer dial at 1, Breville's booklet shows how to move the upper (inner) burr: empty the hopper, run the grinder empty, lift out the burr and turn it one number finer. Do one number at a time, then retest the shot and the tamper-cap level."
+        },
+        "fresh-beans": {
+          "title": "Try fresh beans with a Roasted On date",
+          "text": "Breville says to use beans 5–20 days after their Roasted On date, and that stale coffee pours too quickly and tastes bitter and watery. Old beans or a bag with no roast date are the most likely cause left. Change the beans before anything else."
+        },
+        "routine": {
+          "title": "Preheat, purge and dry before each shot",
+          "text": "Breville says a cold portafilter and basket can cool the shot enough to hurt it, and moisture in the basket encourages channeling. Run water through the group, warm the portafilter and basket, wipe the basket dry, then dose, tamp and brew straight away."
+        },
+        "temperature": {
+          "title": "Now try one step hotter",
+          "text": "Temperature is the last and smallest lever. On the Express, use Advanced Temperature Mode (small steps, up to 4°F either way; holding PROGRAM until 3 beeps resets it). On the Pro, use SHOT TEMP in the menu. Change it one step, then retest."
+        },
+        "grinder": {
+          "title": "The built-in grinder is your limit",
+          "text": "Single-wall basket, full dose, fresh beans, finest outer setting and the inner burr at its finest, and light roasts still run fast: that points to the grinder, not the machine. Keep the machine. A standalone grinder is the one purchase that makes sense, and the grinder picker narrows it down."
+        },
+        "support": {
+          "title": "Stop adjusting and contact Breville or Sage support",
+          "text": "You've done every check the booklet gives. Breville documents no owner test for a pressure fault, so contact support while the machine is under warranty and list what you checked. If they find no fault, the built-in grinder is the limit, and a standalone grinder is the next step."
+        }
+      },
+      "rules": [
+        {
+          "when": {
+            "shot": "ok"
+          },
+          "result": "keep"
+        },
+        {
+          "when": {
+            "shot": "slow"
+          },
+          "result": "coarser"
+        },
+        {
+          "when": {
+            "basket": "dual"
+          },
+          "result": "swap-basket"
+        },
+        {
+          "when": {
+            "basket": "unsure"
+          },
+          "result": "swap-basket"
+        },
+        {
+          "when": {
+            "cap": "below"
+          },
+          "result": "raise-dose"
+        },
+        {
+          "when": {
+            "cap": "above"
+          },
+          "result": "trim"
+        },
+        {
+          "when": {
+            "mode": "preset"
+          },
+          "result": "manual-shot"
+        },
+        {
+          "when": {
+            "grind": "mid"
+          },
+          "result": "finer"
+        },
+        {
+          "when": {
+            "grind": "finest"
+          },
+          "result": "inner-burr"
+        },
+        {
+          "when": {
+            "grind": "inner"
+          },
+          "result": "inner-burr"
+        },
+        {
+          "when": {
+            "beans": "stale"
+          },
+          "result": "fresh-beans"
+        },
+        {
+          "when": {
+            "routine": "no"
+          },
+          "result": "routine"
+        },
+        {
+          "when": {
+            "temp": "no"
+          },
+          "result": "temperature"
+        },
+        {
+          "when": {
+            "beans": "light"
+          },
+          "result": "grinder"
+        }
+      ],
+      "default": "support"
+    }
+  ],
+  "skipped": []
+}

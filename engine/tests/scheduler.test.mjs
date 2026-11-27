@@ -130,12 +130,12 @@ test('a thrown agent error counts as a failure; an unavailable runner does not',
   assert.equal(readRuns(root).at(-1).runnerUnavailable, true);
 });
 
-test('queue cap stops the idea agent at 10 waiting items', () => {
-  const items = Array.from({ length: 10 }, (_, i) => newItem({ id: `idea-${i}`, niche: 'coffee', status: i % 2 ? 'idea' : 'idea_approved', by: 'test' }));
+test('queue cap stops the idea agent at 4 waiting items', () => {
+  const items = Array.from({ length: 4 }, (_, i) => newItem({ id: `idea-${i}`, niche: 'coffee', status: i % 2 ? 'idea' : 'idea_approved', by: 'test' }));
   const ideaOnly = agents.filter((agent) => agent.name === 'idea');
   const capped = planTick({ agents: ideaOnly, items, runs: [] });
   assert.equal(capped.chosen, null);
-  assert.match(capped.skipped[0].reason, /queue cap: 10/);
+  assert.match(capped.skipped[0].reason, /queue cap: 4/);
   assert.equal(planTick({ agents: ideaOnly, items: items.slice(1), runs: [] }).chosen.agent.name, 'idea');
 });
 
@@ -394,4 +394,26 @@ test('each run leaves a log with its trace; seed notes say why a seed did not be
   const failing = { type: 'fake', run: async () => { const e = new Error('claude -p timed out after 30 minutes'); e.trace = trace; throw e; } };
   await tick({ root, agents: agents.filter((a) => a.name === 'idea'), runner: failing, ignoreSchedule: true });
   assert.equal(readRunLogs(root)[0].status, 'failed');
+});
+
+test('daily budget: no agent run once the cap is reached in the last 24 hours', async (t) => {
+  const { appendRun } = await import('../state/store.mjs');
+  const root = sandbox(t);
+  saveItem(root, newItem({ id: 'x', niche: 'coffee', status: 'idea_approved', by: 'test' }));
+  for (let i = 0; i < 3; i += 1) appendRun(root, { agent: 'research', status: 'completed', durationMs: i, runLog: `log-${i}` });
+  let called = false;
+  const result = await tick({ root, agents, maxRunsPerDay: 3, runner: fakeRunner(handlers({ research: () => { called = true; return fixture('research'); } })) });
+  assert.equal(result.ran, null);
+  assert.match(result.skipped[0].reason, /daily budget: 3 agent runs/);
+  assert.equal(called, false);
+});
+
+test('demand signals are collected for the idea agent and saved', async (t) => {
+  const root = sandbox(t);
+  let input;
+  const collector = async () => ({ date: '2026-11-23', queries: [{ q: 'x', suggestions: ['x sour'] }], reddit: [], sources: {} });
+  const result = await tick({ root, agents: agents.filter((a) => a.name === 'idea'), demandCollector: collector, runner: fakeRunner({ idea: (i) => { input = i; return { items: [] }; } }) });
+  assert.deepEqual(input.demandSignals.queries[0].suggestions, ['x sour']);
+  assert.ok(result.changedFiles.some((p) => p.startsWith('data/demand/')));
+  assert.equal(input.niche.focus.products[0], 'barista-express');
 });

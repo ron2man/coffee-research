@@ -10,7 +10,7 @@
       "idea",
       "idea_approved"
     ],
-    "max": 10
+    "max": 4
   },
   "schedule": {
     "minIntervalHours": 24

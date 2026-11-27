@@ -1,0 +1,64 @@
+{
+  "schemaVersion": 1,
+  "id": "barista-express-pro-clean-descale-routine",
+  "type": "new-post",
+  "niche": "coffee",
+  "status": "passed",
+  "attempts": 0,
+  "revisions": 0,
+  "createdAt": "2026-11-23T15:58:57.541Z",
+  "updatedAt": "2026-11-25T08:42:56.544Z",
+  "artifacts": {
+    "idea": "data/ideas/barista-express-pro-clean-descale-routine.json",
+    "idea-judge": "data/idea-scores/barista-express-pro-clean-descale-routine.json",
+    "research": "data/research/barista-express-pro-clean-descale-routine.json",
+    "angle": "data/briefs/barista-express-pro-clean-descale-routine.json",
+    "toolsmith": "data/tools/barista-express-pro-clean-descale-routine.json",
+    "writer": "content/drafts/barista-express-pro-clean-descale-routine.json",
+    "post-judge": "data/reviews/barista-express-pro-clean-descale-routine.json"
+  },
+  "history": [
+    {
+      "at": "2026-11-23T15:58:57.541Z",
+      "from": null,
+      "to": "idea",
+      "by": "idea",
+      "reason": "generated"
+    },
+    {
+      "at": "2026-11-23T18:02:49.761Z",
+      "from": "idea",
+      "to": "idea_approved",
+      "by": "idea-judge",
+      "reason": "Verified, specific confusion: in OzBargain node/955798 (Apr 2026) an owner misread a solid light for two years and owners in the thread contradicted each other. Breville pages split the cycles up and third-party light guides skip one combined schedule. Maintenance guide in the focus cluster."
+    },
+    {
+      "at": "2026-11-24T20:08:22.485Z",
+      "from": "idea_approved",
+      "to": "researched",
+      "by": "research",
+      "reason": "The maintenance schedule and the light meanings can be answered from manufacturer booklets for both machines in both markets. They cover daily care, the alert-driven cleaning and descale cycles with their steps, filter intervals, scale symptoms, and the Express seal replacement. One market difference matters for the single post. The US Barista Express has a combined CLEAN / DESCALE light: flashing means run a cleaning cycle, solid means descale. The UK Sage guide (C21) has a CLEAN ME light, says the machine will not prompt for descaling, and gives 60- or 90-day intervals by water hardness. The remaining gaps are recorded as unknown claims: the light's trigger and reset logic, a shot-count interval, the seal replacement interval, and a seal procedure for the Pro. The writer can cover these with 'when X happens' rules."
+    },
+    {
+      "at": "2026-11-24T20:11:21.367Z",
+      "from": "researched",
+      "to": "briefed",
+      "by": "angle",
+      "reason": "There is a real contribution to make. Each top page gets part of the answer, and some get it wrong. Breville's tutorials are video-only and their FAQ about the light has no answers. Appliances Online says the light only means descale. A retailer blog contradicts the manual. The owner thread argues with itself. None of them handles the three panels an owner can actually have: the US Express CLEAN / DESCALE light, the UK Sage CLEAN ME light (which never asks for a descale), and the Pro LCD with FLUSH and DESCALE. None of them maps the 'it's broken' symptoms to overdue descaling. The research supports one rule per panel, plus a symptom diagnosis taken from the manufacturer troubleshooting tables. No purchase is needed."
+    },
+    {
+      "at": "2026-11-25T04:57:51.294Z",
+      "from": "briefed",
+      "to": "drafted",
+      "by": "writer",
+      "reason": "This revision fixes the attempt-1 lint failure. The claims list now cites only supported claim IDs. The things the manuals don't say (no cleaning or descale interval, no documented light trigger or reset, no seal procedure for the Pro) are written once in the prose as unknowns and are not entered as claims. offerIds is empty because the answer is to keep the machine. The only purchases are consumables, and no knowledge cards exist yet for cleaning tablets, descaler, water filter cartridges or the Barista Express shower-screen seal. Research them, plus a possible guide such as 'barista-express-pro-cleaning-supplies', so the post can get offers later. One deviation from the brief: products are named with {{product:…}}, not {{model:…}}, because the model token resolves to a SKU and would read badly as a name. The grind-fault-tree tool is embedded where the brief asks the post to point readers to the grind troubleshooter."
+    },
+    {
+      "at": "2026-11-25T08:42:56.544Z",
+      "from": "drafted",
+      "to": "passed",
+      "by": "post-judge",
+      "reason": "The draft answers the reader's question in its first paragraph: the machine is fine, read your panel, and descale before calling a weak-steam or dripping-shot problem a fault. It then gives the one thing no top result has, a key for all three panels. That covers the US Express CLEAN / DESCALE light, the UK Express CLEAN ME light (which never asks for a descale) and the Pro LCD. It also maps \"broken\"-looking symptoms to manufacturer troubleshooting causes. It is honest about the missing intervals and the undocumented reset, the automated checks are clean, and the ending names the smallest purchase (consumables only). An owner with a light that won't go off would forward this."
+    }
+  ]
+}

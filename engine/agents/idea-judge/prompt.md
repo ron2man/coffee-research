@@ -28,6 +28,8 @@ For each card:
 | `commercialFit` | There is an honest buying decision, including "keep what you have" | Purely informational, or the commercial angle would bend the advice |
 | `overlap` | No overlap with existing items or content | Duplicates an existing item or post |
 
+Prefer ideas inside `niche.focus` (the product cluster the site builds first) when evidence is comparable: a cluster of guides about one product helps readers and search more than scattered topics. Say so in the reason.
+
 `commercialFit` judges honesty and fit, not revenue size. An idea whose best answer is "don't buy anything" can still score 4 if readers face a real buy-or-keep decision.
 
 ## Choosing

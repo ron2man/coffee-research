@@ -7,6 +7,7 @@ import { join } from 'node:path';
 import { userInfo } from 'node:os';
 import { act } from '../engine/state/item-cli.mjs';
 import { requestPublish } from '../engine/publish/publish.mjs';
+import { holdPublish } from '../engine/publish/autopr.mjs';
 import { addSeed } from '../engine/state/seeds.mjs';
 import { addHumanNote, applyProposal, rejectProposal } from '../engine/feedback/cli.mjs';
 import { LockedError, isStale, lockPath, withLock } from '../engine/scheduler/lock.mjs';
@@ -51,6 +52,10 @@ const ACTIONS = {
     const result = requestPublish(root, required(itemId, 'Article'), { by: by() });
     return { written: result.written, prUrl: result.prUrl, message: `Pull request ready: merge it on GitHub to publish. ${result.prUrl ?? ''}`.trim() };
   },
+  hold: (root, { itemId }) => ({
+    written: holdPublish(root, required(itemId, 'Article')),
+    message: 'On hold: the pull request will not merge itself. Remove the hold label on GitHub to release it, or merge it yourself.',
+  }),
   seed: (root, { text, note }) => ({
     written: [addSeed(root, { text: required(text, 'Seed'), note: note ?? '', by: by() })],
     message: 'Seed added. The idea agent looks into it at the next tick.',

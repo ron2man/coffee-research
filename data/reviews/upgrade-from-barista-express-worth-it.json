@@ -1,0 +1,47 @@
+{
+  "scores": {
+    "readerValueVsCompetitors": {
+      "score": 5,
+      "reason": "The five-step morning test ('Pull three shots in a row at your usual setting… Then the grinder is your limit') and the picker settle the owner's actual decision. The top results list Breville machines for a new buyer (Seattle Coffee Gear, Sur La Table) or rank Australian machines (Arielle). None offers a keep-it result, the Express vs Pro split or the Jet vs Oracle Dual Boiler distinction."
+    },
+    "distinctivenessVoice": {
+      "score": 4,
+      "reason": "One clear opinion from the first line ('you probably don't need a new machine… you may not need even that'), and sections vary in shape instead of following one template. A few passages read slightly like a report, for example the long run of reliability anecdotes."
+    },
+    "honestyAboutLimits": {
+      "score": 5,
+      "reason": "States the unknowns once, where they matter: 'Nobody has published steaming times… so we can't tell you how much time you'd save', and the Oracle grinder reports 'are about the original model'. The sources section says plainly 'We did not test any of these machines', and the US-only booklet scope is disclosed."
+    },
+    "evidenceIntegrity": {
+      "score": 4,
+      "reason": "Statements map to the claims: 16 and 30 grinder settings, ±4°F in 2°F steps, descale symptoms, the DF54 cradle comment marked as 'a single report'. 'Read that as owner consensus' leans a bit hard on one thread's replies, though the owner-upgrade-verdicts claim partly supports it."
+    },
+    "topicFit": {
+      "score": 5,
+      "reason": "Delivers the brief's thesis and every mustInclude: the owner test, the Express/Pro split, 'no grinder in either market', the 54 vs 58 mm note, which Oracle is which, the ageing-machine descale check, 'When I'd choose differently', the keep-it path and the grinder-first ending. It respects the leaveOut list: no prices, no seconds, no prosumer machines."
+    }
+  },
+  "wouldForward": true,
+  "competitorComparison": [
+    {
+      "url": "https://seattlecoffeegear.com/blogs/scg-blog/which-breville-espresso-machine-is-right-for-you-updated",
+      "weGiveThatTheyDont": "A test the owner runs on the Express they already have to find the bottleneck, a 'keep it / change nothing' result, and the point that a grinder bought first carries over to the Dual Boiler. SCG profiles each machine for a new buyer."
+    },
+    {
+      "url": "https://learn.surlatable.com/which-breville-espresso-machine-is-right-for-you/",
+      "weGiveThatTheyDont": "Upgrade advice for an existing owner instead of a lineup comparison. It separates Express owners from Pro owners (a Pro owner rarely needs to upgrade for steaming), separates the Oracle Jet's ThermoJet from the Oracle Dual Boiler, and warns about the 54 mm accessories."
+    },
+    {
+      "url": "https://arielle.com.au/best-home-coffee-machine/",
+      "weGiveThatTheyDont": "This is a ranked list of Australian machines with no owner-upgrade framing. We give a decision rule (shots → grinder, steaming waits → dual boiler, effort → Oracle), a descale check before writing off an old machine, and the honest no-test note."
+    }
+  ],
+  "blockingActions": [],
+  "optionalImprovements": [
+    "Name {{product:turin-df54}} in 'What to do now' next to the grinder picker. Right now the pick first appears inside the 54 mm section, and a reader who skims to the end won't see it.",
+    "Soften 'Read that as owner consensus' to 'Read that as the view of the owners who replied', because it comes from one thread.",
+    "Give the temperature adjustment in °C as well (about ±2°C in roughly 1°C steps), or describe it unit-free, so UK readers aren't working in °F.",
+    "Trim the Dual Boiler reliability anecdotes to one sentence on each side. The list slows the 'When I'd choose differently' section.",
+    "Once the clean and descale guide is published, check that the {{guide:barista-express-pro-clean-descale-routine}} link resolves. It is plain text for now."
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "scores": {
+    "demandEvidence": {
+      "score": 4,
+      "reason": "Mumsnet 5433494 (Oct 2025) is verified: the poster is tired of pods, replies split between bean-to-cup and manual machines, and the poster later struggled with the Rivelia's dial and temperature. The other two threads add independent signals."
+    },
+    "competitorGap": {
+      "score": 3,
+      "reason": "Currys, coffeeblog.co.uk and Price Detective pages already frame bean-to-cup vs manual vs pod, though generically and without daily-routine costs or a 'keep the pods' path."
+    },
+    "valueAddWithoutExperience": {
+      "score": 4,
+      "reason": "A drinks/milk/minutes/budget rule plus a morning routine for each path can be built from manuals."
+    },
+    "evidenceFeasibility": {
+      "score": 4,
+      "reason": "Manuals and owner reports cover the cleaning burden and running costs."
+    },
+    "commercialFit": {
+      "score": 4,
+      "reason": "An honest three-way decision that includes keeping the pods."
+    },
+    "overlap": {
+      "score": 4,
+      "reason": "No existing post, but it partly overlaps the gift card's machine-type sorting."
+    }
+  }
+}

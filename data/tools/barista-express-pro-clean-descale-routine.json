@@ -1,0 +1,354 @@
+{
+  "tools": [
+    {
+      "id": "barista-maintenance-alert-key",
+      "title": "What is your Barista Express or Pro asking for?",
+      "questions": [
+        {
+          "key": "panel",
+          "text": "Which machine do you have, and what does the maintenance label say?",
+          "options": [
+            [
+              "express-cd",
+              "Barista Express with a CLEAN / DESCALE light"
+            ],
+            [
+              "express-cm",
+              "Barista Express with a CLEAN ME light"
+            ],
+            [
+              "pro",
+              "Barista Pro (LCD screen)"
+            ]
+          ]
+        },
+        {
+          "key": "signal",
+          "text": "What is it showing right now?",
+          "options": [
+            [
+              "flash",
+              "The light is flashing"
+            ],
+            [
+              "solid",
+              "The light is on steadily"
+            ],
+            [
+              "flush",
+              "The screen shows FLUSH"
+            ],
+            [
+              "descale",
+              "The screen shows DESCALE"
+            ],
+            [
+              "new",
+              "FLUSH on a brand-new Pro I've just set up"
+            ],
+            [
+              "none",
+              "Nothing is showing"
+            ]
+          ]
+        },
+        {
+          "key": "symptom",
+          "text": "Is anything else wrong?",
+          "options": [
+            [
+              "steam",
+              "Weak steam or no steam"
+            ],
+            [
+              "drip",
+              "Espresso only drips or won't flow"
+            ],
+            [
+              "cold",
+              "Coffee isn't hot enough"
+            ],
+            [
+              "edge",
+              "Espresso escapes around the portafilter edge, or water leaks"
+            ],
+            [
+              "grinder",
+              "Grinder is slow, loud or gives no grounds"
+            ],
+            [
+              "none",
+              "Nothing else"
+            ]
+          ]
+        },
+        {
+          "key": "tried",
+          "text": "Have you already run the cycle it's asking for?",
+          "options": [
+            [
+              "no",
+              "Not yet"
+            ],
+            [
+              "one",
+              "Yes, and the signal is still there"
+            ],
+            [
+              "both",
+              "I've run both the cleaning cycle and a descale, and it's still there"
+            ]
+          ]
+        }
+      ],
+      "results": {
+        "first-use": {
+          "title": "Nothing is due: run the first-use flush",
+          "text": "A new Barista Pro shows FLUSH for its first-use cycle, which rinses the machine and primes the heater. It isn't a cleaning alert. Press 1 CUP, let it count down, and it goes to READY."
+        },
+        "recheck": {
+          "title": "Check the label on your panel again",
+          "text": "That signal doesn't belong to the panel you picked. The Express has a light (CLEAN / DESCALE or CLEAN ME). The Pro shows FLUSH or DESCALE on its screen. Go by the label you can actually see on the machine, not by the country you bought it in, and answer again."
+        },
+        "support": {
+          "title": "Contact Breville or Sage support",
+          "text": "You've run both the cleaning cycle and a descale and the signal is still there. The manual describes no reset step and doesn't say what triggers the light, so more cleaning won't help. This is a question for support, not something to buy."
+        },
+        "run-other": {
+          "title": "Run the other cycle too",
+          "text": "If you ran the cleaning cycle, now descale. If you descaled, now run the cleaning cycle. One owner's light only cleared after running both. The manual describes no reset, so if the signal is still there after both cycles, contact support."
+        },
+        "seal": {
+          "title": "Replace the shower-screen seal",
+          "text": "Breville lists a worn shower-screen seal as the cause of espresso running out around the portafilter edge and of water leaking. Unplug the machine, loosen the screen with the Allen key that came with it, pull out the old seal, fit the new one flat side first, and don't overtighten. If a cycle is also due, run that too."
+        },
+        "pro-leak": {
+          "title": "Leak on the Pro: contact support",
+          "text": "Breville and Sage publish no seal-replacement procedure for the Barista Pro, and its troubleshooting table doesn't list the seal as a cause of leaks. Run any cycle the screen asks for, then contact support about the leak before buying parts."
+        },
+        "descale": {
+          "title": "Run a descale",
+          "text": "A steady CLEAN / DESCALE light or the DESCALE alert means scale needs removing. Take the water filter out first, and don't use bottled water. Express: hold 2-CUP and then POWER, run coffee, steam and hot water, then rinse with a full tank. Pro: MENU, then DESCALE, 3 stages plus a 3-stage rinse, turning the steam dial when the screen tells you to. Don't remove or empty the tank mid-cycle."
+        },
+        "clean": {
+          "title": "Run the cleaning cycle",
+          "text": "A flashing light or the FLUSH alert means a cleaning cycle with a tablet is due. This is separate from descaling. Express: 1 CUP basket, cleaning disc and one tablet, machine off, hold 1 CUP, 2 CUP and POWER for about 10 seconds; it takes about 5 minutes and ends with 2 beeps. Pro: disc and tablet in the basket, MENU, then FLUSH, then 1 CUP. Repeat if the tablet hasn't dissolved."
+        },
+        "clean-me": {
+          "title": "Run the cleaning cycle, then put descaling on a calendar",
+          "text": "CLEAN ME only asks for the cleaning cycle (1 CUP basket, disc and tablet, machine off, hold 1 CUP, 2 CUP and POWER for about 10 seconds). Sage says this machine never prompts for a descale, so set your own reminder: every 90 days at water hardness 4, every 60 days at hardness 6."
+        },
+        "descale-first": {
+          "title": "Descale before you call it a fault",
+          "text": "Breville lists overdue descaling as a cause of no water flow, espresso only dripping, no steam and, on the Express, coffee that isn't hot enough. Descale first: it's free apart from the descaler. That descaling also fixes weak steam comes only from owner reports, so treat it as the first thing to try, not a guaranteed fix. If the symptom is still there afterwards, contact support."
+        },
+        "burrs": {
+          "title": "Clean the grinder burrs",
+          "text": "Empty the hopper, run the grinder empty, remove the top burr and brush both burrs and the chute. Breville says this removes oil build-up that can impede performance. Only take out the lower burr if there's a blockage, and watch out because the burrs are very sharp. If shots are still too fast or slow after that, it's a grind setting problem, not a cleaning one."
+        },
+        "cm-calendar": {
+          "title": "Nothing is due, but your light won't remind you to descale",
+          "text": "Your machine is fine. Keep up the daily wipe, rinse and purge. A CLEAN ME light only ever asks for the cleaning cycle, so descale on a calendar: every 90 days at hardness 4, every 60 days at hardness 6. Replace the filter every 3 months or 40 L."
+        },
+        "keep": {
+          "title": "Your machine is fine, so keep it",
+          "text": "Nothing is due. After every milk drink, wipe and purge the wand. After every session, rinse the basket and portafilter, wipe the group and shower screen, and purge. Change the filter when the reminder dial says so. When a light or alert appears, run the cycle it asks for."
+        }
+      },
+      "rules": [
+        {
+          "when": {
+            "panel": "pro",
+            "signal": "new"
+          },
+          "result": "first-use"
+        },
+        {
+          "when": {
+            "panel": "pro",
+            "signal": "flash"
+          },
+          "result": "recheck"
+        },
+        {
+          "when": {
+            "panel": "pro",
+            "signal": "solid"
+          },
+          "result": "recheck"
+        },
+        {
+          "when": {
+            "panel": "express-cd",
+            "signal": "flush"
+          },
+          "result": "recheck"
+        },
+        {
+          "when": {
+            "panel": "express-cd",
+            "signal": "descale"
+          },
+          "result": "recheck"
+        },
+        {
+          "when": {
+            "panel": "express-cd",
+            "signal": "new"
+          },
+          "result": "recheck"
+        },
+        {
+          "when": {
+            "panel": "express-cm",
+            "signal": "flush"
+          },
+          "result": "recheck"
+        },
+        {
+          "when": {
+            "panel": "express-cm",
+            "signal": "descale"
+          },
+          "result": "recheck"
+        },
+        {
+          "when": {
+            "panel": "express-cm",
+            "signal": "new"
+          },
+          "result": "recheck"
+        },
+        {
+          "when": {
+            "tried": "both"
+          },
+          "result": "support"
+        },
+        {
+          "when": {
+            "tried": "one",
+            "signal": "flash"
+          },
+          "result": "run-other"
+        },
+        {
+          "when": {
+            "tried": "one",
+            "signal": "solid"
+          },
+          "result": "run-other"
+        },
+        {
+          "when": {
+            "tried": "one",
+            "signal": "flush"
+          },
+          "result": "run-other"
+        },
+        {
+          "when": {
+            "tried": "one",
+            "signal": "descale"
+          },
+          "result": "run-other"
+        },
+        {
+          "when": {
+            "panel": "express-cd",
+            "symptom": "edge"
+          },
+          "result": "seal"
+        },
+        {
+          "when": {
+            "panel": "express-cm",
+            "symptom": "edge"
+          },
+          "result": "seal"
+        },
+        {
+          "when": {
+            "panel": "pro",
+            "symptom": "edge"
+          },
+          "result": "pro-leak"
+        },
+        {
+          "when": {
+            "panel": "express-cd",
+            "signal": "solid"
+          },
+          "result": "descale"
+        },
+        {
+          "when": {
+            "panel": "pro",
+            "signal": "descale"
+          },
+          "result": "descale"
+        },
+        {
+          "when": {
+            "panel": "express-cd",
+            "signal": "flash"
+          },
+          "result": "clean"
+        },
+        {
+          "when": {
+            "panel": "pro",
+            "signal": "flush"
+          },
+          "result": "clean"
+        },
+        {
+          "when": {
+            "panel": "express-cm",
+            "signal": "flash"
+          },
+          "result": "clean-me"
+        },
+        {
+          "when": {
+            "panel": "express-cm",
+            "signal": "solid"
+          },
+          "result": "clean-me"
+        },
+        {
+          "when": {
+            "symptom": "steam"
+          },
+          "result": "descale-first"
+        },
+        {
+          "when": {
+            "symptom": "drip"
+          },
+          "result": "descale-first"
+        },
+        {
+          "when": {
+            "symptom": "cold"
+          },
+          "result": "descale-first"
+        },
+        {
+          "when": {
+            "symptom": "grinder"
+          },
+          "result": "burrs"
+        },
+        {
+          "when": {
+            "panel": "express-cm"
+          },
+          "result": "cm-calendar"
+        }
+      ],
+      "default": "keep"
+    }
+  ],
+  "skipped": []
+}

@@ -3,19 +3,121 @@
   "id": "coffee",
   "name": "YourCoffeeSetup",
   "categories": [
-    { "id": "machines", "label": "Home espresso machines" },
-    { "id": "grinders", "label": "Grinders" },
-    { "id": "accessories", "label": "Accessories" }
+    {
+      "id": "machines",
+      "label": "Home espresso machines"
+    },
+    {
+      "id": "grinders",
+      "label": "Grinders"
+    },
+    {
+      "id": "accessories",
+      "label": "Accessories"
+    }
   ],
   "markets": [
-    { "id": "US", "language": "en", "locale": "en-us", "currency": "USD", "status": "primary" },
-    { "id": "GB", "language": "en", "locale": "en-gb", "currency": "GBP", "status": "secondary" }
+    {
+      "id": "US",
+      "language": "en",
+      "locale": "en-us",
+      "currency": "USD",
+      "status": "primary"
+    },
+    {
+      "id": "GB",
+      "language": "en",
+      "locale": "en-gb",
+      "currency": "GBP",
+      "status": "secondary"
+    }
   ],
-  "contentTypes": ["troubleshooter-tool", "buying-decision", "compatibility-check", "maintenance-guide"],
-  "commercialRoles": ["primary", "alternative", "dont-buy"],
+  "contentTypes": [
+    "troubleshooter-tool",
+    "buying-decision",
+    "compatibility-check",
+    "maintenance-guide"
+  ],
+  "commercialRoles": [
+    "primary",
+    "alternative",
+    "dont-buy"
+  ],
   "sellers": [],
   "disclosures": {},
   "openQuestions": [
     "Sellers and disclosure text are empty until affiliate program terms are verified per market (rebuild-spec section 13)."
-  ]
+  ],
+  "focus": {
+    "products": [
+      "barista-express",
+      "barista-pro"
+    ],
+    "why": "The best-selling home espresso machines with a built-in grinder: a large owner base with recurring problems and real upgrade decisions. The site builds this cluster first, then adds machines and grinders one at a time.",
+    "angles": [
+      "fixing a problem (sour, bitter, fast, slow, no pressure, grinder)",
+      "maintenance and cleaning",
+      "what to upgrade first, and what not to buy",
+      "accessories that actually help",
+      "when to replace the machine or add a grinder",
+      "getting a drink right (milk, ratios, beans for this machine)"
+    ]
+  },
+  "catalog": {
+    "repo": "git@github.com:ron2man/coffee-catalog.git",
+    "branch": "main",
+    "dir": "catalog"
+  },
+  "demand": {
+    "querySuffixes": [
+      "",
+      " problems",
+      " grinder",
+      " tips",
+      " upgrade",
+      " not working",
+      " vs"
+    ],
+    "queryPrefixes": [
+      "why is my",
+      "why does my",
+      "how to",
+      "is the",
+      "can i",
+      "should i"
+    ],
+    "maxQueries": 60,
+    "webSearch": {
+      "sites": [
+        "reddit.com/r/espresso",
+        "reddit.com/r/Coffee",
+        "home-barista.com",
+        "coffeegeek.com",
+        "coffeeforums.co.uk"
+      ],
+      "maxQueries": 8,
+      "providers": [
+        "tavily",
+        "serper",
+        "brave"
+      ]
+    },
+    "searchBudgets": {
+      "tavily": 900,
+      "serper": 150,
+      "brave": 900
+    },
+    "peopleAlsoAsk": {
+      "maxQueries": 4
+    },
+    "youtube": {
+      "maxSearches": 6,
+      "videosPerSearch": 3,
+      "commentsPerVideo": 50
+    }
+  },
+  "publishing": {
+    "autoMerge": true,
+    "vetoHours": 24
+  }
 }

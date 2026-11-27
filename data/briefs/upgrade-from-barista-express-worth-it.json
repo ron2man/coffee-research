@@ -1,0 +1,132 @@
+{
+  "thesis": "Before you spend two to three times your Barista Express on a new machine, find out which of three things is actually bothering you. Shots point to a grinder, which you'd need with a Dual Boiler anyway. Waiting to steam between milk drinks points to a dual boiler. Wanting less work points to an Oracle. If none of the three applies, keep the machine.",
+  "reader": "Someone who has owned a Barista Express (or Barista Pro) for several years. In the UK it's sold as Sage. They're tempted by the Dual Boiler, an Oracle or a prosumer machine, and they don't know whether the machine or the grinder is holding them back.",
+  "readerDecision": "Choose one: keep the machine and add a standalone grinder; move to a dual boiler for milk-drink volume; move to an automated Oracle (Jet or Dual Boiler); or change nothing.",
+  "whatCompetitorsMiss": [
+    "None of them gives a way to tell which bottleneck you have: inconsistent or fast shots (grinder or beans), waits between brewing and steaming (single thermocoil), or the effort of grinding, dosing and tamping (workflow). They jump straight to a list of machines by price.",
+    "None treats 'keep it, change nothing' as a valid result, and none lists the free fixes to try first: fresh beans with a roast date, dose and tamp, the ±4°F temperature adjustment, and descaling a machine whose steam has gone weak.",
+    "None separates Barista Express owners from Barista Pro owners. The Pro's ThermoJet heats in about 3 seconds and its booklet describes no wait for steam, so a Pro owner's case for a dual boiler on steaming grounds is weaker.",
+    "Coffee Chronicler and the 2013 Seattle Coffee Gear comparison never say plainly that the Dual Boiler has no grinder. Leaving the Express for it means buying a grinder too, which makes 'grinder first' money that is never wasted.",
+    "None explains that 'Oracle' now means two different machines. The original Oracle is discontinued in the US. The Oracle Jet automates grind, dose, tamp and milk but heats with a ThermoJet, not boilers. Only the Oracle Dual Boiler steams while it brews.",
+    "None warns that the Oracle grinder gets mixed owner reviews (back-to-back shots come out coarser, and some owners kept an external grinder), so automation doesn't settle the grinder question.",
+    "Complete Home Barista covers the 54 mm to 58 mm change, but no competitor ties it to the decision: baskets, tampers and dosing cups bought for the Express won't move to a 58 mm machine. That argues for spending on a grinder rather than on 54 mm accessories if a machine change is likely."
+  ],
+  "ourContribution": "decision-rule",
+  "contributionDetail": "A bottleneck rule with a short owner test, delivered through a picker. Step 1, the test on the machine you already own: (a) buy a bag of beans with a 'Roasted On' date and use it 5–20 days after roasting; (b) dose so the tamper cap sits level with the basket rim and tamp firmly; (c) pull three shots in a row at the setting you normally use. If the shots still run fast, taste sour or thin, or differ a lot from one to the next while you can't go finer, the bottleneck is the grinder. (d) Make your usual run of milk drinks and notice whether you wait for the steam light to stop flashing and for the auto purge before each drink (Express), and whether that wait is what annoys you. (e) Ask whether you resent the grind, dose, tamp and steam routine itself. Step 2, the rule: shot problems mean a standalone grinder and keeping the machine, the cheapest fix and one you'd need with a Dual Boiler anyway. Steaming waits with back-to-back milk drinks on an Express mean a dual boiler (Dual Boiler plus a grinder, or the Oracle Dual Boiler). Wanting less work means an Oracle: the Jet if you make one milk drink at a time, the Oracle Dual Boiler if you make several in a row and want to steam while brewing. None of these means change nothing. If the steam has gone weak or shots only drip on an ageing machine, descale before deciding. Barista Pro owners mostly skip the steaming branch. The picker asks: which machine do you own (Express or Pro), what bothers you most (shots, waiting to steam, the effort, or nothing specific), how many milk drinks you make in a row, and whether you've run the fresh-beans test. It returns one result: keep it and change nothing, keep it and add a grinder, Dual Boiler plus grinder, Oracle Jet, or Oracle Dual Boiler.",
+  "mustInclude": [
+    "Recommendation in the first paragraph: most owners should add a grinder and keep the machine. A dual boiler only pays off for people who make several milk drinks in a row and are tired of waiting for steam.",
+    "The owner test above, run with fresh, roast-dated beans and the dose and tamp they already have, before any purchase. Frame steaming waits as something the owner recognises (the flashing steam light, the purge into the drip tray). Never give a number of seconds, because no measured steaming time exists.",
+    "Express vs Pro split: the Express's single thermocoil heats for steam after brewing and purges afterwards. The Pro's ThermoJet is described with a 3-second heat-up and no steam wait. Both let you adjust shot temperature (Express ±4°F in 2°F steps; Pro via SHOT TEMP), so try that before blaming temperature.",
+    "Say plainly that the Dual Boiler has no grinder in either market, so a grinder bought first carries over.",
+    "The 54 mm vs 58 mm note: accessories bought for the Express or Pro won't fit a Dual Boiler or Oracle, so don't buy 54 mm extras if you're likely to change machines. If the grinder is a DF54, note the owner comment that its cradle suits 58 mm (turin-df54/cradle-58mm-owner-comment) and that UK buying differs (turin-df54/uk-buying-caveat).",
+    "Clarify 'which Oracle': the original Oracle is discontinued in the US. The Oracle Jet is a ThermoJet machine (it isn't documented to brew and steam at the same time, so don't claim it can). Only the Oracle Dual Boiler steams while brewing. Owners of the original Oracle say its built-in grinder is 'a bit meh' on back-to-back drinks; make clear those reports are about the original model.",
+    "Present the Dual Boiler reliability reports honestly as owner reports (mixed: some repairs after years, some say it's solid), with no currency amounts.",
+    "An ageing-machine check: weak steam, shots that only drip or coffee that isn't hot enough are descale symptoms in Breville's own table. Rule these out before concluding the machine is worn out. Say that no source gives a lifespan.",
+    "A 'When I'd choose differently' section: heavy milk-drink households (dual boiler), people who want hands-off drinks (Oracle), and Pro owners (usually grinder or nothing).",
+    "A 'Keep yours' path: if the shots taste good after the fresh-beans test and the waits don't bother you, change nothing.",
+    "An ending for when the free fixes don't work: the smallest sensible purchase is a standalone espresso grinder used with the machine you have. Link to the barista-standalone-grinder-picker tool rather than repeating the grinder guide. If the built-in grinder's fast-shot guide (breville-builtin-grinder-wont-grind-fine-enough) is published by then, link it with {{guide:...}}; otherwise use the grind-fault-tree tool.",
+    "Market-neutral text: name products with {{model:...}}/{{product:...}} (Breville in the US, Sage in the UK). No prices, no currencies, no retailers. The Express heating wording is from the US page, so describe what the owner sees rather than quoting US-only marketing as fact for the UK."
+  ],
+  "leaveOut": [
+    "Prices and the 'two to three times' figure as a number. Prices are merchant data and not claims.",
+    "Any steaming time in seconds, or a claim that a dual boiler steams 'X times faster'.",
+    "Prosumer machines (Lelit, Profitec, Rocket) and price-tier machine lists. They're out of scope and have no claims.",
+    "Spec tables and feature lists for the Oracle models (Auto MilQ temperature ranges, efficiency percentages, 45 settings) beyond what the decision needs.",
+    "Any claim that the Oracle Jet or Barista Pro can or can't brew and steam at the same time. Both are unknown.",
+    "Lifespan estimates, warranty lengths and AUD repair costs.",
+    "Upper-burr adjustment walkthroughs and the full descale procedure. Those belong in their own guides.",
+    "Brewing history, generic espresso tips, and 'we tested' language."
+  ],
+  "assets": [
+    "barista-upgrade-bottleneck-picker",
+    "barista-standalone-grinder-picker",
+    "grind-fault-tree"
+  ],
+  "offerTouchpoints": [
+    {
+      "productId": "barista-express",
+      "role": "dont-buy"
+    },
+    {
+      "productId": "barista-pro",
+      "role": "dont-buy"
+    },
+    {
+      "productId": "turin-df54",
+      "role": "primary"
+    },
+    {
+      "productId": "sage-dual-boiler",
+      "role": "alternative"
+    },
+    {
+      "productId": "breville-oracle-jet",
+      "role": "alternative"
+    },
+    {
+      "productId": "breville-oracle-dual-boiler",
+      "role": "alternative"
+    }
+  ],
+  "claimIds": [
+    "barista-express/heating-thermocoil-pid",
+    "barista-express/steam-heatup-auto-purge",
+    "barista-express/no-simultaneous-brew-steam",
+    "barista-express/temperature-adjust-2f-steps",
+    "barista-express/owner-upgrade-advice-dual-boiler",
+    "barista-express/portafilter-54mm",
+    "barista-express/troubleshooting-runs-too-quickly",
+    "barista-express/beans-roasted-on-5-20-days",
+    "barista-express/builtin-grinder-16-settings",
+    "barista-express/descale-symptoms-us",
+    "barista-express/dose-and-extraction-targets",
+    "barista-pro/thermojet-3-second-heatup",
+    "barista-pro/steam-procedure",
+    "barista-pro/shot-temp-adjustable",
+    "barista-pro/builtin-grinder-baratza-burrs",
+    "barista-pro/troubleshooting-runs-too-quickly",
+    "sage-dual-boiler/simultaneous-brewing-and-steaming",
+    "sage-dual-boiler/simultaneous-us",
+    "sage-dual-boiler/pid-boilers",
+    "sage-dual-boiler/no-built-in-grinder",
+    "sage-dual-boiler/portafilter-diameter",
+    "sage-dual-boiler/portafilter-58mm-us",
+    "sage-dual-boiler/owner-upgrade-verdicts",
+    "sage-dual-boiler/owner-reliability-reports",
+    "breville-oracle-jet/thermojet-not-boiler",
+    "breville-oracle-jet/auto-grind-dose-tamp",
+    "breville-oracle-jet/grinder-45-settings",
+    "breville-oracle-jet/auto-milq",
+    "breville-oracle-dual-boiler/dual-boilers-simultaneous",
+    "breville-oracle-dual-boiler/pid-triple-heating",
+    "breville-oracle-dual-boiler/grinder-auto-adjust",
+    "breville-oracle-dual-boiler/auto-grind-dose-tamp",
+    "breville-oracle-dual-boiler/auto-milq",
+    "breville-oracle-dual-boiler/original-oracle-discontinued-us",
+    "breville-oracle-dual-boiler/owner-oracle-workflow",
+    "turin-df54/burrs-54mm-flat-stepless",
+    "turin-df54/cradle-58mm-owner-comment",
+    "turin-df54/uk-buying-caveat"
+  ],
+  "competitorsReviewed": [
+    {
+      "url": "https://completehomebarista.com/progression/upgrade-from-barista-express/",
+      "summary": "Says to upgrade the grinder first (Eureka Mignon, Sette, Niche) and then move to a Dual Boiler, Mara X, Pro 300 or Appartamento, and notes that 54 mm accessories won't carry over. Its only diagnosis is a one-line symptom ('inconsistent extraction'). It has no steaming branch, never mentions the Oracle, the Barista Pro or 'change nothing', and organises the advice by price tier."
+    },
+    {
+      "url": "https://seattlecoffeegear.com/blogs/scg-blog/which-breville-espresso-machine-is-right-for-you-updated",
+      "summary": "June 2026 retailer guide to the Breville lineup (Bambino Plus to Oracle Dual Boiler). It correctly says the Dual Boiler needs a grinder and the Oracle Dual Boiler brews and steams at the same time. It's written for a new buyer: it doesn't address upgrading from an Express you own, gives no grinder-first rule, no bottleneck test and no keep-it option."
+    },
+    {
+      "url": "https://coffeechronicler.com/breville-barista-express-vs-dual-boiler/",
+      "summary": "2023 head-to-head that would pick the Dual Boiler if money were no object (simultaneous brew/steam, temperature stability) and suggests an IMS basket for the Express. It frames the question as a new purchase, never says outright that the Dual Boiler needs a separate grinder, and ignores the Pro, the Oracle Jet and the Oracle Dual Boiler."
+    }
+  ],
+  "titleOptions": [
+    "Upgrading from a Barista Express: find your bottleneck first",
+    "Barista Express upgrade: grinder, Dual Boiler, Oracle, or keep it?",
+    "Leaving the Barista Express? Most owners only need a grinder"
+  ],
+  "slug": "upgrade-from-barista-express-worth-it",
+  "metaDescription": "Shots, steaming waits or effort? A short test on your Barista Express or Pro tells you whether to add a grinder, go dual boiler, pick an Oracle, or keep it."
+}

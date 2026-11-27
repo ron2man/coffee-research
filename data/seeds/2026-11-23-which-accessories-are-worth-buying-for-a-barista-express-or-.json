@@ -1,0 +1,27 @@
+{
+  "id": "2026-11-23-which-accessories-are-worth-buying-for-a-barista-express-or-",
+  "text": "Which accessories are worth buying for a Barista Express or Barista Pro (scale, tamper, distribution tool, bottomless portafilter, baskets) and which are not?",
+  "note": "Barista Express/Pro cluster (focus). From Ron.",
+  "by": "ron",
+  "at": "2026-11-23T12:29:32.223Z",
+  "status": "no-demand",
+  "considered": 3,
+  "itemIds": [],
+  "attempts": [
+    {
+      "at": "2026-11-23T15:58:57.534Z",
+      "cards": [],
+      "why": "No card yet. The only readable accessory discussions (bottomless portafilter, WDT, shower screen) were in an OzBargain thread from 2024-06-22, which is older than 24 months, and in a 2025 thread I already used for the cleaning card. Reddit, Home-Barista and Coffee Forums UK were blocked. Retry when better sources are reachable."
+    },
+    {
+      "at": "2026-11-25T20:08:27.716Z",
+      "cards": [],
+      "why": "No card this run, for lack of readable owner evidence, not for lack of interest. I searched for accessories worth buying for the Express/Pro: scale, tamper, WDT, puck screen, bottomless portafilter and baskets. The only owner discussions I could open were OzBargain deal threads: node 861855 (2024-08-16, Breville owners arguing about whether stock baskets need replacing), node 795966 (2023) and node 831623 (2024-02-15). They are either older than 24 months or don't come from Express/Pro owners. The one in-window thread with Express accessory advice (OzBargain 916284) is already the evidence for the sour/bitter card, so I couldn't reuse it. Most results were retailer 'best upgrades' blogs (coffeenerd, shotandscale, yozcoffee), which aren't demand. The places where this is really asked (r/espresso, Home-Barista, Coffee Forums UK, Slickdeals) all returned 403 or failed. Worth retrying when Reddit signals come through."
+    },
+    {
+      "at": "2026-11-27T11:20:26.781Z",
+      "cards": [],
+      "why": "No card this run. The main places these owners talk were unreachable. Reddit is blocked for both search and fetch. Home-Barista and CoffeeGeek return 403. Coffee Forums UK redirects to a bot host that doesn't resolve, so its bottomless-portafilter threads for the Sage Barista Express showed up only as search leads. Slickdeals and Whirlpool also return 403. I could read three threads. A Singletrack off-topic thread (2024-01-04, older than 24 months, an unrelated community's general board): a secondhand Sage Barista Express owner asks for tips, and replies suggest single-wall baskets, WDT and a dosing funnel. A PistonHeads food board thread (2025-01-06): a buyer choosing a machine, where one reply recommends a funnel for the Express. That's a reply, not an owner asking the accessory question. A CoffeeSnobs Barista Pro owners thread (2021, older): one owner asks which accessories to buy. Search results are full of retailer 'best Barista Express accessories' blog posts, which is supply, not demand. I found no recent owner asking this that I could actually read, so the seed stays open. A later run with the scheduler's Reddit and YouTube signals enabled (both were skipped today: no API keys) should find it more easily."
+    }
+  ]
+}

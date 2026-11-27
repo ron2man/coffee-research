@@ -1,0 +1,37 @@
+{
+  "id": "barista-express-pro-clean-descale-routine",
+  "seedId": "2026-11-23-how-do-i-clean-and-maintain-a-barista-express-or-barista-pro",
+  "question": "What does the clean/descale light on my Barista Express or Pro actually want, and which cleaning jobs do I really need to do, and how often?",
+  "audience": "Owners of a Barista Express or Barista Pro (Sage in the UK), mostly beginners, who are confused by the clean/descale indicator or have let maintenance slip. Seen on Australian forums; autocomplete in the US and UK shows the same searches ('cleaning cycle', 'descale', 'cleaning cycle not working').",
+  "market": "US",
+  "language": "en",
+  "pain": "The clean/descale light stays on or they can't tell whether it wants a backflush or a descale, and skipped maintenance leads to bad shots, weak steam and owners giving up on the machine.",
+  "decision": "Which maintenance jobs to do and how often (backflush with tablets, descale, grinder burr cleaning, shower screen and gasket, filter), and which they can skip, before deciding the machine is failing.",
+  "contentType": "maintenance-guide",
+  "demand": {
+    "kind": "qualitative",
+    "signals": [
+      {
+        "url": "https://www.ozbargain.com.au/node/955798",
+        "date": "2026-04-16",
+        "note": "Barista Express owner confused by a clean/descale light that stays on. Others explain that solid means descale and flashing means a cleaning backflush, and the light cleared after running both. Another owner says descaling brought steam power back."
+      },
+      {
+        "url": "https://www.ozbargain.com.au/node/887057",
+        "date": "2025-01-01",
+        "note": "A would-be buyer asks why so many used Breville machines are listed cheaply. Owners answer that many people give up because they don't keep up with cleaning cycles, and a Barista Pro owner describes their long daily cleaning routine."
+      }
+    ]
+  },
+  "competitorGap": "Breville's manual and support pages list each cycle separately but don't give one schedule or explain what the light means. Third-party guides (Seattle Coffee Gear product guide) cover descaling only. None cover grinder burr cleaning, gasket replacement and the filter together, or say which jobs can wait.",
+  "valueAdd": "One maintenance schedule (daily, weekly, monthly, yearly) for both machines, a key to what each light state means, and a list of 'symptom that looks like a fault but is overdue maintenance' (weak steam, slow shots, constant light) before anyone pays for a repair. No purchase needed beyond tablets and descaler.",
+  "commercialPath": [
+    "cleaning tablets",
+    "descaler",
+    "replacement group gasket and shower screen",
+    "water filter cartridges"
+  ],
+  "overlapsWith": [
+    "bambino-plus-cleaning-vs-descaling"
+  ]
+}

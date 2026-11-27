@@ -1,0 +1,33 @@
+{
+  "id": "barista-express-pro-steam-wand-microfoam",
+  "seedId": "2026-11-23-steaming-milk-on-a-barista-express-or-barista-pro-why-is-mic",
+  "question": "Why is the milk from my Barista Express or Pro steam wand thin, watery or spitting air instead of silky microfoam, and is it my technique or the machine?",
+  "audience": "Owners of a Barista Express or Barista Pro (Sage in the UK) who make milk drinks and find steaming the hardest part. Seen on Australian forums; the same 'steam wand not working' searches appear in US and UK autocomplete.",
+  "market": "US",
+  "language": "en",
+  "pain": "Milk comes out watered down or too foamy, the wand spits air at the end, and owners can't tell whether it's technique, scale build-up or a faulty part.",
+  "decision": "Fix technique (jug size, fill level, purge, tip depth), descale or clear the tip, or treat it as a hardware fault (warranty or repair), before considering a machine with more steam power.",
+  "contentType": "troubleshooter-tool",
+  "demand": {
+    "kind": "qualitative",
+    "signals": [
+      {
+        "url": "https://www.ozbargain.com.au/node/969872",
+        "date": "2026-08-01",
+        "note": "Barista Express owner says the frother is short and inconsistent, waters the milk down and sometimes spits air at the end. Replies suggest purging first, and one suspects a faulty steam part."
+      },
+      {
+        "url": "https://www.ozbargain.com.au/node/967390",
+        "date": "2026-07-13",
+        "note": "Owner of a refurbished Barista Pro says shots were consistent but steaming milk was the steepest learning curve on the machine."
+      }
+    ]
+  },
+  "competitorGap": "Steaming guides (Brewing With Dani's Barista Express post, Tom's Guide) teach general technique only. They don't separate technique problems from machine problems on a thermocoil wand (scale, a blocked tip hole, a loose tip, the Express wand being weaker than the Pro's), and they don't tell the reader when to stop practising and get the machine checked.",
+  "valueAdd": "A symptom-led troubleshooter: watery milk, big bubbles, spitting air, weak steam. Each symptom gets an ordered check list running from technique (jug size, fill, purge, depth) to maintenance (descale, tip holes) to fault. Notes how the Express and Pro wands differ. Most readers need no purchase, or at most a smaller jug.",
+  "commercialPath": [
+    "milk jug",
+    "descaler"
+  ],
+  "overlapsWith": []
+}

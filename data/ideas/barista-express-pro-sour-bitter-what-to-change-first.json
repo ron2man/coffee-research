@@ -1,0 +1,46 @@
+{
+  "id": "barista-express-pro-sour-bitter-what-to-change-first",
+  "seedId": "2026-11-23-barista-express-or-barista-pro-shots-taste-sour-or-bitter-wh",
+  "question": "My Barista Express (or Pro) shots come out sour, bitter or watery and run fast, and the pressure gauge barely moves. What should I change first, and in what order?",
+  "audience": "Fairly new Breville Barista Express / Express Impress / Barista Pro owners (sold as Sage in the UK and Europe) using the built-in grinder. They are dialing in by the manual or by YouTube and can't tell sour from bitter. The problem is the same in every market. The threads found are from Lemmy, OzBargain and CoffeeForums.com.",
+  "market": "US",
+  "language": "en",
+  "pain": "Shots taste sour, bitter or both, and run 8 to 20 seconds. The gauge sits low. Changing one thing (grinding finer, temperature) seems to make it worse, so the owner starts to suspect the machine is faulty.",
+  "decision": "Which setting to change first (dose by weight, basket type, grind size, inner burr, temperature, beans), when the machine itself might be at fault, and when a scale or grinder is actually needed.",
+  "contentType": "troubleshooter-tool",
+  "demand": {
+    "kind": "qualitative",
+    "signals": [
+      {
+        "url": "https://lemmy.sdf.org/post/35664971/20386535",
+        "date": "2025-05-30",
+        "note": "Barista Express owner using the built-in grinder: shots are sour and watery with channeling, and grinding finer chokes the shot and makes it more sour. They had first mistaken sour for bitter. It got partly better once they found program mode and manual mode behave differently and raised the temperature."
+      },
+      {
+        "url": "https://www.ozbargain.com.au/node/916284",
+        "date": "2025-07-20",
+        "note": "Barista Express owner asks why shots are bitter, why 20 g in gives only 20 to 27 g out in 15 to 20 seconds, and why they need grind 1 to 3 when videos use about 8. Replies point to channeling, the inner burr setting, single- vs double-wall baskets and temperature."
+      },
+      {
+        "url": "https://ozbargain.com.au/node/883614",
+        "date": "2024-12-10",
+        "note": "New Barista Express owner: the pressure gauge doesn't move and shots are watery with no crema. Should they return it as faulty? It turned out to be grind, dose and tamp, and the owner found the dialing-in process fiddly."
+      },
+      {
+        "url": "https://www.coffeeforums.com/threads/help-sage-breville-barista-express-adjustment.23528/",
+        "date": "2024-01-06",
+        "note": "Older: Barista Express owner at grind 8 and grind amount 3 gets sour, bland shots in 8 to 15 seconds and can't tell which adjustment fixes it. No resolution was posted."
+      }
+    ]
+  },
+  "competitorGap": "The top sour/bitter guides I looked at (Clive Coffee's troubleshooting guide, completehomebarista's sour-espresso guide) are written for any machine: 'grind finer, change one variable'. None of them covers the Express/Pro-specific traps that tripped up the owners in these threads: double-wall vs single-wall baskets; the 'grind amount' dial dosing by time rather than weight; the inner burr setting once the outer dial runs out; program mode vs manual temperature; and reading the gauge as a diagnostic instead of a fault. None of them tells you when to stop adjusting and suspect the machine.",
+  "valueAdd": "A step-by-step diagnosis for this machine. It starts from taste, shot time and gauge reading, and gives the order to check things in: basket type, dose by weight, grind size, inner burr, temperature and program mode, then bean roast and age. It ends at 'probably a fault: contact support'. Most owners need to buy nothing. A cheap 0.1 g scale is the only likely purchase, and a separate grinder is suggested only after the inner burr adjustment has run out. This links to our existing guides on the fine-grind limit and the standalone grinder.",
+  "commercialPath": [
+    "digital scale (0.1 g)",
+    "standalone grinder (only after the built-in grinder's inner adjustment has run out)"
+  ],
+  "overlapsWith": [
+    "breville-builtin-grinder-wont-grind-fine-enough",
+    "standalone-grinder-for-barista-express-pro"
+  ]
+}

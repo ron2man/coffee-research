@@ -1,0 +1,28 @@
+{
+  "scores": {
+    "demandEvidence": {
+      "score": 4,
+      "reason": "iFixit question (2025-03-07, BES878, three beeps, answer is only a video link) checked. Search also found independent home-barista threads (hot water stops and beeps after 5 s, air lock cleared; steam stops after a few pumps with three beeps) and ProductReview Q&A."
+    },
+    "competitorGap": {
+      "score": 4,
+      "reason": "Breville's support article lumps the shot cut-out in with grind and dose and never explains the three beeps. Other results are single-case forum anecdotes and JustAnswer pages, with no diagnosis order by symptom scope."
+    },
+    "valueAddWithoutExperience": {
+      "score": 4,
+      "reason": "A symptom-scope fault tree can be built from Breville's support steps, the manual and repeated owner reports without hands-on testing. It would ask whether the fault affects shots only or water and steam too, and whether it started after a filter change or descale, then route to air lock, filter, flow meter or warranty."
+    },
+    "evidenceFeasibility": {
+      "score": 3,
+      "reason": "The manual, Breville's support article and several owner threads support the free fixes. Breville publishes no meaning for the three beeps, so flow-meter attribution and repair costs rest on owner reports and must be hedged."
+    },
+    "commercialFit": {
+      "score": 4,
+      "reason": "The decision is honest: fix it for free, claim the warranty, repair or replace. Keeping the machine is the default, and the buy path (filter, descaler, replacement machine) only applies when the out-of-warranty quote is high."
+    },
+    "overlap": {
+      "score": 4,
+      "reason": "Different from the sour/bitter post and the descale routine. It touches the maintenance-alert-key tool and descaling content only lightly, and should link to them rather than duplicate them."
+    }
+  }
+}

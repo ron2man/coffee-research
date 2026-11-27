@@ -6,6 +6,7 @@ import { join, resolve } from 'node:path';
 import { loadAgents } from '../agents/registry.mjs';
 import { defaultNicheId, loadNiche, repoRoot } from './niche.mjs';
 import { loadItems, readJson } from './store.mjs';
+import { libraryProblems } from '../library/library.mjs';
 
 export function validateRepo(root = repoRoot) {
   const errors = [];
@@ -34,6 +35,7 @@ export function validateRepo(root = repoRoot) {
       }
     }
   }
+  errors.push(...libraryProblems(root).filter((p) => !/no knowledge card/.test(p)));
   return { agents: agents.length, items: items.length, errors };
 }
 

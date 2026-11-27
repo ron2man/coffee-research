@@ -34,4 +34,4 @@ Source types are `manufacturer`, `professional-test`, `owner-report`, and `merch
 
 Omit `variantId` for a claim that applies at the product level. `verifiedAt` records when the claim status was checked, including checks that left a gap unresolved.
 
-Run `node agent/validate-knowledge.mjs` from the repository root, optionally passing another knowledge directory as an argument. The validator checks card structure and internal references. During research, check that each source supports the claim for the stated product and variant.
+Run `npm run validate` (or `node engine/state/validate-knowledge.mjs`) from the repository root, optionally passing another knowledge directory as an argument. The validator checks card structure and internal references. During research, check that each source supports the claim for the stated product and variant.

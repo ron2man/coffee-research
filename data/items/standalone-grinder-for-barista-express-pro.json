@@ -1,0 +1,78 @@
+{
+  "schemaVersion": 1,
+  "id": "standalone-grinder-for-barista-express-pro",
+  "type": "new-post",
+  "niche": "coffee",
+  "status": "passed",
+  "attempts": 0,
+  "revisions": 1,
+  "createdAt": "2026-11-23T15:58:57.537Z",
+  "updatedAt": "2026-11-24T18:12:37.374Z",
+  "artifacts": {
+    "idea": "data/ideas/standalone-grinder-for-barista-express-pro.json",
+    "idea-judge": "data/idea-scores/standalone-grinder-for-barista-express-pro.json",
+    "research": "data/research/standalone-grinder-for-barista-express-pro.json",
+    "angle": "data/briefs/standalone-grinder-for-barista-express-pro.json",
+    "toolsmith": "data/tools/standalone-grinder-for-barista-express-pro.json",
+    "writer": "content/drafts/standalone-grinder-for-barista-express-pro.json",
+    "post-judge": "data/reviews/standalone-grinder-for-barista-express-pro.json"
+  },
+  "history": [
+    {
+      "at": "2026-11-23T15:58:57.537Z",
+      "from": null,
+      "to": "idea",
+      "by": "idea",
+      "reason": "generated"
+    },
+    {
+      "at": "2026-11-23T18:02:49.760Z",
+      "from": "idea",
+      "to": "idea_approved",
+      "by": "idea-judge",
+      "reason": "Core focus-cluster guide that an existing draft already links to as a wanted guide. The OzBargain signal checks out (failing built-in grinder; DF54 and Mignon suggested; Smart Grinder Pro called no real upgrade). The top results are forum threads and price-tier lists that never start from a diagnosis."
+    },
+    {
+      "at": "2026-11-24T06:16:08.382Z",
+      "from": "idea_approved",
+      "to": "researched",
+      "by": "research",
+      "reason": "The decision (keep the built-in grinder after the burr checks, add a budget espresso grinder, or add a single-dose grinder) can be answered from supported claims. Both machines use 54 mm portafilters. The Express's built-in grinder shares its 40 mm burr group with the Smart Grinder Pro (CoffeeGeek), which makes that grinder a sideways move. The Pro instead uses Baratza burrs. The Encore ESP has a 40 mm M2 espresso range and is sold in the US and GB, and the DF54 (54 mm flat, stepless, low retention per the reviewer) is sold in both markets. The keep path is already carded through the upper-burr adjustment and part claims. Gaps are listed below. None blocks the decision rule."
+    },
+    {
+      "at": "2026-11-24T06:18:34.039Z",
+      "from": "researched",
+      "to": "briefed",
+      "by": "angle",
+      "reason": "There is a distinct contribution the top pages don't make: a decision rule that starts from a diagnosis. First rule out beans and dose, then clean the burrs and step the upper burr. Only after that does it pick between keeping the built-in grinder, a budget replacement and a single-dose grinder that outlives the machine. Two points from our sources set it apart. Balance Journal and others recommend the Smart Grinder Pro, but CoffeeGeek says it uses the same 40 mm burr group as the Express. And neither the Encore ESP nor the DF54 has been tested head-to-head against the built-in grinder, so the brief keeps the Encore ESP as a working replacement, not a proven upgrade. Every claim the post needs is supported. Mignon picks are left out because their market variants aren't on file. The slug matches the wanted guide."
+    },
+    {
+      "at": "2026-11-24T06:43:01.599Z",
+      "from": "briefed",
+      "to": "drafted",
+      "by": "writer",
+      "reason": "I wrote the post to the brief: four free checks as the gate, then a replacement upper burr as the smallest purchase, then a three-way grinder rule built around the picker tool. The Smart Grinder Pro point is limited to the Express, and I say outright that it isn't established for the Pro. The Impress is excluded from all Express-specific claims. Offers follow the brief: the DF54 as the pick, the Encore ESP as the alternative, and neither machine. The post has no inline links; the diagnosis guide is linked with a guide token and shows as plain text until it is published. One open item before publishing: the Encore ESP dosing-cup size (54 mm) rests on the 2026-11-21 page read, and the 2026-11-24 re-read didn't show it. Please re-check it against the Encore ESP manual. The title is 61 characters with the longest market names, so it also has a 58-character seoTitle."
+    },
+    {
+      "at": "2026-11-24T09:08:21.275Z",
+      "from": "drafted",
+      "to": "briefed",
+      "by": "post-judge",
+      "reason": "This is the strongest page for the query. None of the top three results runs the free checks first, has a buy-nothing path, mentions the upper burr, or says the Smart Grinder Pro shares the Express's burr group. Balance Journal even recommends the Smart Grinder Pro. Two fixable problems hold the draft back. The opening paragraph contradicts itself: it says to buy for your next machine, then offers the Encore ESP for people keeping this one. And three statements have no claim behind them."
+    },
+    {
+      "at": "2026-11-24T17:46:58.218Z",
+      "from": "briefed",
+      "to": "drafted",
+      "by": "writer",
+      "reason": "This revision fixes the three blocking actions from the post-judge review. (1) I rewrote the opening paragraph so the rule no longer contradicts itself. It now says: do the free checks, then the upper burr, skip the Smart Grinder Pro, and decide on one question: should the grinder outlive this machine? Yes means the DF54. Keeping the machine and wanting something simple means the Encore ESP. (2) I removed or replaced the three statements no claim covered. 'Most fast, sour shots come from…' is now what the manufacturer's troubleshooting table lists. The supermarket-beans line is cut, and the post now says only that a bag with no roasted-on date can't be checked against the 5–20 day window. 'Easy-to-swap burrs' is now 'a quick-release burr mount', which baratza-encore-esp/burrs-40mm-m2 states word for word. (3) I could not re-check the Encore ESP 54 mm dosing-cup claim, because this run has no web access. The card still carries the 2026-11-21 read (verifiedAt 2026-11-21, with a note that the 2026-11-24 re-read didn't show the size). To lower the risk, the post no longer rests the Encore ESP's fit on the cup. It says that grinding into a cup and transferring works whatever the cup size. A human or the research agent should still confirm the dosing cup against the Encore ESP manual before this publishes; if it doesn't hold up, cut that one sentence. I also took the optional improvements. The DF54 cradle now 'suits a 58 mm machine if that's your next step'. The UK caveat is a single sentence of advice for UK buyers. Seattle Coffee Gear's 2016 comparison is now cited in the Smart Grinder Pro section under the burr-group claim. The title names both machines: 63 characters with the longest market names, plus a 58-character seoTitle. Offers are unchanged: the DF54 as the pick, the Encore ESP as the alternative, and neither machine."
+    },
+    {
+      "at": "2026-11-24T18:12:37.374Z",
+      "from": "drafted",
+      "to": "passed",
+      "by": "post-judge",
+      "reason": "The revision fixes all three blocking actions from the last review. The opening paragraph is now one rule that doesn't contradict itself: free checks, then the upper burr, skip the Smart Grinder Pro, then \"should the new grinder outlive this machine?\". The unsupported statements are gone or now map to claims; the claims table had no claim behind \"quick-release mount\" before, and burrs-40mm-m2 now covers it word for word. The Encore ESP dosing-cup sentence no longer carries the fit (\"grinding into a cup and transferring works either way\"), and its card is still supported from the 2026-11-21 read. The top results for the query are a home-barista.com forum thread and two Seattle Coffee Gear comparisons from 2013 and 2016. None of them gives a gate before buying, a keep path, the part numbers by batch date, or a single deciding question, and the search summary still pushes the Smart Grinder Pro, which this post argues against with sources. Offers match the advice: the DF54 as the pick, the Encore ESP as the alternative, neither machine. The ending lists what to do in order of cost. Automated checks have nothing blocking."
+    }
+  ]
+}

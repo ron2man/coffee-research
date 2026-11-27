@@ -4,7 +4,18 @@
   "note": "From Ron after reading the Barista Express/Pro diagnosis draft.",
   "by": "ron",
   "at": "2026-11-22T15:06:14.476Z",
-  "status": "open",
-  "considered": 1,
-  "itemIds": []
+  "status": "used",
+  "considered": 2,
+  "itemIds": [
+    "standalone-grinder-for-barista-express-pro"
+  ],
+  "attempts": [
+    {
+      "at": "2026-11-23T15:58:57.530Z",
+      "cards": [
+        "standalone-grinder-for-barista-express-pro"
+      ],
+      "why": "Became standalone-grinder-for-barista-express-pro, which also covers the wanted guide grinder-for-barista-express-and-pro. Searched forum and Reddit phrasings ('Barista Express grinder upgrade', 'which grinder with Barista Express'). Reddit (www and old), Home-Barista (403), Coffee Forums UK (redirects to a paywall that wouldn't resolve), Slickdeals (403), boards.ie and Overclockers UK (403) all blocked. The two signals I read are OzBargain threads (Australia). I found no readable US or UK owner thread."
+    }
+  ]
 }

@@ -1,0 +1,105 @@
+{
+  "id": "2026-11-26T07-27-26-671Z-critic",
+  "agent": "research",
+  "source": "critic",
+  "at": "2026-11-26T07:27:26.671Z",
+  "itemIds": [
+    "breville-builtin-grinder-wont-grind-fine-enough",
+    "standalone-grinder-for-barista-express-pro",
+    "barista-express-pro-clean-descale-routine",
+    "upgrade-from-barista-express-worth-it"
+  ],
+  "findings": [
+    {
+      "severity": "major",
+      "itemIds": [
+        "barista-express-pro-sour-bitter-what-to-change-first",
+        "barista-express-pro-clean-descale-routine",
+        "upgrade-from-barista-express-worth-it"
+      ],
+      "problem": "Output size is breaking runs. Each run re-emits the complete Barista Express and Barista Pro cards (30+ claims each), even when it only adds a few claims. Runs are failing on output size and generation time, not on research.",
+      "evidence": "recentRuns 2026-11-24: StructuredOutput 'could not be parsed as JSON… first 200 of 72308 bytes' and again at 61923 bytes. recentRuns 2026-11-26 and 2026-11-25: 'claude -p timed out after 30 minutes' with only 1–2 fetches and 5–7 reads. The sour-bitter item has now failed twice (commits fb8bb3e, 43f67ce).",
+      "suggestion": "Include a card in cardChanges only if this run adds or changes a claim on it. Copy unchanged claims verbatim; don't re-research or re-word them. When a card is over about 25 claims, record that in unknowns so a human can decide whether to split it or move to patch-style card changes in the engine."
+    },
+    {
+      "severity": "major",
+      "itemIds": [
+        "breville-builtin-grinder-wont-grind-fine-enough"
+      ],
+      "problem": "The needs_human output's reason contradicts its own artifact. The reason says no Breville booklet could be read. The artifact's cards say the Q26 and X26 booklets were 'read page by page' and cite page-numbered locators (p18, p21, p24…), and they are byte-identical to the later 'researched' output. Either the stored artifact was overwritten by the later run, or the agent wrote page locators for PDFs it had not read.",
+      "evidence": "Output at 06:54 reason: 'Every Breville instruction booklet I fetched was a compressed PDF this environment cannot read… PDF rendering failed because pdftoppm/poppler is not installed.' Same output's barista-pro.md: 'The current US instruction booklet (BES878 USCM Q26) was read page by page' with locator 'Page 18, 'Adjusting Conical Burrs''.",
+      "suggestion": "A human should check whether the feedback log stores the latest artifact against older outputs. If it doesn't, the agent invented locators. Either way, the agent must never write a locator for a source it could not open; such evidence should read 'Not read: <reason>', as it already does for williams-sonoma-bes878-manual."
+    },
+    {
+      "severity": "major",
+      "itemIds": [
+        "standalone-grinder-for-barista-express-pro",
+        "barista-express-pro-clean-descale-routine"
+      ],
+      "problem": "Competitor analysis isn't built from the top pages for the reader's question. One competitor is critiqued from a search snippet. Others are Breville's own tutorials or forum threads the agent happened to fetch. Runs use only 1–3 searches, so 'top 3' isn't established.",
+      "evidence": "balancejournal.co entry: 'UK price-tier list (per search snippet; the page was not read in full)… It misses that the Smart Grinder Pro uses the same burr group'. The clean-descale competitors are two breville.com tutorials and an OzBargain thread. The grinder-troubleshooter competitors include a Singletrack forum thread.",
+      "suggestion": "Run at least one search phrased the way the reader asks the question. Pick the three highest-ranking editorial or retailer guides that answer it. Fetch each one in full before saying what it gets wrong. If a page can't be fetched, leave it out or label it 'not read' and make no criticism of it."
+    },
+    {
+      "severity": "minor",
+      "itemIds": [
+        "upgrade-from-barista-express-worth-it"
+      ],
+      "problem": "Source types are inconsistent and inflate the evidence tier. A 2013 Seattle Coffee Gear 'crew comparison' (a retailer) is typed professional-test on the Barista Express card, while other SCG pages are typed merchant. Coffee Chronicler's comparison article is also typed professional-test without any test described.",
+      "evidence": "barista-express.md sources: {\"id\":\"scg-express-vs-dual-boiler\",…\"type\":\"professional-test\"} vs {\"id\":\"scg-top-burr-blog\",…\"type\":\"merchant\"}. The claim note itself says 'The SCG post is a retailer's legacy crew comparison.'",
+      "suggestion": "Type the source by who publishes it: retailers are always merchant. Use professional-test only when the page describes a test or measurement, and name that test in the locator."
+    },
+    {
+      "severity": "minor",
+      "itemIds": [
+        "standalone-grinder-for-barista-express-pro",
+        "upgrade-from-barista-express-worth-it"
+      ],
+      "problem": "Market variant SKUs and names aren't verified against the market's own page. Several were recorded even though the URL built from that SKU returned 404, or were taken from a bundle page.",
+      "evidence": "ses878-gb SKU 'SES878', but recentRuns shows sageappliances.com/en-gb/product/SES878 → 404, and the working page is /BES878. ses985-gb SKU 'SES985' after /SES985 → 404. The Express GB variant is sourced from the BES875 page titled 'the Barista Express with Milk Jug Thermal'.",
+      "suggestion": "Record a variant's sku only as printed on that market's manufacturer page, with the page as a source. If the SKU can't be confirmed, leave sku out and note it in unknowns rather than guess a prefix."
+    },
+    {
+      "severity": "minor",
+      "itemIds": [
+        "breville-builtin-grinder-wont-grind-fine-enough",
+        "barista-express-pro-sour-bitter-what-to-change-first"
+      ],
+      "problem": "The grinder and troubleshooting claims the shared post relies on are scoped to the US variants only. The GB Sage booklets were read for maintenance but not for the grind, extraction or upper-burr sections, so the writer may generalise US-only evidence to GB readers.",
+      "evidence": "Claims like troubleshooting-runs-too-quickly, upper-burr-adjustment-documented and dose-and-extraction-targets all carry variantId bes870xl-us or bes878-us. The sage-uk-quick-guide-c21 and sage-quick-guide-ug5 locators cover only Care & Cleaning pages.",
+      "suggestion": "If a claim the writer needs is scoped to one market's variant, check the other market's manual for the same section in the same run. Then either add evidence for both variants or list the gap in unknowns."
+    },
+    {
+      "severity": "minor",
+      "itemIds": [
+        "breville-builtin-grinder-wont-grind-fine-enough"
+      ],
+      "problem": "A source is recorded under a Squarespace staging domain instead of the blog's public URL, which makes it hard to verify and odd to cite.",
+      "evidence": "brewing-with-dani-inner-burr url: https://daffodil-seal-3z25.squarespace.com/blog/…",
+      "suggestion": "Resolve sources to their canonical public URL before recording them. Don't record internal hosting domains."
+    }
+  ],
+  "addressedBy": null,
+  "summary": "Evidence quality in this batch is high. Locators quote real text, unknowns and disputes are recorded honestly, owner reports are labelled, and every idea keeps a keep-what-you-have path. My three spot-checks (SCG top-burr blog, CoffeeGeek Smart Grinder Pro review, OzBargain 956872) all match what the cards claim. The most important fix is operational. The Barista Express and Barista Pro cards now hold 30+ claims each, and the agent re-emits every card in full each run. That already caused 60–72 KB StructuredOutput parse failures on 2026-11-24, and the two latest runs timed out at 30 minutes after only 1–2 fetches. The agent should rewrite only the cards it actually changes and keep runs bounded.",
+  "keep": [
+    "Locators quote the exact phrase and page. All three spot-checked quotes ('adjust the burr coarser', CoffeeGeek's '40mm' and 'same one that was in the Barista Express', OzBargain 'biggest bottleneck… grinder, by far') match the live pages.",
+    "Unknown claims explain what was checked and why it matters, e.g. the upper-burr factory position '6' is kept unknown because only blogs and snippets state it.",
+    "Disputes are resolved with a higher-tier source, and the note says why (upper-burr-tool resolved by the manufacturer booklet).",
+    "Owner reports are labelled 'one owner's experience, not a specification', and claims are scoped to the right model (Oracle owner thread scoped to BES980, not BES995 or Jet).",
+    "Every learned list ends with a keep-what-you-have or diagnose-first path built on Breville's own troubleshooting.",
+    "needs_human reasons say exactly what a human must supply (specific PDFs and pages, or install poppler).",
+    "Prices are seen but kept out of claims, and the note says they must not appear in post text.",
+    "Never removes existing claims; partial resolutions are explained in notes."
+  ],
+  "promptChanges": [
+    "Include a card in cardChanges only if this run adds or changes a claim on it. Copy unchanged claims verbatim; don't re-check or re-word them.",
+    "Budget the run: stop researching once the decision can be answered or about 15 fetches are done, then write the output. A timeout produces nothing.",
+    "Never write a page or section locator for a source you could not open. Use 'Not read: <reason>' as the locator and keep the claim unknown.",
+    "Competitors: search the reader's question as they would phrase it, take the top three editorial or retailer answers, and fetch each in full before saying what it gets wrong. Never critique a page from a search snippet.",
+    "Source type is set by the publisher: retailers are merchant even when they compare products. Use professional-test only for pages that describe a test or measurement.",
+    "Record a variant sku only as printed on that market's manufacturer page. If it's unconfirmed, leave it out and note it in unknowns.",
+    "When a claim the writer needs is scoped to one market's variant, check the other market's manual for the same section, or list the gap in unknowns.",
+    "Record sources under their canonical public URL, not hosting or staging domains.",
+    "[niche] Sage UK product URLs use the BES model number (e.g. /en-gb/product/BES878), not SES. Don't infer SES SKUs from 404s."
+  ]
+}

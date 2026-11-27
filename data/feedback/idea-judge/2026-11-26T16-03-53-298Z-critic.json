@@ -1,0 +1,107 @@
+{
+  "id": "2026-11-26T16-03-53-298Z-critic",
+  "agent": "idea-judge",
+  "source": "critic",
+  "at": "2026-11-26T16:03:53.298Z",
+  "itemIds": [
+    "standalone-grinder-for-barista-express-pro",
+    "barista-express-pro-clean-descale-routine",
+    "barista-express-pro-steam-wand-microfoam",
+    "upgrade-from-barista-express-worth-it",
+    "uk-coffee-machine-gift-for-partner-non-coffee-drinker",
+    "uk-nespresso-to-beans-bean-to-cup-or-espresso-machine",
+    "barista-express-pro-sour-bitter-what-to-change-first"
+  ],
+  "findings": [
+    {
+      "severity": "major",
+      "itemIds": [
+        "barista-express-pro-clean-descale-routine",
+        "barista-express-pro-sour-bitter-what-to-change-first",
+        "standalone-grinder-for-barista-express-pro"
+      ],
+      "problem": "Same failure as the open 2026-11-22 finding: high evidenceFeasibility scores rest on manuals nobody opened. Clean/descale got 5 and sour/bitter got 4 for 'Breville manuals document the inner burr', even though the last review found Breville booklets unreadable here and owners call the inner-burr adjustment undocumented. Three of the four advanced ideas could stall in research the same way breville-builtin-grinder did.",
+      "evidence": "Sour/bitter run: 1 search, 2 fetches (the OzBargain 916284 thread and the Lemmy post), no manual or support page. Nov 23 run: 6 fetches for 6 cards, and the logged targets are signal threads. Clean/descale reason: 'The BES870/BES878 manuals document the cycles, the light behaviour and the reset steps.' Sour reason: 'The Breville manuals document the inner burr…'",
+      "suggestion": "Open the primary source before scoring evidenceFeasibility 4 or 5. If it is a PDF you can't read, or a blocked page, cap the score at 3 and say so. Breville support HTML pages (for example the clean/descale light page) are a readable alternative."
+    },
+    {
+      "severity": "major",
+      "itemIds": [
+        "standalone-grinder-for-barista-express-pro",
+        "upgrade-from-barista-express-worth-it"
+      ],
+      "problem": "demandEvidence 4 is propped up by signals that are neither named nor opened. This repeats the open finding.",
+      "evidence": "Grinder: 'several home-barista threads ask the same thing' (no URLs). Upgrade: 'The card also cites an Oracle-vs-Jet thread, and home-barista has an \"upgrade or better grinder\" thread' (neither opened nor linked; only node/956872 was verified).",
+      "suggestion": "Only signals you opened and name by URL and date can count. Score 4 needs at least two verified, independent signals."
+    },
+    {
+      "severity": "major",
+      "itemIds": [
+        "standalone-grinder-for-barista-express-pro",
+        "barista-express-pro-clean-descale-routine",
+        "upgrade-from-barista-express-worth-it",
+        "barista-express-pro-sour-bitter-what-to-change-first"
+      ],
+      "problem": "Every advanced idea rests its verified demand on OzBargain, an Australian deals forum, and mostly on comment tangents under deal posts. The rubric asks for 'several independent' signals for a 5, yet all four got demand 4 from one site. Market fit isn't checked either: OzBargain is AU-only and the cards' markets aren't mentioned.",
+      "evidence": "node/955798 is a Costco deal post (BES875, $549.99) where the light confusion turns up in the comments. node/899121 and 916284 are also OzBargain. The judge's own sour reason says 'they come from small forums' but still scores 4.",
+      "suggestion": "Treat signals from a single site as one source. Name the market of each signal and compare it with the card's market. Look for a second, independent venue (r/espresso, Home-Barista, coffeeforums.co.uk) before giving demandEvidence 4."
+    },
+    {
+      "severity": "major",
+      "itemIds": [
+        "upgrade-from-barista-express-worth-it",
+        "uk-coffee-machine-gift-for-partner-non-coffee-drinker"
+      ],
+      "problem": "The competition check was skipped for two of six cards, but both still got competitorGap scores. The Nov 23 run made 4 searches for 6 cards, and none was for the upgrade question or the gift question. The upgrade card was advanced on that unchecked gap.",
+      "evidence": "Nov 23 searches: clean/descale, 'best grinder for Breville Barista Express upgrade', steam wand, Nespresso→beans. The gift reason says only 'UK \"which machine type\" buyer guides already exist', with no page named.",
+      "suggestion": "Run one search per card on the card's own question and name at least one top result in the competitorGap reason. If you couldn't search, say so and don't advance on competitorGap alone."
+    },
+    {
+      "severity": "minor",
+      "itemIds": [
+        "barista-express-pro-sour-bitter-what-to-change-first"
+      ],
+      "problem": "The signal is described a little too broadly. The judge wrote 'fast sour or bitter shots', but OzBargain 916284 mentions only bitterness and 15–20 s shots, with no sourness. It is also a general 'Questions for the coffee experts' thread, not a 'what do I change first' question. Research will inherit the claim that sourness is part of the demand.",
+      "evidence": "Fetched node/916284 (20 July 2025): the poster reports a bitter aftertaste and 15–20 s shots, and the post doesn't mention sourness.",
+      "suggestion": "When you verify a signal, check the card's specific claim (the symptom asked about) and write down any mismatch in the reason."
+    },
+    {
+      "severity": "minor",
+      "itemIds": [
+        "standalone-grinder-for-barista-express-pro",
+        "upgrade-from-barista-express-worth-it",
+        "barista-express-pro-sour-bitter-what-to-change-first"
+      ],
+      "problem": "Rejection reasons don't separate 'failed the bar' from 'lost to the cap or to focus'. Nespresso→beans scored 23, the same as two advanced ideas, and the gift card scored 20 with every threshold met. The reasons cite off-focus and competition, but competitorGap is 3 for both, the same as the advanced ideas. Meanwhile three of the four advanced ideas sit on the same grinder/extraction branch, the very overlap the prompt warns about ('Prefer a mix that helps different readers').",
+      "evidence": "Nespresso reason: 'UK retailer and coffeeblog guides already cover…', but competitorGap is 3. Upgrade overlap 3: 'partly overlaps the standalone-grinder card'. Sour overlap 3: 'partly overlaps the grind-fault-tree and standalone-grinder tools'.",
+      "suggestion": "When an idea clears the bar but isn't advanced, say so in the reason ('cleared the bar; lost to the 3-cap / focus preference'), so the idea agent doesn't learn the wrong lesson. Make the scores match the reason: if the competition really covers the topic, lower competitorGap."
+    },
+    {
+      "severity": "minor",
+      "itemIds": [],
+      "problem": "The last run failed StructuredOutput twice with unparseable JSON before it succeeded. The 'failed' Mumsnet fetch in the Nov 23 run actually returned content, so that warning is a logging quirk and can be closed.",
+      "evidence": "Run 2026-11-25: two 'InputValidationError: … could not be parsed as JSON' entries (~2.3 KB each). The 2026-11-23 Mumsnet entry note contains the thread's date and question.",
+      "suggestion": "Keep reasons short and use single quotes inside reason text to avoid escaping errors."
+    }
+  ],
+  "addressedBy": null,
+  "summary": "The judge reads signals well. I opened three OzBargain threads (899121, 955798, 916284) and each one says what the judge claimed, and the steam-wand rejection correctly spotted a misdescribed signal. Last critic's main findings haven't been addressed and showed up again in this batch: evidenceFeasibility scores of 4–5 claim 'the manuals document' something without any manual being opened, and demand scores still lean on unnamed 'several threads'. The fix that matters most is to require an opened primary source before evidenceFeasibility ≥ 4, and to count only named, opened signals from independent sites toward demandEvidence.",
+  "keep": [
+    "Reading a signal's intent rather than its topic: the steam-wand rejection correctly found that node/969872 is a Sunbeam owner asking whether to buy, with the complaint in one reply.",
+    "Signal descriptions that hold up when checked: node/899121 (DF54/Mignon suggested, Smart Grinder Pro 'won't be an upgrade') and node/955798 (light solid for almost two years, contradictory replies, cleared by both cycles) both match the threads.",
+    "Rejections that say what would change the decision ('Re-score with direct owner questions', 'Re-score once the cluster is built').",
+    "commercialFit treats 'keep it / replace the burr / buy nothing' as an honest path and scores maintenance topics fairly.",
+    "Handoff notes for the writer ('link to the grinder guide rather than repeat it', 'link the grind-fault-tree tool and not rebuild it').",
+    "Respecting the cap of three advances per run."
+  ],
+  "promptChanges": [
+    "Under 'How to judge', add: \"Before giving evidenceFeasibility 4 or 5, open the primary source the answer depends on most (manual, support page, spec sheet) and name it in the reason. If it is unreadable (compressed PDF, blocked) or you didn't open it, cap the score at 3.\"",
+    "In step 1, add: \"Only signals you opened count. Name each by URL and date in the demandEvidence reason. Signals from the same site count as one independent source, so a 4 needs verified signals from at least two independent sites.\"",
+    "In step 1, add: \"Note the market of each verified signal. If it differs from the card's market, say so and lower demandEvidence or recommend changing the market.\"",
+    "In step 2, make it explicit: \"Run one search per card on that card's own question, and name at least one top result in the competitorGap reason. Don't reuse another card's search.\"",
+    "Under 'Choosing', add: \"If an idea meets the bar but isn't advanced (cap, focus, or overlap with a stronger pick), say that in the reason, and keep its scores consistent with the reason.\"",
+    "Under 'Choosing', add: \"Two picks that share one diagnosis branch (for example, both resolve to 'get a better grinder') count as one reader need. Advance the stronger and reject the other as overlap.\"",
+    "[niche] Add to idea-judge niche guidance: \"OzBargain demand usually appears in comments under deal posts and is Australian. Pair it with an r/espresso, Home-Barista or coffeeforums.co.uk thread before scoring demand 4. Breville/Sage booklets on assets.breville.com aren't readable here; use Breville support HTML pages to confirm manual coverage.\"",
+    "Under 'Output', add: \"Keep each reason to one or two sentences and use single quotes inside reason text so the JSON parses on the first try.\""
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "id": "barista-express-pro-steam-wand-microfoam",
+  "type": "new-post",
+  "niche": "coffee",
+  "status": "rejected",
+  "attempts": 0,
+  "revisions": 0,
+  "createdAt": "2026-11-23T15:58:57.543Z",
+  "updatedAt": "2026-11-23T18:02:49.762Z",
+  "artifacts": {
+    "idea": "data/ideas/barista-express-pro-steam-wand-microfoam.json",
+    "idea-judge": "data/idea-scores/barista-express-pro-steam-wand-microfoam.json"
+  },
+  "history": [
+    {
+      "at": "2026-11-23T15:58:57.543Z",
+      "from": null,
+      "to": "idea",
+      "by": "idea",
+      "reason": "generated"
+    },
+    {
+      "at": "2026-11-23T18:02:49.762Z",
+      "from": "idea",
+      "to": "rejected",
+      "by": "idea-judge",
+      "reason": "Demand is misdescribed. In node/969872 the poster is a Sunbeam owner asking whether to buy an Express, and the steaming complaint is a single reply. The second signal is a passing remark. Generic steaming and wand-cleaning guides already rank. Re-score with direct owner questions."
+    }
+  ]
+}

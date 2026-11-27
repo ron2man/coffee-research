@@ -1,0 +1,119 @@
+{
+  "thesis": "If your Barista Express or Pro pulls fast, sour or 'bitter' shots and the gauge sits low, the machine is almost certainly fine. Fix the basket and the dose before you touch the grind, change the grind before the temperature, and don't buy anything until the inner burr adjustment has run out.",
+  "reader": "A fairly new owner of a Breville Barista Express or Barista Pro (sold as Sage in the UK) who uses the built-in grinder. Their shots run 8–20 s, taste sour, bitter or watery, and the gauge (Express) barely moves. Each change seems to make things worse, and they are starting to think the machine is faulty.",
+  "readerDecision": "Which single thing to change next, in what order, and the point at which to stop adjusting: contact Breville/Sage support, or consider a separate grinder.",
+  "whatCompetitorsMiss": [
+    "None of them says Breville's own Extraction Guide calls a fast, under-extracted shot 'bitter/sharp, weak and watery'. Owners who can't tell sour from bitter go the wrong way. Our post says to diagnose by flow start, total time and the gauge zone, not by taste words.",
+    "None of them puts the basket check first. A dual-wall basket 'regulates the pressure regardless of grind, dose, tamp', so dialing in with one hides every variable. The Pro ships with the single-wall basket fitted; Express owners often grab the dual-wall one.",
+    "None of them explains that GRIND AMOUNT doses by grinder run time (the Pro's defaults are 9.5 s and 13 s; the Express uses a dial that starts at 3 o'clock). Grinding finer without raising the grind amount leaves the basket underfilled, which explains the 'finer made it worse' trap. Our post says to check dose by the tamper-cap level, and by weight if the reader owns any scale.",
+    "None of them warns that the 1 CUP/2 CUP buttons stop at a preset volume of about 30/60 ml, not a time, so the cup output changes as you dial in. Our post says to use a manual shot (press and hold, release, press to stop) while dialing in.",
+    "Competitors cover the Express only. None covers the Barista Pro, which has no gauge: there the LCD shot clock and flow start (8–12 s is right, under 7 s is under-extracted) do the gauge's job.",
+    "The rankers state bar values (8–10 bar, gauge reads high, OPV at 15 bar), and one blames a non-moving gauge on a worn gasket. None of that traces to Breville. Our post gives the booklet's zone names only, and says honestly that Breville documents no test that proves a pressure fault.",
+    "None of them gives a stopping rule. Ours: once the documented checks are done and the shot still gushes in a single-wall basket at the finest outer setting, with the inner burr moved one step finer, stop adjusting. Contact support, or consider a separate grinder only if the inner burr has run out."
+  ],
+  "ourContribution": "decision-rule",
+  "contributionDetail": "An ordered decision rule the reader works through one change per shot. Step 0, read the shot, not the taste: on the Express, note total time (Breville's target is 25–30 s; under 20 s is under-extracted) and the gauge zone (Under/Within/Over Espresso Range). On the Pro, note on the shot clock when flow starts (8–12 s is right; under 7 s is under-extracted; no flow after 13 s is over-extracted). Fast with a low gauge or early flow means under-extracted, whatever the taste words say. Step 1, the basket: is it single-wall? If not, swap it and stop there for this shot. Step 2, the dose: after tamping, is the tamper's metal cap level with the basket rim? If it sits below, raise GRIND AMOUNT (Express dial towards MORE; Pro grind time up) before you change the grind. If the reader has any kitchen scale, weigh against 16–19 g for the 2-cup basket. Step 3, the shot mode: switch to a manual shot (press and hold, release, press to stop) so the preset volume doesn't hide the result. Step 4, the grind: one step finer per shot, re-checking the cap level each time, because finer grounds need a larger grind amount. Step 5, the inner burr: only if you're at the outer dial's finest end (1) and still fast, move the upper burr one number finer using Breville's own procedure. Link the grind-fault-tree tool here instead of repeating it. Step 6, the beans: is there a Roasted On date 5–20 days old? Stale beans pour fast and taste 'bitter and watery'. Step 7, the routine: preheat the portafilter and basket, purge the group, wipe the basket dry. Step 8, only then temperature: on the Express, ±4°F in 2°F steps via Advanced Temperature Mode (holding PROGRAM until 3 beeps resets the volumes and temperature); on the Pro, the SHOT TEMP menu. Exit: if every step is done and the shot still runs fast, stop. Breville documents no owner test for a pressure fault, and its troubleshooting table only sends owners to support for the thermal cut-out, so contact Breville/Sage support under warranty. If instead the inner burr has run out and shots are still fast with fresh beans, that's when the standalone-grinder picker applies. A short troubleshooter asks four or five questions (machine, basket, cap level, current grind setting/inner burr moved, bean roast date) and returns the one next change.",
+  "mustInclude": [
+    "The recommendation in the first paragraph: the machine is very likely fine. Work through basket → dose → shot mode → grind → inner burr → beans → routine → temperature, one change per shot. Most owners buy nothing.",
+    "A test the reader can run on what they own tonight: one shot in the single-wall 2-cup basket, a manual shot, dose checked by the tamper-cap level after tamping. Record total time and gauge zone (Express) or flow-start second on the shot clock (Pro). Tell them which step to go to next.",
+    "The taste trap, plainly: Breville's own guide calls a fast shot 'bitter/sharp, weak and watery', and only its summary table says 'sour'. Fast + low gauge/early flow = under-extracted = go finer/more dose, whatever word fits the taste.",
+    "The finer-made-it-worse explanation: GRIND AMOUNT is time-based, so a finer grind needs a larger grind amount, otherwise the basket is underfilled. Breville says the single-wall basket may need a larger grind amount.",
+    "The preset-volume trap: 1 CUP/2 CUP stop at about 30/60 ml, so use a manual shot while dialing in.",
+    "Express vs Pro differences: the Express has a gauge with zones (no bar values given by Breville), a dial that starts at 3 o'clock, a 25–30 s total-time target and temperature in 2°F steps. The Pro has no gauge, so use the shot clock and flow start; its defaults are 9.5 s/13 s, and SHOT TEMP has no stated range. Mention that the Express booklet gives two different flow-start figures (4–7 s and 8–12 s), which is why the post uses total time for the Express.",
+    "Inner burr as the step after the outer dial runs out, one number at a time per Breville. Embed or link the existing grind-fault-tree tool rather than re-explaining it.",
+    "An honest fault section: Breville documents no test that separates a pump/valve/gauge fault from a dial-in problem, and its troubleshooting table only points to support for the thermal cut-out. After the checks fail, contact Breville (US) / Sage (UK) support under warranty. Do not invent a dual-wall gauge test or bar figures. One owner thought the gauge was broken, and it moved once they ground finer, filled the basket higher and tamped harder.",
+    "A 'When I'd choose differently' section: if the inner burr is already at its finest and fresh beans still gush, the built-in grinder is the limit, so run the barista-standalone-grinder-picker. If the reader drinks mostly very light roasts, expect the built-in grinder to struggle sooner.",
+    "A 'Don't buy / keep yours' path: no new machine, no pressure kit, no new basket. A 0.1 g scale is optional, not required, because the tamper-cap check costs nothing. Phrase it without naming a scale product (we have no scale card).",
+    "Ending, the smallest sensible purchase: nothing, then support if a fault is suspected, then a standalone grinder only after the inner burr has run out (link the barista-standalone-grinder-picker tool).",
+    "Per-market notes: name machines with {{model:barista-express}} / {{model:barista-pro}} so GB readers see Sage. The research covered the US booklets only, so phrase the steps so they hold for Sage units too, avoid presenting °F steps as the only unit, and say 'Breville or Sage support'.",
+    "Scope note: the Barista Express Impress doses differently (assisted tamp), so the dose steps may not apply. Say so in one line rather than covering it.",
+    "Existing guides: none of the existingContent items (all archived Bambino/ECM/Opus/Micra posts) is relevant, so don't link them. Link the tools grind-fault-tree and barista-standalone-grinder-picker. If the guides breville-builtin-grinder-wont-grind-fine-enough or standalone-grinder-for-barista-express-pro exist when this is written, link them with {{guide:...}}; otherwise use the tools."
+  ],
+  "leaveOut": [
+    "Bar values for the gauge (8–10 bar, 'reads high', OPV at 15 bar): not traced to Breville.",
+    "OPV adjustment, pump swaps, gasket-wear claims and any DIY internal repair.",
+    "Inner burr factory position '6' and number ranges (unknown in the claims).",
+    "Descaling as a cure for fast shots. Breville ties scale to reduced or dripping flow, not gushing. Mention it at most as unrelated to this symptom.",
+    "Generic espresso theory, extraction-percentage talk, a history of the machines and spec tables.",
+    "Dose and grind numbers from YouTube or other guides presented as Breville's (e.g. 12 o'clock dial start, grind 5 equalling a particular time).",
+    "Any 'we tested' or 'in our experience' language; there is no human data.",
+    "Upgrade machine comparisons (Dual Boiler etc.).",
+    "Express Impress-specific instructions."
+  ],
+  "assets": [
+    "barista-fast-shot-next-step",
+    "grind-fault-tree",
+    "barista-standalone-grinder-picker"
+  ],
+  "offerTouchpoints": [
+    {
+      "productId": "barista-express",
+      "role": "dont-buy"
+    },
+    {
+      "productId": "barista-pro",
+      "role": "dont-buy"
+    },
+    {
+      "productId": "turin-df54",
+      "role": "alternative"
+    }
+  ],
+  "claimIds": [
+    "barista-express/pressure-gauge-zones",
+    "barista-express/extraction-guide-over-and-summary",
+    "barista-express/flow-start-figures-differ",
+    "barista-express/grind-too-fine-or-coarse",
+    "barista-express/grind-amount-dial-dosing",
+    "barista-express/shot-volume-preset-program-manual",
+    "barista-express/preheat-and-dry-basket",
+    "barista-express/troubleshooting-only-thermal-cutout-to-support",
+    "barista-express/owner-gauge-not-moving-was-dose",
+    "barista-express/owner-fast-shots-split-advice",
+    "barista-express/owner-sour-finer-more-sour",
+    "barista-express/dose-and-extraction-targets",
+    "barista-express/baskets-single-vs-dual-wall",
+    "barista-express/troubleshooting-runs-too-quickly",
+    "barista-express/beans-roasted-on-5-20-days",
+    "barista-express/temperature-adjust-2f-steps",
+    "barista-express/upper-burr-adjustment-documented",
+    "barista-express/grind-dial-1-finest-16-coarsest",
+    "barista-express/descale-symptoms-us",
+    "barista-pro/no-pressure-gauge-lcd-shot-clock",
+    "barista-pro/grind-amount-time-based",
+    "barista-pro/extraction-guide-over-and-summary",
+    "barista-pro/shot-volume-preset-program-manual",
+    "barista-pro/single-wall-2cup-installed",
+    "barista-pro/purge-group-head-preheat",
+    "barista-pro/troubleshooting-only-thermal-cutout-to-support",
+    "barista-pro/extraction-guide-fast-shot",
+    "barista-pro/baskets-single-vs-dual-wall",
+    "barista-pro/troubleshooting-runs-too-quickly",
+    "barista-pro/beans-roasted-on-5-20-days",
+    "barista-pro/shot-temp-adjustable",
+    "barista-pro/upper-burr-adjustment-documented",
+    "barista-pro/grind-dial-1-finest-30-coarsest",
+    "barista-pro/grind-settings-start-15"
+  ],
+  "competitorsReviewed": [
+    {
+      "url": "https://www.fluentincoffee.com/?p=5034127",
+      "summary": "'10 common problems' listicle for the Express. For a low gauge with sour shots it says: grind 2–3 clicks finer, add 1–2 g, tamp at about 30 lb, use fresh beans, and judge by 25–30 s rather than the needle (it claims the gauge reads high). It misses that the dual-wall basket masks everything, that grind amount is time-based (so finer needs more dose), the preset-volume trap and the Pro. It mentions the inner burr only as a 'reset to 6' for inconsistent grinding, has no stopping rule for suspecting a fault, and its bar claims don't trace to Breville."
+    },
+    {
+      "url": "https://completehomebarista.com/guides/breville-barista-express-setup-guide/",
+      "summary": "First-time setup and dial-in guide for the Express only: grind 5, dial at 12 o'clock, 18–20 g weighed, 36 g in 25–30 s, one variable at a time, plus gauge zones in bar values (8–10 bar target, under 5 bar means grind finer). It misses that you shouldn't dial in on the dual-wall basket, the finer-needs-more-grind-amount trap, the inner burr as an extension of range, Breville's 'bitter' wording for fast shots, and the Pro entirely. Its fault advice (a gauge that doesn't move means a worn gasket, replaced every 6–12 months) isn't supported by Breville and would send readers the wrong way."
+    },
+    {
+      "url": "https://www.home-barista.com/espresso-machines/breville-barista-express-brew-pressure-and-channeling-issues-t73646.html",
+      "summary": "Typical of the forum threads that dominate the results (fetching returned 403; assessed from the search result and snippets). Owners argue that the gauge tracks grind coarseness, that the OPV is set around 15 bar, and whether to adjust it. Useful anecdotes are scattered over many posts, there's no ordered checklist, and the advice drifts into OPV tinkering rather than the basket and dose checks a new owner actually needs."
+    }
+  ],
+  "titleOptions": [
+    "Sour, fast shots on a Barista Express or Pro: what to change first",
+    "Barista Express gauge barely moves? Check these before blaming it",
+    "Fast, sour Barista Express or Pro shots: the order to fix them in"
+  ],
+  "slug": "barista-express-pro-sour-bitter-what-to-change-first",
+  "metaDescription": "Fast, sour or bitter shots on a Barista Express or Pro? The order to check basket, dose, grind, inner burr and temperature, and when to call support."
+}

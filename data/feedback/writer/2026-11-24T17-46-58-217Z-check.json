@@ -1,0 +1,18 @@
+{
+  "id": "2026-11-24T17-46-58-217Z-check",
+  "agent": "writer",
+  "source": "check",
+  "at": "2026-11-24T17:46:58.217Z",
+  "itemIds": [
+    "standalone-grinder-for-barista-express-pro"
+  ],
+  "findings": [
+    {
+      "severity": "minor",
+      "problem": "standalone-grinder-for-barista-express-pro: links to guide breville-builtin-grinder-wont-grind-fine-enough, which doesn't exist yet (rendered as plain text)",
+      "evidence": "deterministic check",
+      "suggestion": "Address in the prompt if it recurs."
+    }
+  ],
+  "addressedBy": null
+}

@@ -75,6 +75,16 @@ One real agent run uses about 8% of the subscription's usage, as the project lea
 
 Follow-up: watch the weekly limit, and lengthen the tick interval (`npm run schedule -- install --interval-minutes 120`) if runs start to crowd out the lead's own use.
 
+### 2026-11-23 · Toward one guide a day: focus, demand data, budget, cleanup
+
+The project lead set the goal: one guide a day, built around equipment, with "my setup" as the site's eventual core and affiliation moved to a separate service (`docs/offers-service.md`). Changes:
+
+- `niche.json` `focus`: the Barista Express and Pro cluster. The idea agent starts there, and the judge prefers it when evidence is comparable. Six seeds cover the cluster.
+- Demand data without AI before each idea run: autocomplete phrasing per market and Reddit posts (API with app credentials, or public JSON with blocks recorded). The idea agent can cite these as signals. This answers "the idea agent can't reach Reddit".
+- Fewer runs per guide. The critic and tuner run only on idle ticks and review in batches of 5. The idea agent waits until fewer than 4 ideas are queued. A 12-runs-per-24h budget protects the subscription.
+- Publishing: disclosure text is required only for posts with affiliate offers. Approvals can be queued, and the next tick opens the PR.
+- Removed the legacy `agent/` pipeline, the old site renderer and the old dashboard view.
+
 ## Decisions
 
 - **2026-11-21 · Git flow.** Internal changes (items, research, briefs, drafts, knowledge cards) are committed straight to `main` by `npm run tick -- --commit`, with no approval, so the pipeline never waits on a merge. Reader-facing paths (`content/published/`, `site/`, `data/offers/`) are never committed by a tick and need their own PR. The boundary is [git-policy.json](../engine/scheduler/git-policy.json). The publish step that opens content PRs arrives with M4/M5.
@@ -95,6 +105,9 @@ Follow-up: watch the weekly limit, and lengthen the tick interval (`npm run sche
 
 - **2026-11-23 · M0 done.** Subscription billing, about 8% of usage per run; the job environment has no API key.
 
+- **2026-11-24 · Humans can stop what ships.** Passed posts merge themselves after a 24-hour veto window with green checks unless held (approved by the project lead). Site code and offers still need a human merge.
+- **2026-11-24 · Reddit.** The Data API needs approval under Reddit's Responsible Builder Policy and the public JSON is blocked; apply, and lean on other sources until then.
+
 ## Open questions
 
 - **Disclosure text per market (blocks the first publish):** `niches/coffee/niche.json` `disclosures` is empty. Decide the wording for US and GB after checking the affiliate programs you will join.
@@ -110,3 +123,19 @@ Follow-up: watch the weekly limit, and lengthen the tick interval (`npm run sche
 - **Audience:** current guides range from a Bambino (about $300) to a Linea Micra (about $4–5k). Decide entry-level vs every machine, and whether to organise guides by machine.
 - **Niche-aware checks:** `market` and `contentType` in artifacts are not yet checked against `niche.json`.
 - **Affiliate terms and consent:** sellers and disclosure text in `niche.json` stay empty until program terms are verified per market.
+
+### 2026-11-25 · Demand from Reddit without Reddit
+- Reddit closed every route for a new small project (API approval closed 2026-10-31, RSS ended 2026-11-13, public JSON 403, public API ends March 2027). The Reddit collector is removed.
+- Replaced by two keyed sources in `engine/demand/collect.mjs`: community threads via Brave Search `site:` queries (search metadata only, the sites are never fetched) and YouTube comment questions. Both have monthly budgets counted from `data/demand/`, rotate queries daily, and report `skipped` without a key.
+- Open question: Brave's terms on storing search results. We keep only titles, URLs, dates and snippets as internal research notes and never publish them; check the terms before anything from them reaches a reader.
+
+### 2026-11-27 · Catalog mirror and more demand sources
+- The coffee-catalog repository (its own hourly job) is now the first source of manufacturer facts. Every tick refreshes a read-only mirror in `catalog/` (gitignored) before planning; agents get a `catalog` listing and the research prompt reads it before the web. A failed refresh is logged (`catalog-sync`) and never stops a tick. The in-repo `library/` stayed empty and is now the fallback.
+- Demand search is provider-based: Tavily (1,000 free credits a month) first, Serper (2,500 free once, Google results) second, Brave last. A provider that refuses hands the query to the next. Serper also returns Google's "People also ask" questions and related searches (`demandSignals.questions`). Autocomplete now uses question openings ("why is my …") as well as suffixes, up to 60 queries per collection; YouTube up to 6 searches per collection.
+- Open question: storage terms. Brave's API terms (2026-09-01) forbid storing results beyond transient use, which our `data/demand/` files do; Tavily's and Serper's terms on keeping result snippets were not checked. We keep titles, URLs, dates and snippets as internal notes only and never publish them; check both terms before relying on them for long.
+- Uncertain: whether Tavily's domain filter plus subreddit words finds subreddit threads as well as Google `site:` does. Compare `byProvider` yields in `data/demand/` after a week.
+
+### 2026-11-27 · Disclosure is a footer placeholder, never a blocker
+- Decision (project lead): one generic disclosure in the footer of every page (`DEFAULT_DISCLOSURE` in `site/lib/site-data.mjs`), overridden per market by `niche.json` `disclosures`. It no longer blocks the build or publishing, and nothing is shown above the content.
+- Why it mattered: the three passed guides without offers had publishing PRs since 2026-11-24, but their `checks` failed because those branches were cut from a main where the production build refused to run without disclosure text. They need their branch updated from main to re-run checks.
+- Open question, for when real affiliate links go live: Amazon Associates requires its own statement on the site, and UK advertising guidance (ASA/CAP) expects affiliate content to be identifiable as advertising, usually with an upfront label. A footer-only note may not be enough then; revisit before joining a programme.

@@ -7,7 +7,7 @@
   },
   "scripts": {
     "test": "node --test",
-    "validate": "node engine/state/validate-repo.mjs && node agent/validate-knowledge.mjs",
+    "validate": "node engine/state/validate-repo.mjs && node engine/state/validate-knowledge.mjs",
     "tick": "node engine/scheduler/tick.mjs",
     "item": "node engine/state/item-cli.mjs",
     "feedback": "FEEDBACK_TOOL=feedback node engine/feedback/cli.mjs",
@@ -17,7 +17,8 @@
     "site:preview": "astro dev --root site --port 4321 --host 127.0.0.1",
     "dashboard": "node backoffice/server.mjs",
     "seed": "node engine/state/seed-cli.mjs",
-    "site:build:production": "SITE_MODE=production astro build --root site"
+    "site:build:production": "SITE_MODE=production astro build --root site",
+    "library": "node engine/library/cli.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.6",

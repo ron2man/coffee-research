@@ -1,0 +1,46 @@
+{
+  "scores": {
+    "readerValueVsCompetitors": {
+      "score": 5,
+      "reason": "The top results each cover one slice of the answer. The Appliances Online descale guide treats the light as descale-only, and their cleaning-cycle guide says only 'periodically' with no solid-light meaning. Barista Life gives flashing vs solid for the US Express only. The draft covers all three panels, the Pro's first-use FLUSH ('Nothing is dirty yet: press 1 CUP'), the CLEAN ME calendar rule and a stuck-light rule ('run the other cycle as well… If it's still on after both, contact the manufacturer's support'). None of the competitors offer these."
+    },
+    "distinctivenessVoice": {
+      "score": 4,
+      "reason": "It opens with a clear opinion ('Your machine is almost certainly fine') and keeps it. The 'When I'd choose differently' section commits to a personal call ('I wouldn't wait for the alert… it costs you one sachet'). The procedure blocks read more like a manual, but the brief asked for them."
+    },
+    "honestyAboutLimits": {
+      "score": 5,
+      "reason": "Each unknown is stated once: no shot-count or calendar interval ('The \"3 months or 300 coffees\" figure… isn't in the booklets we read'), no documented trigger or reset, no Pro seal procedure, and that the weak-steam fix comes from owner reports only. The methods section says 'We did not test these machines' and that only the C21 UK guide was read."
+    },
+    "evidenceIntegrity": {
+      "score": 4,
+      "reason": "The light meanings, procedures, symptom causes, filter intervals and cautions all map to cited claim IDs, and the owner anecdote is attributed and weighted. One addition goes slightly beyond the claims: 'the warranty is the first place to check' has no claim behind it. It is generic, harmless advice."
+    },
+    "topicFit": {
+      "score": 5,
+      "reason": "It delivers the brief's thesis for a beginner owner. It covers the panel key, the stuck-light rule, the symptom diagnosis, the trigger-based routine, the burr and seal jobs, the handoff to the grind-fault-tree tool, the 'When I'd choose differently' section and an ending with consumables only. It leaves out the brief's exclusions: invented intervals, reset tricks and DIY descaler."
+    }
+  },
+  "wouldForward": true,
+  "competitorComparison": [
+    {
+      "url": "https://www.appliancesonline.com.au/article/how-to-descale-breville-barista-express-machine/",
+      "weGiveThatTheyDont": "The correct flashing (cleaning cycle) vs solid (descale) split; this page implies the light only clears after a descale. Also the Pro and UK CLEAN ME panels, a symptom-to-maintenance diagnosis, and burr, seal and filter jobs in one routine."
+    },
+    {
+      "url": "https://www.appliancesonline.com.au/article/how-to-perform-cleaning-cycle-breville-espresso/",
+      "weGiveThatTheyDont": "What a solid light means, coverage of the Pro and the UK Express, a stuck-light rule, and honesty that no interval exists where this page only says 'periodically'. It also lists 'looks broken' symptoms to rule out before a repair."
+    },
+    {
+      "url": "https://baristalife.co/blogs/blog/breville-barista-express-lights-meaning",
+      "weGiveThatTheyDont": "Coverage of the UK CLEAN ME light (no descale prompt, 60/90-day calendar) and the Pro FLUSH/DESCALE alerts, including the first-use FLUSH. It also gives a rule for a light that survives both cycles and a keep-your-machine ending."
+    }
+  ],
+  "blockingActions": [],
+  "optionalImprovements": [
+    "Replace 'the Sage guide' with 'the UK guide' in the prose so US readers don't meet an unfamiliar brand name. The Sources list can keep the full titles.",
+    "Tell CLEAN ME owners how to find their hardness level (for example, the test strip if one came in the box, or their water supplier) so the 60/90-day rule can be acted on. Only do this if a claim supports the test-strip detail.",
+    "Drop or source 'the warranty is the first place to check', since no claim supports it.",
+    "Move the {{tool barista-maintenance-alert-key}} embed above the OzBargain anecdote so the interactive key comes straight after the panel list."
+  ]
+}

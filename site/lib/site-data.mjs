@@ -1,14 +1,18 @@
 // Everything the pages need, loaded once per build from the repo (niche, knowledge cards, posts,
 // offers, tools). Two modes:
 //   preview     drafts, the quality reference and archived drafts (badged), mock offers and photos, noindex
-//   production  content/published only, real data/offers, disclosures required once a guide is live
+//   production  content/published only, real data/offers, disclosure from niche.json or the footer placeholder
 import { existsSync, readFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { defaultNicheId, loadNiche, categoryIds } from '../../engine/state/niche.mjs';
 import { loadCardsSync } from '../../engine/state/knowledge.mjs';
+import { guideAliases } from '../../engine/state/content.mjs';
 import { categoryCounts, collectPosts, listed, loadTools } from './content.mjs';
 import { loadOffers, mockOffers } from './offers.mjs';
+
+/** Footer disclosure used until a market has its own text in niche.json `disclosures`. */
+export const DEFAULT_DISCLOSURE = 'Some links on this site may earn us a commission if you buy through them, at no extra cost to you. It never changes what we recommend.';
 
 export const siteDir = resolve(fileURLToPath(new URL('..', import.meta.url)));
 export const repoRoot = resolve(siteDir, '..');
@@ -52,16 +56,9 @@ export function loadSiteData({ root = repoRoot, mode = siteMode(), now = Date.no
   for (const post of posts) post.markets = markets.map((m) => m.id);
   for (const post of posts) post.category = post.category ?? cards.get(post.productIds[0])?.card?.category ?? null;
 
-  // A live guide may carry affiliate links, so production refuses to build without verified
-  // disclosure text for every market. With no guides live there is nothing to disclose yet.
-  const disclosure = (market) => {
-    const text = niche.disclosures?.[market.id];
-    if (text) return text;
-    if (production && posts.length) throw new Error(`No disclosure text for ${market.id} in niche.json; verify affiliate terms first (rebuild-spec 8).`);
-    if (production) return null;
-    return 'Disclosure placeholder: affiliate terms for this market are not verified yet, so the final disclosure text is pending.';
-  };
-  if (production && posts.length) markets.forEach(disclosure);
+  // Disclosure: one generic placeholder in the footer of every page unless niche.json has a
+  // market-specific text. It never blocks a build (decision 2026-11-27).
+  const disclosure = (market) => niche.disclosures?.[market.id] || DEFAULT_DISCLOSURE;
 
   const productIds = [...new Set(posts.flatMap((p) => p.offerIds ?? []))];
   const mockPrices = join(siteDir, 'mock-prices.json');
@@ -73,6 +70,7 @@ export function loadSiteData({ root = repoRoot, mode = siteMode(), now = Date.no
   const site = {
     name: niche.name, markets, cards, tools: loadTools(root), disclosure, categories,
     allCategories: niche.categories ?? [], mock: preview ? loadMock() : null, pages: new Set(),
+    guideAliases: guideAliases(root),
   };
   // Every path the build will produce, so the market switcher only links to pages that exist.
   for (const market of markets) {

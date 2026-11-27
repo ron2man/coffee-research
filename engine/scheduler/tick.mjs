@@ -22,7 +22,11 @@ import { runChecks } from '../feedback/checks.mjs';
 import { addFeedback, openFeedback, readReviewState } from '../feedback/store.mjs';
 import { applyAssist, assistCandidates, buildAssistInput, checkAssistArtifact } from './assist.mjs';
 import { listTools } from '../state/tools.mjs';
-import { syncPublished } from '../publish/publish.mjs';
+import { libraryCatalog } from '../library/library.mjs';
+import { catalogListing, syncCatalog } from '../catalog/catalog.mjs';
+import { processPublishQueue, syncPublished } from '../publish/publish.mjs';
+import { autoPullRequests } from '../publish/autopr.mjs';
+import { collectDemand, demandUsage } from '../demand/collect.mjs';
 import { applyReview, applyTune, buildReviewInput, buildTuneInput, checkTuneArtifact, reviewCandidates, tuneCandidates } from '../feedback/loop.mjs';
 import { newItem, transition } from '../state/machine.mjs';
 import { defaultNicheId, loadNiche, repoRoot } from '../state/niche.mjs';
@@ -143,6 +147,14 @@ function loadArtifacts(root, item, names = []) {
   return artifacts;
 }
 
+function knowledgeCardIds(root, niche) {
+  try {
+    return [...loadCardsSync(join(root, 'knowledge'), categoryIds(niche)).cards.keys()];
+  } catch {
+    return [];
+  }
+}
+
 function buildInput(root, niche, agent, chosenItems, allItems) {
   if (agent.mode === 'generate') {
     return {
@@ -179,7 +191,10 @@ function buildInput(root, niche, agent, chosenItems, allItems) {
   const existingContent = contentIndex(root);
   const wanted = wantedGuides(root);
   const availableTools = listTools(root).map(({ id, title }) => ({ id, title }));
-  return agent.mode === 'batch' ? { niche, today, existingContent, wantedGuides: wanted, availableTools, items: entries } : { niche, today, existingContent, wantedGuides: wanted, availableTools, ...entries[0] };
+  const library = libraryCatalog(root);
+  const catalog = catalogListing(root, niche, { cardIds: knowledgeCardIds(root, niche) });
+  const shared = { niche, today, existingContent, wantedGuides: wanted, availableTools, library, ...(catalog ? { catalog } : {}) };
+  return agent.mode === 'batch' ? { ...shared, items: entries } : { ...shared, ...entries[0] };
 }
 
 function validateArtifact(agent, artifact, label) {
@@ -370,7 +385,7 @@ function recordFailure(root, agent, chosenItems, error, meta, maxAttempts, writt
  * Run one tick. `runner` overrides per-agent runners (tests and simulation).
  * Returns a summary; throws only for store/config problems, never for agent failures.
  */
-export async function tick({ root = repoRoot, runner, now = new Date(), nicheId, agents = loadAgents(), dryRun = false, maxAttempts = MAX_ATTEMPTS, lock = true, ignoreSchedule = false } = {}) {
+export async function tick({ root = repoRoot, runner, now = new Date(), nicheId, agents = loadAgents(), dryRun = false, maxAttempts = MAX_ATTEMPTS, lock = true, ignoreSchedule = false, demandCollector, catalogSync, maxRunsPerDay = Number(process.env.TICK_MAX_RUNS_PER_DAY ?? 12) } = {}) {
   if (lock && !dryRun) {
     let release;
     try {
@@ -380,12 +395,18 @@ export async function tick({ root = repoRoot, runner, now = new Date(), nicheId,
       throw error;
     }
     try {
-      return await tick({ root, runner, now, nicheId, agents, dryRun, maxAttempts, lock: false, ignoreSchedule });
+      return await tick({ root, runner, now, nicheId, agents, dryRun, maxAttempts, lock: false, ignoreSchedule, demandCollector, catalogSync, maxRunsPerDay });
     } finally {
       release();
     }
   }
   const niche = loadNiche(nicheId ?? defaultNicheId(root), root);
+  // Refresh the product catalog mirror before anything reads it (real runs only; tests pass a runner).
+  const syncer = catalogSync === undefined ? (runner ? null : syncCatalog) : catalogSync;
+  const catalogResult = !dryRun && syncer ? syncer(root, niche) : null;
+  if (catalogResult && !catalogResult.skipped && (!catalogResult.ok || catalogResult.changed)) {
+    appendRun(root, { workflow: 'catalog-sync', agent: null, itemId: null, status: catalogResult.ok ? 'completed' : 'failed', ...(catalogResult.ok ? { from: catalogResult.from, to: catalogResult.to } : { error: catalogResult.error }) });
+  }
   let { items, errors } = loadItems(root);
   if (errors.length) throw new Error(`Item store is invalid; fix before scheduling:\n${errors.join('\n')}`);
   // Posts merged to main since the last tick: passed → published (deterministic, no agent).
@@ -404,11 +425,32 @@ export async function tick({ root = repoRoot, runner, now = new Date(), nicheId,
     oldestFreshSeedAt: openSeeds(root).filter((seed) => seed.considered === 0).map((seed) => seed.at).sort()[0] ?? null,
   };
   const plan = planTick({ agents, items, runs: readRuns(root), schedule: readSchedule(root), now, ignoreSchedule, loop });
-  if (!plan.chosen) return { ran: null, skipped: plan.skipped, changedFiles: publishedFiles, ...(publishedFiles.length ? { published: publishedFiles } : {}) };
+  const catalogNote = catalogResult && !catalogResult.skipped ? { catalog: catalogResult } : {};
+  if (!plan.chosen) return { ran: null, skipped: plan.skipped, changedFiles: publishedFiles, ...(publishedFiles.length ? { published: publishedFiles } : {}), ...catalogNote };
   const { agent, items: chosenItems } = plan.chosen;
   const written = [...publishedFiles];
-  const summary = { ran: agent.name, itemIds: chosenItems.map((item) => item.id), skipped: plan.skipped, changedFiles: written };
+  const summary = { ran: agent.name, itemIds: chosenItems.map((item) => item.id), skipped: plan.skipped, changedFiles: written, ...catalogNote };
   if (dryRun) return { ...summary, dryRun: true };
+
+  // Usage budget: each agent run draws on the subscription (about 8% of a usage window), so cap
+  // the runs per rolling 24 hours. TICK_MAX_RUNS_PER_DAY changes it.
+  const dayAgo = now.getTime() - 24 * hourMs;
+  const recent = new Set(readRuns(root).filter((r) => r.agent && !r.runnerUnavailable && Date.parse(r.timestamp) > dayAgo)
+    .map((r) => r.runLog ?? `${r.agent}:${r.durationMs}`));
+  if (recent.size >= maxRunsPerDay) {
+    return { ran: null, skipped: [{ agent: agent.name, reason: `daily budget: ${recent.size} agent runs in the last 24h (max ${maxRunsPerDay})` }], changedFiles: written };
+  }
+
+  // Demand data for the idea agent, collected without AI (autocomplete, community search, YouTube). Real runs only.
+  const collector = demandCollector === undefined ? (runner ? null : collectDemand) : demandCollector;
+  let demandSignals = null;
+  if (agent.acceptsSeeds && collector) {
+    const { cards } = loadCardsSync(join(root, 'knowledge'), categoryIds(niche));
+    demandSignals = await collector(niche, { cards, seeds: openSeeds(root), usage: demandUsage(root) });
+    const path = `data/demand/${new Date().toISOString().replace(/[:.]/g, '-')}.json`;
+    writeJsonAtomic(join(root, path), demandSignals);
+    written.push(path);
+  }
 
   const started = Date.now();
   const candidate = plan.chosen.candidate;
@@ -423,7 +465,7 @@ export async function tick({ root = repoRoot, runner, now = new Date(), nicheId,
       instructions: instructionsFor(agent, root, niche.id),
       input: candidate
         ? ({ review: buildReviewInput, tune: buildTuneInput, assist: buildAssistInput })[agent.mode]({ root, niche, agents, agent, candidate })
-        : buildInput(root, niche, agent, chosenItems, items),
+        : { ...buildInput(root, niche, agent, chosenItems, items), ...(demandSignals ? { demandSignals } : {}) },
       tools: agent.runner.tools ?? [],
       permissions: agent.runner.permissions ?? {},
     };
@@ -548,6 +590,16 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
       else if (values['dry-run']) freshness = remoteStatus(root);
       else freshness = assertFresh(root);
       const result = await tick({ root, dryRun: values['dry-run'], nicheId: values.niche, lock: false, ignoreSchedule: values['ignore-schedule'] });
+      // Approvals queued from elsewhere: open their pull requests from this machine (it can push).
+      if (commit) {
+        const policy = loadNiche(values.niche ?? defaultNicheId(root), root).publishing ?? {};
+        const auto = autoPullRequests(root, loadItems(root).items, { policy });
+        const queued = processPublishQueue(root);
+        const pr = autoPullRequests(root, loadItems(root).items, { policy }); // a PR for what was just pushed
+        const more = [...new Set([...auto.written, ...queued, ...pr.written])];
+        if (auto.events.length || pr.events.length) result.publishing = [...auto.events, ...pr.events];
+        if (more.length) result.changedFiles = [...(result.changedFiles ?? []), ...more];
+      }
       if (freshness?.behind > 0) result.warning = `checkout is ${freshness.behind} commit(s) behind the remote; a real tick here would refuse to run`;
       if (freshness?.unknown) result.warning = `could not check the remote (${freshness.reason}); this checkout may be stale`;
       if (commit && result.changedFiles?.length) result.commit = commitInternal(root, result.changedFiles, commitMessage(result));

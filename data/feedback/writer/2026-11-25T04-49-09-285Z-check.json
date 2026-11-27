@@ -1,0 +1,36 @@
+{
+  "id": "2026-11-25T04-49-09-285Z-check",
+  "agent": "writer",
+  "source": "check",
+  "at": "2026-11-25T04:49:09.285Z",
+  "itemIds": [
+    "barista-express-pro-clean-descale-routine"
+  ],
+  "findings": [
+    {
+      "severity": "major",
+      "problem": "barista-express-pro-clean-descale-routine \"The manuals give no trigger or reset for the light and no sh\": claim barista-express/light-trigger-and-reset is unknown, not supported",
+      "evidence": "deterministic check (run rejected)",
+      "suggestion": "Fix in the prompt so the agent stops producing this."
+    },
+    {
+      "severity": "major",
+      "problem": "barista-express-pro-clean-descale-routine \"The manuals give no trigger or reset for the light and no sh\": claim barista-express/maintenance-interval-not-stated is unknown, not supported",
+      "evidence": "deterministic check (run rejected)",
+      "suggestion": "Fix in the prompt so the agent stops producing this."
+    },
+    {
+      "severity": "major",
+      "problem": "barista-express-pro-clean-descale-routine \"The manuals give no trigger or reset for the light and no sh\": claim barista-pro/maintenance-interval-not-stated is unknown, not supported",
+      "evidence": "deterministic check (run rejected)",
+      "suggestion": "Fix in the prompt so the agent stops producing this."
+    },
+    {
+      "severity": "major",
+      "problem": "barista-express-pro-clean-descale-routine \"The Pro booklets have no seal procedure and don't list the s\": claim barista-pro/shower-seal-not-documented is unknown, not supported",
+      "evidence": "deterministic check (run rejected)",
+      "suggestion": "Fix in the prompt so the agent stops producing this."
+    }
+  ],
+  "addressedBy": null
+}

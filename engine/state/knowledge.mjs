@@ -1,5 +1,5 @@
 // Knowledge cards (knowledge/<category>/<product>.md): validation and lookup.
-// Moved from agent/knowledge.mjs (rebuild-spec section 11); that file re-exports this one.
+// Card format and rules: knowledge/README.md.
 import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { readFile, readdir } from 'node:fs/promises';
 import { basename, join } from 'node:path';

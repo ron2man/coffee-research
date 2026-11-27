@@ -10,14 +10,21 @@ export const CONTENT_DIRS = { published: 'content/published', archived: 'content
  * Guides that drafts already link to ({{guide:slug|text}}) but that don't exist yet. The angle
  * agent reuses the slug when it plans that guide, so the links start working once it's published.
  */
+/** Old guide slug → current slug (content/guide-aliases.json). */
+export function guideAliases(root) {
+  const path = join(root, 'content', 'guide-aliases.json');
+  return existsSync(path) ? JSON.parse(readFileSync(path, 'utf8')).aliases ?? {} : {};
+}
+
 export function wantedGuides(root) {
   const draftsDir = join(root, 'content', 'drafts');
   const drafts = existsSync(draftsDir) ? readdirSync(draftsDir).filter((n) => n.endsWith('.json')).map((n) => JSON.parse(readFileSync(join(draftsDir, n), 'utf8'))) : [];
   const have = new Set([...contentIndex(root).map((post) => post.slug), ...drafts.map((draft) => draft.slug)]);
   const wanted = new Map();
+  const aliases = guideAliases(root);
   for (const draft of drafts) {
     for (const { slug, text } of guideSlugs(draft.body)) {
-      if (have.has(slug)) continue;
+      if (have.has(slug) || have.has(aliases[slug])) continue;
       const entry = wanted.get(slug) ?? { slug, linkTexts: [], linkedFrom: [] };
       if (text && !entry.linkTexts.includes(text)) entry.linkTexts.push(text);
       if (!entry.linkedFrom.includes(draft.slug)) entry.linkedFrom.push(draft.slug);
