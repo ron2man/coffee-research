@@ -266,6 +266,20 @@ test('privacy page: in every market, linked from the footer and the banner, and 
   assert.match(readFileSync(join(repoRoot, 'docs/deploy.md'), 'utf8'), /Data retention: 14 months/, 'same retention as the GA4 property');
 });
 
+test('a renamed guide: new address built, old one not, and a 301 for both markets', () => {
+  const { read, has } = build('production');
+  const aliases = JSON.parse(readFileSync(join(repoRoot, 'content/guide-aliases.json'), 'utf8')).aliases;
+  const redirects = read('_redirects');
+  for (const [old, now] of Object.entries(aliases)) {
+    if (!has(`en-us/guides/${now}/index.html`)) continue; // aliases for drafts that never went live need no redirect
+    assert.ok(!has(`en-us/guides/${old}/index.html`), `${old} is no longer built`);
+    assert.ok(redirects.includes(`/:locale/guides/${old}/ /:locale/guides/${now}/ 301`), `301 from ${old}`);
+    assert.ok(redirects.includes(`/:locale/guides/${old} /:locale/guides/${now}/ 301`), `301 from ${old} without the slash`);
+  }
+  assert.match(read('sitemap-0.xml'), /barista-express-pro-grinder-too-fast-at-setting-1/);
+  assert.doesNotMatch(read('sitemap-0.xml'), /breville-builtin-grinder/);
+});
+
 test('consent banner: production pages with GTM carry it hidden, previews do not', () => {
   const home = build('production').read('en-gb/index.html');
   assert.match(home, /<section class="consent" id="consent" aria-label="Cookie choice" hidden>/);
