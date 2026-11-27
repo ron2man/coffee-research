@@ -3,15 +3,16 @@
   "id": "barista-express-pro-sour-bitter-what-to-change-first",
   "type": "new-post",
   "niche": "coffee",
-  "status": "researched",
+  "status": "briefed",
   "attempts": 0,
   "revisions": 0,
   "createdAt": "2026-11-25T20:08:27.717Z",
-  "updatedAt": "2026-11-27T04:39:30.186Z",
+  "updatedAt": "2026-11-27T04:57:04.407Z",
   "artifacts": {
     "idea": "data/ideas/barista-express-pro-sour-bitter-what-to-change-first.json",
     "idea-judge": "data/idea-scores/barista-express-pro-sour-bitter-what-to-change-first.json",
-    "research": "data/research/barista-express-pro-sour-bitter-what-to-change-first.json"
+    "research": "data/research/barista-express-pro-sour-bitter-what-to-change-first.json",
+    "angle": "data/briefs/barista-express-pro-sour-bitter-what-to-change-first.json"
   },
   "history": [
     {
@@ -48,6 +49,13 @@
       "to": "researched",
       "by": "research",
       "reason": "The decision can be answered from supported claims. Breville's current US booklets for the Barista Express (X26) and Barista Pro (Q26) give the order of variables, which basket to use, how dosing works, the gauge zones or LCD shot clock, shot volume, the temperature controls and the troubleshooting rows. Owner threads back up the pattern that a gauge that doesn't move means a dial-in problem, not a fault. One gap remains: neither booklet documents a test that tells a real pressure fault apart from a dial-in problem. It is recorded as an unknown claim, so the writer must send owners to support without inventing a test. The writer should link the existing grind-fault-tree tool for the inner-burr branch."
+    },
+    {
+      "at": "2026-11-27T04:57:04.407Z",
+      "from": "researched",
+      "to": "briefed",
+      "by": "angle",
+      "reason": "There is something distinct to add. The top pages for this question either cover only the Express and give generic advice (\"grind finer, dose up\"), or they state gauge bar values and fault causes that don't trace to Breville. One of them blames a still gauge on a worn gasket. None of them puts the Express/Pro traps in order: dual-wall basket, time-based dosing that leaves the basket underfilled when you grind finer, preset buttons that stop at a volume, inner burr, then temperature last. None says that Breville's own booklet uses 'bitter' for fast shots too, and none covers the Pro, which has no gauge. The research claims support an ordered decision rule from start to finish. For the one gap, a test that proves a machine fault, the plan is to say plainly that none is documented and send owners to support."
     }
   ]
 }
