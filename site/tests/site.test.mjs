@@ -249,6 +249,23 @@ test('each guide has its own share image per market, with the title for that mar
   assert.notDeepEqual(readFileSync(join(build('production').outDir, `og/en-gb/${guide}.png`)), readFileSync(join(build('production').outDir, `og/en-us/${guide}.png`)), 'markets differ when product names do');
 });
 
+test('privacy page: in every market, linked from the footer and the banner, and lists every key the scripts store', () => {
+  const { read, has } = build('production');
+  const page = read('en-gb/privacy/index.html');
+  assert.ok(has('en-us/privacy/index.html'));
+  const home = read('en-gb/index.html');
+  assert.match(home.match(/<footer[\s\S]*<\/footer>/)[0], /href="\/en-gb\/privacy\/"/, 'footer link');
+  assert.match(home.match(/<section class="consent"[\s\S]*?<\/section>/)[0], /href="\/en-gb\/privacy\/"/, 'banner link');
+  const scripts = ['site.js', 'consent.js'].map((f) => readFileSync(join(repoRoot, 'site/public/assets', f), 'utf8')).join('\n')
+    + readFileSync(join(repoRoot, 'site/src/components/Analytics.astro'), 'utf8');
+  const keys = new Set([...scripts.matchAll(/(?:KEY = |getItem\()'([a-z-]+)'/g)].map((m) => m[1]));
+  assert.ok(keys.size >= 2, `found the storage keys: ${[...keys]}`);
+  for (const key of keys) assert.match(page, new RegExp(`<code>${key}</code>`), `privacy page lists localStorage "${key}"`);
+  assert.match(page, /Cookie settings/);
+  assert.match(page, /14 months/);
+  assert.match(readFileSync(join(repoRoot, 'docs/deploy.md'), 'utf8'), /Data retention: 14 months/, 'same retention as the GA4 property');
+});
+
 test('consent banner: production pages with GTM carry it hidden, previews do not', () => {
   const home = build('production').read('en-gb/index.html');
   assert.match(home, /<section class="consent" id="consent" aria-label="Cookie choice" hidden>/);
