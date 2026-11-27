@@ -3,11 +3,11 @@
   "id": "barista-express-pro-clean-descale-routine",
   "type": "new-post",
   "niche": "coffee",
-  "status": "passed",
+  "status": "published",
   "attempts": 0,
   "revisions": 0,
   "createdAt": "2026-11-23T15:58:57.541Z",
-  "updatedAt": "2026-11-25T08:42:56.544Z",
+  "updatedAt": "2026-11-27T18:13:14.778Z",
   "artifacts": {
     "idea": "data/ideas/barista-express-pro-clean-descale-routine.json",
     "idea-judge": "data/idea-scores/barista-express-pro-clean-descale-routine.json",
@@ -59,6 +59,13 @@
       "to": "passed",
       "by": "post-judge",
       "reason": "The draft answers the reader's question in its first paragraph: the machine is fine, read your panel, and descale before calling a weak-steam or dripping-shot problem a fault. It then gives the one thing no top result has, a key for all three panels. That covers the US Express CLEAN / DESCALE light, the UK Express CLEAN ME light (which never asks for a descale) and the Pro LCD. It also maps \"broken\"-looking symptoms to manufacturer troubleshooting causes. It is honest about the missing intervals and the undocumented reset, the automated checks are clean, and the ending names the smallest purchase (consumables only). An owner with a light that won't go off would forward this."
+    },
+    {
+      "at": "2026-11-27T18:13:14.778Z",
+      "from": "passed",
+      "to": "published",
+      "by": "scheduler",
+      "reason": "content/published/barista-express-pro-clean-descale-routine.md is on main"
     }
   ]
 }

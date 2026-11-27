@@ -3,11 +3,11 @@
   "id": "barista-express-pro-sour-bitter-what-to-change-first",
   "type": "new-post",
   "niche": "coffee",
-  "status": "passed",
+  "status": "published",
   "attempts": 0,
   "revisions": 0,
   "createdAt": "2026-11-25T20:08:27.717Z",
-  "updatedAt": "2026-11-27T09:29:11.175Z",
+  "updatedAt": "2026-11-27T18:13:14.782Z",
   "artifacts": {
     "idea": "data/ideas/barista-express-pro-sour-bitter-what-to-change-first.json",
     "idea-judge": "data/idea-scores/barista-express-pro-sour-bitter-what-to-change-first.json",
@@ -73,6 +73,13 @@
       "to": "passed",
       "by": "post-judge",
       "reason": "This is the only result for the query that gives a Barista Express or Pro owner an ordered checklist they can run on their own machine: basket, dose, shot mode, grind, inner burr, beans, routine, then temperature. It also gives a clear point at which to stop and call support. Every product fact traces to supported claims from the manufacturer's booklet. The post covers the Pro, which none of the top results do. It sends the reader to the smallest sensible purchase, which is nothing, then support, then a separate grinder only once the inner burr has run out. Automated checks show no blocking issues, and I found nothing that blocks a pass."
+    },
+    {
+      "at": "2026-11-27T18:13:14.782Z",
+      "from": "passed",
+      "to": "published",
+      "by": "scheduler",
+      "reason": "content/published/barista-express-pro-sour-bitter-what-to-change-first.md is on main"
     }
   ]
 }

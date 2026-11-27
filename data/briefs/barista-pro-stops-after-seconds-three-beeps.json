@@ -1,0 +1,89 @@
+{
+  "thesis": "If hot water cuts out after a few seconds too, stop changing your grind: run four free water-path checks in order, and if it still beeps and stops, hand it to Breville/Sage rather than opening it or buying parts.",
+  "reader": "A Barista Pro (BES878 / Sage SES878) owner whose shots, flushes, hot water or steam stop a few seconds in with three beeps and no message on the screen. Often just out of warranty, sometimes on a new machine or right after a filter change or descale.",
+  "readerDecision": "Fix it for free at home, make a warranty claim, or pay for a repair (and whether a repair is worth it compared with replacing the machine).",
+  "whatCompetitorsMiss": [
+    "No page gives the 30-second test that splits the fault: turn the dial to hot water with no portafilter fitted. It should run for 60 seconds by design. If it stops after a few seconds, the problem isn't grind, dose or tamp.",
+    "Nobody puts the free checks in order with the reason for each: tank pushed down and locked above MIN, a run with the water filter removed (and a 5-minute soak for any new filter), a descale, RESET DEFAULTS, and the booklet's cool-down for a thermal cut-out.",
+    "Nobody says when to stop. The booklet has no row for this symptom and no beep codes. Owner and repairer reports point to the flow meter or its wiring, and Breville's warranty excludes repairs by unauthorised parties, so opening the machine can cost you the claim.",
+    "No page explains the warranty route in plain steps: Breville/Sage support, not the store, with the batch code from the sticker and the receipt.",
+    "Nobody warns that a repair may not last. One owner's flow-control repair failed again about seven months later. A repairer also warns against generic 'compatible' flow meters, and both points matter for an out-of-warranty decision.",
+    "Grind-focused pages ignore that hot water and steam fail as well, which rules out the puck."
+  ],
+  "ourContribution": "diagnosis",
+  "contributionDetail": "A diagnosis in this order. (1) Split test: with no portafilter fitted, run hot water and count. It should flow for 60 seconds. Then run 1 CUP into a cup with an empty group. If either stops after a few seconds with beeps, the fault is in the water path, so leave the grind alone. If only real shots stop and water runs normally, point to the choked-puck causes the booklet lists (too fine, overdosed, over-tamped, blocked basket) and link the dial-in guide. (2) Tank: push it down until it locks, fill above MIN, and listen for a loud pump with no water, which the booklet says means an empty or unseated tank. (3) Water filter: take it out and test again. If the cut-out stops, fit a filter that has been soaked in cold water for 5 minutes (replace it every 2 months on US machines, every 3 months on Sage). (4) Descale using the on-screen DESCALE cycle. The booklet gives scale as a cause of no flow and no steam. (5) RESET DEFAULTS: free and harmless, but say honestly that it only resets your settings. (6) If the machine has stopped altogether, switch it off, unplug it and let it cool for 30–60 minutes (the booklet's thermal cut-out). Stop rule: if it still cuts out, don't open it. In warranty, contact Breville/Sage support with the batch code and receipt. Out of warranty, get a written quote for the flow meter, ask for a genuine part, and compare the quote with what a replacement machine would cost you, remembering that one owner's repair failed again. The troubleshooter asks: which functions cut out (shots only / also hot water or steam)? What changed recently (new machine / filter changed / descaled / nothing)? Does it still happen after the free checks? Is it in warranty? It ends at one next step.",
+  "mustInclude": [
+    "Recommendation in the first paragraph: run the hot-water test, then the free checks, then claim the warranty rather than open the machine.",
+    "The test the reader can run now on the machine they own: hot water with no portafilter should run 60 seconds (barista-pro/hot-water-60s-auto-stop). A stop after a few seconds is a fault, not the timeout.",
+    "The free checks in order, each tied to its booklet row: tank seated and above MIN, water filter out and then a soaked filter, descale, RESET DEFAULTS, thermal cool-down.",
+    "Honest framing: the booklet has no beep codes and no row for this symptom (barista-pro/troubleshooting-no-beep-cutout-row). What causes it beyond the free checks comes from owner and repairer reports, labelled as such (barista-pro/owner-reports-three-beep-cutout, barista-pro/repair-shop-flow-meter-diagnosis).",
+    "Warranty route in steps: support, not the store; batch code from the sticker under or on the back of the machine; proof of purchase; opening the machine yourself can void the claim (barista-pro/warranty-claim-process-us, barista-pro/warranty-scope). Phrase it for every market ('Breville or Sage support via their support page'). Don't print the US phone number in the body and don't state a warranty length.",
+    "Out-of-warranty rule without numbers: get a written quote, insist on a genuine flow meter, and weigh the quote against a replacement, noting that one owner's repair failed again after about 7 months.",
+    "Per-market note: the water filter replacement interval is 2 months in the US booklet (barista-pro/water-filter-interval-us) and 3 months in the Sage guide (barista-pro/water-filter-interval-sage). Name the machine with {{product:barista-pro}}.",
+    "Ending: if the filter test fixed it, the only purchase is a replacement water filter. If the descale fixed it, keep descaling when the alert shows. Neither needs a new machine.",
+    "'When I'd choose differently' section: e.g. a brand-new machine still inside its return window, where returning it beats troubleshooting; or a machine whose cut-out happens only on real shots, where it's a dial-in problem.",
+    "A 'keep yours' path as the default: most readers keep the machine, and a covered repair costs them nothing.",
+    "Link our guides: {{guide:barista-express-pro-clean-descale-routine|how to run the descale}} and {{guide:barista-express-pro-sour-bitter-what-to-change-first|dial-in guide}} (for the shots-only branch). At most 2 inline links.",
+    "Collapsed 'How this guide was put together' section: Breville US booklet, Breville warranty page, CoffeeSnobs and iFixit owner reports, the Home Coffee Machine Repairs article. Say that Breville's own support article for this symptom could not be read."
+  ],
+  "leaveOut": [
+    "The 90-second steam timeout (not documented for this model).",
+    "The contents of Breville's support article (unverified search summaries), including any priming procedure we can't source.",
+    "Part numbers, part prices and the AUD 150 figure as a cost guide.",
+    "Pump or pressure-sensor speculation from JustAnswer-style answers.",
+    "DIY air-lock tricks (massage gun, tilting the machine) and anything that involves opening the case.",
+    "Guesses at what the three beeps mean.",
+    "A stated warranty length (unknown).",
+    "Spec tables, machine history and generic cleaning tips.",
+    "Any 'we tested' language."
+  ],
+  "assets": [
+    "barista-pro-cutout-troubleshooter"
+  ],
+  "offerTouchpoints": [
+    {
+      "productId": "barista-pro",
+      "role": "dont-buy"
+    }
+  ],
+  "claimIds": [
+    "barista-pro/troubleshooting-no-beep-cutout-row",
+    "barista-pro/troubleshooting-only-thermal-cutout-to-support",
+    "barista-pro/troubleshooting-no-flow-rows",
+    "barista-pro/troubleshooting-no-steam-row",
+    "barista-pro/hot-water-60s-auto-stop",
+    "barista-pro/water-filter-soak-5-min",
+    "barista-pro/reset-defaults-procedure",
+    "barista-pro/descale-symptoms",
+    "barista-pro/descale-alert-procedure",
+    "barista-pro/owner-reports-three-beep-cutout",
+    "barista-pro/repair-shop-flow-meter-diagnosis",
+    "barista-pro/warranty-claim-process-us",
+    "barista-pro/warranty-scope",
+    "barista-pro/water-filter-interval-us",
+    "barista-pro/water-filter-interval-sage",
+    "barista-pro/first-use-flush",
+    "barista-pro/flush-alert-cleaning-cycle"
+  ],
+  "competitorsReviewed": [
+    {
+      "url": "https://www.justanswer.com/small-appliance/kc3pt-can-t-pull-shot-machine-beeps-times-when-try.html",
+      "summary": "Paid Q&A that treats three beeps and a mid-brew stop as a pump-protection or pressure-sensor fault. It skips the free checks (tank, filter, descale), has no test to separate the puck from the water path, and gives no warranty guidance, so readers are pushed toward a repair they may not need."
+    },
+    {
+      "url": "https://homecoffeemachinerepairs.com.au/breville-coffee-machine-stopping-at-5-seconds/",
+      "summary": "Australian repair shop: on the BES878/BES880 a stop at about 5 seconds is usually the flow meter or its wiring, not an air lock. It advises checking the tank and priming first and warns against generic parts. It says nothing about beeps, warranty or cost, and it ends with 'send it to us'. It's useful as a repairer's view, but it isn't an owner's decision guide."
+    },
+    {
+      "url": "https://coffeesnobs.com.au/forum/equipment/brewing-equipment-midrange-500-1500/948102-bes878bss-3-beeps-sound-issue",
+      "summary": "Owner thread with the exact symptom on shots, steam and hot water. One flow-control repair failed again after 7 months, and a later owner's question about air locks went unanswered. It's real experience, but there's no check order, no resolution and no warranty or repair rule."
+    }
+  ],
+  "titleOptions": [
+    "{{product:barista-pro}} stops after a few seconds and beeps? Start here",
+    "{{product:barista-pro}} cuts out with three beeps: fix, claim or repair",
+    "Barista Pro cuts out on shots, steam and hot water? Check this first"
+  ],
+  "slug": "barista-pro-stops-after-seconds-three-beeps",
+  "metaDescription": "Barista Pro stopping a few seconds in and beeping? One 30-second test, the free fixes in order, and when to claim the warranty instead of opening it."
+}

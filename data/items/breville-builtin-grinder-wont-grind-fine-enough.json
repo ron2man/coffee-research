@@ -3,11 +3,11 @@
   "id": "breville-builtin-grinder-wont-grind-fine-enough",
   "type": "new-post",
   "niche": "coffee",
-  "status": "passed",
+  "status": "published",
   "attempts": 0,
   "revisions": 1,
   "createdAt": "2026-11-21T17:35:36.159Z",
-  "updatedAt": "2026-11-23T12:00:14.801Z",
+  "updatedAt": "2026-11-27T18:13:14.783Z",
   "artifacts": {
     "idea": "data/ideas/breville-builtin-grinder-wont-grind-fine-enough.json",
     "idea-judge": "data/idea-scores/breville-builtin-grinder-wont-grind-fine-enough.json",
@@ -143,6 +143,13 @@
       "to": "passed",
       "by": "post-judge",
       "reason": "Both blocking title issues from the last review are fixed. The title is now \"Shots still fast at grind setting 1? Fix the built-in grinder first\": one promise, problem first, 67 characters. The seoTitle is 57 characters. The automated checks report no blocking items. The body is the same one that scored well before, and it still beats every top result. The top results are Home-Barista threads, the Singletrack thread and the Seattle Coffee Gear top-burr post. None of them gives an order of checks, explains why the pressurised basket hides the grind problem, gives the correct burr direction or says when to stop. The ending tells the reader exactly what to do: buy a separate grinder, not a new machine and not a new burr. offerIds is empty, which is correct because no claim supports a particular grinder for these machines. grind-fault-tree now exists in content/tools. One thing is left for a human before publishing: the grinder-for-barista-express-and-pro guide has to exist. Until it does, both links to it render as plain text and the ending promises a guide the reader can't open."
+    },
+    {
+      "at": "2026-11-27T18:13:14.783Z",
+      "from": "passed",
+      "to": "published",
+      "by": "scheduler",
+      "reason": "content/published/breville-builtin-grinder-wont-grind-fine-enough.md is on main"
     }
   ]
 }
