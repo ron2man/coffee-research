@@ -5,10 +5,10 @@
   Permissions-Policy: camera=(), microphone=(), geolocation=()
   X-Frame-Options: DENY
 
+# Every asset URL in the HTML carries a content hash (?v=, assetUrl in site/lib/templates.mjs), and
+# fonts keep fixed names, so all assets can be cached for a year. One rule only: two matching rules
+# would send two Cache-Control headers.
 /assets/*
-  Cache-Control: public, max-age=86400
-
-/assets/fonts/*
   Cache-Control: public, max-age=31536000, immutable
 
 # workers.dev addresses (branch Previews, deployment URLs, the Worker's own subdomain) must never be
