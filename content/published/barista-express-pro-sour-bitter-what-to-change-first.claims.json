@@ -1,0 +1,179 @@
+{
+  "slug": "barista-express-pro-sour-bitter-what-to-change-first",
+  "itemId": "barista-express-pro-sour-bitter-what-to-change-first",
+  "claims": [
+    {
+      "statement": "The Extraction Guide describes a fast, under-extracted shot as tasting 'bitter/sharp, weak and watery' and an over-extracted shot as 'bitter and burnt'; only the summary table links under-extraction to 'sour'.",
+      "claimIds": [
+        "barista-express/extraction-guide-over-and-summary",
+        "barista-pro/extraction-guide-over-and-summary",
+        "barista-express/dose-and-extraction-targets"
+      ]
+    },
+    {
+      "statement": "A Lemmy owner said they had first misjudged sour as bitter, and that grinding finer made the shot even more sour.",
+      "claimIds": [
+        "barista-express/owner-sour-finer-more-sour"
+      ]
+    },
+    {
+      "statement": "On the Barista Express the target shot time is 25–30 s, under 20 s is under-extracted, and the 2-cup dose is 16–19 g.",
+      "claimIds": [
+        "barista-express/dose-and-extraction-targets",
+        "barista-express/extraction-guide-over-and-summary"
+      ]
+    },
+    {
+      "statement": "The Barista Express gauge zones are Under, Within and Over Espresso Range, with no bar values given.",
+      "claimIds": [
+        "barista-express/pressure-gauge-zones"
+      ]
+    },
+    {
+      "statement": "The Barista Express booklet gives two different flow-start figures: 4–7 s and 8–12 s.",
+      "claimIds": [
+        "barista-express/flow-start-figures-differ"
+      ]
+    },
+    {
+      "statement": "The Barista Pro has no pressure gauge; its LCD shot clock counts up from the start of the shot.",
+      "claimIds": [
+        "barista-pro/no-pressure-gauge-lcd-shot-clock"
+      ]
+    },
+    {
+      "statement": "On the Barista Pro, flow starting at 8–12 s is right, before 7 s is under-extracted, and no flow after 13 s is over-extracted.",
+      "claimIds": [
+        "barista-pro/extraction-guide-fast-shot",
+        "barista-pro/extraction-guide-over-and-summary"
+      ]
+    },
+    {
+      "statement": "Dual-wall baskets regulate the pressure regardless of grind, dose, tamp or freshness; single-wall baskets are for fresh whole beans.",
+      "claimIds": [
+        "barista-express/baskets-single-vs-dual-wall",
+        "barista-pro/baskets-single-vs-dual-wall"
+      ]
+    },
+    {
+      "statement": "The Barista Pro ships with the single-wall 2-cup basket installed.",
+      "claimIds": [
+        "barista-pro/single-wall-2cup-installed"
+      ]
+    },
+    {
+      "statement": "The Barista Express GRIND AMOUNT dial starts at 3 o'clock and is adjusted until the tamper's metal cap is level with the basket rim after tamping.",
+      "claimIds": [
+        "barista-express/grind-amount-dial-dosing",
+        "barista-express/dose-and-extraction-targets"
+      ]
+    },
+    {
+      "statement": "The Barista Pro GRIND AMOUNT sets grind time, with defaults of 9.5 s (single) and 13 s (double), and the dose is checked by the tamper-cap level.",
+      "claimIds": [
+        "barista-pro/grind-amount-time-based",
+        "barista-pro/extraction-guide-fast-shot"
+      ]
+    },
+    {
+      "statement": "A finer grind in single-wall baskets may need a larger grind amount, because dosing depends on how long the grinder runs.",
+      "claimIds": [
+        "barista-express/grind-amount-dial-dosing",
+        "barista-pro/baskets-single-vs-dual-wall"
+      ]
+    },
+    {
+      "statement": "1 CUP and 2 CUP stop at a preset volume of about 30 ml or 60 ml, and the cup output varies with grind size and grind amount; a manual shot is press and hold, release, press to stop.",
+      "claimIds": [
+        "barista-express/shot-volume-preset-program-manual",
+        "barista-pro/shot-volume-preset-program-manual"
+      ]
+    },
+    {
+      "statement": "On the Barista Express, setting 1 is finest and 16 coarsest; on the Barista Pro, 1 is finest, 30 coarsest and 15 is the default.",
+      "claimIds": [
+        "barista-express/grind-dial-1-finest-16-coarsest",
+        "barista-pro/grind-dial-1-finest-30-coarsest",
+        "barista-pro/grind-settings-start-15"
+      ]
+    },
+    {
+      "statement": "Grind should be fine but not too fine, and the factors should be adjusted one at a time.",
+      "claimIds": [
+        "barista-express/grind-too-fine-or-coarse"
+      ]
+    },
+    {
+      "statement": "The upper (inner) burr is a documented owner adjustment on both machines, moved one number at a time using its wire handle after emptying the hopper and running the grinder empty.",
+      "claimIds": [
+        "barista-express/upper-burr-adjustment-documented",
+        "barista-pro/upper-burr-adjustment-documented"
+      ]
+    },
+    {
+      "statement": "Beans should have a Roasted On date and be used 5–20 days after roasting; stale coffee may pour too quickly and taste bitter and watery.",
+      "claimIds": [
+        "barista-express/beans-roasted-on-5-20-days",
+        "barista-pro/beans-roasted-on-5-20-days"
+      ]
+    },
+    {
+      "statement": "A cold portafilter and basket can reduce extraction temperature enough to significantly affect quality; the basket should be wiped dry because moisture encourages channeling; a short flow through the group stabilises temperature.",
+      "claimIds": [
+        "barista-express/preheat-and-dry-basket",
+        "barista-pro/purge-group-head-preheat"
+      ]
+    },
+    {
+      "statement": "Barista Express Advanced Temperature Mode (power off, hold PROGRAM, press POWER) adjusts brew temperature up to 4°F either way in 2°F steps.",
+      "claimIds": [
+        "barista-express/temperature-adjust-2f-steps"
+      ]
+    },
+    {
+      "statement": "Holding PROGRAM until three beeps resets the default shot volumes and the default espresso water temperature.",
+      "claimIds": [
+        "barista-express/shot-volume-preset-program-manual"
+      ]
+    },
+    {
+      "statement": "Barista Pro shot temperature is set in the SHOT TEMP menu, with no stated range.",
+      "claimIds": [
+        "barista-pro/shot-temp-adjustable"
+      ]
+    },
+    {
+      "statement": "The troubleshooting tables list a coarse grind, not enough coffee and a light tamp as the causes of espresso running out too quickly.",
+      "claimIds": [
+        "barista-express/troubleshooting-runs-too-quickly",
+        "barista-pro/troubleshooting-runs-too-quickly"
+      ]
+    },
+    {
+      "statement": "The only troubleshooting row that sends owners to support is the thermal cut-out; fast shots and no crema are attributed to grind, dose, tamp, freshness, a blocked basket and basket choice.",
+      "claimIds": [
+        "barista-express/troubleshooting-only-thermal-cutout-to-support",
+        "barista-pro/troubleshooting-only-thermal-cutout-to-support"
+      ]
+    },
+    {
+      "statement": "Mineral build-up is linked to reduced brewing flow and to espresso dripping or not flowing, not to fast shots.",
+      "claimIds": [
+        "barista-express/descale-symptoms-us"
+      ]
+    },
+    {
+      "statement": "A new Express owner thought the gauge was broken; it moved after grinding at 1–2, filling the basket higher and tamping harder, and they kept the machine.",
+      "claimIds": [
+        "barista-express/owner-gauge-not-moving-was-dose"
+      ]
+    },
+    {
+      "statement": "Over-extracted shots are fixed with a coarser grind and a smaller grind amount; over 35 s is over-extracted on the Express.",
+      "claimIds": [
+        "barista-express/extraction-guide-over-and-summary",
+        "barista-pro/extraction-guide-over-and-summary"
+      ]
+    }
+  ]
+}
