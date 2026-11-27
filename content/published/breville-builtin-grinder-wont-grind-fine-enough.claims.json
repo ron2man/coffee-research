@@ -1,0 +1,122 @@
+{
+  "slug": "breville-builtin-grinder-wont-grind-fine-enough",
+  "itemId": "breville-builtin-grinder-wont-grind-fine-enough",
+  "claims": [
+    {
+      "statement": "The Barista Express grind dial runs from 1 (finest) to 16 (coarsest), and the manufacturer suggests starting at 5.",
+      "claimIds": [
+        "barista-express/grind-dial-1-finest-16-coarsest"
+      ]
+    },
+    {
+      "statement": "The Barista Pro grind dial runs from 1 (finest) to 30 (coarsest), with 15 as the default.",
+      "claimIds": [
+        "barista-pro/grind-dial-1-finest-30-coarsest",
+        "barista-pro/grind-settings-start-15"
+      ]
+    },
+    {
+      "statement": "The manual recommends beans with a 'Roasted On' date, used 5–20 days after roasting, and the Pro booklet warns stale coffee may pour too quickly and taste bitter and watery.",
+      "claimIds": [
+        "barista-pro/beans-roasted-on-5-20-days",
+        "barista-express/beans-roasted-on-5-20-days"
+      ]
+    },
+    {
+      "statement": "Single-wall baskets are for fresh whole beans. Dual-wall baskets are for pre-ground coffee and regulate pressure regardless of grind, dose, tamp pressure or freshness.",
+      "claimIds": [
+        "barista-pro/baskets-single-vs-dual-wall",
+        "barista-express/baskets-single-vs-dual-wall"
+      ]
+    },
+    {
+      "statement": "The manual recommends a 22–33 lb tamp and a dose where the tamper's metal cap sits level with the basket rim after tamping. The double basket is designed for about 16–19 g.",
+      "claimIds": [
+        "barista-express/dose-and-extraction-targets",
+        "barista-pro/extraction-guide-fast-shot",
+        "barista-pro/baskets-single-vs-dual-wall"
+      ]
+    },
+    {
+      "statement": "On the Pro, a finer grind in single-wall baskets may need a larger dose.",
+      "claimIds": [
+        "barista-pro/baskets-single-vs-dual-wall"
+      ]
+    },
+    {
+      "statement": "The Pro guide says espresso should start to flow after 8–12 seconds, and under 7 seconds means under-dosed or too coarse a grind.",
+      "claimIds": [
+        "barista-pro/extraction-guide-fast-shot"
+      ]
+    },
+    {
+      "statement": "The Express guide describes an under-extracted shot as starting after 1–6 seconds and finishing within 20 seconds, against a 25–30 second target.",
+      "claimIds": [
+        "barista-express/dose-and-extraction-targets"
+      ]
+    },
+    {
+      "statement": "Both troubleshooting tables list grind too coarse, not enough coffee and tamping too lightly as the causes of espresso running out too quickly, and neither lists the burrs.",
+      "claimIds": [
+        "barista-pro/troubleshooting-runs-too-quickly",
+        "barista-express/troubleshooting-runs-too-quickly"
+      ]
+    },
+    {
+      "statement": "The manual's burr cleaning involves emptying the hopper, running the grinder empty, removing the top burr and brushing both burrs and the chute. The manual says it removes oil build-up that can impede performance, advanced cleaning is only for blockages, and the burrs are extremely sharp.",
+      "claimIds": [
+        "barista-pro/burr-cleaning-cycle",
+        "barista-express/burr-cleaning-cycle"
+      ]
+    },
+    {
+      "statement": "Both booklets call the adjustable upper burr a feature of the machine that extends the grind range, give a step-by-step procedure using the burr's wire handle, and recommend one adjustment at a time.",
+      "claimIds": [
+        "barista-express/upper-burr-adjustment-documented",
+        "barista-pro/upper-burr-adjustment-documented"
+      ]
+    },
+    {
+      "statement": "On the Barista Express, repositioning the upper burr needs no tool, and the included Allen key is for the shower-screen seal.",
+      "claimIds": [
+        "barista-express/upper-burr-tool"
+      ]
+    },
+    {
+      "statement": "The Pro booklet's illustrations show the burr ring marked FINE and COARSE, and neither booklet gives a number range, a factory position or a burr-contact warning.",
+      "claimIds": [
+        "barista-pro/upper-burr-adjustment-documented",
+        "barista-express/upper-burr-adjustment-documented"
+      ]
+    },
+    {
+      "statement": "The manual warns against grinding green or under-roasted beans, which can damage or break burr grinders.",
+      "claimIds": [
+        "barista-pro/no-green-or-under-roasted-beans",
+        "barista-express/no-green-or-under-roasted-beans"
+      ]
+    },
+    {
+      "statement": "One owner of a refurbished Barista Pro got gritty grounds, then cleaned the grinder and moved the internal burr from 2 to 1 with the dial at 2, and reported a 28-second shot that was 'WAY better'. The manufacturer offered a free upper burr, which had not arrived when the improvement was reported.",
+      "claimIds": [
+        "barista-pro/owner-refurb-upper-burr-fix"
+      ]
+    },
+    {
+      "statement": "An Australian parts seller lists upper burr SP0001801 for machines built before PDC 1926 and SP0027464 for machines from 1926 (2019 week 26) onwards. The batch date is on the sticker under the machine.",
+      "claimIds": [
+        "barista-express/upper-burr-part-sp0001801",
+        "barista-express/upper-burr-part-sp0027464",
+        "barista-pro/upper-burr-part-sp0001801",
+        "barista-pro/upper-burr-part-sp0027464"
+      ]
+    },
+    {
+      "statement": "The booklet's limited warranty covers repair or replacement if the product is defective due to faulty materials, workmanship or function.",
+      "claimIds": [
+        "barista-pro/warranty-scope",
+        "barista-express/warranty-scope"
+      ]
+    }
+  ]
+}
