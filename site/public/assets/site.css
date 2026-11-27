@@ -233,3 +233,12 @@ th { font-weight: 700; }
   .gr-date { text-align: left; order: -1; }
   .gr-summary { white-space: normal; }
 }
+
+/* Breadcrumbs and related guides (internal links) */
+.breadcrumbs ol { list-style: none; margin: 0 0 .6rem; padding: 0; display: flex; flex-wrap: wrap; gap: .25rem; font-size: 14px; color: var(--ink-2); }
+.breadcrumbs li + li::before { content: "›"; margin-right: .25rem; color: var(--ink-2); }
+.breadcrumbs a { color: var(--ink-2); text-decoration: none; }
+.breadcrumbs a:hover { text-decoration: underline; }
+.breadcrumbs [aria-current="page"] { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 28ch; }
+.related { margin-top: 3rem; padding-top: 1.5rem; border-top: 2px solid var(--fg); }
+.related h2 { margin: 0 0 .5rem; font-size: 1.25rem; }
