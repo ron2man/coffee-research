@@ -144,6 +144,26 @@ test('writer checks: product tokens must have cards, untokenised products and mi
   assert.ok(plain.warnings.some((w) => /guide other-guide, which doesn't exist yet/.test(w)));
 });
 
+test('writer checks: no market name, market-only brand or price outside the sources section', () => {
+  const cards = new Map([['machine-a', { card: { claims: [], variants: [
+    { id: 'a-us', markets: ['US'], name: 'Northco Alpha', brand: 'Northco' },
+    { id: 'a-gb', markets: ['GB'], name: 'Southco Alpha', brand: 'Southco' },
+  ] } }]]);
+  const markets = [{ id: 'US', names: ['US', 'American'] }, { id: 'GB', names: ['UK', 'British'] }];
+  const draft = (body, extra = {}) => ({ itemId: 'x', artifact: { title: 'Fix your {{product:machine-a}}', description: 'D', body, productIds: ['machine-a'], claims: [], humanData: [], ...extra } });
+  const run = (d) => runChecks('writer', [d], { cards, markets, existingContent: [] }).blocking.join('\n');
+
+  const clean = run(draft('Your {{product:machine-a}} is fine. Contact {{brand:machine-a}} support. One edition of the manual says 2 months.\n\n## How this guide was put together\n\n[Northco US manual](https://example.test/m) and the Southco UK guide.'));
+  assert.doesNotMatch(clean, /market|brand in only some markets|price/, 'tokens, neutral wording and named sources pass');
+
+  assert.match(run(draft('The Southco guide says descale every 90 days.')), /"Southco" is machine-a's brand in only some markets.*\{\{brand:machine-a\}\}/);
+  assert.match(run(draft('The US booklet skips this step.')), /names the US market \("US"/);
+  assert.match(run(draft('A British owner reported it.')), /names the GB market \("British"/);
+  assert.match(run(draft('Fine.', { description: 'Why the Southco light stays on' })), /"Southco"/, 'title and description count too');
+  assert.match(run(draft('A new burr costs about $40.')), /has a price/);
+  assert.doesNotMatch(run(draft('Tell us what you checked. Look in the user guide.')), /names the/, 'lower-case "us" and other words are fine');
+});
+
 test('writer checks: offered products need knowledge cards', () => {
   const cards = new Map([['machine-a', { card: { claims: [] } }]]);
   const { blocking } = runChecks('writer', [{ itemId: 'x', artifact: { title: 'T', description: 'D', body: 'Fix your {{product:machine-a}}.', productIds: ['machine-a'], offerIds: ['grinder-z'], claims: [] } }], { cards, existingContent: [] });

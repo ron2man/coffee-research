@@ -267,6 +267,25 @@ test('markdown escapes HTML and only allows http links', () => {
   assert.match(blocks[0].html, /href="https:\/\/ok.test"/);
 });
 
+test('markdown: a list right after a line of text is a list, as in CommonMark', () => {
+  const html = (md) => parseMarkdown(md).blocks.map((b) => b.html).join('');
+  assert.equal(html('**Cleaning cycle:**\n1. Put the basket in.\n2. Fill the tank.'), '<p><strong>Cleaning cycle:</strong></p><ol><li>Put the basket in.</li><li>Fill the tank.</li></ol>');
+  assert.equal(html('Before:\n- one\n- two\nstill two'), '<p>Before:</p><ul><li>one</li><li>two still two</li></ul>');
+  assert.equal(html('Released in\n2019. That was it.'), '<p>Released in 2019. That was it.</p>', 'only a list starting at 1 interrupts text');
+  assert.equal(html('1. a\n2. b'), '<ol><li>a</li><li>b</li></ol>');
+});
+
+test('published guides read the same in every market: no market name, market-only brand or price before the sources', async () => {
+  const { marketWords, bodyBeforeSources } = await import('../../engine/state/market-text.mjs');
+  const { data } = { data: loadSiteData({ mode: 'production' }) };
+  const niche = JSON.parse(readFileSync(join(repoRoot, 'niches/coffee/niche.json'), 'utf8'));
+  assert.ok(data.posts.length > 0);
+  for (const post of data.posts) {
+    const text = [post.title, post.seoTitle, post.description, bodyBeforeSources(post.body)].filter(Boolean).join('\n');
+    assert.deepEqual(marketWords(text, { cards: data.site.cards, markets: niche.markets }).map((w) => `${w.word}: ${w.excerpt}`), [], post.slug);
+  }
+});
+
 test('guides link to related guides, carry breadcrumbs and structured data, and x-default is the primary market', () => {
   const { read } = build('preview');
   const page = read('en-gb/guides/barista-express-pro-sour-bitter-what-to-change-first/index.html');

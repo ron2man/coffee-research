@@ -71,11 +71,11 @@
             "options": [
               [
                 "low",
-                "Around $200"
+                "As little as possible"
               ],
               [
                 "mid",
-                "Up to $300+"
+                "I can spend more for stepless adjustment"
               ]
             ]
           }
@@ -96,7 +96,7 @@
             "productId": "baratza-encore-esp"
           },
           "df": {
-            "title": "Turin DF54",
+            "title": "A DF54 single-dose grinder",
             "text": "Built for single-dosing and bean swaps. More hands-on per shot, and it\u2019s mainly an espresso grinder. Check the version and burr option before ordering.",
             "productId": "turin-df54"
           }

@@ -3,6 +3,16 @@
 // Checks are about evidence and honesty rules from the spec, never about one niche.
 import { claimStatus } from '../state/knowledge.mjs';
 import { resolveTokens } from '../state/tokens.mjs';
+import { bodyBeforeSources, marketWords } from '../state/market-text.mjs';
+
+/** One line per market-specific word, with what to write instead. */
+export function marketWordProblems(found) {
+  return found.map((w) => (w.kind === 'brand'
+    ? `"${w.word}" is ${w.productId}'s brand in only some markets ("…${w.excerpt}…"); write {{brand:${w.productId}}} or "the manufacturer"`
+    : w.kind === 'price'
+    ? `has a price ("…${w.excerpt}…"); prices belong in offers, not in text every market reads`
+    : `names the ${w.marketId} market ("${w.word}": "…${w.excerpt}…"); every market reads this text, so describe the difference without the market (e.g. "one edition of the manual")`));
+}
 
 // Title rules (all markets, after product names are filled in). The H1 can carry a little more
 // than the search-result title, which Google cuts at about 60 characters.
@@ -90,7 +100,7 @@ const CHECKS = {
     const warnings = [];
     for (const { itemId, artifact: draft } of outputs) {
       const body = draft.body ?? '';
-      const main = body.split(/^#+\s*How this guide was put together.*$/im)[0];
+      const main = bodyBeforeSources(body);
       const inlineLinks = (main.match(/\]\((https?:[^)]+)\)/g) ?? []).length;
       if (inlineLinks > 2) blocking.push(`${itemId}: ${inlineLinks} inline links before the sources section (max 2)`);
       const words = main.split(/\s+/).filter(Boolean).length;
@@ -105,6 +115,10 @@ const CHECKS = {
       for (const claim of draft.claims ?? []) checkClaims(claim.claimIds, context.cards, `${itemId} "${claim.statement.slice(0, 60)}"`, blocking);
       // Market-neutral naming: products are named with tokens the site fills in per market.
       const text = [draft.title, draft.description, body].join('\n');
+      const neutral = [draft.title, draft.seoTitle, draft.description, main].filter(Boolean).join('\n');
+      for (const problem of marketWordProblems(marketWords(neutral, { cards: context.cards, productIds: draft.productIds ?? [], markets: context.markets ?? [] }))) {
+        blocking.push(`${itemId}: ${problem}`);
+      }
       for (const [, kind, id] of text.matchAll(/\{\{(product|model|brand):([a-z0-9-]+)\}\}/g)) {
         if (!context.cards?.has(id)) blocking.push(`${itemId}: {{${kind}:${id}}} names a product with no knowledge card`);
         else if (!(draft.productIds ?? []).includes(id)) warnings.push(`${itemId}: {{${kind}:${id}}} is not in productIds`);

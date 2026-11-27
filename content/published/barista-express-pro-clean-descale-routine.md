@@ -24,7 +24,7 @@ Your machine is almost certainly fine, and it is already telling you which clean
 There are three versions of this signal. Go by the label you can see on the machine, not by the country you bought it in. Newer units may not match the booklet we read for your market.
 
 - **{{product:barista-express}} with a CLEAN / DESCALE light.** Flashing means a cleaning cycle (a back-flush with a tablet) is due. Solid means it's time to descale. The manual says plainly that the cleaning cycle is separate from descaling.
-- **{{product:barista-express}} with a CLEAN ME light.** This light only ever asks for the cleaning cycle. The Sage guide says the machine "will not automatically prompt a reminder" to descale. Descale every 90 days at water hardness level 4, or every 60 days at level 6.
+- **{{product:barista-express}} with a CLEAN ME light.** This light only ever asks for the cleaning cycle. The manufacturer's guide for this panel says the machine "will not automatically prompt a reminder" to descale. Descale every 90 days at water hardness level 4, or every 60 days at level 6.
 - **{{product:barista-pro}}.** There's no light. The screen shows FLUSH when a cleaning cycle is due and DESCALE when it's time to descale. On a brand-new Pro, FLUSH is the first-use cycle that rinses the machine and primes the heater. Nothing is dirty yet: press 1 CUP and let it count down.
 
 This is a real source of confusion. In an April 2026 owner thread, one owner had read a solid light as a back-flush reminder for almost two years, and the replies disagreed about what it meant. The light finally went off after the owner ran both cycles.
@@ -41,7 +41,7 @@ This is a real source of confusion. In an April 2026 owner thread, one owner had
 
 **Cleaning cycle, {{product:barista-pro}}:** put the disc in the basket with a tablet on top, lock the portafilter in, empty the tray and fill the tank to MAX. Press MENU, turn the dial to FLUSH and press it to select, then press 1 CUP. Repeat if any tablet is left in the disc.
 
-**Descale, both machines:** take the water filter out first. The Sage guide and the Pro booklet both say so. The US Express booklet doesn't, but taking it out is the safe move. Don't use bottled water to descale, and never remove or empty the tank partway through.
+**Descale, both machines:** take the water filter out first. The guide for the CLEAN ME machine and the Pro booklet both say so. The booklet for the CLEAN / DESCALE machine doesn't, but taking it out is the safe move. Don't use bottled water to descale, and never remove or empty the tank partway through.
 
 - **{{product:barista-express}}:** dissolve one sachet of descaler in 1 L of water and fill the tank. Hold 2-CUP, then hold POWER to enter Descale mode. Once the lights go solid, press 1 CUP to descale the coffee side, then turn the dial to steam and then to hot water. Repeat until the tank is empty, then rinse with a full tank of fresh water the same way. The machine switches itself off after 5 minutes without input in this mode.
 - **{{product:barista-pro}}:** fill the tank to the DESCALE line and add the descaler as its pack directs. The booklets don't say how much. Press MENU, select DESCALE and press 1 CUP. It runs in 3 stages (coffee, hot water, steam), and you turn the steam dial by hand when the screen tells you to. Then empty the tray, fill the tank to MAX and press 1 CUP for a 3-stage rinse.
@@ -69,21 +69,21 @@ A **grinder that is slow, loud or gives no grounds** needs its burrs cleaned. Em
 
 ## The routine, by trigger rather than calendar
 
-Neither manufacturer gives a shot count or a calendar interval for the cleaning cycle on either machine, or for descaling the US Express or the Pro. Those cycles are alert-driven. The "3 months or 300 coffees" figure you'll see elsewhere isn't in the booklets we read. So run each job when its trigger happens:
+Neither manufacturer gives a shot count or a calendar interval for the cleaning cycle on either machine, or for descaling the Express with a CLEAN / DESCALE light or the Pro. Those cycles are alert-driven. The "3 months or 300 coffees" figure you'll see elsewhere isn't in the booklets we read. So run each job when its trigger happens:
 
 - **After every milk drink:** wipe the steam wand and purge it for a couple of seconds.
 - **After every session:** rinse the basket and portafilter under hot water, wipe the group head and shower screen with a damp cloth, and now and then run water through an empty basket.
 - **When the drip-tray float pops up or EMPTY ME! shows:** empty the tray.
 - **When the light or alert appears:** run that cycle.
-- **Water filter:** change it when the reminder dial comes round. The US booklets say every 2 months, sooner in hard water. The Sage guides say every 3 months, and the Express guide adds "or 40 L". The filter reduces scale but doesn't stop it: the manufacturer says minerals build up even with the filter in place. Take it out if you use filtered or bottled water.
+- **Water filter:** change it when the reminder dial comes round. One edition of the booklets says every 2 months, sooner in hard water. The other says every 3 months, and its Express guide adds "or 40 L". The filter reduces scale but doesn't stop it: the manufacturer says minerals build up even with the filter in place. Take it out if you use filtered or bottled water.
 - **Basket holes blocked:** clear them with the pin on the cleaning tool, or soak the basket and portafilter in a dissolved cleaning tablet for about 20 minutes.
 
 Wash every part by hand, because none of them are dishwasher-safe. The Pro booklet also warns against alkaline cleaners (use a soft cloth and mild detergent) and against highly filtered, demineralised or distilled water in the tank.
 
 ## When I'd choose differently
 
-- **You have hard water and a CLEAN / DESCALE or Pro panel.** I wouldn't wait for the alert. Descaling every 60 to 90 days is the Sage guidance for the CLEAN ME machine. Applying it to the other panels is my suggestion by analogy, not a manufacturer rule, but it costs you one sachet.
-- **You fill the tank with bottled or filtered water.** Take the water filter out, as the US Express booklet says. Still descale when the machine asks.
+- **You have hard water and a CLEAN / DESCALE or Pro panel.** I wouldn't wait for the alert. Descaling every 60 to 90 days is the manufacturer's guidance for the CLEAN ME machine. Applying it to the other panels is my suggestion by analogy, not a manufacturer rule, but it costs you one sachet.
+- **You fill the tank with bottled or filtered water.** Take the water filter out, as the booklet for the CLEAN / DESCALE machine says. Still descale when the machine asks.
 - **The signal survives both cycles, or a symptom is still there after a descale.** Stop cleaning. This is now a question for support or a repair, and the warranty is the first place to check.
 
 ## What to do now

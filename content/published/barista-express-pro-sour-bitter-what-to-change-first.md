@@ -58,7 +58,7 @@ Note the total time and the gauge zone (Express) or the second the flow starts (
 
 **7. The routine.** The booklet says a cold portafilter and basket can cut the extraction temperature "enough to significantly affect the quality" of the shot. It also says moisture in the basket encourages channeling. Run a short flow through the group, warm the portafilter and basket, wipe the basket dry, then dose and brew.
 
-**8. Temperature, last.** It's the smallest lever, so it goes at the end. On the {{product:barista-express}}, use Advanced Temperature Mode: with the machine off, hold PROGRAM and press POWER. The US booklet allows up to 4°F either way in 2°F steps. Holding PROGRAM until it beeps three times resets the default temperature *and* your programmed shot volumes. On the {{product:barista-pro}}, use SHOT TEMP in the menu; the booklet doesn't give its range. One step, then retest.
+**8. Temperature, last.** It's the smallest lever, so it goes at the end. On the {{product:barista-express}}, use Advanced Temperature Mode: with the machine off, hold PROGRAM and press POWER. The booklet allows up to 4°F (about 2°C) either way, in 2°F (about 1°C) steps. Holding PROGRAM until it beeps three times resets the default temperature *and* your programmed shot volumes. On the {{product:barista-pro}}, use SHOT TEMP in the menu; the booklet doesn't give its range. One step, then retest.
 
 The {{product:barista-express}} Impress doses differently (it has an assisted tamp), so steps 2 and 4 may not apply to it as written.
 
@@ -68,7 +68,7 @@ Probably not, and the booklet backs that up. Its troubleshooting row for "Espres
 
 One OzBargain thread shows how this usually goes. A new Express owner asked whether to return the machine because the gauge "does not move at all". They moved the grind to 1–2, filled the basket higher and tamped harder, and the needle moved. Their verdict was "I had no idea the Barista Express was so finicky about the dose", and they kept it. That's one owner, but it's the pattern the booklet's own tables predict.
 
-What nobody can give you is a proper test for a real fault. The manufacturer documents no owner check that separates a pump, valve or gauge fault from a dial-in problem, and we won't invent one. So the rule is simple. If you've done all eight steps (single-wall basket, cap level, manual shot, finest outer setting, inner burr one step finer, fresh beans, preheated and dry) and the shot still runs fast, stop adjusting. Contact Breville or Sage support while the machine is under warranty, and give them the list of what you checked.
+What nobody can give you is a proper test for a real fault. The manufacturer documents no owner check that separates a pump, valve or gauge fault from a dial-in problem, and we won't invent one. So the rule is simple. If you've done all eight steps (single-wall basket, cap level, manual shot, finest outer setting, inner burr one step finer, fresh beans, preheated and dry) and the shot still runs fast, stop adjusting. Contact {{brand:barista-express}} support while the machine is under warranty, and give them the list of what you checked.
 
 ## Keep yours: what not to buy
 

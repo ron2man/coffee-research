@@ -38,7 +38,7 @@ export function buildAssistInput({ root, niche, agent, candidate }) {
 }
 
 /** Returns a problem string, or null. */
-export function checkAssistArtifact(artifact, input, { cards }) {
+export function checkAssistArtifact(artifact, input, { cards, markets }) {
   const asked = new Set(input.missingTools);
   const answered = [...artifact.tools.map((t) => t.id), ...artifact.skipped.map((s) => s.id)];
   const unknown = answered.filter((id) => !asked.has(id));
@@ -46,7 +46,7 @@ export function checkAssistArtifact(artifact, input, { cards }) {
   const unanswered = [...asked].filter((id) => !answered.includes(id));
   if (unanswered.length) return `must build or skip every missing tool (${unanswered.join(', ')})`;
   for (const tool of artifact.tools) {
-    const problems = toolProblems(tool, { cards });
+    const problems = toolProblems(tool, { cards, markets });
     if (problems.length) return `tool ${tool.id}: ${problems.join('; ')}`;
   }
   return null;

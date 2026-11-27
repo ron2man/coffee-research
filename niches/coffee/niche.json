@@ -22,14 +22,16 @@
       "language": "en",
       "locale": "en-us",
       "currency": "USD",
-      "status": "primary"
+      "status": "primary",
+      "names": ["US", "U.S.", "USA", "American", "North American"]
     },
     {
       "id": "GB",
       "language": "en",
       "locale": "en-gb",
       "currency": "GBP",
-      "status": "secondary"
+      "status": "secondary",
+      "names": ["UK", "U.K.", "British", "Britain"]
     }
   ],
   "contentTypes": [

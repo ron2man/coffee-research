@@ -7,12 +7,16 @@ import { loadAgents } from '../agents/registry.mjs';
 import { defaultNicheId, loadNiche, repoRoot } from './niche.mjs';
 import { loadItems, readJson } from './store.mjs';
 import { libraryProblems } from '../library/library.mjs';
+import { categoryIds } from './niche.mjs';
+import { loadCardsSync } from './knowledge.mjs';
+import { listTools, toolProblems } from './tools.mjs';
 
 export function validateRepo(root = repoRoot) {
   const errors = [];
   let agents = [];
+  let niche = null;
   try {
-    loadNiche(defaultNicheId(root), root);
+    niche = loadNiche(defaultNicheId(root), root);
   } catch (error) {
     errors.push(error.message);
   }
@@ -36,6 +40,11 @@ export function validateRepo(root = repoRoot) {
     }
   }
   errors.push(...libraryProblems(root).filter((p) => !/no knowledge card/.test(p)));
+  // Tools already in content/tools, held to the same rules as new ones from the toolsmith.
+  if (niche) {
+    const { cards } = loadCardsSync(join(root, 'knowledge'), categoryIds(niche));
+    for (const tool of listTools(root)) for (const problem of toolProblems(tool, { cards, markets: niche.markets })) errors.push(`tool ${tool.id}: ${problem}`);
+  }
   return { agents: agents.length, items: items.length, errors };
 }
 

@@ -89,6 +89,12 @@
               "secondary",
               "planned"
             ]
+          },
+          "names": {
+            "description": "How readers name this market in text (\"UK\", \"British\"). Text shown in every market must not use them outside the sources section.",
+            "type": "array",
+            "uniqueItems": true,
+            "items": { "type": "string", "minLength": 1 }
           }
         }
       }
