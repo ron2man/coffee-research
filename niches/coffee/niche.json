@@ -63,6 +63,11 @@
       "getting a drink right (milk, ratios, beans for this machine)"
     ]
   },
+  "catalog": {
+    "repo": "git@github.com:ron2man/coffee-catalog.git",
+    "branch": "main",
+    "dir": "catalog"
+  },
   "demand": {
     "querySuffixes": [
       "",
@@ -73,7 +78,15 @@
       " not working",
       " vs"
     ],
-    "maxQueries": 24,
+    "queryPrefixes": [
+      "why is my",
+      "why does my",
+      "how to",
+      "is the",
+      "can i",
+      "should i"
+    ],
+    "maxQueries": 60,
     "webSearch": {
       "sites": [
         "reddit.com/r/espresso",
@@ -83,10 +96,22 @@
         "coffeeforums.co.uk"
       ],
       "maxQueries": 8,
-      "monthlyMax": 900
+      "providers": [
+        "tavily",
+        "serper",
+        "brave"
+      ]
+    },
+    "searchBudgets": {
+      "tavily": 900,
+      "serper": 150,
+      "brave": 900
+    },
+    "peopleAlsoAsk": {
+      "maxQueries": 4
     },
     "youtube": {
-      "maxSearches": 3,
+      "maxSearches": 6,
       "videosPerSearch": 3,
       "commentsPerVideo": 50
     }

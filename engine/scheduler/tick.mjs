@@ -23,6 +23,7 @@ import { addFeedback, openFeedback, readReviewState } from '../feedback/store.mj
 import { applyAssist, assistCandidates, buildAssistInput, checkAssistArtifact } from './assist.mjs';
 import { listTools } from '../state/tools.mjs';
 import { libraryCatalog } from '../library/library.mjs';
+import { catalogListing, syncCatalog } from '../catalog/catalog.mjs';
 import { processPublishQueue, syncPublished } from '../publish/publish.mjs';
 import { autoPullRequests } from '../publish/autopr.mjs';
 import { collectDemand, demandUsage } from '../demand/collect.mjs';
@@ -146,6 +147,14 @@ function loadArtifacts(root, item, names = []) {
   return artifacts;
 }
 
+function knowledgeCardIds(root, niche) {
+  try {
+    return [...loadCardsSync(join(root, 'knowledge'), categoryIds(niche)).cards.keys()];
+  } catch {
+    return [];
+  }
+}
+
 function buildInput(root, niche, agent, chosenItems, allItems) {
   if (agent.mode === 'generate') {
     return {
@@ -183,7 +192,9 @@ function buildInput(root, niche, agent, chosenItems, allItems) {
   const wanted = wantedGuides(root);
   const availableTools = listTools(root).map(({ id, title }) => ({ id, title }));
   const library = libraryCatalog(root);
-  return agent.mode === 'batch' ? { niche, today, existingContent, wantedGuides: wanted, availableTools, library, items: entries } : { niche, today, existingContent, wantedGuides: wanted, availableTools, library, ...entries[0] };
+  const catalog = catalogListing(root, niche, { cardIds: knowledgeCardIds(root, niche) });
+  const shared = { niche, today, existingContent, wantedGuides: wanted, availableTools, library, ...(catalog ? { catalog } : {}) };
+  return agent.mode === 'batch' ? { ...shared, items: entries } : { ...shared, ...entries[0] };
 }
 
 function validateArtifact(agent, artifact, label) {
@@ -374,7 +385,7 @@ function recordFailure(root, agent, chosenItems, error, meta, maxAttempts, writt
  * Run one tick. `runner` overrides per-agent runners (tests and simulation).
  * Returns a summary; throws only for store/config problems, never for agent failures.
  */
-export async function tick({ root = repoRoot, runner, now = new Date(), nicheId, agents = loadAgents(), dryRun = false, maxAttempts = MAX_ATTEMPTS, lock = true, ignoreSchedule = false, demandCollector, maxRunsPerDay = Number(process.env.TICK_MAX_RUNS_PER_DAY ?? 12) } = {}) {
+export async function tick({ root = repoRoot, runner, now = new Date(), nicheId, agents = loadAgents(), dryRun = false, maxAttempts = MAX_ATTEMPTS, lock = true, ignoreSchedule = false, demandCollector, catalogSync, maxRunsPerDay = Number(process.env.TICK_MAX_RUNS_PER_DAY ?? 12) } = {}) {
   if (lock && !dryRun) {
     let release;
     try {
@@ -384,12 +395,18 @@ export async function tick({ root = repoRoot, runner, now = new Date(), nicheId,
       throw error;
     }
     try {
-      return await tick({ root, runner, now, nicheId, agents, dryRun, maxAttempts, lock: false, ignoreSchedule, demandCollector, maxRunsPerDay });
+      return await tick({ root, runner, now, nicheId, agents, dryRun, maxAttempts, lock: false, ignoreSchedule, demandCollector, catalogSync, maxRunsPerDay });
     } finally {
       release();
     }
   }
   const niche = loadNiche(nicheId ?? defaultNicheId(root), root);
+  // Refresh the product catalog mirror before anything reads it (real runs only; tests pass a runner).
+  const syncer = catalogSync === undefined ? (runner ? null : syncCatalog) : catalogSync;
+  const catalogResult = !dryRun && syncer ? syncer(root, niche) : null;
+  if (catalogResult && !catalogResult.skipped && (!catalogResult.ok || catalogResult.changed)) {
+    appendRun(root, { workflow: 'catalog-sync', agent: null, itemId: null, status: catalogResult.ok ? 'completed' : 'failed', ...(catalogResult.ok ? { from: catalogResult.from, to: catalogResult.to } : { error: catalogResult.error }) });
+  }
   let { items, errors } = loadItems(root);
   if (errors.length) throw new Error(`Item store is invalid; fix before scheduling:\n${errors.join('\n')}`);
   // Posts merged to main since the last tick: passed → published (deterministic, no agent).
@@ -408,10 +425,11 @@ export async function tick({ root = repoRoot, runner, now = new Date(), nicheId,
     oldestFreshSeedAt: openSeeds(root).filter((seed) => seed.considered === 0).map((seed) => seed.at).sort()[0] ?? null,
   };
   const plan = planTick({ agents, items, runs: readRuns(root), schedule: readSchedule(root), now, ignoreSchedule, loop });
-  if (!plan.chosen) return { ran: null, skipped: plan.skipped, changedFiles: publishedFiles, ...(publishedFiles.length ? { published: publishedFiles } : {}) };
+  const catalogNote = catalogResult && !catalogResult.skipped ? { catalog: catalogResult } : {};
+  if (!plan.chosen) return { ran: null, skipped: plan.skipped, changedFiles: publishedFiles, ...(publishedFiles.length ? { published: publishedFiles } : {}), ...catalogNote };
   const { agent, items: chosenItems } = plan.chosen;
   const written = [...publishedFiles];
-  const summary = { ran: agent.name, itemIds: chosenItems.map((item) => item.id), skipped: plan.skipped, changedFiles: written };
+  const summary = { ran: agent.name, itemIds: chosenItems.map((item) => item.id), skipped: plan.skipped, changedFiles: written, ...catalogNote };
   if (dryRun) return { ...summary, dryRun: true };
 
   // Usage budget: each agent run draws on the subscription (about 8% of a usage window), so cap

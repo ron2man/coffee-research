@@ -1,0 +1,47 @@
+{
+  "scores": {
+    "readerValueVsCompetitors": {
+      "score": 5,
+      "reason": "The top results are scattered forum threads (home-barista, iFixit) and a listicle. They jump to descaling, OPV settings, blind-basket tests or replacing the gauge. This post settles the reader's real question in the first paragraph: \"Your machine is almost certainly fine... Most owners end up buying nothing.\" It then gives a test to run tonight and an ordered list with a reason for each position. It covers three traps the competitors miss: dual-wall baskets hiding the dial-in, \"finer made it worse\" because GRIND AMOUNT doses by time, and the 1 CUP/2 CUP preset-volume trap. It also covers the Pro, which has no gauge."
+    },
+    "distinctivenessVoice": {
+      "score": 4,
+      "reason": "It has one clear opinion with reasons: \"Read the shot, not the taste\", and \"Temperature, last. It's the smallest lever.\" The steps are written as prose and don't follow a template. It has a \"When I'd choose differently\" section with a plainly labelled hunch (\"My expectation is that...\"). The 'Is it the machine?' section uses the OzBargain owner as a story rather than as a citation. In a few places the booklet quotes read more like a report than a person talking."
+    },
+    "honestyAboutLimits": {
+      "score": 5,
+      "reason": "It says the key gap once and plainly: \"The manufacturer documents no owner check that separates a pump, valve or gauge fault from a dial-in problem, and we won't invent one.\" It flags that the °F steps come from the US booklet and that the Sage booklets weren't checked. It says the Impress may differ, and that the owner stories are \"patterns rather than proof\". It doesn't hedge every sentence."
+    },
+    "evidenceIntegrity": {
+      "score": 4,
+      "reason": "I spot-checked the statements against the barista-express card and they match. Under-extraction is described as \"bitter/sharp, weak and watery\" with only the summary table saying \"sour\". The flow-start figures do differ between pages. The grind amount starts at 3 o'clock, and a finer grind may need a larger grind amount. The troubleshooting table only points to support for the thermal cut-out. Descaling is tied to dripping flow, not gushing. Two small stretches: \"It got better once they changed more than the grind dial\" (the Lemmy owner changed the temperature and learned that program and manual modes differ, which fits but is loose), and calling temperature \"the smallest lever\", which is opinion presented as fact."
+    },
+    "topicFit": {
+      "score": 5,
+      "reason": "It delivers the brief's thesis and decision rule almost item for item. It includes the test to run tonight, the taste trap, the finer-needs-more-dose trap, the preset-volume trap, the Express vs Pro signals, inner burr via grind-fault-tree, an honest fault section, keep-yours, choose-differently, and an ending at the standalone-grinder picker. It also respects the brief's leaveOut list: no bar values, no OPV or gasket claims, no inner-burr factory position."
+    }
+  },
+  "wouldForward": true,
+  "competitorComparison": [
+    {
+      "url": "https://www.home-barista.com/repairs/no-pressure-from-breville-barista-express-group-head-t92088.html",
+      "weGiveThatTheyDont": "The thread returned a 403, so I judged it from the search result. It's a repair-forum thread that treats a low gauge as a hardware fault. We give the dial-in order first, explain why the gauge stays low with an underfilled basket, and say when to stop adjusting and call support. A new owner can act on that without reading pages of OPV and pump talk."
+    },
+    {
+      "url": "https://www.home-barista.com/espresso-machines/breville-barista-express-brew-pressure-and-channeling-issues-t73646.html",
+      "weGiveThatTheyDont": "In that thread the useful anecdotes are spread over many posts, and the advice drifts into OPV tinkering. We give one ordered checklist, one change per shot, plus the GRIND AMOUNT-is-time-based explanation of why grinding finer made it worse, and the Barista Pro's shot-clock signal."
+    },
+    {
+      "url": "https://www.ifixit.com/Answers/View/499887/Pressure+gauge+not+working",
+      "weGiveThatTheyDont": "It's about a Dual Boiler gauge, and it jumps straight to clogged lines, pumps, solenoids and replacing the gauge. We tell an Express or Pro owner that a fast shot with a low needle is what the booklet describes as under-extraction, give the free checks in order, and send real faults to warranty support instead of DIY repair."
+    }
+  ],
+  "blockingActions": [],
+  "optionalImprovements": [
+    "The top results tell readers to watch the gauge during the cleaning cycle with the cleaning disc or blind basket. Add one sentence: forum owners suggest this as a gauge check, but Breville gives no expected reading for it, so it's a hint, not proof. This needs a claim in the research, or it should be left out. Readers who arrive from those threads will be wondering about it.",
+    "Next to the US °F temperature steps, add a note so GB readers aren't left with °F only, for example 'check your Sage booklet for the °C steps'.",
+    "With the GB product name, the title reads 'Sage the Barista Express or Pro shots...', which is awkward. Consider a title that reads cleanly in both markets, for example from the brief's options: 'Fast, sour Barista Express or Pro shots: the order to fix them in'.",
+    "Soften 'It's the smallest lever' to make it clear it's the author's opinion, or tie it to the booklet's ±4°F range.",
+    "The tool picks the next change after the test shot, so 'The order' section could be trimmed a little where the steps repeat booklet quotes."
+  ]
+}
