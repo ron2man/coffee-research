@@ -1,0 +1,24 @@
+{
+  "id": "2026-11-27T11-20-26-780Z-check",
+  "agent": "idea",
+  "source": "check",
+  "at": "2026-11-27T11:20:26.780Z",
+  "itemIds": [
+    "barista-pro-stops-after-seconds-three-beeps"
+  ],
+  "findings": [
+    {
+      "severity": "minor",
+      "problem": "barista-pro-stops-after-seconds-three-beeps: signal from 2023-04-14 is older than 24 months (https://coffeesnobs.com.au/forum/equipment/brewing-equipment-midrange-500-1500/948102-bes878bss-3-beeps-sound-issue)",
+      "evidence": "deterministic check",
+      "suggestion": "Address in the prompt if it recurs."
+    },
+    {
+      "severity": "minor",
+      "problem": "barista-pro-stops-after-seconds-three-beeps: signal from 2024-04-22 is older than 24 months (https://coffeesnobs.com.au/forum/equipment/brewing-equipment-midrange-500-1500/948102-bes878bss-3-beeps-sound-issue)",
+      "evidence": "deterministic check",
+      "suggestion": "Address in the prompt if it recurs."
+    }
+  ],
+  "addressedBy": null
+}

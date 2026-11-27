@@ -1,0 +1,166 @@
+{
+  "id": "barista-upgrade-bottleneck-picker",
+  "title": "Barista Express or Pro: what to upgrade, if anything",
+  "questions": [
+    {
+      "key": "machine",
+      "text": "Which machine do you own now?",
+      "options": [
+        [
+          "express",
+          "Barista Express"
+        ],
+        [
+          "pro",
+          "Barista Pro"
+        ]
+      ]
+    },
+    {
+      "key": "bother",
+      "text": "What bothers you most about it?",
+      "options": [
+        [
+          "shots",
+          "Shots: fast, sour, thin or different every time"
+        ],
+        [
+          "steam",
+          "Waiting to steam between drinks"
+        ],
+        [
+          "effort",
+          "The grind, dose, tamp and steam routine itself"
+        ],
+        [
+          "weak",
+          "Weak steam, shots that only drip, or coffee not hot enough"
+        ],
+        [
+          "nothing",
+          "Nothing specific, it just feels old"
+        ]
+      ]
+    },
+    {
+      "key": "milk",
+      "text": "How many milk drinks do you usually make in a row?",
+      "options": [
+        [
+          "one",
+          "None or one"
+        ],
+        [
+          "several",
+          "Two or more"
+        ]
+      ]
+    },
+    {
+      "key": "beans",
+      "text": "Have you tried fresh beans (5–20 days after the roast date) with a full dose and a firm tamp?",
+      "options": [
+        [
+          "yes",
+          "Yes, and the shots still disappoint"
+        ],
+        [
+          "no",
+          "Not yet"
+        ]
+      ]
+    }
+  ],
+  "results": {
+    "descale": {
+      "title": "Descale before you decide anything",
+      "text": "Weak steam, shots that only drip and coffee that isn't hot enough are all listed as descale symptoms in Breville's own troubleshooting table. Run a full descale, then answer again. No source gives a lifespan for these machines, so these symptoms alone don't prove yours is worn out."
+    },
+    "keep": {
+      "title": "Keep it and change nothing",
+      "text": "If the shots taste good and the steaming doesn't bother you, a new machine won't fix anything. Run the cleaning and descale cycles when the machine asks for them, buy beans with a roast date, and keep your money."
+    },
+    "beans-test": {
+      "title": "Run the fresh-beans test first",
+      "text": "Breville lists a coarse grind, too small a dose and a light tamp as the causes of fast shots, and says stale beans run fast too. Buy beans with a 'Roasted On' date, use them 5–20 days after roasting, dose so the tamper cap sits level with the rim, then pull three shots in a row. You can also adjust shot temperature on both machines."
+    },
+    "grinder": {
+      "title": "Keep the machine, add a standalone grinder",
+      "text": "If fresh beans and a proper dose still give fast, sour or inconsistent shots, the built-in grinder is your bottleneck. A standalone espresso grinder is the cheapest real fix, and it isn't wasted if you move later: the Dual Boiler has no grinder, so you'd need one anyway. Don't buy 54 mm extras if a machine change is likely."
+    },
+    "steam-single": {
+      "title": "Keep it: the wait matters most for back-to-back drinks",
+      "text": "A dual boiler's main gain is steaming while it brews, which pays off when you make several milk drinks in a row. For one drink at a time, keep your machine. If the steam has got weaker than it used to be, descale first."
+    },
+    "dual-boiler": {
+      "title": "Dual Boiler, plus a standalone grinder",
+      "text": "If you make several milk drinks in a row and the wait to steam after each shot is what annoys you, a dual boiler brews and steams at the same time. It has no built-in grinder, so budget for one, and it takes a 58 mm portafilter, so your 54 mm accessories won't carry over. Owner reliability reports are mixed. Barista Pro owners have a weaker case here, since the Pro heats quickly.",
+      "productId": "sage-dual-boiler"
+    },
+    "oracle-jet": {
+      "title": "Oracle Jet, if you want less work",
+      "text": "It grinds, doses and tamps for you and textures milk hands-free. It heats with a ThermoJet, not boilers, so don't count on it steaming while it brews. Owners of the original Oracle called its built-in grinder 'a bit meh' on back-to-back drinks, so automation may not settle the grinder question.",
+      "productId": "breville-oracle-jet"
+    },
+    "oracle-dual-boiler": {
+      "title": "Oracle Dual Boiler, for less work and several milk drinks",
+      "text": "It automates grind, dose, tamp and milk, and its dual boilers let it steam while it brews, which helps with several drinks in a row. Owners of the original Oracle praised the workflow but some found the grinder coarser on back-to-back shots and kept an external grinder. Your 54 mm accessories won't fit its 58 mm portafilter.",
+      "productId": "breville-oracle-dual-boiler"
+    }
+  },
+  "rules": [
+    {
+      "when": {
+        "bother": "weak"
+      },
+      "result": "descale"
+    },
+    {
+      "when": {
+        "bother": "nothing"
+      },
+      "result": "keep"
+    },
+    {
+      "when": {
+        "bother": "shots",
+        "beans": "no"
+      },
+      "result": "beans-test"
+    },
+    {
+      "when": {
+        "bother": "shots"
+      },
+      "result": "grinder"
+    },
+    {
+      "when": {
+        "bother": "steam",
+        "milk": "one"
+      },
+      "result": "steam-single"
+    },
+    {
+      "when": {
+        "bother": "steam",
+        "milk": "several"
+      },
+      "result": "dual-boiler"
+    },
+    {
+      "when": {
+        "bother": "effort",
+        "milk": "several"
+      },
+      "result": "oracle-dual-boiler"
+    },
+    {
+      "when": {
+        "bother": "effort"
+      },
+      "result": "oracle-jet"
+    }
+  ],
+  "default": "keep"
+}

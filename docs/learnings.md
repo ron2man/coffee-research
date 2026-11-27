@@ -123,3 +123,19 @@ The project lead set the goal: one guide a day, built around equipment, with "my
 - **Audience:** current guides range from a Bambino (about $300) to a Linea Micra (about $4–5k). Decide entry-level vs every machine, and whether to organise guides by machine.
 - **Niche-aware checks:** `market` and `contentType` in artifacts are not yet checked against `niche.json`.
 - **Affiliate terms and consent:** sellers and disclosure text in `niche.json` stay empty until program terms are verified per market.
+
+### 2026-11-25 · Demand from Reddit without Reddit
+- Reddit closed every route for a new small project (API approval closed 2026-10-31, RSS ended 2026-11-13, public JSON 403, public API ends March 2027). The Reddit collector is removed.
+- Replaced by two keyed sources in `engine/demand/collect.mjs`: community threads via Brave Search `site:` queries (search metadata only, the sites are never fetched) and YouTube comment questions. Both have monthly budgets counted from `data/demand/`, rotate queries daily, and report `skipped` without a key.
+- Open question: Brave's terms on storing search results. We keep only titles, URLs, dates and snippets as internal research notes and never publish them; check the terms before anything from them reaches a reader.
+
+### 2026-11-27 · Catalog mirror and more demand sources
+- The coffee-catalog repository (its own hourly job) is now the first source of manufacturer facts. Every tick refreshes a read-only mirror in `catalog/` (gitignored) before planning; agents get a `catalog` listing and the research prompt reads it before the web. A failed refresh is logged (`catalog-sync`) and never stops a tick. The in-repo `library/` stayed empty and is now the fallback.
+- Demand search is provider-based: Tavily (1,000 free credits a month) first, Serper (2,500 free once, Google results) second, Brave last. A provider that refuses hands the query to the next. Serper also returns Google's "People also ask" questions and related searches (`demandSignals.questions`). Autocomplete now uses question openings ("why is my …") as well as suffixes, up to 60 queries per collection; YouTube up to 6 searches per collection.
+- Open question: storage terms. Brave's API terms (2026-09-01) forbid storing results beyond transient use, which our `data/demand/` files do; Tavily's and Serper's terms on keeping result snippets were not checked. We keep titles, URLs, dates and snippets as internal notes only and never publish them; check both terms before relying on them for long.
+- Uncertain: whether Tavily's domain filter plus subreddit words finds subreddit threads as well as Google `site:` does. Compare `byProvider` yields in `data/demand/` after a week.
+
+### 2026-11-27 · Disclosure is a footer placeholder, never a blocker
+- Decision (project lead): one generic disclosure in the footer of every page (`DEFAULT_DISCLOSURE` in `site/lib/site-data.mjs`), overridden per market by `niche.json` `disclosures`. It no longer blocks the build or publishing, and nothing is shown above the content.
+- Why it mattered: the three passed guides without offers had publishing PRs since 2026-11-24, but their `checks` failed because those branches were cut from a main where the production build refused to run without disclosure text. They need their branch updated from main to re-run checks.
+- Open question, for when real affiliate links go live: Amazon Associates requires its own statement on the site, and UK advertising guidance (ASA/CAP) expects affiliate content to be identifiable as advertising, usually with an upfront label. A footer-only note may not be enough then; revisit before joining a programme.

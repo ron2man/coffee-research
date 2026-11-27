@@ -176,20 +176,32 @@
         }
       }
     },
+    "catalog": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["repo"],
+      "description": "Read-only product catalog repository (manufacturer versions, specs, manuals, troubleshooting). Each tick refreshes a local mirror in dir (gitignored) before agents run.",
+      "properties": {
+        "repo": { "type": "string", "minLength": 1 },
+        "branch": { "type": "string", "minLength": 1 },
+        "dir": { "type": "string", "pattern": "^[a-z0-9][a-z0-9._-]*$" },
+        "maxListed": { "type": "integer", "minimum": 1 }
+      }
+    },
     "demand": {
       "type": "object",
       "additionalProperties": false,
       "description": "Where the scheduler collects demand data (no AI) before the idea agent runs.",
       "properties": {
-        "subreddits": {
-          "type": "array",
-          "items": {
-            "type": "string",
-            "pattern": "^[A-Za-z0-9_]+$"
-          }
-        },
         "querySuffixes": {
           "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "queryPrefixes": {
+          "type": "array",
+          "description": "Question openings put before each focus product for autocomplete (\"why is my\").",
           "items": {
             "type": "string"
           }
@@ -197,6 +209,81 @@
         "maxQueries": {
           "type": "integer",
           "minimum": 1
+        },
+        "searchBudgets": {
+          "type": "object",
+          "description": "Monthly request budget per search provider, shared by community search and People also ask.",
+          "additionalProperties": false,
+          "properties": {
+            "tavily": { "type": "integer", "minimum": 0 },
+            "serper": { "type": "integer", "minimum": 0 },
+            "brave": { "type": "integer", "minimum": 0 }
+          }
+        },
+        "peopleAlsoAsk": {
+          "type": "object",
+          "additionalProperties": false,
+          "description": "Google's People also ask questions and related searches for the focus queries (SERPER_API_KEY).",
+          "properties": {
+            "maxQueries": { "type": "integer", "minimum": 1 }
+          }
+        },
+        "webSearch": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "sites"
+          ],
+          "description": "Community sites searched through a web search API (TAVILY_API_KEY, SERPER_API_KEY or BRAVE_SEARCH_API_KEY, in providers order). Only search results are kept; the sites are never fetched.",
+          "properties": {
+            "sites": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "string",
+                "pattern": "^[a-z0-9.-]+\\.[a-z]{2,}(/[A-Za-z0-9_/-]+)?$"
+              }
+            },
+            "maxQueries": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "monthlyMax": {
+              "type": "integer",
+              "minimum": 1,
+              "description": "Default monthly budget for a provider missing from searchBudgets."
+            },
+            "providers": {
+              "type": "array",
+              "minItems": 1,
+              "items": { "enum": ["tavily", "serper", "brave"] }
+            }
+          }
+        },
+        "youtube": {
+          "type": "object",
+          "additionalProperties": false,
+          "description": "YouTube videos and question comments (YOUTUBE_API_KEY).",
+          "properties": {
+            "maxSearches": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "videosPerSearch": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 50
+            },
+            "commentsPerVideo": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100
+            },
+            "monthlyUnits": {
+              "type": "integer",
+              "minimum": 1
+            }
+          }
         }
       }
     },

@@ -4,14 +4,23 @@
   "note": "Barista Express/Pro cluster (focus). From Ron.",
   "by": "ron",
   "at": "2026-11-23T12:29:32.217Z",
-  "status": "open",
-  "considered": 1,
-  "itemIds": [],
+  "status": "used",
+  "considered": 2,
+  "itemIds": [
+    "barista-express-pro-sour-bitter-what-to-change-first"
+  ],
   "attempts": [
     {
       "at": "2026-11-23T15:58:57.531Z",
       "cards": [],
       "why": "No card. The Express/Pro sour-shot threads I found are on Home-Barista and Coffee Forums UK (search results show many threads, mostly 2016–2022), but both sites blocked fetching, so they can't count. None of the OzBargain threads I opened raised sour or bitter shots. Worth retrying if Reddit or Home-Barista access becomes available."
+    },
+    {
+      "at": "2026-11-25T20:08:27.716Z",
+      "cards": [
+        "barista-express-pro-sour-bitter-what-to-change-first"
+      ],
+      "why": "This became card barista-express-pro-sour-bitter-what-to-change-first. I folded in the 'gauge doesn't move / watery shot' question because it needs the same diagnosis. Evidence I read: a Lemmy c/espresso thread (2025-05-30), OzBargain node 916284 (2025-07-20) and node 883614 (2024-12-10), plus an older CoffeeForums.com thread (2024-01-06). The scheduler's Reddit fetch returned 403, and reddit.com and old.reddit.com also failed for me. Home-Barista returned 403 on every thread, including several relevant Barista Pro sourness threads such as t94722 and t100004. Coffee Forums UK redirects to a paid crawler gateway that wouldn't resolve. feddit.it blocked me with Anubis, and Team Blind returned 402."
     }
   ]
 }

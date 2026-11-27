@@ -4,7 +4,7 @@ import { execFileSync } from 'node:child_process';
 import { cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { loadSiteData, repoRoot, siteMode } from '../lib/site-data.mjs';
+import { DEFAULT_DISCLOSURE, loadSiteData, repoRoot, siteMode } from '../lib/site-data.mjs';
 import { offersFor, mockOffers } from '../lib/offers.mjs';
 import { parseMarkdown } from '../lib/markdown.mjs';
 import { categoryCounts } from '../lib/content.mjs';
@@ -110,18 +110,21 @@ test('production with no published guides: holding homes, indexable, GTM with co
   assert.ok(!has('assets/mock'), 'mock photos never ship');
   assert.match(read('robots.txt'), /Allow: \/\n\nSitemap: https:\/\/yourcoffeesetup\.com\/sitemap-index\.xml/);
   assert.match(read('sitemap-0.xml'), /<loc>https:\/\/yourcoffeesetup\.com\/en-us\/<\/loc>/);
-  assert.match(read('en-us/how-we-work/index.html'), /We don’t use affiliate links yet/);
+  assert.match(read('en-us/how-we-work/index.html'), /may earn us a commission/);
+  assert.match(home, /<p class="disclosure">Some links on this site may earn us a commission/, 'placeholder in the footer');
 });
 
-test('production refuses to build a live guide with offers without verified disclosures', (t) => {
+test('disclosure never blocks a build: the footer shows the placeholder until a market has its own text', (t) => {
   const root = mkdtempSync(join(tmpdir(), 'site-root-'));
   t.after(() => rmSync(root, { recursive: true, force: true }));
   for (const dir of ['niches', 'knowledge', 'engine']) cpSync(join(repoRoot, dir), join(root, dir), { recursive: true });
   mkdirSync(join(root, 'content/published'), { recursive: true });
   writeFileSync(join(root, 'content/published/live.md'), '# A live guide\n\nKeep yours.\n');
-  assert.equal(loadSiteData({ root, mode: 'production' }).posts.length, 1, 'a guide that sells nothing needs no disclosure');
+  assert.equal(loadSiteData({ root, mode: 'production' }).posts.length, 1);
   writeFileSync(join(root, 'content/published/live.md'), '---\noffers: 1\nofferIds: ["bambino-plus"]\n---\n# A live guide\n\nGet the X.\n');
-  assert.throws(() => loadSiteData({ root, mode: 'production' }), /No disclosure text/);
+  const data = loadSiteData({ root, mode: 'production' });
+  assert.equal(data.posts.length, 1, 'a guide with offers builds without market disclosure text');
+  assert.equal(data.site.disclosure(data.markets[0]), DEFAULT_DISCLOSURE);
   assert.equal(loadSiteData({ root, mode: 'preview' }).posts[0].slug, 'live');
 });
 

@@ -1,0 +1,41 @@
+{
+  "id": "barista-pro-stops-after-seconds-three-beeps",
+  "question": "My Breville Barista Pro starts a shot (or hot water or steam), stops after a few seconds and beeps three times. Is it something I can fix myself, or does it need a repair?",
+  "audience": "Owners of the Breville Barista Pro (BES878), sold as the Sage Barista Pro in the UK. Often just out of warranty, sometimes on a brand-new unit, who see the same cut-out on shots, hot water and steam.",
+  "market": "US",
+  "language": "en",
+  "pain": "The machine cuts out a few seconds into every shot, flush, hot-water or steam cycle with three beeps and no on-screen error, so they can't make coffee and don't know whether it's an air lock, scale, or a failed part.",
+  "decision": "Whether to try the safe home fixes first (prime or clear an air lock, check the water filter, descale and flush, reset), claim the warranty, or pay for a flow meter or pump repair, and when the repair cost makes replacing the machine the better choice.",
+  "contentType": "troubleshooter-tool",
+  "demand": {
+    "kind": "qualitative",
+    "signals": [
+      {
+        "url": "https://www.ifixit.com/Answers/View/890461/Breville+Barista+Pro+machine+stops+dispensing+water+after+5sec",
+        "date": "2025-03-07",
+        "note": "Barista Pro (BES878) owner says the machine stops dispensing water after 5 seconds and beeps three times, and asks how to fix it. The only answer (2026-08-08) is a bare video link."
+      },
+      {
+        "url": "https://coffeesnobs.com.au/forum/equipment/brewing-equipment-midrange-500-1500/948102-bes878bss-3-beeps-sound-issue",
+        "date": "2023-04-14",
+        "note": "Older. Barista Pro owner's machine beeps three times and stops on shots, steam and hot water. A repair centre replaced a flow-control part, and the fault came back seven months later, just after the warranty ended. Another owner on 2023-04-20 reports a double shot cutting out at 7 to 10 seconds with three beeps."
+      },
+      {
+        "url": "https://coffeesnobs.com.au/forum/equipment/brewing-equipment-midrange-500-1500/948102-bes878bss-3-beeps-sound-issue",
+        "date": "2024-04-22",
+        "note": "Older, extra support from a third owner in the same thread: shots, steam and hot water all stop after a few seconds with three beeps. It's intermittent and getting more frequent, they're out of warranty, the knob switch was already repaired, and they ask whether it could be an air lock in the pipework. No reply."
+      }
+    ]
+  },
+  "competitorGap": "The pages that come up for this symptom are JustAnswer AI-style answers that blame a pump or pressure sensor, and a CoffeeCherish article that blames grind size. That can't be right when hot water and steam cut out too. The forum threads I read show owners cycling through switch and flow-control repairs without a lasting fix, and the iFixit question has no written answer. Nobody gives a diagnosis order that separates a shared water-path fault (air lock, clogged filter, scale, flow meter connector) from a grind problem or the 90-second steam timeout, or says when to stop and claim the warranty.",
+  "valueAdd": "A step-by-step troubleshooter: does it happen on hot water and steam too, or only on shots? Brand new or after a descale or filter change? It routes the owner to the free fixes first (remove and soak or prime the water filter, clear an air lock, descale and flush, factory reset), flags when the symptom points to the flow meter or its connector (a warranty claim, not a DIY job), and gives a repair-or-replace rule for out-of-warranty machines. Many readers will fix it for nothing, and the 'keep your machine' path is the default.",
+  "commercialPath": [
+    "descaling solution",
+    "replacement water filter",
+    "replacement espresso machine (only if out of warranty and the repair quote is high)"
+  ],
+  "overlapsWith": [
+    "barista-express-pro-clean-descale-routine",
+    "barista-express-pro-sour-bitter-what-to-change-first"
+  ]
+}

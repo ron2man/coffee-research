@@ -1,0 +1,107 @@
+{
+  "id": "2026-11-26T07-28-55-271Z-critic",
+  "agent": "angle",
+  "source": "critic",
+  "at": "2026-11-26T07:28:55.271Z",
+  "itemIds": [
+    "breville-builtin-grinder-wont-grind-fine-enough",
+    "standalone-grinder-for-barista-express-pro",
+    "barista-express-pro-clean-descale-routine",
+    "upgrade-from-barista-express-worth-it"
+  ],
+  "findings": [
+    {
+      "severity": "major",
+      "itemIds": [
+        "breville-builtin-grinder-wont-grind-fine-enough"
+      ],
+      "problem": "The brief plans an asset that can't be built. The instructions allow only pickers and troubleshooters and say not to plan diagrams.",
+      "evidence": "assets: [\"grind-fault-tree\", \"upper-burr-direction-diagram\"]",
+      "suggestion": "Drop the diagram. Carry the burr direction (toward FINE) in the text or as one step of the troubleshooter."
+    },
+    {
+      "severity": "major",
+      "itemIds": [
+        "breville-builtin-grinder-wont-grind-fine-enough"
+      ],
+      "problem": "All three title options break the 70-character limit, by a lot.",
+      "evidence": "\"Barista Express or Pro still too fast at grind setting 1? Check these in order before buying a grinder\" (~102 chars); \"Breville built-in grinder won't go fine enough: a step-by-step fix, from beans to upper burr\" (~92); \"Fix the Barista Express grinder you have: beans, basket, dose, then the upper burr\" (~83). They also read as summaries, where the instructions ask for one promise.",
+      "suggestion": "Count characters with product names filled in and cut each title to one promise, e.g. \"Barista Express still fast at setting 1? Don't buy a grinder yet\"."
+    },
+    {
+      "severity": "major",
+      "itemIds": [
+        "barista-express-pro-clean-descale-routine",
+        "upgrade-from-barista-express-worth-it"
+      ],
+      "problem": "There were more competitor summaries than pages the agent actually opened in the run. The instructions say to fetch each of the top 3 pages, so some summaries probably came from the research artifact or from memory.",
+      "evidence": "recentRuns 2026-11-24T20:11: 3 fetches, 2 failed (brewcoffeehome 525, baristalife 404), so 1 page opened, yet 3 competitors were reviewed. Run 2026-11-25T13:59: 2 fetches and 0 failures, yet 3 competitors were reviewed. I spot-checked Appliances Online and Coffee Chronicler and both summaries were accurate, so this is a process gap, not a misdescription.",
+      "suggestion": "When a fetch fails, fetch the next search result instead. If a summary comes from the research artifact and not from a fetch made in this run, label it that way in competitorsReviewed."
+    },
+    {
+      "severity": "minor",
+      "itemIds": [
+        "upgrade-from-barista-express-worth-it",
+        "barista-express-pro-clean-descale-routine"
+      ],
+      "problem": "Two theses say more than their own briefs support. Item 4's thesis uses a price multiple that its leaveOut bans. Item 3's thesis says the UK Express 'never asks for a descale', but its mustInclude says newer UK units may have the US-style light.",
+      "evidence": "thesis: \"Before you spend two to three times your Barista Express...\" vs leaveOut: \"Prices and the 'two to three times' figure as a number.\" Thesis: \"except the UK Express, which never asks for a descale\" vs mustInclude: \"newer UK units may have the US-style light, so readers should go by the label they actually see\".",
+      "suggestion": "Before returning, check the thesis against leaveOut and mustInclude. The writer starts from the thesis, so it must not carry anything the brief tells them to cut."
+    },
+    {
+      "severity": "minor",
+      "itemIds": [
+        "standalone-grinder-for-barista-express-pro",
+        "upgrade-from-barista-express-worth-it"
+      ],
+      "problem": "The same free-checks gate (roast date, tamper-cap dose, burr cleaning, one upper-burr step) is written out in full in three briefs. The later posts risk repeating the diagnosis guide instead of building on it.",
+      "evidence": "Item 2's contributionDetail repeats all four gate steps and also reuses grind-fault-tree. Item 4 repeats the beans and dose test. Item 1 is the guide that owns this diagnosis.",
+      "suggestion": "When existingContent or a sibling brief already owns a diagnosis, reduce it to one line plus the {{guide:}} link or the shared tool, and spend the brief on what this post decides."
+    },
+    {
+      "severity": "minor",
+      "itemIds": [
+        "standalone-grinder-for-barista-express-pro"
+      ],
+      "problem": "The brief hands an unverified fact to the writer, who has no way to check it, but still lists the supporting claim as supported.",
+      "evidence": "mustInclude: \"Ask the writer to check the dosing-cup size before publishing, since the 2026-11-24 page read didn't show it\", while claimIds includes baratza-encore-esp/us-dosing-cup.",
+      "suggestion": "If a page read didn't confirm a claim, leave it out or move it to leaveOut as unknown. Don't hand verification to the writer."
+    },
+    {
+      "severity": "minor",
+      "itemIds": [
+        "upgrade-from-barista-express-worth-it"
+      ],
+      "problem": "The rule for Barista Pro owners rests on something the booklet doesn't say, while the same brief marks the Pro's ability to brew and steam at once as unknown.",
+      "evidence": "\"its booklet describes no wait for steam, so a Pro owner's case for a dual boiler on steaming grounds is weaker\" vs leaveOut: \"Any claim that the Oracle Jet or Barista Pro can or can't brew and steam at the same time. Both are unknown.\"",
+      "suggestion": "Base branch decisions on documented claims (here, the 3-second ThermoJet heat-up). Present any inference as editorial judgement, not as a fact from the booklet."
+    },
+    {
+      "severity": "minor",
+      "itemIds": [],
+      "problem": "Search coverage is thin: every recent run made exactly one search.",
+      "evidence": "recentRuns: searches = 1 in all three runs. Home-Barista returned 403, and brewcoffeehome and baristalife failed.",
+      "suggestion": "Run a second search using the reader's own wording (or a forum/Reddit phrasing) so the top-3 set isn't decided by one query, and replace any page that fails to load."
+    }
+  ],
+  "addressedBy": null,
+  "summary": "A strong batch. All four briefs have a real thesis an owner can act on, an honest keep-yours default, a careful line between what is documented and what isn't, and accurate competitor summaries: all three pages I spot-checked say what the briefs claim. The main fix is to make the agent check its hard constraints before returning. One brief plans a diagram, which can't be built, and every title in that brief is over 70 characters. Two runs reviewed three competitors after only one or two successful fetches.",
+  "keep": [
+    "The thesis is an actionable opinion with 'keep yours / buy nothing' as the default outcome, and it names the smallest sensible purchase when the free fixes fail.",
+    "An explicit 'what the source doesn't say' handling: unknowns such as the factory burr position, burr range, reset procedure and invented intervals are named and sent to leaveOut instead of being guessed.",
+    "Competitor summaries are specific and accurate, and they name a concrete gap for this reader. The Seattle Coffee Gear 'adjust the burr coarser', Appliances Online light and Coffee Chronicler grinder/IMS claims all checked out.",
+    "Market differences (Breville vs Sage, the CLEAN ME vs CLEAN/DESCALE panels, DF54 UK buying) go in mustInclude, product names stay market-neutral, and the post never says 'we tested'.",
+    "contributionDetail gives the actual picker questions and their outcomes, so the toolsmith can build from it.",
+    "Owner reports are labelled as one person's experience, and reviewer measurements are attributed to the reviewer."
+  ],
+  "promptChanges": [
+    "Before returning, check every titleOption: at most 70 characters with product names filled in, one promise, not a summary. Rewrite any that fail.",
+    "assets may contain only pickers or troubleshooters. If you want a diagram, photo or calculator, put that content into mustInclude as text, or make it a step of the troubleshooter.",
+    "Fetch each competitor page in this run. If a fetch fails, take the next search result. If a summary is based on the research artifact and not a page you opened now, say so in its summary.",
+    "The thesis must not contain anything your leaveOut bans (prices, unverified figures) or anything your mustInclude qualifies. Make the thesis exactly as strong as the evidence.",
+    "If another brief or existing guide already covers a diagnosis or test, reference it in one line (with {{guide:}} or the shared tool id) and don't restate its steps.",
+    "Don't ask the writer to verify facts. If a claim wasn't confirmed, drop it from claimIds and list it in leaveOut as unknown.",
+    "Search at least twice: once with the reader's question as written and once with forum-style wording, then pick the top 3 pages from both.",
+    "[niche] Home-Barista returns 403 to fetches. Don't count it as a reviewed competitor. Use Reddit r/espresso threads or CoffeeGeek for the forum perspective."
+  ]
+}

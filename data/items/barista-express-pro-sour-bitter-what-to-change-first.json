@@ -1,0 +1,78 @@
+{
+  "schemaVersion": 1,
+  "id": "barista-express-pro-sour-bitter-what-to-change-first",
+  "type": "new-post",
+  "niche": "coffee",
+  "status": "passed",
+  "attempts": 0,
+  "revisions": 0,
+  "createdAt": "2026-11-25T20:08:27.717Z",
+  "updatedAt": "2026-11-27T09:29:11.175Z",
+  "artifacts": {
+    "idea": "data/ideas/barista-express-pro-sour-bitter-what-to-change-first.json",
+    "idea-judge": "data/idea-scores/barista-express-pro-sour-bitter-what-to-change-first.json",
+    "research": "data/research/barista-express-pro-sour-bitter-what-to-change-first.json",
+    "angle": "data/briefs/barista-express-pro-sour-bitter-what-to-change-first.json",
+    "toolsmith": "data/tools/barista-express-pro-sour-bitter-what-to-change-first.json",
+    "writer": "content/drafts/barista-express-pro-sour-bitter-what-to-change-first.json",
+    "post-judge": "data/reviews/barista-express-pro-sour-bitter-what-to-change-first.json"
+  },
+  "history": [
+    {
+      "at": "2026-11-25T20:08:27.717Z",
+      "from": null,
+      "to": "idea",
+      "by": "idea",
+      "reason": "generated"
+    },
+    {
+      "at": "2026-11-25T20:09:24.160Z",
+      "from": "idea",
+      "to": "idea_approved",
+      "by": "idea-judge",
+      "reason": "This is in the focus cluster and the signals check out. Top results are generic sour/bitter guides. The writer should link the grind-fault-tree tool and not rebuild it."
+    },
+    {
+      "at": "2026-11-26T07:15:59.675Z",
+      "from": "idea_approved",
+      "to": "blocked",
+      "by": "scheduler",
+      "reason": "research failed 2 times: claude -p timed out after 30 minutes"
+    },
+    {
+      "at": "2026-11-26T20:17:47.327Z",
+      "from": "blocked",
+      "to": "idea_approved",
+      "by": "human:rcw-01nun8rqpvryti6emv8dugpr",
+      "reason": "timed out twice because the Mac slept mid-run; tick now runs under caffeinate"
+    },
+    {
+      "at": "2026-11-27T04:39:30.186Z",
+      "from": "idea_approved",
+      "to": "researched",
+      "by": "research",
+      "reason": "The decision can be answered from supported claims. Breville's current US booklets for the Barista Express (X26) and Barista Pro (Q26) give the order of variables, which basket to use, how dosing works, the gauge zones or LCD shot clock, shot volume, the temperature controls and the troubleshooting rows. Owner threads back up the pattern that a gauge that doesn't move means a dial-in problem, not a fault. One gap remains: neither booklet documents a test that tells a real pressure fault apart from a dial-in problem. It is recorded as an unknown claim, so the writer must send owners to support without inventing a test. The writer should link the existing grind-fault-tree tool for the inner-burr branch."
+    },
+    {
+      "at": "2026-11-27T04:57:04.407Z",
+      "from": "researched",
+      "to": "briefed",
+      "by": "angle",
+      "reason": "There is something distinct to add. The top pages for this question either cover only the Express and give generic advice (\"grind finer, dose up\"), or they state gauge bar values and fault causes that don't trace to Breville. One of them blames a still gauge on a worn gasket. None of them puts the Express/Pro traps in order: dual-wall basket, time-based dosing that leaves the basket underfilled when you grind finer, preset buttons that stop at a volume, inner burr, then temperature last. None says that Breville's own booklet uses 'bitter' for fast shots too, and none covers the Pro, which has no gauge. The research claims support an ordered decision rule from start to finish. For the one gap, a test that proves a machine fault, the plan is to say plainly that none is documented and send owners to support."
+    },
+    {
+      "at": "2026-11-27T06:54:54.412Z",
+      "from": "briefed",
+      "to": "drafted",
+      "by": "writer",
+      "reason": "I wrote the post from the brief's ordered decision rule: basket, dose, shot mode, grind, inner burr, beans, routine, temperature, then support. All three tools in the brief exist and are placed in the post: barista-fast-shot-next-step, grind-fault-tree and barista-standalone-grinder-picker. Every product fact maps to a supported claim on the barista-express or barista-pro card. The fault section says plainly that the manufacturer documents no test for a pressure fault. It gives no bar figures and no dual-wall gauge test.\n\nofferIds is empty on purpose. For most readers the answer is to buy nothing. A standalone grinder only makes sense once the inner burr has run out, and the post sends those readers to the barista-standalone-grinder-picker tool. The brief lists turin-df54 as an alternative, but putting it in the 'Our pick' card would contradict the post's main point. Its card also has no claims tying it to these machines' fine-grind problem; the only fit evidence is a reader comment about the 58 mm cradle.\n\nThe two overlap guides aren't published yet, so the post uses the tools instead of guide links: breville-builtin-grinder-wont-grind-fine-enough and standalone-grinder-for-barista-express-pro. Once standalone-grinder-for-barista-express-pro is researched, the grinder step could take offers.\n\nThe temperature steps in °F come from the US booklet and are labelled that way. The Sage GB booklets were not checked.\n\nTitle is 63 characters with the longest names filled in. seoTitle is 58 and description is about 150."
+    },
+    {
+      "at": "2026-11-27T09:29:11.175Z",
+      "from": "drafted",
+      "to": "passed",
+      "by": "post-judge",
+      "reason": "This is the only result for the query that gives a Barista Express or Pro owner an ordered checklist they can run on their own machine: basket, dose, shot mode, grind, inner burr, beans, routine, then temperature. It also gives a clear point at which to stop and call support. Every product fact traces to supported claims from the manufacturer's booklet. The post covers the Pro, which none of the top results do. It sends the reader to the smallest sensible purchase, which is nothing, then support, then a separate grinder only once the inner burr has run out. Automated checks show no blocking issues, and I found nothing that blocks a pass."
+    }
+  ]
+}
