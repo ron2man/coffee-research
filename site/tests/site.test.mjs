@@ -143,3 +143,32 @@ test('markdown escapes HTML and only allows http links', () => {
   assert.doesNotMatch(blocks[0].html, /href="javascript/);
   assert.match(blocks[0].html, /href="https:\/\/ok.test"/);
 });
+
+test('guides link to related guides, carry breadcrumbs and structured data, and x-default is the primary market', () => {
+  const { read } = build('preview');
+  const page = read('en-gb/guides/barista-express-pro-sour-bitter-what-to-change-first/index.html');
+  assert.match(page, /<nav class="breadcrumbs" aria-label="Breadcrumb"><ol><li><a href="\/en-gb\/">Home<\/a><\/li>/);
+  const related = page.match(/<section class="wrap related"[\s\S]*?<\/section>/)?.[0] ?? '';
+  assert.ok(related, 'a Related guides section');
+  const links = [...related.matchAll(/href="(\/en-gb\/guides\/[^"]+)"/g)].map((m) => m[1]);
+  assert.ok(links.length >= 2 && links.length <= 4, `2–4 related links, got ${links.length}`);
+  assert.ok(!links.includes('/en-gb/guides/barista-express-pro-sour-bitter-what-to-change-first/'), 'never itself');
+  const blocks = [...page.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)].map((m) => JSON.parse(m[1]));
+  const article = blocks.find((b) => b['@type'] === 'Article');
+  const crumbs = blocks.find((b) => b['@type'] === 'BreadcrumbList');
+  assert.equal(article.inLanguage, 'en-GB');
+  assert.equal(article.url, 'https://yourcoffeesetup.com/en-gb/guides/barista-express-pro-sour-bitter-what-to-change-first/');
+  assert.equal(article.author['@type'], 'Organization', 'no invented author');
+  assert.equal(crumbs.itemListElement.at(-1).item, article.url);
+  assert.match(page, /hreflang="x-default" href="https:\/\/yourcoffeesetup\.com\/en-us\/guides\/barista-express-pro-sour-bitter-what-to-change-first\/"/);
+  assert.match(read('en-gb/index.html'), /hreflang="x-default" href="https:\/\/yourcoffeesetup\.com\/"/, 'market homes keep the chooser');
+});
+
+test('related guides: shared products and links first, other markets and itself never', async () => {
+  const { relatedPosts } = await import('../lib/templates.mjs');
+  const market = { id: 'US' };
+  const p = (slug, productIds, extra = {}) => ({ slug, productIds, markets: ['US'], category: 'machines', body: '', ...extra });
+  const post = p('a', ['x', 'y'], { body: 'see {{guide:d|d}}' });
+  const posts = [post, p('b', ['x', 'y']), p('c', ['x']), p('d', []), p('e', ['z'], { category: 'grinders' }), p('f', ['x'], { markets: ['GB'] })];
+  assert.deepEqual(relatedPosts({ post, posts, market }).map((x) => x.slug), ['b', 'c', 'd']);
+});
