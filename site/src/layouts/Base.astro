@@ -76,6 +76,7 @@ const siteLd = !market || isHome ? t.siteStructuredData({ site: siteInfo, siteUr
 <link rel="stylesheet" href={t.assetUrl('/assets/site.css')}>
 <link rel="icon" href={t.assetUrl('/assets/icon.svg')} type="image/svg+xml">
 <link rel="apple-touch-icon" href={t.LOGO.src}>
+<link rel="manifest" href="/manifest.webmanifest">
 {siteLd && <Fragment set:html={siteLd} />}
 {gtm && <Analytics id={gtm} market={market?.id} pageId={pageId} />}
 </head>

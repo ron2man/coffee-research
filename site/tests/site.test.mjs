@@ -216,6 +216,22 @@ test('page polish: prices line only with a pick, no category tag on its own page
   if (!/class="tile"/.test(home)) assert.doesNotMatch(home, /Browse by category/);
 });
 
+test('security headers and manifest: HSTS, a report-only CSP that allows what the pages load', () => {
+  const { read, has } = build('production');
+  const headers = read('_headers');
+  const block = headers.match(/^\/\*\n((?: {2}.+\n)+)/m)[1];
+  assert.ok(block.split('\n').filter(Boolean).every((l) => /^ {2}[A-Za-z-]+: /.test(l)), 'every line in the /* block is a header');
+  assert.match(block, /Strict-Transport-Security: max-age=31536000\n/);
+  const csp = block.match(/Content-Security-Policy-Report-Only: (.+)/)[1];
+  const home = read('en-us/index.html');
+  for (const [, src] of home.matchAll(/<script[^>]* src="(https:\/\/[^/"]+)/g)) assert.ok(csp.includes(src), `CSP script-src allows ${src}`);
+  assert.match(csp, /script-src [^;]*'unsafe-inline'/, 'the GTM bootstrap is inline');
+  assert.doesNotMatch(home, / style="/, 'no inline styles, so style-src can stay self');
+  assert.match(home, /<link rel="manifest" href="\/manifest\.webmanifest">/);
+  const manifest = JSON.parse(read('manifest.webmanifest'));
+  for (const icon of manifest.icons) assert.ok(has(icon.src.slice(1)), `manifest icon ${icon.src} is built`);
+});
+
 test('consent banner: production pages with GTM carry it hidden, previews do not', () => {
   const home = build('production').read('en-gb/index.html');
   assert.match(home, /<section class="consent" id="consent" aria-label="Cookie choice" hidden>/);

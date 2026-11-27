@@ -1,0 +1,21 @@
+{
+  "name": "YourCoffeeSetup",
+  "short_name": "CoffeeSetup",
+  "description": "Straight answers for home espresso. Including when to buy nothing.",
+  "start_url": "/",
+  "display": "browser",
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff",
+  "icons": [
+    {
+      "src": "/assets/logo-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "/assets/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}
