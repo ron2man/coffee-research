@@ -242,3 +242,14 @@ th { font-weight: 700; }
 .breadcrumbs [aria-current="page"] { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 28ch; }
 .related { margin-top: 3rem; padding-top: 1.5rem; border-top: 2px solid var(--fg); }
 .related h2 { margin: 0 0 .5rem; font-size: 1.25rem; }
+
+/* Cookie consent: a non-modal bar at the bottom. Accept and Reject look the same on purpose. */
+.consent { position: fixed; left: 0; right: 0; bottom: 0; z-index: 50; background: var(--fg); color: #fff; border-top: 3px solid var(--acc); padding: 1rem 0 calc(1rem + env(safe-area-inset-bottom)); }
+.consent[hidden], .link-button[hidden] { display: none; }
+.consent-inner { display: flex; flex-wrap: wrap; gap: 1rem 2rem; align-items: center; }
+.consent-text { flex: 1 1 28rem; margin: 0; font-size: 15px; line-height: 1.5; }
+.consent-actions { display: flex; gap: .75rem; }
+.consent-actions button { min-height: 44px; min-width: 7.5rem; padding: 0 1.1rem; border: 2px solid #fff; border-radius: 2px; background: #fff; color: var(--fg); font: 700 15px/1 var(--sans); cursor: pointer; }
+.consent-actions button:hover { background: var(--fg); color: #fff; }
+.consent-actions button:focus-visible, .link-button:focus-visible { outline: 3px solid var(--acc-on-dark); outline-offset: 2px; }
+.link-button { padding: 0; border: 0; background: none; color: #fff; font: inherit; text-decoration: underline; cursor: pointer; }

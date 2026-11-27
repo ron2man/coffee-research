@@ -142,6 +142,19 @@ test('production build: published guides only, indexable, GTM with consent defau
   assert.match(home, /<p class="disclosure">Some links on this site may earn us a commission/, 'placeholder in the footer');
 });
 
+test('consent banner: production pages with GTM carry it hidden, previews do not', () => {
+  const home = build('production').read('en-gb/index.html');
+  assert.match(home, /<section class="consent" id="consent" aria-label="Cookie choice" hidden>/);
+  assert.match(home, /<button type="button" id="consent-accept">Accept<\/button>/);
+  assert.match(home, /<button type="button" id="consent-reject">Reject<\/button>/);
+  assert.match(home, /id="consent-settings" hidden>Cookie settings<\/button>/, 'a way back to the choice in the footer');
+  assert.match(home, /<script src="\/assets\/consent\.js" defer><\/script>/);
+  const saved = home.indexOf("localStorage.getItem('analytics-consent')");
+  assert.ok(saved > home.indexOf("gtag('consent', 'default'") && saved < home.indexOf('gtm.js?id='), 'a saved choice is applied after the defaults and before GTM loads');
+  const preview = build('preview').read('en-gb/index.html');
+  assert.doesNotMatch(preview, /id="consent"|consent\.js|Cookie settings/);
+});
+
 test('production with no published guides: holding homes and no guide list', (t) => {
   // A copy of the repo with content/published emptied, built the way the live site is built.
   const root = mkdtempSync(join(tmpdir(), 'site-empty-'));

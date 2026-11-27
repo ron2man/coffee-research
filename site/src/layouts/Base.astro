@@ -89,10 +89,22 @@ const hasGuides = siteInfo.pages.has(`/${market?.locale}/guides/`);
 <footer class="foot">
   <div class="wrap">
     {disclosure && <p class="disclosure">{disclosure}</p>}
-    <p class="foot-links"><span class="brand-inline">{siteInfo.name}</span> <a href={`/${market.locale}/how-we-work/`}>How we work</a> <a href={`/${market.locale}/how-we-work/#disclosure`}>Disclosure</a> {hasGuides && <a href={`/${market.locale}/guides/`}>All guides</a>} <a href="mailto:hello@yourcoffeesetup.com">hello@yourcoffeesetup.com</a></p>
+    <p class="foot-links"><span class="brand-inline">{siteInfo.name}</span> <a href={`/${market.locale}/how-we-work/`}>How we work</a> <a href={`/${market.locale}/how-we-work/#disclosure`}>Disclosure</a> {hasGuides && <a href={`/${market.locale}/guides/`}>All guides</a>} <a href="mailto:hello@yourcoffeesetup.com">hello@yourcoffeesetup.com</a>{gtm && <button type="button" class="link-button" id="consent-settings" hidden>Cookie settings</button>}</p>
   </div>
 </footer>
 )}
+{gtm && (
+<section class="consent" id="consent" aria-label="Cookie choice" hidden>
+  <div class="wrap consent-inner">
+    <p class="consent-text">Can we use analytics cookies? Google Analytics would count visits and show us which guides help. No ads, and nothing is sold. You can change this any time under Cookie settings at the bottom of the page.</p>
+    <div class="consent-actions">
+      <button type="button" id="consent-accept">Accept</button>
+      <button type="button" id="consent-reject">Reject</button>
+    </div>
+  </div>
+</section>
+)}
 <script is:inline src="/assets/site.js" defer></script>
+{gtm && <script is:inline src="/assets/consent.js" defer></script>}
 </body>
 </html>

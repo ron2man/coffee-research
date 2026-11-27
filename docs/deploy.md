@@ -62,8 +62,16 @@ builds only. GA4 is configured inside the container, not in the site code.
 
 - GA4 property: Your Coffee Setup, web stream `https://yourcoffeesetup.com`. Data retention: 14 months.
 - Consent Mode v2 (`site/src/components/Analytics.astro`): the page sets consent defaults before GTM
-  loads. Analytics storage is denied by default in the UK, EEA and Switzerland until a consent banner
-  exists; ads signals are denied everywhere. In GTM, leave the GA4 tags on built-in consent checks.
+  loads. Analytics storage is denied by default in the UK, EEA and Switzerland (Google's IP region)
+  and granted elsewhere; ads signals are denied everywhere. In GTM, leave the GA4 tags on built-in
+  consent checks; the banner needs no GTM change.
+- Consent banner (`site/public/assets/consent.js`, markup in `site/src/layouts/Base.astro`, production
+  pages with GTM only). It asks readers whose time zone is in Europe (or unknown); "Cookie settings"
+  in the footer reopens it for everyone. Accept/Reject is saved in `localStorage`
+  (`analytics-consent`) and sent as `gtag('consent', 'update', { analytics_storage })`; on later
+  visits Analytics.astro applies the saved choice before GTM loads. To check after a deploy: in Tag
+  Assistant from a UK connection, the Consent tab shows `analytics_storage` denied, then granted
+  after Accept, and a `_ga` cookie appears only after Accept.
 - The page pushes `{ market, page_id }` to `dataLayer` before GTM loads.
 - `site/public/assets/site.js` pushes custom events as `{ event: '<name>', params: { … } }`:
   `affiliate_click` (`page_id, product_id, seller, market, position, tool_state`), `tool_complete`
