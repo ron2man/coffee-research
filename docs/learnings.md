@@ -234,3 +234,7 @@ The project lead set the goal: one guide a day, built around equipment, with "my
 - `npm run schedule -- doctor` checks Node, branch, local edits, dependencies, push without a prompt, catalog access, Claude subscription sign-in, `gh` sign-in and Bitwarden secrets, each with its fix.
 - Not tested on a real systemd user session here (the container has none): the first install on the NUC is the real test.
 - The NUC move (2026-11-28) found three gaps the doctor now covers or the runbook names: no `curl` on a fresh Ubuntu (both install scripts failed silently in a pipe), `~/.local/bin` missing from PATH until the next login, and no git identity for the scheduler's commits. A claim that failed half-way left the state file changed; `claim` now starts from the committed file.
+
+### 2026-11-28 · Ideas when the queue runs low
+- The idea agent ran at most once a day, so an empty queue left research and writing idle for up to a day (it happened on the 28th). It now runs whenever fewer than 4 ideas wait, at most every 6 hours. Hourly would spend search budgets in days (Tavily 8 a run, SerpApi 4, YouTube about 620 units against a 10,000-unit daily quota) and find the same things.
+- Demand collection happens once a UTC day; later runs reuse that day's file (`demandReused` in the tick result) unless a focus product or an open seed isn't in it.
