@@ -1,7 +1,7 @@
 {
   "id": "idea-2026-11-28T16-06-11-201Z",
   "agent": "idea",
-  "status": "open",
+  "status": "applied",
   "at": "2026-11-28T16:06:11.201Z",
   "summary": "Tighten the idea agent's evidence rules: a signal counts only if its poster asks the card's question, and the agent checks age, reuse and site spread before it returns cards. Also update the coffee guidance with the sites that actually load (Reddit and Home-Barista are blocked) and the Bambino overlap.",
   "changes": [
@@ -26,5 +26,7 @@
     "2026-11-25T20-08-27-715Z-check"
   ],
   "notAddressed": [],
-  "niche": "coffee"
+  "niche": "coffee",
+  "appliedAt": "2026-11-28T16:24:20.865Z",
+  "appliedBy": "root"
 }

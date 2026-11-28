@@ -80,7 +80,7 @@
       "suggestion": "Prefer threads where someone asks the question or describes the problem as unresolved, and attribute each claim in the note to the poster or to a reply."
     }
   ],
-  "addressedBy": null,
+  "addressedBy": "idea-2026-11-28T16-06-11-201Z",
   "summary": "Problem framing is strong: each card has a specific owner, a real decision, a free keep-yours path and a no-testing value add. The evidence breaks the prompt's own rules, though. Three of the four cards rest on one signal but are labelled `qualitative`. One forum thread backs two cards. Most signals come from an off-topic board on a cycling forum, and none come from the sources the niche guidance ranks first. The fix that matters most is to apply the two-signal rule and the no-reuse rule before a card is returned, and to search the priority communities first.",
   "keep": [
     "Questions are written in the owner's voice, about one named product and one concrete decision (fix, adjust or replace).",

@@ -101,7 +101,7 @@
       "suggestion": "No change needed. The tuner can close 2026-11-25T20-08-27-715Z-check and the reuse/age findings from 2026-11-21."
     }
   ],
-  "addressedBy": null,
+  "addressedBy": "idea-2026-11-28T16-06-11-201Z",
   "summary": "Better than the last batch. Every card now has at least two signals, no URL appears on two cards, the older thread is marked, and the questions stay specific and decision-led with honest keep-yours paths. The remaining weakness is how strong the signals are. Several \"signals\" are side remarks in threads about something else, not people asking the card's question, and almost every card rests on a single site. The most important fix is to count a signal only when its poster asks the card's question or describes the problem as their own.",
   "keep": [
     "Questions are in the owner's voice, about one named machine and one concrete decision. 'Keep it / change nothing / keep your pods' is a real outcome in each `decision` or `valueAdd`.",

@@ -26,7 +26,7 @@ Demand sources, strongest first:
 3. Market changes: a new model, a price drop, a discontinued product, a known fault or recall that leaves owners with a decision to make.
 4. Search Console queries or questionnaire answers, if they ever appear in the input. They do not exist yet; never pretend they do.
 
-Use WebSearch to find threads and WebFetch to open them. **Only record a signal you opened and read.** Search result snippets are leads, never signals. If a site won't load, don't count it; find the same question elsewhere. Avoid off-topic boards of unrelated communities (for example a general chat board on a sports forum) unless nothing better exists, and say so in the note.
+Use WebSearch to find threads and WebFetch to open them. **Only record a signal you opened and read.** Search result snippets are leads, never signals. If a site won't load, don't count it; find the same question elsewhere. If the niche guidance says a site can't be reached, don't spend fetches on it. Avoid off-topic boards of unrelated communities (for example a general chat board on a sports forum) unless nothing better exists, and say so in the note.
 
 ## Seeds from the site owner
 
@@ -37,7 +37,7 @@ A seed is a situation or question the site owner thinks readers have, for exampl
 - A broad seed usually becomes one specific card for one specific reader and decision, not a roundup. Pick the version with the strongest evidence.
 - If you find no real demand, make no card for it. The seed stays open for a later run and closes on its own after a few runs without evidence.
 - For **every** seed in the input, add an entry to `seedNotes` (`{ "seedId", "why" }`): which cards it became, or why not. Say what you searched, which communities you could open and which you couldn't (blocked or failed pages), so the owner can tell "nobody asks this" from "couldn't reach where they ask".
-- Seeds don't count toward or against the rest of the run: still look for other ideas as usual.
+- Seeds don't count toward or against the rest of the run, and they don't replace the normal search. Spend part of every run on unseeded problems in `niche.focus`, even when seeds take up most of it.
 
 ## What makes a good idea
 
@@ -51,16 +51,19 @@ A seed is a situation or question the site owner thinks readers have, for exampl
 - **No invented demand.** Never write search volumes, view counts or percentages you did not read.
 - `demand.kind`:
   - `measured`: a number you read from a real data source (none exists yet).
-  - `qualitative`: **at least two independent signals**: different threads, different people, ideally different sites, each asking this question or describing this problem. Three to five is better.
-  - `unmeasured`: a plausible gap with fewer than two signals. Expect the judge to score it low; prefer finding more evidence or dropping the idea.
-- Signals should be from the last 24 months (compare with `today`). An older thread may be included only as extra support, never as the main evidence; say "older" in the note.
-- **Never reuse a signal across cards.** If one thread supports two ideas, those ideas are probably one idea, or one of them needs its own evidence.
-- Each signal has the `url` you read, the `date` of the post (YYYY-MM-DD), and a one-line `note` saying what the person asked or complained about, paraphrased.
+  - `qualitative`: **at least two independent counting signals** (see below): different threads, different people, ideally different sites, each asking this question or describing this problem. Three to five is better.
+  - `unmeasured`: a plausible gap with fewer than two counting signals. Expect the judge to score it low; prefer finding more evidence or dropping the idea.
+- **What counts as a signal.** A signal counts toward the two-signal minimum only if its original poster asks this card's question or describes this problem as their own. These can be supporting evidence but don't count: a reply in a thread about something else, a poster in a different situation from `audience` (for example a would-be buyer when the card is for owners), and a finished how-I-fixed-it report. Say which one it is in the note ("reply in a thread about X", "would-be buyer; a reply says ...", "upgrade report, not a question"). A reply counts only when it describes the card's problem as the replier's own, in some detail.
+- Signals should be from the last 24 months (compare each date with `today`). Anything older starts its note with "Older:" and never counts toward the minimum; it may only be extra support.
+- **Never reuse a signal across cards.** If one URL would appear on two cards, merge the cards or find separate evidence for one of them.
+- Aim for signals from at least two different sites per card. If every signal comes from one site, say so in the last note, and name the sites you tried and couldn't reach.
+- Each signal has the `url` you read, the `date` of the post (YYYY-MM-DD), and a one-line `note`. The note starts with what the thread is about (who is posting and what they ask), then the part that supports the card, paraphrased. State only what the poster or a named reply actually said. Attribute each claim to the poster or the reply, and write offers, suggestions and guesses as such, never as confirmed fixes.
 
 ## Overlap
 
 - Group synonymous questions into one card, with each phrasing's thread as a signal.
-- Compare against every `existing` question and every `existingContent` title. Don't repeat an idea already covered, even if it was rejected, unless you have new demand evidence. In that case explain what changed in `competitorGap` and list the old id or slug in `overlapsWith`. List partially overlapping ids or slugs in `overlapsWith` too.
+- Compare against every `existing` question, every `existingContent` title and any coverage list in the niche guidance. Don't repeat an idea already covered, even if it was rejected, unless you have new demand evidence. In that case explain what changed in `competitorGap` and list the old id or slug in `overlapsWith`. List partially overlapping ids or slugs in `overlapsWith` too.
+- Check the cards from this run against each other as well. When two of them share a decision, list each other's id in `overlapsWith` and say in `decision` how their readers differ, or merge them.
 - `id`: a short kebab-case slug (lowercase letters, digits, hyphens, max 80 characters), not used in `existing` or `existingContent`.
 
 ## Field guide
@@ -71,9 +74,18 @@ A seed is a situation or question the site owner thinks readers have, for exampl
 - `contentType`: one of `niche.contentTypes`.
 - `pain`: what is going wrong for them, one sentence.
 - `decision`: the choice the content helps them make.
-- `competitorGap`: what the current top answers get wrong or leave out. Be concrete and name what you looked at; "generic guides" alone is weak.
+- `competitorGap`: what the current top answers get wrong or leave out. Be concrete and name what you looked at; "generic guides" alone is weak. Open one or two of the top competing pages before describing them, and name only pages you opened. If you saw a page only as a search snippet, or it failed to load, say so.
 - `valueAdd`: what we could give them that others don't, without hands-on testing: a diagnosis order, a decision rule, a compatibility check, an interactive tool.
 - `commercialPath`: the kinds of product a reader might reasonably end up buying, or an empty list if the honest answer involves buying nothing. Never inflate it.
+
+## Before you return
+
+Check every card:
+
+1. Count its counting signals: dated within 24 months of `today`, from different people, posted by someone asking this question or describing this problem as their own, and used on no other card. If there are fewer than two, set `demand.kind` to `unmeasured` or drop the card. Never label it `qualitative`.
+2. No URL appears on more than one card.
+3. Every older signal's note starts with "Older:", and every supporting-only signal says why it doesn't count.
+4. Sibling cards from this run and overlapping coverage are listed in `overlapsWith`.
 
 ## Output
 
