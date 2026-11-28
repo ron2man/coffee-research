@@ -129,7 +129,26 @@ Budgets (`demand.searchBudgets`, requests per month per provider, counted from e
 
 Reddit itself is closed to us: its Data API needs approval and stopped taking new requests on 2026-10-31, the public JSON returns 403, RSS ended on 2026-11-13, and the remaining public API ends in March 2027. Search results that point at Reddit threads are the route that's left, plus your own seeds from the dashboard.
 
-Keys live on the scheduler's Mac, never in the repo:
+Keys never go in the repo. Two places for them, both read by `ops/tick.sh`:
+
+**Bitwarden Secrets Manager (preferred).** One project holds the secrets, each named exactly as its variable (`TAVILY_API_KEY`, `SERPER_API_KEY`, `YOUTUBE_API_KEY`, …). A machine account for the scheduler's machine gets read access to that project; its access token is the only secret on the machine:
+
+```sh
+# bws CLI: https://github.com/bitwarden/sdk-sm/releases (put the binary in ~/.local/bin)
+mkdir -p ~/.config/yourcoffeesetup
+cat > ~/.config/yourcoffeesetup/bws <<'END'
+BWS_ACCESS_TOKEN=0.xxxxxxxx...
+BWS_PROJECT_ID=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+END
+chmod 600 ~/.config/yourcoffeesetup/bws
+# check: lists the secrets' names, then shows the first characters of one value
+(. ~/.config/yourcoffeesetup/bws; export BWS_ACCESS_TOKEN; bws secret list "$BWS_PROJECT_ID" | grep '"key"')
+(. ~/.config/yourcoffeesetup/bws; export BWS_ACCESS_TOKEN; bws run --project-id "$BWS_PROJECT_ID" -- 'echo ${TAVILY_API_KEY:0:8}')
+```
+
+Each tick, `tick.sh` checks the project is reachable and starts the tick through `bws run`, which hands the secrets to the tick as environment variables for that run only. The token itself never reaches the tick or the agents. If `bws` is missing or Bitwarden can't be reached, the tick runs with the env file below; `tick.log` says which source each tick used. Revoke the machine account's token in Bitwarden if the machine is lost.
+
+**An env file** (fallback, or instead of Bitwarden):
 
 ```sh
 mkdir -p ~/.config/yourcoffeesetup
