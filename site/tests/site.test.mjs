@@ -280,6 +280,16 @@ test('a renamed guide: new address built, old one not, and a 301 for both market
   assert.doesNotMatch(read('sitemap-0.xml'), /breville-builtin-grinder/);
 });
 
+test('home hero: one headline without the market, then a quieter line (as on the share image)', () => {
+  const { read } = build('production');
+  for (const locale of ['en-us', 'en-gb']) {
+    const hero = read(`${locale}/index.html`).match(/<div class="hero">[\s\S]*?<\/div>/)?.[0] ?? '';
+    assert.match(hero, /<h1 class="intro" id="guides-title">Straight answers for home espresso\.<\/h1>/, locale);
+    assert.match(hero, /<p class="intro-sub">Fix it, upgrade it, or keep it\. Including when to buy nothing\.<\/p>/, locale);
+  }
+  assert.match(read('en-gb/index.html'), /<title>[^<]*in the UK<\/title>/, 'the market stays in the page title for search');
+});
+
 test('consent banner: production pages with GTM carry it hidden, previews do not', () => {
   const home = build('production').read('en-gb/index.html');
   assert.match(home, /<section class="consent" id="consent" aria-label="Cookie choice" hidden>/);

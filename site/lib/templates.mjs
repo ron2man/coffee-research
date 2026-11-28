@@ -365,7 +365,10 @@ ${mockPhoto(site.mock?.home ?? postPhoto(site, lead.slug), 'feature-photo')}` : 
   // One category is already the nav link; tiles help once there are two to choose from.
   const tiles = site.categories.length < 2 ? '' : site.categories.map((c) => `<a class="tile" href="/${market.locale}/${c.id}/"><span class="tile-title">${escape(navLabel(c))}</span><span class="tile-count">${c.count} guides</span></a>`).join('');
   return `<section class="wrap" id="guides" aria-labelledby="guides-title">
-<h1 class="intro" id="guides-title">Straight answers for home espresso in the ${escape(shortLabel(market))}. Including when to buy nothing.</h1>
+<div class="hero">
+<h1 class="intro" id="guides-title">Straight answers for home espresso.</h1>
+<p class="intro-sub">Fix it, upgrade it, or keep it. Including when to buy nothing.</p>
+</div>
 ${feature}
 ${latest.length ? `<div class="section-head"><h2 class="section-title">Latest guides</h2><a href="/${market.locale}/guides/">All guides</a></div>
 ${guideRows({ site, market, posts: latest })}` : ''}
