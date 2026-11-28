@@ -134,7 +134,8 @@ Keys never go in the repo. Two places for them, both read by `ops/tick.sh`:
 **Bitwarden Secrets Manager (preferred).** One project holds the secrets, each named exactly as its variable (`TAVILY_API_KEY`, `SERPER_API_KEY`, `YOUTUBE_API_KEY`, …). A machine account for the scheduler's machine gets read access to that project; its access token is the only secret on the machine:
 
 ```sh
-# bws CLI: https://github.com/bitwarden/sdk-sm/releases (put the binary in ~/.local/bin)
+# bws CLI (official install script: downloads the release, checks its checksum, installs to /usr/local/bin)
+curl -fsSL https://bws.bitwarden.com/install | sh
 mkdir -p ~/.config/yourcoffeesetup
 cat > ~/.config/yourcoffeesetup/bws <<'END'
 BWS_ACCESS_TOKEN=0.xxxxxxxx...
