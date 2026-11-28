@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { cpSync, mkdtempSync, readFileSync, rmSync } from 'node:fs';
+import { cpSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { loadAgents } from '../agents/registry.mjs';
@@ -416,4 +416,25 @@ test('demand signals are collected for the idea agent and saved', async (t) => {
   assert.deepEqual(input.demandSignals.queries[0].suggestions, ['x sour']);
   assert.ok(result.changedFiles.some((p) => p.startsWith('data/demand/')));
   assert.equal(input.niche.focus.products[0], 'barista-express');
+});
+
+test('a second idea run the same day reuses that day\'s demand data unless the focus changed', async (t) => {
+  const root = sandbox(t);
+  const now = new Date();
+  const today = now.toISOString().slice(0, 10);
+  let collected = 0;
+  const products = JSON.parse(readFileSync(join(root, 'niches/coffee/niche.json'), 'utf8')).focus.products;
+  const collector = async (niche) => { collected += 1; return { date: today, queries: niche.focus.products.map((id) => ({ q: id, source: `focus:${id}`, suggestions: [] })), sources: {} }; };
+  const idea = agents.filter((a) => a.name === 'idea');
+  const run = () => tick({ root, now, agents: idea, ignoreSchedule: true, demandCollector: collector, focusReview: null, runner: fakeRunner({ idea: () => ({ items: [] }) }) });
+  await run();
+  const second = await run();
+  assert.equal(collected, 1, 'collected once');
+  assert.match(second.demandReused, /^data\/demand\//);
+  assert.ok(!second.changedFiles.some((p) => p.startsWith('data/demand/')), 'nothing new saved');
+  const niche = JSON.parse(readFileSync(join(root, 'niches/coffee/niche.json'), 'utf8'));
+  niche.focus.products = [...products, 'sage-dual-boiler'];
+  writeFileSync(join(root, 'niches/coffee/niche.json'), JSON.stringify(niche, null, 2));
+  await run();
+  assert.equal(collected, 2, 'a new focus product means a new collection');
 });
