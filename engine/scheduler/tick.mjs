@@ -30,6 +30,7 @@ import { autoPullRequests } from '../publish/autopr.mjs';
 import { autocomplete, collectDemand, demandUsage } from '../demand/collect.mjs';
 import { initialFocus, readFocus, reviewDue, reviewFocus, withFocus, writeFocus } from '../focus/focus.mjs';
 import { writeDailyDigests } from '../report/report.mjs';
+import { machineIdentity, schedulerCheck, withScheduler } from './host.mjs';
 import { applyReview, applyTune, buildReviewInput, buildTuneInput, checkTuneArtifact, reviewCandidates, tuneCandidates } from '../feedback/loop.mjs';
 import { newItem, transition } from '../state/machine.mjs';
 import { defaultNicheId, loadNiche, repoRoot } from '../state/niche.mjs';
@@ -631,7 +632,23 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
       }
       else if (values['dry-run']) freshness = remoteStatus(root);
       else freshness = assertFresh(root);
+      // Only the scheduler's checkout runs committing ticks (engine/scheduler/host.mjs). Checked after
+      // the sync, so a claim made on another machine is seen at once.
+      const claimed = [];
+      if (commit) {
+        const identity = machineIdentity(root);
+        const check = schedulerCheck(readSchedule(root), identity);
+        if (!check.allowed) return { ran: null, notScheduler: true, reason: check.reason, changedFiles: [] };
+        if (check.claim) {
+          writeJsonAtomic(join(root, SCHEDULE_PATH), withScheduler(readSchedule(root), identity));
+          claimed.push(SCHEDULE_PATH);
+        }
+      }
       const result = await tick({ root, dryRun: values['dry-run'], nicheId: values.niche, lock: false, ignoreSchedule: values['ignore-schedule'] });
+      if (claimed.length) {
+        result.changedFiles = [...new Set([...(result.changedFiles ?? []), ...claimed])];
+        result.schedulerClaimed = readSchedule(root).scheduler.name;
+      }
       // Approvals queued from elsewhere: open their pull requests from this machine (it can push).
       if (commit) {
         const policy = loadNiche(values.niche ?? defaultNicheId(root), root).publishing ?? {};

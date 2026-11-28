@@ -144,6 +144,7 @@ export function commitInternal(root, paths, message, { remote = policy.remote, b
 
 export function commitMessage(result) {
   const message = baseCommitMessage(result);
+  if (result.schedulerClaimed && !result.ran && !result.focus && message === 'tick(null): no changes') return `tick: ${result.schedulerClaimed} is the scheduler`;
   if (!result.focus) return !result.ran && result.digests && message === 'tick(null): no changes' ? 'tick: daily run digest' : message;
   const focus = [...result.focus.added.map((id) => `+${id}`), ...result.focus.removed.map((id) => `-${id}`)].join(' ');
   return result.ran || result.published?.length || result.changedFiles?.some((p) => p.startsWith('data/publish/')) ? `${message} · focus ${focus}` : `tick: focus ${focus} (${result.focus.trigger})`;

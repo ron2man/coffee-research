@@ -2,7 +2,7 @@
 
 The scheduler runs one tick at a time. Each tick runs one agent (or the critic or tuner), validates its output, and commits internal files to `main`. Reader-facing paths (`content/published/`, `site/`, `data/offers/`) are never committed by a tick.
 
-## One-time setup on the Mac
+## One-time setup on the Mac (Linux: see "Moving the scheduler to a Linux machine" below)
 
 The scheduler gets **its own clone** on `main`. Your working copy stays yours: the tick fails a run if files change underneath it, so the two must not share a folder.
 
@@ -174,6 +174,65 @@ A missing key isn't an error: the source shows as `skipped` in `sources`, and th
 
 Each real run reports its usage in `.backoffice/runs.jsonl` (`usage.costUsd` is the CLI's estimate at API prices, not your subscription bill). One idea run took about 4 minutes and 44 turns. Hourly ticks mean up to 24 agent runs a day when there is work; when nothing is due a tick does nothing and uses no usage.
 
-## Linux or cloud later
+## Which machine is the scheduler
 
-Run `ops/tick.sh` from cron in a dedicated clone, for example `0 * * * * /path/to/clone/ops/tick.sh`. The lock file and the committed schedule state (`data/scheduler/state.json`) make the move safe.
+Only one checkout runs committing ticks: the one named in `data/scheduler/state.json` (`scheduler`). Each checkout has its own id in `.backoffice/machine.json` (made on first use, never committed). A tick anywhere else does nothing and writes why in its log, and the dashboard says so. The first tick after this was added claims the job for the machine it runs on.
+
+```sh
+npm run schedule -- doctor     # does this machine have everything a tick needs?
+npm run schedule -- claim      # make this checkout the scheduler (commits and pushes)
+```
+
+`claim` always makes a fresh id, so a copied `.backoffice` folder can't leave two schedulers.
+
+## Moving the scheduler to a Linux machine
+
+`npm run schedule` installs a systemd user timer on Linux: the same slots as on the Mac, `Persistent=true` (a slot missed while the machine was off runs when it's back) and one tick at a time. With lingering on, it runs without anyone logged in. Without systemd, run `ops/tick.sh` from cron (`5 * * * * /bin/bash /path/to/clone/ops/tick.sh`).
+
+On the new machine:
+
+```sh
+# 1. Tools: Node 22+, git, Claude Code, GitHub CLI, bws
+node -v                                   # 22 or newer
+curl -fsSL https://claude.ai/install.sh | bash && claude auth login    # the subscription account, never an API key
+# GitHub CLI: https://cli.github.com (apt on Ubuntu/Debian), then:
+gh auth login
+curl -fsSL https://bws.bitwarden.com/install | sh
+
+# 2. An SSH key that can push this repository and read the catalog
+ssh-keygen -t ed25519 -C "scheduler@$(hostname)"   # no passphrase, or load it in an agent at boot
+cat ~/.ssh/id_ed25519.pub                          # add it on GitHub (your account's SSH keys)
+
+# 3. Secrets: this machine's Bitwarden machine account (read access to the project)
+mkdir -p ~/.config/yourcoffeesetup
+read -rs -p "BWS token: " T && echo
+printf 'BWS_ACCESS_TOKEN=%s\nBWS_PROJECT_ID=<project id>\n' "$T" > ~/.config/yourcoffeesetup/bws
+chmod 600 ~/.config/yourcoffeesetup/bws; unset T
+
+# 4. The scheduler's own clone
+git clone git@github.com:ron2man/coffee-research.git ~/coffee-research-bot
+cd ~/coffee-research-bot && npm install
+npm run schedule -- doctor                # fix everything it lists before going on
+```
+
+Then move it, in this order:
+
+```sh
+# On the Mac (in ~/Projects/coffee-research-bot): stop the job
+npm run schedule -- uninstall
+
+# On the new machine (in ~/coffee-research-bot):
+npm run schedule -- claim                 # the Mac's checkout stops ticking even if its job is still installed
+npm run schedule -- install               # or --interval-minutes 20 for a faster pace
+sudo loginctl enable-linger "$USER"       # once: keep the timer running when nobody is logged in
+npm run schedule -- run-now
+sleep 90; npm run schedule -- logs        # look for "secrets: Bitwarden project" and "=== exit 0 ==="
+```
+
+Optional: copy the Mac's run log so the daily budget and cost history continue (`.backoffice/runs.jsonl` only, never the whole `.backoffice` folder):
+
+```sh
+scp mac:Projects/coffee-research-bot/.backoffice/runs.jsonl ~/coffee-research-bot/.backoffice/
+```
+
+Open the dashboard on the new machine (`npm run dashboard` in its clone). The Mac's dashboard keeps reading the Mac's clone, which is no longer the scheduler; it says so.
