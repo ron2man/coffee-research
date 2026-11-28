@@ -90,7 +90,7 @@
       "suggestion": "Close these warnings. If guide links are meant to point only to published slugs, change the check to warn only when the target slug has no item in the pipeline."
     }
   ],
-  "addressedBy": null,
+  "addressedBy": "writer-2026-11-28T15-57-41-205Z",
   "summary": "The prose is strong: each post leads with a clear recommendation, has a real keep-what-you-have test, attributes owner reports honestly and says plainly what wasn't tested. The two sources I spot-checked hold up. The main problem is that the writer's `reason` doesn't describe its artifact. Three revisions of the built-in-grinder post return a body identical to the first draft while the reasons claim edits, and one reason says the tools field is empty when it isn't. Fix that first, then the habit of writing without reading the cards (0–1 reads per run), which caused the lint rejection and a claim that overstates its card.",
   "keep": [
     "The first paragraph gives a clear recommendation and makes \"don't buy anything yet\" the default.",

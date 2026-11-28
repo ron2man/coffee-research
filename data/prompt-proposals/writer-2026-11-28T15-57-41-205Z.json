@@ -1,7 +1,7 @@
 {
   "id": "writer-2026-11-28T15-57-41-205Z",
   "agent": "writer",
-  "status": "open",
+  "status": "applied",
   "at": "2026-11-28T15:57:41.206Z",
   "summary": "Five changes to the writer prompt. Open the knowledge cards before writing and keep `unknown` claims out of `claims`. Leave doubtful sentences out of the body. Make revision reasons match the artifact exactly. Use short summaries plus guide links instead of repeating checks, and don't end on a recap. Keep plug, warranty and import advice out of the text. A new coffee guidance file says how to refer to Sage/Breville documents and which product names need tokens.",
   "changes": [
@@ -44,5 +44,7 @@
       "why": "The link to a missing guide is intended. barista-express-pro-clean-descale-routine is drafted in the pipeline. The fix belongs in the check, not the prompt."
     }
   ],
-  "niche": "coffee"
+  "niche": "coffee",
+  "appliedAt": "2026-11-28T18:41:53.001Z",
+  "appliedBy": "root"
 }
