@@ -1,0 +1,143 @@
+{
+  "slug": "grinder-for-barista-express-and-pro",
+  "itemId": "standalone-grinder-for-barista-express-pro",
+  "claims": [
+    {
+      "statement": "The manufacturer's troubleshooting for espresso that runs out too quickly lists a too-coarse grind, too little coffee and too light a tamp, not the burrs.",
+      "claimIds": [
+        "barista-express/troubleshooting-runs-too-quickly",
+        "barista-pro/troubleshooting-runs-too-quickly"
+      ]
+    },
+    {
+      "statement": "The manufacturer says to use beans 5–20 days after the roasted-on date; stale coffee may pour too quickly and taste bitter and watery.",
+      "claimIds": [
+        "barista-express/beans-roasted-on-5-20-days",
+        "barista-pro/beans-roasted-on-5-20-days"
+      ]
+    },
+    {
+      "statement": "Use single-wall baskets with fresh beans; dual-wall baskets are for pre-ground coffee.",
+      "claimIds": [
+        "barista-express/baskets-single-vs-dual-wall",
+        "barista-pro/baskets-single-vs-dual-wall"
+      ]
+    },
+    {
+      "statement": "As a dose guide, the tamper's metal cap should sit level with the basket rim after tamping.",
+      "claimIds": [
+        "barista-express/dose-and-extraction-targets",
+        "barista-pro/extraction-guide-fast-shot"
+      ]
+    },
+    {
+      "statement": "The booklet's burr cleaning (run empty, remove the top burr, brush burrs and chute) removes oil build-up that can impede performance.",
+      "claimIds": [
+        "barista-express/burr-cleaning-cycle",
+        "barista-pro/burr-cleaning-cycle"
+      ]
+    },
+    {
+      "statement": "The adjustable upper burr is a documented owner feature on both machines for a wider grind range; move it one number at a time and check the extraction after each adjustment.",
+      "claimIds": [
+        "barista-express/upper-burr-adjustment-documented",
+        "barista-pro/upper-burr-adjustment-documented"
+      ]
+    },
+    {
+      "statement": "A parts seller lists upper burr SP0027464 for machines with a PDC batch date of 1926 or later and SP0001801 for earlier machines; both listings name the Express and Pro, and the batch date is on the sticker under the machine.",
+      "claimIds": [
+        "barista-express/upper-burr-part-sp0027464",
+        "barista-express/upper-burr-part-sp0001801",
+        "barista-pro/upper-burr-part-sp0027464",
+        "barista-pro/upper-burr-part-sp0001801"
+      ]
+    },
+    {
+      "statement": "The Smart Grinder Pro comes with a portafilter cradle for 50–54 mm portafilters.",
+      "claimIds": [
+        "breville-smart-grinder-pro/portafilter-cradles"
+      ]
+    },
+    {
+      "statement": "CoffeeGeek's 2023 review says the Smart Grinder Pro uses a 40 mm conical burr group, the same one that was in the Barista Express; Seattle Coffee Gear's 2016 comparison found the Express burrs were conical stainless steel like the Smart Grinder Pro's.",
+      "claimIds": [
+        "breville-smart-grinder-pro/burr-group-shared-with-barista-express"
+      ]
+    },
+    {
+      "statement": "CoffeeGeek's reviewer calls the Smart Grinder Pro a clumpy grinder for espresso that retains a lot of grounds.",
+      "claimIds": [
+        "breville-smart-grinder-pro/espresso-limitations-review"
+      ]
+    },
+    {
+      "statement": "An owner on OzBargain said the Smart Grinder Pro would not be an upgrade from the Barista Express built-in grinder; others suggested a DF54.",
+      "claimIds": [
+        "breville-smart-grinder-pro/owner-not-an-upgrade"
+      ]
+    },
+    {
+      "statement": "The Barista Pro's built-in grinder uses Baratza European Precision Burrs; no source compares them with the Smart Grinder Pro's burrs.",
+      "claimIds": [
+        "barista-pro/builtin-grinder-baratza-burrs"
+      ]
+    },
+    {
+      "statement": "The DF54 is a single-dose grinder with 54 mm stainless flat burrs and stepless adjustment.",
+      "claimIds": [
+        "turin-df54/burrs-54mm-flat-stepless",
+        "turin-df54/us-stepless-adjustment"
+      ]
+    },
+    {
+      "statement": "In Coffeeblog's review, DF54 retention was 0.1 g or less from the third use.",
+      "claimIds": [
+        "turin-df54/retention-review"
+      ]
+    },
+    {
+      "statement": "The single-dose workflow is to weigh each dose and transfer grounds from the dosing cup.",
+      "claimIds": [
+        "turin-df54/us-single-dose-workflow"
+      ]
+    },
+    {
+      "statement": "A reader says the DF54 cradle is made for 58 mm portafilters and a 54 mm portafilter can be pushed in and held.",
+      "claimIds": [
+        "turin-df54/cradle-58mm-owner-comment"
+      ]
+    },
+    {
+      "statement": "Coffeeblog advises UK buyers to buy the DF54 from a UK retailer, warning that overseas sellers may ship an EU plug with no UK warranty and that import fees may apply.",
+      "claimIds": [
+        "turin-df54/uk-buying-caveat"
+      ]
+    },
+    {
+      "statement": "The Encore ESP has 40 mm conical steel (M2) burrs with a quick-release burr mount.",
+      "claimIds": [
+        "baratza-encore-esp/burrs-40mm-m2"
+      ]
+    },
+    {
+      "statement": "Baratza identifies settings 1–20 as the Encore ESP's espresso range.",
+      "claimIds": [
+        "baratza-encore-esp/espresso-settings"
+      ]
+    },
+    {
+      "statement": "Baratza lists an Encore ESP dosing cup intended for 54 mm portafilters.",
+      "claimIds": [
+        "baratza-encore-esp/us-dosing-cup"
+      ]
+    },
+    {
+      "statement": "The Barista Express comes with a 54 mm portafilter, and the manufacturer lists a 54 mm portafilter for the Barista Pro.",
+      "claimIds": [
+        "barista-express/portafilter-54mm",
+        "barista-pro/portafilter-54mm-gb"
+      ]
+    }
+  ]
+}
