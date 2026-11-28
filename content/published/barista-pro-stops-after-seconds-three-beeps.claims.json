@@ -1,0 +1,115 @@
+{
+  "slug": "barista-pro-stops-after-seconds-three-beeps",
+  "itemId": "barista-pro-stops-after-seconds-three-beeps",
+  "claims": [
+    {
+      "statement": "Hot water stops by itself after 60 seconds, so a cut-out after a few seconds is not the timeout.",
+      "claimIds": [
+        "barista-pro/hot-water-60s-auto-stop"
+      ]
+    },
+    {
+      "statement": "The manual says to run a short flow through the group head by pressing 1 CUP before inserting the portafilter, to preheat.",
+      "claimIds": [
+        "barista-pro/purge-group-head-preheat"
+      ]
+    },
+    {
+      "statement": "For no water flow, the manual lists an empty or unseated tank, a needed descale, and a choked puck: grind too fine, too much coffee, over-tamping or a blocked basket.",
+      "claimIds": [
+        "barista-pro/troubleshooting-no-flow-rows"
+      ]
+    },
+    {
+      "statement": "An empty tank or one below MIN can make the pump run loudly with no water coming through.",
+      "claimIds": [
+        "barista-pro/troubleshooting-no-flow-rows"
+      ]
+    },
+    {
+      "statement": "For no steam, the manual lists an empty or unseated tank and a needed descale, among other causes.",
+      "claimIds": [
+        "barista-pro/troubleshooting-no-steam-row"
+      ]
+    },
+    {
+      "statement": "Basket holes can be cleared with the cleaning-tool pin.",
+      "claimIds": [
+        "barista-pro/daily-care"
+      ]
+    },
+    {
+      "statement": "Owners describe the same cut-out with beeps on shots, hot water and steam, sometimes intermittent and becoming more frequent.",
+      "claimIds": [
+        "barista-pro/owner-reports-three-beep-cutout"
+      ]
+    },
+    {
+      "statement": "The manual says to soak a new water filter in cold water for 5 minutes before fitting it.",
+      "claimIds": [
+        "barista-pro/water-filter-soak-5-min"
+      ]
+    },
+    {
+      "statement": "One edition of the manual says to replace the filter every 2 months and the other every 3 months, more often in hard-water areas.",
+      "claimIds": [
+        "barista-pro/water-filter-interval-us",
+        "barista-pro/water-filter-interval-sage"
+      ]
+    },
+    {
+      "statement": "Descaling is the manual's fix for no flow and no steam, and mineral build-up reduces brewing flow.",
+      "claimIds": [
+        "barista-pro/descale-symptoms"
+      ]
+    },
+    {
+      "statement": "The DESCALE cycle is run from the menu with the filter removed, in three stages followed by a rinse.",
+      "claimIds": [
+        "barista-pro/descale-alert-procedure"
+      ]
+    },
+    {
+      "statement": "RESET DEFAULTS restores grind amount, filter size, shot temperature and the 1 CUP and 2 CUP volumes; the machine beeps and returns to READY. It is not presented as a fault fix.",
+      "claimIds": [
+        "barista-pro/reset-defaults-procedure"
+      ]
+    },
+    {
+      "statement": "A machine that is on but stops operating is the thermal cut-out: switch off, unplug, cool 30–60 minutes, and call support if it persists. It is the only troubleshooting row that sends owners to support.",
+      "claimIds": [
+        "barista-pro/troubleshooting-only-thermal-cutout-to-support"
+      ]
+    },
+    {
+      "statement": "The manual has no troubleshooting row for a cycle that stops after a few seconds with beeps, and no beep or error code list.",
+      "claimIds": [
+        "barista-pro/troubleshooting-no-beep-cutout-row"
+      ]
+    },
+    {
+      "statement": "A repair shop says a stop at about five seconds on this model is usually the flow meter or its wiring, not an air lock, and warns against generic compatible flow meters.",
+      "claimIds": [
+        "barista-pro/repair-shop-flow-meter-diagnosis"
+      ]
+    },
+    {
+      "statement": "The warranty covers repair or replacement when the machine is defective due to materials, workmanship or function.",
+      "claimIds": [
+        "barista-pro/warranty-scope"
+      ]
+    },
+    {
+      "statement": "Warranty claims go through manufacturer support, not the store, with the model number or batch code from the sticker under or on the back of the machine and proof of purchase. Exclusions include repairs by unauthorised parties and failing to follow care instructions.",
+      "claimIds": [
+        "barista-pro/warranty-claim-process-us"
+      ]
+    },
+    {
+      "statement": "One owner's flow-control part repair failed again about seven months later.",
+      "claimIds": [
+        "barista-pro/owner-reports-three-beep-cutout"
+      ]
+    }
+  ]
+}
