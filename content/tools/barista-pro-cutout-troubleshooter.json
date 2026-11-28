@@ -114,7 +114,7 @@
     },
     "cool-down": {
       "title": "Let it cool: this looks like the thermal cut-out",
-      "text": "Switch it off, unplug it and let it cool for 30 to 60 minutes. That's the booklet's fix for a machine that is on but has stopped working. If it still won't run after that, contact Breville or Sage support."
+      "text": "Switch it off, unplug it and let it cool for 30 to 60 minutes. That's the booklet's fix for a machine that is on but has stopped working. If it still won't run after that, contact the manufacturer's support."
     },
     "tank": {
       "title": "Seat the tank and fill it above MIN",
@@ -126,7 +126,7 @@
     },
     "new-filter": {
       "title": "Keep your machine: replace the water filter",
-      "text": "The filter was the problem. Soak a new one in cold water for 5 minutes before fitting it. Breville's booklet says to replace it every 2 months and Sage's guide every 3, and more often if your water is hard. A new filter is the only thing you need to buy."
+      "text": "The filter was the problem. Soak a new one in cold water for 5 minutes before fitting it. One edition of the booklet says to replace it every 2 months and the other every 3, and more often if your water is hard. A new filter is the only thing you need to buy."
     },
     "descale": {
       "title": "Run the DESCALE cycle",
@@ -141,8 +141,8 @@
       "text": "On a brand-new machine still inside its return window, take it back rather than keep troubleshooting. The booklet doesn't cover this fault. Owners and one repairer link it to the flow meter or its wiring, and that isn't something to fix at home."
     },
     "claim": {
-      "title": "Stop here and contact Breville or Sage support",
-      "text": "Don't open the machine: repairs by unauthorised parties can cost you the claim. Contact Breville or Sage support through their support page, not the store. Have the batch code from the sticker under or on the back of the machine and your receipt ready. If you're not sure you're covered, they can tell you."
+      "title": "Stop here and contact the manufacturer's support",
+      "text": "Don't open the machine: repairs by unauthorised parties can cost you the claim. Contact the manufacturer's support through their support page, not the store. Have the batch code from the sticker under or on the back of the machine and your receipt ready. If you're not sure you're covered, they can tell you."
     },
     "repair-or-replace": {
       "title": "Get a written quote, then decide on repair or replace",
