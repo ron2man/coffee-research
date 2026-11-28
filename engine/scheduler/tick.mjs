@@ -36,7 +36,7 @@ import { defaultNicheId, loadNiche, repoRoot } from '../state/niche.mjs';
 import { appendRun, loadItems, readJson, readRuns, saveItem, writeJsonAtomic, writeRunLog, writeTextAtomic } from '../state/store.mjs';
 import { assertValid } from '../state/validate.mjs';
 import { RunnerUnavailableError, runnerFor } from '../runner/index.mjs';
-import { assertFresh, commitInternal, commitMessage, remoteStatus, syncMain } from './git.mjs';
+import { assertFresh, commitInternal, commitMessage, fileChangedSince, headCommit, remoteStatus, syncMain } from './git.mjs';
 import { LockedError, acquireLock } from './lock.mjs';
 import { changedSince, snapshot } from './workspace.mjs';
 
@@ -623,7 +623,12 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
       let freshness = null;
       // This process loaded the engine before the sync. If the sync brought new commits (a merged
       // check, a fixed prompt), run the tick again in a fresh process so the new code does the work.
-      if (commit && syncMain(root) && !reloaded) return { reload: true };
+      const before = commit ? headCommit(root) : null;
+      if (commit && syncMain(root) && !reloaded) {
+        // The wrapper script itself changed (ops/tick.sh, which starts this process): it has to
+        // start again too, or this run would use the old one. Exit code 75 asks it to.
+        return { reload: true, wrapper: process.env.TICK_SH === '1' && !process.env.TICK_SH_RELOADED && fileChangedSince(root, before, 'ops/tick.sh') };
+      }
       else if (values['dry-run']) freshness = remoteStatus(root);
       else freshness = assertFresh(root);
       const result = await tick({ root, dryRun: values['dry-run'], nicheId: values.niche, lock: false, ignoreSchedule: values['ignore-schedule'] });
@@ -656,7 +661,10 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
       }
       try {
         result = await run();
-        if (result.reload) {
+        if (result.reload && result.wrapper) {
+          console.log('ops/tick.sh changed in the sync: exiting so it restarts with the new version');
+          process.exitCode = 75; // the lock is released below; the restarted tick takes it again
+        } else if (result.reload) {
           const child = spawnSync(process.execPath, process.argv.slice(1), { stdio: 'inherit', env: { ...process.env, TICK_RELOADED: '1' } });
           process.exitCode = child.status ?? 1;
         }

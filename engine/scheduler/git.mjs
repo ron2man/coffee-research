@@ -97,6 +97,18 @@ function rebaseOnto(root, remote, branch) {
  * Refuse to run unless the checkout is on the main branch; then sync with the remote.
  * Returns true when the sync brought in commits (the running code may now be out of date).
  */
+/** The current commit, or null outside a repository. */
+export function headCommit(root) {
+  const result = spawnSync('git', ['rev-parse', 'HEAD'], { cwd: root, encoding: 'utf8' });
+  return result.status === 0 ? result.stdout.trim() : null;
+}
+
+/** Did `path` change between commit `from` and HEAD? */
+export function fileChangedSince(root, from, path) {
+  if (!from) return false;
+  return spawnSync('git', ['diff', '--quiet', from, 'HEAD', '--', path], { cwd: root }).status === 1;
+}
+
 export function syncMain(root, { remote = policy.remote, branch = policy.mainBranch } = {}) {
   const current = git(root, ['symbolic-ref', '--short', 'HEAD']);
   if (current !== branch) throw new Error(`Scheduler commits run only on ${branch} (checkout is on ${current})`);
