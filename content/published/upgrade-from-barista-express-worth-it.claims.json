@@ -1,0 +1,164 @@
+{
+  "slug": "upgrade-from-barista-express-worth-it",
+  "itemId": "upgrade-from-barista-express-worth-it",
+  "claims": [
+    {
+      "statement": "The manual recommends beans with a 'Roasted On' date used 5 to 20 days after roasting; stale beans run fast.",
+      "claimIds": [
+        "barista-express/beans-roasted-on-5-20-days"
+      ]
+    },
+    {
+      "statement": "Dose so the tamper's metal cap sits level with the basket rim after tamping, and tamp firmly.",
+      "claimIds": [
+        "barista-express/dose-and-extraction-targets"
+      ]
+    },
+    {
+      "statement": "On the Express the steam light flashes while the machine heats for steam, and it purges water into the drip tray after shots and steaming.",
+      "claimIds": [
+        "barista-express/steam-heatup-auto-purge"
+      ]
+    },
+    {
+      "statement": "The manual lists a coarse grind, too small a dose and too light a tamp as the causes of a shot running too fast, and does not list the machine.",
+      "claimIds": [
+        "barista-express/troubleshooting-runs-too-quickly",
+        "barista-pro/troubleshooting-runs-too-quickly"
+      ]
+    },
+    {
+      "statement": "The Express built-in grinder has 16 settings; the Pro's has 30 settings with Baratza burrs.",
+      "claimIds": [
+        "barista-express/builtin-grinder-16-settings",
+        "barista-pro/builtin-grinder-baratza-burrs"
+      ]
+    },
+    {
+      "statement": "The Dual Boiler has no grinder in either market, so a standalone grinder is needed if you move to it.",
+      "claimIds": [
+        "sage-dual-boiler/no-built-in-grinder"
+      ]
+    },
+    {
+      "statement": "In a 2026 owner thread, replies said the Express's biggest bottleneck is the grinder, and that a dual boiler is worth it mainly for milk drinkers tired of the steaming wait.",
+      "claimIds": [
+        "barista-express/owner-upgrade-advice-dual-boiler",
+        "sage-dual-boiler/owner-upgrade-verdicts"
+      ]
+    },
+    {
+      "statement": "Express brew temperature can be adjusted up to 4°F either way in 2°F steps in Advanced Temperature Mode.",
+      "claimIds": [
+        "barista-express/temperature-adjust-2f-steps"
+      ]
+    },
+    {
+      "statement": "Barista Pro shot temperature can be adjusted from the SHOT TEMP menu.",
+      "claimIds": [
+        "barista-pro/shot-temp-adjustable"
+      ]
+    },
+    {
+      "statement": "The Express heats with a single thermocoil.",
+      "claimIds": [
+        "barista-express/heating-thermocoil-pid"
+      ]
+    },
+    {
+      "statement": "A retailer comparison and an independent review both say the Express cannot brew and steam at the same time.",
+      "claimIds": [
+        "barista-express/no-simultaneous-brew-steam"
+      ]
+    },
+    {
+      "statement": "The Dual Boiler brews and steams at the same time, with PID-controlled boilers.",
+      "claimIds": [
+        "sage-dual-boiler/simultaneous-brewing-and-steaming",
+        "sage-dual-boiler/simultaneous-us",
+        "sage-dual-boiler/pid-boilers"
+      ]
+    },
+    {
+      "statement": "The Oracle Dual Boiler's dual boilers let it steam while it brews, with PID temperature control.",
+      "claimIds": [
+        "breville-oracle-dual-boiler/dual-boilers-simultaneous",
+        "breville-oracle-dual-boiler/pid-triple-heating"
+      ]
+    },
+    {
+      "statement": "The Barista Pro's ThermoJet is listed with a 3-second heat-up, and its manual describes steaming after a short purge with no heat-up wait.",
+      "claimIds": [
+        "barista-pro/thermojet-3-second-heatup",
+        "barista-pro/steam-procedure"
+      ]
+    },
+    {
+      "statement": "The original Oracle is listed as discontinued in the US.",
+      "claimIds": [
+        "breville-oracle-dual-boiler/original-oracle-discontinued-us"
+      ]
+    },
+    {
+      "statement": "The Oracle Jet grinds, doses and tamps automatically into a 58 mm portafilter, textures milk hands-free, and heats with a ThermoJet rather than boilers.",
+      "claimIds": [
+        "breville-oracle-jet/auto-grind-dose-tamp",
+        "breville-oracle-jet/auto-milq",
+        "breville-oracle-jet/thermojet-not-boiler",
+        "breville-oracle-jet/grinder-45-settings"
+      ]
+    },
+    {
+      "statement": "The Oracle Dual Boiler automates grind, dose, tamp and milk, uses a 58 mm portafilter, and its grinder adjusts automatically.",
+      "claimIds": [
+        "breville-oracle-dual-boiler/auto-grind-dose-tamp",
+        "breville-oracle-dual-boiler/auto-milq",
+        "breville-oracle-dual-boiler/grinder-auto-adjust"
+      ]
+    },
+    {
+      "statement": "Owners of the original Oracle called its built-in grinder 'a bit meh', said grinds after the first come out coarser on back-to-back drinks, and some kept an external grinder.",
+      "claimIds": [
+        "breville-oracle-dual-boiler/owner-oracle-workflow"
+      ]
+    },
+    {
+      "statement": "Weak or no steam, shots that only drip and coffee that isn't hot enough are listed as descale symptoms in the manual's troubleshooting table.",
+      "claimIds": [
+        "barista-express/descale-symptoms-us"
+      ]
+    },
+    {
+      "statement": "The Express comes with a 54 mm portafilter; the Dual Boiler uses a 58 mm portafilter.",
+      "claimIds": [
+        "barista-express/portafilter-54mm",
+        "sage-dual-boiler/portafilter-diameter",
+        "sage-dual-boiler/portafilter-58mm-us"
+      ]
+    },
+    {
+      "statement": "The DF54 is a single-dose grinder with 54 mm flat burrs and stepless adjustment.",
+      "claimIds": [
+        "turin-df54/burrs-54mm-flat-stepless"
+      ]
+    },
+    {
+      "statement": "A reader of a DF54 review says its cradle is designed for 58 mm portafilters and a 54 mm one can be pushed in and held.",
+      "claimIds": [
+        "turin-df54/cradle-58mm-owner-comment"
+      ]
+    },
+    {
+      "statement": "The reviewer recommends UK buyers buy the DF54 from a UK seller, warning of EU plugs, no UK warranty and import fees from overseas sellers.",
+      "claimIds": [
+        "turin-df54/uk-buying-caveat"
+      ]
+    },
+    {
+      "statement": "Dual Boiler owners report mixed reliability: repairs after three and eight years, level-probe failures, a steam leak damaging a control board, a repairer suggesting a service every two years, and others calling it solid.",
+      "claimIds": [
+        "sage-dual-boiler/owner-reliability-reports"
+      ]
+    }
+  ]
+}
