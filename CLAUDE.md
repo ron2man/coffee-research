@@ -11,6 +11,7 @@ This repo is being rebuilt per [rebuild-spec.md](rebuild-spec.md). It's an auton
   - `state/item-cli.mjs`: human actions on items (resume, reject, park, reopen). `state/knowledge.mjs`: card validation; `state/validate-knowledge.mjs` checks every card.
   - `publish/`: the publishing pull request (`requestPublish`) and the passed → published sync each tick.
   - `scheduler/assist.mjs`: assist agents (the toolsmith) work on an item without changing its status.
+  - `focus/`: the live focus (`data/focus/state.json`): a weekly deterministic review retires covered products and adds the best catalog candidate by demand probe. `report/`: daily run digests (`data/reports/daily/`) and the weekly report.
   - `feedback/`: deterministic checks on every output (`checks.mjs`), the feedback store, the critic/tuner loop, and `cli.mjs` (`npm run feedback`, `npm run prompt`). Agents `critic` and `tuner` review outputs and propose prompt changes; a human applies them.
   - `agents/<name>/`: `agent.json` (mode, input status, outcomes → statuses, caps), `artifact.schema.json`, `fixtures/valid.json` + `fixtures/invalid.json`, and `prompt.md` once written. Agents get read-only tools only; the tick writes every file from their validated output, and any file an agent changes itself fails the run.
 - `niches/coffee/`: `niche.json` (categories, markets, sellers, disclosures), `style.md`, and `agents/<agent>.md` niche guidance appended to that agent's prompt. Engine prompts stay niche-agnostic; coffee specifics go here.
@@ -29,6 +30,8 @@ npm run tick -- --dry-run                  # show what the scheduler would run n
 npm run tick -- --commit                   # run one tick, commit + push internal changes to main
 npm run item -- list                       # items and status; also show|resume|reject|park|reopen|revise <id> --reason "..."
 npm run seed -- add "topic hint" --commit    # seed the idea agent (runs at the next tick)
+npm run focus -- show | review | undo | allow <id>   # the products ideas start from
+npm run report -- week                     # the week's report (weekly review)
 npm run feedback -- list | add <agent> "note"   # feedback per agent
 npm run prompt -- list | show|apply|reject <id> # prompt proposals from the tuner
 npm run site:preview                       # preview site on http://127.0.0.1:4321 (mock prices; restart to pick up content changes)

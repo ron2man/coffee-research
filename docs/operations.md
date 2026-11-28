@@ -77,6 +77,31 @@ The target is one guide a day: about 6 agent runs per guide (research, angle, to
 - **Daily budget:** a tick doesn't start an agent once 12 agent runs happened in the last 24 hours (each is about 8% of a usage window). Change it with `TICK_MAX_RUNS_PER_DAY` in `~/.config/yourcoffeesetup/env`.
 - The critic and tuner run only when the pipeline has nothing else to do; the idea agent runs when fewer than 4 ideas are waiting (seeds bring it forward).
 
+## Focus: which products ideas start from
+
+The idea agent and the demand collector start from the **focus**: a few products whose owners' problems the site covers next (spec section 2: build around equipment, one product at a time). `niches/coffee/niche.json` `focus.products` is only the starting list; the live list is `data/focus/state.json`, kept by a review in the tick (`engine/focus/focus.mjs`, no AI):
+
+- **When:** once a week (`focus.rotation.reviewEveryDays`), or after a day with nothing in the idea queue.
+- **Retire:** a product with `coveredAfterGuides` guides about it (it is one of the first two products in their `productIds`) moves to *covered*. Ideas about it are still fine with strong evidence. When the idea queue is empty and nothing reached that number, the active product with the most guides (at least half) is retired.
+- **Add**, up to `maxActive`: products with a knowledge card in `rotation.categories`, sold in every active market (card or catalog), held by the catalog. The catalog's troubleshooting rows and documents rank them; the top `probeCandidates` get a demand probe (search autocomplete for "why is my …", "… problems", "… not working" in every market). A product nobody searches problems for is never added. A product sharing a brand with the cluster gets a 25% bonus, so the site grows in clusters. If most probe requests fail, nothing is added that time.
+- **You:** the dashboard's Focus panel shows the live list, each product's reason with its numbers, and recent changes. **Undo the last change** brings back what it retired and excludes what it added (until you press **Allow again**). Pin or exclude products for good in `niche.json` (`focus.pinned`, `focus.exclude`).
+
+```sh
+npm run focus -- show
+npm run focus -- review            # run a review now and print the scores (no commit)
+npm run focus -- undo --commit
+npm run focus -- allow <id> --commit
+```
+
+## Weekly review
+
+The tick commits a digest of each finished day's runs to `data/reports/daily/<date>.json` (runs, failures, ticks, estimated cost and status changes; the run log itself stays on the scheduler's machine). `npm run report -- week` turns the digests and the committed state into the week's report: ideas created and approved, guides drafted, passed and published, every rejection with its reason, what is stuck, failures, cost per agent, focus changes, prompt proposals and which demand sources worked. A scheduled weekly review session reads it on Sunday morning and writes up what worked, what didn't and what to change.
+
+```sh
+npm run report -- week                 # the last 7 days
+npm run report -- week --to 2026-12-06 --json
+```
+
 ## Product catalog (read-only mirror)
 
 The catalog is a separate private repository (`niche.json` `catalog`, ron2man/coffee-catalog) that its own job fills hourly with manufacturer facts: every regional version with market names and model numbers, specifications with page sources, manuals as text with `--- page N ---` markers, and the manufacturers' troubleshooting tables. It has no prices, reviews or owner reports.

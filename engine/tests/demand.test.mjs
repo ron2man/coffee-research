@@ -42,7 +42,14 @@ const fakeFetch = (calls = []) => async (url, options = {}) => {
 
 test('queries come from focus products per market and English seeds', () => {
   const q = demandQueries(niche, { cards, seeds: [{ id: 's1', text: 'Which grinder should I buy? (more)' }, { id: 's2', text: 'איזה מטחנה' }] });
-  assert.deepEqual(q.map((x) => `${x.market}:${x.q}`), ['US:brand m', 'US:brand m problems', 'GB:other m', 'GB:other m problems', 'US:which grinder should i buy']);
+  assert.deepEqual(q.map((x) => `${x.market}:${x.q}`), ['US:brand m', 'GB:other m', 'US:brand m problems', 'GB:other m problems', 'US:which grinder should i buy']);
+});
+
+test('a capped query list still covers every focus product and every market', () => {
+  const two = { ...niche, focus: { ...niche.focus, products: [niche.focus.products[0], niche.focus.products[0] + '-b'] }, demand: { ...niche.demand, maxQueries: 4 } };
+  const q = demandQueries(two, { cards });
+  assert.deepEqual(new Set(q.map((x) => x.source)).size, 2, 'both products');
+  assert.deepEqual(new Set(q.map((x) => x.market)).size, 2, 'both markets');
 });
 
 test('rotate moves through the list day by day and never repeats within a run', () => {
@@ -105,7 +112,7 @@ test('demandUsage counts this month\'s keyed searches from earlier collections',
 
 test('question prefixes ask autocomplete how people start a problem', () => {
   const q = demandQueries({ ...niche, demand: { ...niche.demand, querySuffixes: [''], queryPrefixes: ['why is my '], maxQueries: 10 } }, { cards });
-  assert.deepEqual(q.map((x) => `${x.market}:${x.q}`), ['US:brand m', 'US:why is my brand m', 'GB:other m', 'GB:why is my other m']);
+  assert.deepEqual(q.map((x) => `${x.market}:${x.q}`), ['US:brand m', 'GB:other m', 'US:why is my brand m', 'GB:why is my other m']);
 });
 
 const providerNiche = {

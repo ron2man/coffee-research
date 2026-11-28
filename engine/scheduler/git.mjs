@@ -131,6 +131,13 @@ export function commitInternal(root, paths, message, { remote = policy.remote, b
 }
 
 export function commitMessage(result) {
+  const message = baseCommitMessage(result);
+  if (!result.focus) return !result.ran && result.digests && message === 'tick(null): no changes' ? 'tick: daily run digest' : message;
+  const focus = [...result.focus.added.map((id) => `+${id}`), ...result.focus.removed.map((id) => `-${id}`)].join(' ');
+  return result.ran || result.published?.length || result.changedFiles?.some((p) => p.startsWith('data/publish/')) ? `${message} · focus ${focus}` : `tick: focus ${focus} (${result.focus.trigger})`;
+}
+
+function baseCommitMessage(result) {
   if (result.assist) return `tick(${result.ran}): ${result.assist.target}: built ${result.assist.built.join(', ') || 'nothing'}${result.assist.skipped.length ? `, skipped ${result.assist.skipped.join(', ')}` : ''}`;
   if (!result.ran && result.changedFiles?.some((p) => p.startsWith('data/publish/'))) return `tick: publishing (${result.publishing?.join('; ') ?? 'pull requests'})`;
   if (!result.ran && result.published?.length) return `tick: published ${result.published.map((p) => p.split('/').pop().replace('.json', '')).join(', ')}`;

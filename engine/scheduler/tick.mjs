@@ -27,7 +27,9 @@ import { libraryCatalog } from '../library/library.mjs';
 import { catalogListing, syncCatalog } from '../catalog/catalog.mjs';
 import { processPublishQueue, syncPublished } from '../publish/publish.mjs';
 import { autoPullRequests } from '../publish/autopr.mjs';
-import { collectDemand, demandUsage } from '../demand/collect.mjs';
+import { autocomplete, collectDemand, demandUsage } from '../demand/collect.mjs';
+import { initialFocus, readFocus, reviewDue, reviewFocus, withFocus, writeFocus } from '../focus/focus.mjs';
+import { writeDailyDigests } from '../report/report.mjs';
 import { applyReview, applyTune, buildReviewInput, buildTuneInput, checkTuneArtifact, reviewCandidates, tuneCandidates } from '../feedback/loop.mjs';
 import { newItem, transition } from '../state/machine.mjs';
 import { defaultNicheId, loadNiche, repoRoot } from '../state/niche.mjs';
@@ -78,6 +80,9 @@ function lastRunAt(agent, runs, schedule) {
   const times = [logged, committed].filter(Boolean).map((t) => Date.parse(t));
   return times.length ? Math.max(...times) : null;
 }
+
+/** The real focus review: autocomplete over the network (Node's fetch). */
+const defaultFocusReview = (args) => reviewFocus({ ...args, autocomplete: (query) => autocomplete(fetch, query) });
 
 function byAge(a, b) {
   return a.updatedAt.localeCompare(b.updatedAt) || a.id.localeCompare(b.id);
@@ -386,7 +391,7 @@ function recordFailure(root, agent, chosenItems, error, meta, maxAttempts, writt
  * Run one tick. `runner` overrides per-agent runners (tests and simulation).
  * Returns a summary; throws only for store/config problems, never for agent failures.
  */
-export async function tick({ root = repoRoot, runner, now = new Date(), nicheId, agents = loadAgents(), dryRun = false, maxAttempts = MAX_ATTEMPTS, lock = true, ignoreSchedule = false, demandCollector, catalogSync, maxRunsPerDay = Number(process.env.TICK_MAX_RUNS_PER_DAY ?? 12) } = {}) {
+export async function tick({ root = repoRoot, runner, now = new Date(), nicheId, agents = loadAgents(), dryRun = false, maxAttempts = MAX_ATTEMPTS, lock = true, ignoreSchedule = false, demandCollector, catalogSync, focusReview, dailyDigests, maxRunsPerDay = Number(process.env.TICK_MAX_RUNS_PER_DAY ?? 12) } = {}) {
   if (lock && !dryRun) {
     let release;
     try {
@@ -396,12 +401,12 @@ export async function tick({ root = repoRoot, runner, now = new Date(), nicheId,
       throw error;
     }
     try {
-      return await tick({ root, runner, now, nicheId, agents, dryRun, maxAttempts, lock: false, ignoreSchedule, demandCollector, catalogSync, maxRunsPerDay });
+      return await tick({ root, runner, now, nicheId, agents, dryRun, maxAttempts, lock: false, ignoreSchedule, demandCollector, catalogSync, focusReview, dailyDigests, maxRunsPerDay });
     } finally {
       release();
     }
   }
-  const niche = loadNiche(nicheId ?? defaultNicheId(root), root);
+  let niche = loadNiche(nicheId ?? defaultNicheId(root), root);
   // Refresh the product catalog mirror before anything reads it (real runs only; tests pass a runner).
   const syncer = catalogSync === undefined ? (runner ? null : syncCatalog) : catalogSync;
   const catalogResult = !dryRun && syncer ? syncer(root, niche) : null;
@@ -416,6 +421,33 @@ export async function tick({ root = repoRoot, runner, now = new Date(), nicheId,
     ({ items } = loadItems(root));
     for (const path of publishedFiles) appendRun(root, { workflow: 'publish-sync', agent: null, itemId: path.split('/').pop().replace('.json', ''), status: 'completed', outcome: 'published', to: 'published' });
   }
+  // Focus: the products ideas start from. A deterministic review (weekly, or sooner when the idea
+  // queue is empty) retires covered products and adds the best candidate (engine/focus/focus.mjs).
+  // Upkeep files committed with this tick: daily run digests (engine/report/report.mjs), focus state.
+  const digester = dailyDigests === undefined ? (runner ? null : writeDailyDigests) : dailyDigests;
+  const focusFiles = !dryRun && digester ? digester(root, { now }) : [];
+  const digests = focusFiles.length;
+  let focusChange = null;
+  let focusState = niche.focus ? readFocus(root) ?? initialFocus(niche, now) : null;
+  const reviewer = focusReview === undefined ? (runner ? null : defaultFocusReview) : focusReview;
+  if (focusState && reviewer && !dryRun) {
+    const dry = !items.some((item) => ['idea', 'idea_approved'].includes(item.status));
+    const due = reviewDue(focusState, { now, niche, dry });
+    if (due.due) {
+      try {
+        const { cards } = loadCardsSync(join(root, 'knowledge'), categoryIds(niche));
+        const reviewed = await reviewer({ root, niche, cards, items, state: focusState, now, trigger: due.trigger });
+        focusState = reviewed.state;
+        focusChange = reviewed.change;
+        focusFiles.push(writeFocus(root, focusState));
+        appendRun(root, { workflow: 'focus-review', agent: null, itemId: null, status: 'completed', trigger: due.trigger, added: reviewed.change?.added ?? [], removed: (reviewed.change?.removed ?? []).map((r) => r.productId) });
+      } catch (error) {
+        appendRun(root, { workflow: 'focus-review', agent: null, itemId: null, status: 'failed', error: error.message });
+      }
+    }
+  }
+  niche = withFocus(niche, focusState);
+  const focusNote = { ...(focusChange ? { focus: { added: focusChange.added, removed: focusChange.removed.map((r) => r.productId), trigger: focusChange.trigger } } : {}), ...(digests ? { digests } : {}) };
   const critic = agents.find((agent) => agent.mode === 'review');
   const tuner = agents.find((agent) => agent.mode === 'tune');
   const loop = {
@@ -427,10 +459,10 @@ export async function tick({ root = repoRoot, runner, now = new Date(), nicheId,
   };
   const plan = planTick({ agents, items, runs: readRuns(root), schedule: readSchedule(root), now, ignoreSchedule, loop });
   const catalogNote = catalogResult && !catalogResult.skipped ? { catalog: catalogResult } : {};
-  if (!plan.chosen) return { ran: null, skipped: plan.skipped, changedFiles: publishedFiles, ...(publishedFiles.length ? { published: publishedFiles } : {}), ...catalogNote };
+  if (!plan.chosen) return { ran: null, skipped: plan.skipped, changedFiles: [...publishedFiles, ...focusFiles], ...(publishedFiles.length ? { published: publishedFiles } : {}), ...catalogNote, ...focusNote };
   const { agent, items: chosenItems } = plan.chosen;
-  const written = [...publishedFiles];
-  const summary = { ran: agent.name, itemIds: chosenItems.map((item) => item.id), skipped: plan.skipped, changedFiles: written, ...catalogNote };
+  const written = [...publishedFiles, ...focusFiles];
+  const summary = { ran: agent.name, itemIds: chosenItems.map((item) => item.id), skipped: plan.skipped, changedFiles: written, ...catalogNote, ...focusNote };
   if (dryRun) return { ...summary, dryRun: true };
 
   // Usage budget: each agent run draws on the subscription (about 8% of a usage window), so cap
@@ -439,7 +471,7 @@ export async function tick({ root = repoRoot, runner, now = new Date(), nicheId,
   const recent = new Set(readRuns(root).filter((r) => r.agent && !r.runnerUnavailable && Date.parse(r.timestamp) > dayAgo)
     .map((r) => r.runLog ?? `${r.agent}:${r.durationMs}`));
   if (recent.size >= maxRunsPerDay) {
-    return { ran: null, skipped: [{ agent: agent.name, reason: `daily budget: ${recent.size} agent runs in the last 24h (max ${maxRunsPerDay})` }], changedFiles: written };
+    return { ran: null, skipped: [{ agent: agent.name, reason: `daily budget: ${recent.size} agent runs in the last 24h (max ${maxRunsPerDay})` }], changedFiles: written, ...focusNote };
   }
 
   // Demand data for the idea agent, collected without AI (autocomplete, community search, YouTube). Real runs only.

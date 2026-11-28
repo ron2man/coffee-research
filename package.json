@@ -17,6 +17,8 @@
     "site:preview": "astro dev --root site --port 4321 --host 127.0.0.1",
     "dashboard": "node backoffice/server.mjs",
     "seed": "node engine/state/seed-cli.mjs",
+    "focus": "node engine/focus/cli.mjs",
+    "report": "node engine/report/cli.mjs",
     "site:build:production": "SITE_MODE=production astro build --root site",
     "library": "node engine/library/cli.mjs"
   },

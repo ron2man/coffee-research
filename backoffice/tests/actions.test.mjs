@@ -67,3 +67,24 @@ test('run-tick starts ops/tick.sh in the state root, and refuses while a tick ho
   assert.throws(() => startTick(root, { spawnTick: () => ({}) }), /already running/);
   release();
 });
+
+test('focus: the dashboard shows the live focus, undoes the last change and allows a product again', async (t) => {
+  const { readFocus, writeFocus } = await import('../../engine/focus/focus.mjs');
+  const { focusSummary } = await import('../../engine/focus/cli.mjs');
+  const { loadNiche } = await import('../../engine/state/niche.mjs');
+  const root = sandbox(t);
+  const niche = loadNiche('coffee', root);
+  assert.deepEqual(focusSummary(root, niche).active.map((a) => a.productId), niche.focus.products, 'before any review: the starting list');
+  await assert.rejects(runAction(root, 'focus-undo', {}, { commit: false }), /No focus change to undo/);
+  const at = '2026-12-01T10:00:00.000Z';
+  writeFocus(root, {
+    schemaVersion: 1, lastReviewAt: at, covered: [{ productId: 'barista-pro', at, guides: 6, reason: '6 guides' }], excluded: [],
+    active: [{ productId: 'barista-express', since: at, reason: 'x' }, { productId: 'bambino-plus', since: at, reason: 'score 9' }],
+    history: [{ at, trigger: 'weekly', added: ['bambino-plus'], removed: [{ productId: 'barista-pro', guides: 6, reason: '6 guides' }] }],
+  });
+  const undone = await runAction(root, 'focus-undo', {}, { commit: false });
+  assert.match(undone.message, /back barista-pro; excluded bambino-plus/);
+  assert.deepEqual(readFocus(root).active.map((a) => a.productId), ['barista-express', 'barista-pro']);
+  await runAction(root, 'focus-allow', { productId: 'bambino-plus' }, { commit: false });
+  assert.deepEqual(readFocus(root).excluded, []);
+});

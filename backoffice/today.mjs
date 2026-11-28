@@ -17,6 +17,7 @@ import { diffProposal } from '../engine/feedback/cli.mjs';
 import { titleProblems } from '../engine/feedback/checks.mjs';
 import { publishProblems, REQUESTS_DIR } from '../engine/publish/publish.mjs';
 import { listSeeds } from '../engine/state/seeds.mjs';
+import { focusSummary } from '../engine/focus/cli.mjs';
 
 const hourMs = 3_600_000;
 
@@ -111,6 +112,13 @@ export async function todayData(root) {
       preview: draft ? `http://127.0.0.1:4321/en-${(draft.market ?? 'US').toLowerCase()}/guides/${draft.slug}/` : null,
       commands: ['npm run site:preview', `npm run feedback -- add writer "..." --item ${item.id} --commit`] });
   }
+  try {
+    const focus = focusSummary(root, loadNiche(defaultNicheId(root), root));
+    const change = focus.changes[0];
+    if (change && !change.undone && !change.undo && now - Date.parse(change.at) < 7 * 24 * hourMs) {
+      inbox.push({ kind: 'Focus changed', title: `Ideas now start from ${focus.active.map((a) => a.productId).join(', ')}`, reason: `${change.trigger}: ${[...change.added.map((id) => `added ${id}`), ...change.removed.map((r) => `retired ${r.productId} (${r.reason})`)].join('; ')}. Undo it under Focus if it's wrong.`, at: change.at, focus: true, commands: ['npm run focus -- show', 'npm run focus -- undo --commit'] });
+    }
+  } catch { /* the focus panel shows the error */ }
   const recentFailures = runs.filter((r) => r.status === 'failed' && now - Date.parse(r.timestamp) < 24 * hourMs);
   // Only while it is still the latest event: a later successful run means the problem is gone.
   const unavailable = runs.at(-1)?.runnerUnavailable && now - Date.parse(runs.at(-1).timestamp) < 24 * hourMs ? runs.at(-1) : null;
@@ -160,6 +168,7 @@ export async function todayData(root) {
     proposals: proposals.slice(-10).reverse().map(({ id, agent, status, summary, at }) => ({ id, agent, status, summary, at })),
     articles: articles(root),
     openProposals: openProposals(root),
+    focus: (() => { try { return focusSummary(root, loadNiche(defaultNicheId(root), root)); } catch (error) { return { error: error.message }; } })(),
     seeds: listSeeds(root).reverse().slice(0, 15).map(({ id, text, status, considered, itemIds, attempts }) => ({ id, text, status, considered, itemIds, lastWhy: attempts?.at(-1)?.why ?? null })),
     runLogs: readRunLogs(root, { limit: 10 }).map(({ at, agent, itemIds, status, error, durationMs, usage, trace }) => ({ at, agent, itemIds, status, error, minutes: durationMs ? Math.round(durationMs / 6000) / 10 : null, costUsd: usage?.costUsd ?? null, summary: trace?.summary ?? null, calls: trace?.calls?.slice(0, 80) ?? [] })),
     costs: costs(runs),

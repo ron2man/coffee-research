@@ -35,6 +35,14 @@ function render(d) {
   $('feedback-list').innerHTML = `<table><thead><tr><th>Agent</th><th>Prompt</th><th>Open feedback</th><th>Latest critic review</th></tr></thead><tbody>${d.feedback.map((f) => `<tr><td>${esc(f.agent)}</td><td>${f.hasPrompt ? 'yes' : '<span class="bad">missing</span>'}</td><td>${f.open} / ${f.total}</td><td>${f.lastCritic ? `${esc(f.lastCritic.summary)} <span class="muted">(${ago(f.lastCritic.at)})</span>` : '<span class="muted">none yet</span>'}</td></tr>`).join('')}</tbody></table>
   <h3>Prompt proposals</h3>${d.proposals.length ? `<table><tbody>${d.proposals.map((p) => `<tr><td>${esc(p.id)}</td><td>${esc(p.status)}</td><td>${esc(p.summary)}</td></tr>`).join('')}</tbody></table>` : '<p class="muted">None yet. The tuner proposes once an agent has enough open feedback.</p>'}`;
 
+  const f = d.focus ?? {};
+  $('focus-panel').innerHTML = f.error ? `<p class="bad">${esc(f.error)}</p>` : `<p class="muted">Reviewed every week, or sooner when the idea queue is empty. Last review: ${ago(f.lastReviewAt)}. Pin or exclude products for good in niche.json (focus.pinned, focus.exclude).</p>
+    <table><thead><tr><th>Active</th><th>Since</th><th>Why</th></tr></thead><tbody>${(f.active ?? []).map((a) => `<tr><td>${esc(a.productId)}</td><td>${ago(a.since)}</td><td>${esc(a.reason)}</td></tr>`).join('')}</tbody></table>
+    ${f.changes?.length ? `<h3>Recent changes</h3>${f.changes.map((h) => `<div class="note"><strong>${esc(h.trigger)}</strong> · ${ago(h.at)}${h.undone ? ' · undone' : ''}<br>${[...h.added.map((id) => `+ ${esc(id)}`), ...h.removed.map((r) => `− ${esc(r.productId)}${r.reason ? ` (${esc(r.reason)})` : ''}`)].join('<br>')}</div>`).join('')}` : ''}
+    ${f.canUndo ? '<div class="actions"><button type="button" class="danger" id="focus-undo">Undo the last change</button><span class="muted">Brings back what it retired; what it added is excluded until you allow it again.</span></div>' : ''}
+    ${f.covered?.length ? `<h3>Covered</h3><p class="muted">${f.covered.map((c) => `${esc(c.productId)} (${esc(c.reason)})`).join(' · ')}</p>` : ''}
+    ${f.excluded?.length ? `<h3>Excluded</h3>${f.excluded.map((e) => `<div class="actions">${esc(e.productId)} <span class="muted">${esc(e.reason)}</span><button type="button" data-focus-allow="${esc(e.productId)}">Allow again</button></div>`).join('')}` : ''}`;
+
   $('seeds-list').innerHTML = d.seeds.length ? `<table><thead><tr><th>Seed</th><th>Status</th><th>Looked at</th><th>Cards / why not</th></tr></thead><tbody>${d.seeds.map((x) => `<tr><td>${esc(x.text)}</td><td>${esc(x.status)}</td><td>${x.considered}×</td><td>${esc(x.itemIds.join(', '))}${x.lastWhy ? `<div class="muted">${esc(x.lastWhy)}</div>` : ''}</td></tr>`).join('')}</tbody></table>` : '<p class="muted">No seeds yet.</p>';
   const total = d.costs.reduce((sum, c) => sum + c.costUsd, 0);
   $('costs').innerHTML = `<p class="muted">Cost is the CLI's estimate at API prices, not your subscription bill. Total: $${total.toFixed(2)}.</p><table><thead><tr><th>Agent</th><th>Runs</th><th>Failures</th><th>Avg min</th><th>Est. cost</th><th>Last</th></tr></thead><tbody>${d.costs.map((c) => `<tr><td>${esc(c.agent)}</td><td>${c.runs}</td><td class="${c.failures ? 'bad' : ''}">${c.failures}</td><td>${c.avgMinutes ?? '–'}</td><td>$${c.costUsd.toFixed(2)}</td><td>${ago(c.last)}</td></tr>`).join('')}</tbody></table>`;
@@ -181,6 +189,11 @@ document.addEventListener('click', async (event) => {
     const id = t.dataset.rejectProposal;
     return post('reject-proposal', { proposalId: id, text: document.querySelector(`[data-reason-for="${CSS.escape(id)}"]`).value }, t);
   }
+  if (t.id === 'focus-undo') {
+    if (!confirm('Undo the last focus change?')) return;
+    return post('focus-undo', {}, t);
+  }
+  if (t.dataset.focusAllow) return post('focus-allow', { productId: t.dataset.focusAllow }, t);
   if (t.dataset.inboxArticle) return openArticle(t.dataset.inboxArticle);
   if (t.dataset.itemAct) {
     const id = t.dataset.item;
