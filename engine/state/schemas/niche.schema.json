@@ -247,15 +247,17 @@
           "properties": {
             "tavily": { "type": "integer", "minimum": 0 },
             "serper": { "type": "integer", "minimum": 0 },
-            "brave": { "type": "integer", "minimum": 0 }
+            "brave": { "type": "integer", "minimum": 0 },
+            "serpapi": { "type": "integer", "minimum": 0 }
           }
         },
         "peopleAlsoAsk": {
           "type": "object",
           "additionalProperties": false,
-          "description": "Google's People also ask questions and related searches for the focus queries (SERPER_API_KEY).",
+          "description": "Google's People also ask questions and related searches for the focus queries (SERPER_API_KEY or SERPAPI_API_KEY).",
           "properties": {
-            "maxQueries": { "type": "integer", "minimum": 1 }
+            "maxQueries": { "type": "integer", "minimum": 1 },
+            "providers": { "type": "array", "minItems": 1, "items": { "enum": ["serper", "serpapi"] } }
           }
         },
         "webSearch": {
@@ -286,7 +288,7 @@
             "providers": {
               "type": "array",
               "minItems": 1,
-              "items": { "enum": ["tavily", "serper", "brave"] }
+              "items": { "enum": ["tavily", "serper", "brave", "serpapi"] }
             }
           }
         },

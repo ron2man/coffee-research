@@ -6,8 +6,9 @@
 //    falling back to the next when one is out of credit. The community pages themselves are never
 //    fetched: we keep the search engine's title, URL, date and snippet. This is how forum and Reddit
 //    threads reach the idea agent now that Reddit's API, JSON and RSS are closed to new projects.
-//  - "People also ask" questions and related searches from Google results (Serper): the questions
-//    Google itself groups around a query.
+//  - "People also ask" questions and related searches from Google results (Serper, SERPER_API_KEY,
+//    or SerpApi, SERPAPI_API_KEY, whichever has a key and budget first): the questions Google itself
+//    groups around a query.
 //  - YouTube: videos for the focus products and the questions owners leave in their comments
 //    (YouTube Data API, YOUTUBE_API_KEY).
 // Every source reports what worked, what failed and what was skipped, so a gap is visible.
@@ -125,20 +126,44 @@ async function serperSearch(fetchImpl, { q, site, key, country }) {
     .map((r) => thread({ title: r.title, url: r.url, age: r.date ?? null, excerpt: r.snippet }));
 }
 
+/** SerpApi (serpapi.com) Google results: free plan of 250 searches a month. */
+function serpapiGoogle(fetchImpl, { q, key, country, num = 10, extra = {} }) {
+  const params = new URLSearchParams({ engine: 'google', q, gl: country.toLowerCase(), hl: 'en', num: String(num), api_key: key, ...extra });
+  return getJson(fetchImpl, `https://serpapi.com/search.json?${params}`);
+}
+
+/** SerpApi: `<q> site:<site>`, past year. */
+async function serpapiSearch(fetchImpl, { q, site, key, country }) {
+  const data = await serpapiGoogle(fetchImpl, { q: `${q} site:${site}`, key, country, extra: { tbs: 'qdr:y' } });
+  return (data?.organic_results ?? []).map((r) => ({ title: r.title, url: r.link, date: r.date, snippet: r.snippet })).filter(onSite(site))
+    .map((r) => thread({ title: r.title, url: r.url, age: r.date ?? null, excerpt: r.snippet }));
+}
+
 /** Search providers in the order of preference niche.json gives; each needs its key in the environment. */
 export const SEARCH_PROVIDERS = {
   tavily: { env: 'TAVILY_API_KEY', search: tavilySearch },
   serper: { env: 'SERPER_API_KEY', search: serperSearch },
   brave: { env: 'BRAVE_SEARCH_API_KEY', search: braveSearch },
+  serpapi: { env: 'SERPAPI_API_KEY', search: serpapiSearch },
 };
+
+/** Providers of Google's "People also ask" boxes. */
+export const QUESTION_PROVIDERS = ['serper', 'serpapi'];
 
 /** One web search limited to a site. Returns search-engine metadata only. */
 export async function webSearch(fetchImpl, { q, site, key, country = 'us', provider = 'brave' }) {
   return SEARCH_PROVIDERS[provider].search(fetchImpl, { q, site, key, country });
 }
 
-/** Google's "People also ask" questions and related searches for a query (Serper). */
-export async function peopleAlsoAsk(fetchImpl, { q, key, country = 'us' }) {
+/** Google's "People also ask" questions and related searches for a query (Serper or SerpApi). */
+export async function peopleAlsoAsk(fetchImpl, { q, key, country = 'us', provider = 'serper' }) {
+  if (provider === 'serpapi') {
+    const data = await serpapiGoogle(fetchImpl, { q, key, country });
+    return {
+      questions: (data?.related_questions ?? []).map((x) => ({ question: clip(x.question, 200), answerSnippet: clip(x.snippet), url: x.link ?? null })).filter((x) => x.question),
+      related: (data?.related_searches ?? []).map((x) => clip(x.query, 120)).filter(Boolean).slice(0, 10),
+    };
+  }
   const data = await getJson(fetchImpl, 'https://google.serper.dev/search', { method: 'POST', headers: { 'X-API-KEY': key, 'Content-Type': 'application/json' }, body: JSON.stringify({ q, gl: country.toLowerCase(), hl: 'en', num: 10 }) });
   return {
     questions: (data?.peopleAlsoAsk ?? []).map((x) => ({ question: clip(x.question, 200), answerSnippet: clip(x.snippet), url: x.link ?? null })).filter((x) => x.question),
@@ -192,7 +217,7 @@ export async function collectDemand(niche, { cards, seeds = [], fetchImpl = fetc
     sources: {
       autocomplete: { ok: 0, failed: 0 },
       web: { ok: 0, failed: 0, error: null, skipped: null },
-      questions: { provider: 'serper', ok: 0, failed: 0, error: null, skipped: null },
+      questions: { provider: null, ok: 0, failed: 0, error: null, skipped: null },
       youtube: { ok: 0, failed: 0, units: 0, error: null, skipped: null },
     },
   };
@@ -249,19 +274,23 @@ export async function collectDemand(niche, { cards, seeds = [], fetchImpl = fetc
     }
   }
 
-  // "People also ask" and related searches (Serper only: Google's own question boxes).
+  // "People also ask" and related searches (Google's own question boxes): the first provider in
+  // demand.peopleAlsoAsk.providers with a key, that hasn't refused and has budget left.
   const paa = niche.demand?.peopleAlsoAsk;
   const paaState = result.sources.questions;
+  const paaKeyed = (paa?.providers ?? QUESTION_PROVIDERS).filter((id) => env[SEARCH_PROVIDERS[id]?.env]);
+  const paaProvider = paaKeyed.find((id) => !dead.has(id) && room(id) > 0);
   if (!paa) paaState.skipped = 'no demand.peopleAlsoAsk in niche.json';
-  else if (!env.SERPER_API_KEY) paaState.skipped = 'SERPER_API_KEY not set';
-  else if (dead.has('serper')) paaState.skipped = 'serper refused earlier in this collection';
+  else if (!paaKeyed.length) paaState.skipped = `no key set (${(paa.providers ?? QUESTION_PROVIDERS).map((id) => SEARCH_PROVIDERS[id].env).join(', ')})`;
+  else if (!paaProvider) paaState.skipped = paaKeyed.every((id) => dead.has(id)) ? `${paaKeyed.join(', ')} refused earlier in this collection` : `monthly ${paaKeyed.join(', ')} budget reached`;
   else {
-    const picked = rotate(englishQueries, Math.min(paa.maxQueries ?? 4, room('serper')), today);
-    if (!picked.length) paaState.skipped = room('serper') ? 'no queries' : 'monthly serper budget reached';
+    paaState.provider = paaProvider;
+    const picked = rotate(englishQueries, Math.min(paa.maxQueries ?? 4, room(paaProvider)), today);
+    if (!picked.length) paaState.skipped = 'no queries';
     for (const q of picked) {
-      spend('serper');
+      spend(paaProvider);
       try {
-        result.questions.push({ q, ...(await peopleAlsoAsk(fetchImpl, { q, key: env.SERPER_API_KEY, country: first })) });
+        result.questions.push({ q, ...(await peopleAlsoAsk(fetchImpl, { q, key: env[SEARCH_PROVIDERS[paaProvider].env], country: first, provider: paaProvider })) });
         paaState.ok += 1;
       } catch (error) {
         paaState.failed += 1;

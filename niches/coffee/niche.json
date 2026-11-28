@@ -110,16 +110,19 @@
       "providers": [
         "tavily",
         "serper",
-        "brave"
+        "brave",
+        "serpapi"
       ]
     },
     "searchBudgets": {
       "tavily": 900,
       "serper": 150,
-      "brave": 900
+      "brave": 900,
+      "serpapi": 230
     },
     "peopleAlsoAsk": {
-      "maxQueries": 4
+      "maxQueries": 4,
+      "providers": ["serper", "serpapi"]
     },
     "youtube": {
       "maxSearches": 6,

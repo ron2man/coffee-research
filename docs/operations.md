@@ -115,7 +115,7 @@ The scheduler's clone needs read access to the catalog repository with the same 
 Before the idea agent runs, the scheduler collects demand data without AI and saves it in `data/demand/` (`niche.json` `demand`):
 
 - **Search autocomplete** per market for the focus products, with suffixes (`querySuffixes`: "problems", "vs" …) and question openings (`queryPrefixes`: "why is my", "how to" …, which make autocomplete complete the problem people type), plus your English seeds. Free, no key.
-- **People also ask** (`demand.peopleAlsoAsk`, Serper): the questions Google shows for a focus query, with their short answer snippet, and Google's related searches.
+- **People also ask** (`demand.peopleAlsoAsk`, Serper or SerpApi, the first in `providers` with a key and budget): the questions Google shows for a focus query, with their short answer snippet, and Google's related searches.
 - **Community threads through web search** (`demand.webSearch.sites`: r/espresso, r/Coffee, Home-Barista, CoffeeGeek, Coffee Forums UK). We keep each search result's title, URL, date and snippet and never open the site itself. Queries rotate daily across product × site pairs, at most `maxQueries` per run. Providers are tried in `webSearch.providers` order (Tavily, then Serper, then Brave): the first one with a key and budget left answers, and one that refuses (no credit, bad key, rate limit) hands the query to the next.
 - **YouTube**: videos for the focus products and the question-like comments under them (YouTube Data API, free quota of 10,000 units a day; one search with its comment pages costs about 103 units, a run of 6 about 620).
 
@@ -126,6 +126,7 @@ Budgets (`demand.searchBudgets`, requests per month per provider, counted from e
 | Tavily | `TAVILY_API_KEY` | 1,000 credits a month, no card; a basic search is 1 credit | 900 |
 | Serper (Google results) | `SERPER_API_KEY` | 2,500 searches once at sign-up, no card | 150 (about 16 months) |
 | Brave | `BRAVE_SEARCH_API_KEY` | no free plan since Feb 2026: $5 monthly credit, card required | 900 |
+| SerpApi (Google results) | `SERPAPI_API_KEY` | 250 searches a month, renewing, no card (checked 2026-11-28) | 230 |
 
 Reddit itself is closed to us: its Data API needs approval and stopped taking new requests on 2026-10-31, the public JSON returns 403, RSS ended on 2026-11-13, and the remaining public API ends in March 2027. Search results that point at Reddit threads are the route that's left, plus your own seeds from the dashboard.
 
@@ -162,7 +163,8 @@ chmod 600 ~/.config/yourcoffeesetup/env
 ```
 
 - Tavily: sign up at https://app.tavily.com and copy the key (free plan, no card).
-- Serper: sign up at https://serper.dev and copy the key (free credits, no card).
+- Serper: sign up at https://serper.dev and copy the key (free credits, no card). Not the same service as SerpApi.
+- SerpApi: sign up at https://serpapi.com and copy the key from the dashboard (free plan, renewing monthly). Its secret is `SERPAPI_API_KEY`.
 - YouTube: in Google Cloud Console create a project, enable "YouTube Data API v3", create an API key and restrict it to that API.
 - Brave (optional): https://api-dashboard.search.brave.com, Search plan; set a $5 spending limit. Its API terms (2026-09-01) forbid storing results beyond transient use, which `data/demand/` does, so leave it last or unset.
 
