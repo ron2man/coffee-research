@@ -183,3 +183,27 @@ test('budgets come from earlier collections this month', async () => {
   assert.match(spent.sources.web.skipped, /budget reached/);
   assert.match(spent.sources.questions.skipped, /serper budget/);
 });
+
+test('People also ask through SerpApi when only its key is set, counted against its own budget', async () => {
+  const calls = [];
+  const fetchImpl = async (url, options = {}) => {
+    calls.push(url);
+    if (url.includes('suggestqueries')) return { ok: true, json: async () => ['q', []] };
+    if (url.startsWith('https://serpapi.com/search.json')) {
+      return { ok: true, json: async () => ({ related_questions: [{ question: 'Why is my espresso sour?', snippet: 'Grind finer.', link: 'https://a.example/x' }], related_searches: [{ query: 'brand m sour shots' }] }) };
+    }
+    return { ok: false, status: 403 };
+  };
+  const paaOnly = { ...providerNiche, demand: { ...providerNiche.demand, webSearch: undefined, searchBudgets: { serpapi: 3 }, peopleAlsoAsk: { maxQueries: 2 } } };
+  const result = await collectDemand(paaOnly, { cards, fetchImpl, env: { SERPAPI_API_KEY: 'k' }, today: '2026-11-25' });
+  assert.equal(result.sources.questions.provider, 'serpapi');
+  assert.equal(result.sources.questions.ok, 2);
+  assert.equal(result.questions[0].questions[0].question, 'Why is my espresso sour?');
+  assert.deepEqual(result.questions[0].related, ['brand m sour shots']);
+  const url = new URL(calls.find((c) => c.includes('serpapi')));
+  assert.deepEqual([url.searchParams.get('engine'), url.searchParams.get('api_key'), url.searchParams.get('gl')], ['google', 'k', 'us']);
+  const spent = await collectDemand(paaOnly, { cards, fetchImpl, env: { SERPAPI_API_KEY: 'k' }, today: '2026-11-25', usage: { web: 0, youtube: 0, providers: { serpapi: 3 } } });
+  assert.match(spent.sources.questions.skipped, /serpapi budget reached/);
+  const none = await collectDemand(paaOnly, { cards, fetchImpl, env: {}, today: '2026-11-25' });
+  assert.match(none.sources.questions.skipped, /SERPER_API_KEY, SERPAPI_API_KEY/);
+});
