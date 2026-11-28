@@ -366,7 +366,7 @@ ${mockPhoto(site.mock?.home ?? postPhoto(site, lead.slug), 'feature-photo')}` : 
   const tiles = site.categories.length < 2 ? '' : site.categories.map((c) => `<a class="tile" href="/${market.locale}/${c.id}/"><span class="tile-title">${escape(navLabel(c))}</span><span class="tile-count">${c.count} guides</span></a>`).join('');
   return `<section class="wrap" id="guides" aria-labelledby="guides-title">
 <div class="hero">
-<h1 class="intro" id="guides-title">Straight answers for home espresso.</h1>
+<h1 class="intro" id="guides-title">Straight answers for home&nbsp;espresso.</h1>
 <p class="intro-sub">Fix it, upgrade it, or keep it. Including when to buy nothing.</p>
 </div>
 ${feature}

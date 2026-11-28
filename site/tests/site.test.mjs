@@ -284,7 +284,7 @@ test('home hero: one headline without the market, then a quieter line (as on the
   const { read } = build('production');
   for (const locale of ['en-us', 'en-gb']) {
     const hero = read(`${locale}/index.html`).match(/<div class="hero">[\s\S]*?<\/div>/)?.[0] ?? '';
-    assert.match(hero, /<h1 class="intro" id="guides-title">Straight answers for home espresso\.<\/h1>/, locale);
+    assert.match(hero, /<h1 class="intro" id="guides-title">Straight answers for home&nbsp;espresso\.<\/h1>/, locale);
     assert.match(hero, /<p class="intro-sub">Fix it, upgrade it, or keep it\. Including when to buy nothing\.<\/p>/, locale);
   }
   assert.match(read('en-gb/index.html'), /<title>[^<]*in the UK<\/title>/, 'the market stays in the page title for search');
