@@ -1,0 +1,10 @@
+{
+  "itemId": "barista-pro-stops-after-seconds-three-beeps",
+  "slug": "barista-pro-stops-after-seconds-three-beeps",
+  "status": "open",
+  "branch": "publish/barista-pro-stops-after-seconds-three-beeps",
+  "sha": "668adf3fc83e197a89dcbd059c319153e2e6ce9a",
+  "prUrl": "https://github.com/ron2man/coffee-research/pull/24",
+  "requestedBy": "scheduler (passed the judge)",
+  "at": "2026-11-28T15:48:44.050Z"
+}

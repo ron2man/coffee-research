@@ -3,18 +3,19 @@
   "id": "barista-pro-stops-after-seconds-three-beeps",
   "type": "new-post",
   "niche": "coffee",
-  "status": "drafted",
+  "status": "passed",
   "attempts": 0,
   "revisions": 0,
   "createdAt": "2026-11-27T11:20:26.781Z",
-  "updatedAt": "2026-11-28T15:37:34.947Z",
+  "updatedAt": "2026-11-28T15:48:42.033Z",
   "artifacts": {
     "idea": "data/ideas/barista-pro-stops-after-seconds-three-beeps.json",
     "idea-judge": "data/idea-scores/barista-pro-stops-after-seconds-three-beeps.json",
     "research": "data/research/barista-pro-stops-after-seconds-three-beeps.json",
     "angle": "data/briefs/barista-pro-stops-after-seconds-three-beeps.json",
     "toolsmith": "data/tools/barista-pro-stops-after-seconds-three-beeps.json",
-    "writer": "content/drafts/barista-pro-stops-after-seconds-three-beeps.json"
+    "writer": "content/drafts/barista-pro-stops-after-seconds-three-beeps.json",
+    "post-judge": "data/reviews/barista-pro-stops-after-seconds-three-beeps.json"
   },
   "history": [
     {
@@ -51,6 +52,13 @@
       "to": "drafted",
       "by": "writer",
       "reason": "The post follows the brief. It opens with a split test using hot water and 1 CUP with no portafilter fitted. Then come the free checks in the manual's order: tank, water filter, descale, RESET DEFAULTS, and the thermal cool-down for a machine that has stopped altogether. The stop rule says not to open the machine: claim the warranty, or if it's out of warranty, get a written quote for a genuine part and weigh it against a replacement, with no numbers. I placed the barista-pro-cutout-troubleshooter tool near the top. Every product fact comes from supported barista-pro claims, and I added purge-group-head-preheat to back the 1 CUP test with no portafilter. The things the brief listed to leave out are left out: the steam timeout, the support article's contents, part numbers and prices, the warranty length, and what the beeps mean. Support is named with the {{brand:barista-pro}} token, the filter interval is written as one edition of the manual against the other, and the body has no external inline links. offerIds is empty. The brief only gives a dont-buy touchpoint, which is the reader's own machine, and the one purchase the post mentions (a replacement water filter for the Barista Pro tank) has no knowledge card yet. The catalog has breville-claroswiss-water-filter with no card. If it is researched, it could be added as an offer for the filter branch."
+    },
+    {
+      "at": "2026-11-28T15:48:42.033Z",
+      "from": "drafted",
+      "to": "passed",
+      "by": "post-judge",
+      "reason": "This settles the owner's decision better than anything ranking for the query. The opening paragraph gives a one-minute hot-water/1 CUP test that separates a puck problem from a water-path fault. Four free checks follow in order, each tied to its manual row, then a clear stop rule (don't open it; claim the warranty or get a written quote) and a complete ending that says what, if anything, to buy. The claims hold up against the barista-pro card, including the flow-meter 'turbine' line, which comes from the repair-shop claim. It names products with market-neutral tokens, offerIds is empty as the brief intends, and no automated checks are blocking."
     }
   ]
 }

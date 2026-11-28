@@ -1,0 +1,46 @@
+{
+  "scores": {
+    "readerValueVsCompetitors": {
+      "score": 5,
+      "reason": "The split test ('Take the portafilter out… turn the dial to hot water. The manual says hot water stops by itself after 60 seconds') and the ordered checks followed by 'This is where you stop' give the reader a decision. No competitor gives one: the forum threads end without a fix, and iFixit has only a video link. The warranty steps ('Tell them what you've already done… That saves you a round of the same suggestions') are practical and found nowhere else."
+    },
+    "distinctivenessVoice": {
+      "score": 4,
+      "reason": "It commits in the first line ('Leave the grind dial alone for now') and takes clear positions: 'don't open the machine and don't buy parts', and 'I'd lean toward replacing over a second paid repair'. Sections vary in shape (a test, a numbered list, a warranty checklist), so it doesn't read as a template. A few lines run a bit flat, like 'The rest of the page explains why each check is in its place.'"
+    },
+    "honestyAboutLimits": {
+      "score": 5,
+      "reason": "It states the unknowns once and plainly: 'The manual has no entry for a cycle that runs a few seconds, beeps and stops, and no list of beep codes', 'I can't give you a number: I found no reliable repair costs', and the repair shop is framed as 'one repairer's view'. It admits RESET DEFAULTS probably won't help instead of overselling it."
+    },
+    "evidenceIntegrity": {
+      "score": 5,
+      "reason": "Each factual statement maps to a claim, and I checked the two claims outside the brief (purge-group-head-preheat, daily-care) on the card. The flow-meter description ('a small turbine the machine counts') matches repair-shop-flow-meter-diagnosis. The filter interval is given as 'one edition… the other' and not tied to a market. The draft avoids everything the brief listed to leave out: the steam timeout, the support article's contents, prices and the warranty length."
+    },
+    "topicFit": {
+      "score": 5,
+      "reason": "It delivers the brief's thesis point by point: the hot-water test first, the free water-path checks in order, then hand it to support rather than opening it. It covers every mustInclude item, including the keep-yours default, the 'When I'd choose differently' cases (return window, shots only, a repeat failure) and the collapsed sources section."
+    }
+  },
+  "wouldForward": true,
+  "competitorComparison": [
+    {
+      "url": "https://www.home-barista.com/repairs/breville-barista-pro-hot-water-stops-and-beeps-after-5-seconds-air-lock-cleared-with-massage-gun-t105337.html",
+      "weGiveThatTheyDont": "A sourced, ordered set of free checks, plus a warranty-safe stop rule. The thread offers one owner's massage-gun air-lock trick, which can risk the warranty and doesn't explain when to give up and claim."
+    },
+    {
+      "url": "https://ts.ifixit.com/Answers/View/890461/Breville+Barista+Pro+machine+stops+dispensing+water+after+5sec",
+      "weGiveThatTheyDont": "A written diagnosis at all. The iFixit question's only answer is a bare video link, with no test, no check order and no repair-or-replace guidance."
+    },
+    {
+      "url": "https://www.breville.com/en-us/support/article/ka0QU000002ZkrdYAC",
+      "weGiveThatTheyDont": "Search summaries say the manufacturer's article lists grind causes, a test without the portafilter, a filter check and priming. We add the 60-second hot-water benchmark that tells a fault from the timeout, the descale and reset steps in order, and an honest out-of-warranty repair-or-replace rule, including the owner whose repair failed again after seven months."
+    }
+  ],
+  "blockingActions": [],
+  "optionalImprovements": [
+    "The dial-in guide is linked twice (in the shots-only branch and again under 'When I'd choose differently'). Keep one link and make the second mention plain text, so the body stays clearly within the 2-link budget.",
+    "If a human can read Breville's support article in a browser and it confirms a priming step, add it as a free check between the tank and the filter. It's the one free fix competitors mention that this post leaves out.",
+    "Once breville-claroswiss-water-filter has a knowledge card, add it as the offer for the 'filter fixed it' branch, since that's the post's only recommended purchase.",
+    "Cut 'The rest of the page explains why each check is in its place.' The tool line before it is enough."
+  ]
+}
