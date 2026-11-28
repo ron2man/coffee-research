@@ -9,7 +9,7 @@ import { repoRoot } from '../state/niche.mjs';
 import { saveItem } from '../state/store.mjs';
 import { fakeRunner } from '../runner/index.mjs';
 import { tick } from '../scheduler/tick.mjs';
-import { StaleCheckoutError, assertFresh, classify, commitInternal, commitMessage, syncMain } from '../scheduler/git.mjs';
+import { StaleCheckoutError, assertFresh, fileChangedSince, classify, commitInternal, commitMessage, headCommit, syncMain } from '../scheduler/git.mjs';
 
 function repo(t) {
   const dir = mkdtempSync(join(tmpdir(), 'engine-git-'));
@@ -115,6 +115,22 @@ test('a push rejected because main moved is rebased and retried', async (t) => {
   assert.equal(syncMain(root), true, 'new commits came in: the tick restarts with the new code');
   assert.equal(git('log', '-1', '--format=%s'), 'Unpushed tick commit');
   assert.equal(git('rev-parse', 'HEAD~1'), sha);
+});
+
+test('a sync that changes ops/tick.sh is detected, so the wrapper script restarts too', (t) => {
+  const { root, git } = repo(t);
+  const { other, otherGit } = otherClone(root);
+  const before = headCommit(root);
+  mkdirSync(join(other, 'ops'), { recursive: true });
+  writeFileSync(join(other, 'ops', 'tick.sh'), '#!/bin/bash\necho new\n');
+  otherGit('add', 'ops/tick.sh');
+  otherGit('commit', '-qm', 'New wrapper');
+  otherGit('push', '-q', 'origin', 'main');
+  assert.equal(syncMain(root), true);
+  assert.equal(fileChangedSince(root, before, 'ops/tick.sh'), true);
+  assert.equal(fileChangedSince(root, before, 'engine/scheduler/tick.mjs'), false);
+  assert.equal(fileChangedSince(root, null, 'ops/tick.sh'), false);
+  assert.match(git('log', '-1', '--format=%s'), /New wrapper/);
 });
 
 test('an agent that writes files itself fails the run and nothing is committed for it', async (t) => {
