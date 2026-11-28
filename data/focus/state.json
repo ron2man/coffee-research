@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "active": [
+    {
+      "productId": "barista-express",
+      "since": "2026-11-28T17:05:14.718Z",
+      "reason": "starting list in niche.json"
+    },
+    {
+      "productId": "sage-bambino",
+      "since": "2026-11-28T17:05:14.718Z",
+      "reason": "starting list in niche.json"
+    },
+    {
+      "productId": "bambino-plus",
+      "since": "2026-11-28T17:05:14.718Z",
+      "reason": "starting list in niche.json"
+    },
+    {
+      "productId": "breville-smart-grinder-pro",
+      "since": "2026-11-28T17:05:14.718Z",
+      "reason": "starting list in niche.json"
+    }
+  ],
+  "covered": [
+    {
+      "productId": "barista-pro",
+      "at": "2026-11-28T17:05:14.718Z",
+      "guides": 6,
+      "reason": "6 guides (covered at 6)"
+    }
+  ],
+  "excluded": [],
+  "lastReviewAt": "2026-11-28T17:05:14.718Z",
+  "history": [
+    {
+      "at": "2026-11-28T17:05:14.718Z",
+      "trigger": "first review",
+      "added": [],
+      "removed": [
+        {
+          "productId": "barista-pro",
+          "guides": 6,
+          "reason": "6 guides (covered at 6)"
+        }
+      ],
+      "scores": [],
+      "probe": null
+    }
+  ]
+}

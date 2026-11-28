@@ -1,0 +1,148 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-11-22",
+  "ticks": 11,
+  "agents": {
+    "research": {
+      "runs": 2,
+      "failed": 0,
+      "minutes": 20.5,
+      "costUsd": 2.39
+    },
+    "critic": {
+      "runs": 1,
+      "failed": 0,
+      "minutes": 1.5,
+      "costUsd": 0.35
+    },
+    "angle": {
+      "runs": 1,
+      "failed": 0,
+      "minutes": 1.5,
+      "costUsd": 0.49
+    },
+    "writer": {
+      "runs": 4,
+      "failed": 2,
+      "minutes": 40.6,
+      "costUsd": 1.72
+    },
+    "post-judge": {
+      "runs": 2,
+      "failed": 0,
+      "minutes": 1.3,
+      "costUsd": 0.65
+    },
+    "idea": {
+      "runs": 2,
+      "failed": 0,
+      "minutes": 6.2,
+      "costUsd": 1.86
+    },
+    "tuner": {
+      "runs": 1,
+      "failed": 0,
+      "minutes": 0.6,
+      "costUsd": 0.18
+    }
+  },
+  "failures": [
+    {
+      "at": "2026-11-22T14:50:07.847Z",
+      "workflow": "agent:idea",
+      "agent": "idea",
+      "itemId": null,
+      "error": "Claude CLI not found (claude). Install it or set CLAUDE_BIN."
+    },
+    {
+      "at": "2026-11-22T16:09:58.659Z",
+      "workflow": "agent:writer",
+      "agent": "writer",
+      "itemId": "breville-builtin-grinder-wont-grind-fine-enough",
+      "error": "quality checks failed: breville-builtin-grinder-wont-grind-fine-enough: claims first-hand testing (\"hands-on\") without human data"
+    },
+    {
+      "at": "2026-11-22T16:47:22.590Z",
+      "workflow": "agent:writer",
+      "agent": "writer",
+      "itemId": "breville-builtin-grinder-wont-grind-fine-enough",
+      "error": "claude -p timed out after 30 minutes"
+    }
+  ],
+  "runnerUnavailable": 1,
+  "transitions": [
+    {
+      "itemId": "breville-builtin-grinder-wont-grind-fine-enough",
+      "from": "idea_approved",
+      "to": "needs_human",
+      "by": "research"
+    },
+    {
+      "itemId": "breville-builtin-grinder-wont-grind-fine-enough",
+      "from": "idea_approved",
+      "to": "researched",
+      "by": "research"
+    },
+    {
+      "itemId": "breville-builtin-grinder-wont-grind-fine-enough",
+      "from": "researched",
+      "to": "briefed",
+      "by": "angle"
+    },
+    {
+      "itemId": "breville-builtin-grinder-wont-grind-fine-enough",
+      "from": "briefed",
+      "to": "drafted",
+      "by": "writer"
+    },
+    {
+      "itemId": "breville-builtin-grinder-wont-grind-fine-enough",
+      "from": "drafted",
+      "to": "passed",
+      "by": "post-judge"
+    },
+    {
+      "itemId": "uk-nespresso-to-beans-bean-to-cup-or-espresso-machine",
+      "from": null,
+      "to": "idea",
+      "by": "idea"
+    },
+    {
+      "itemId": "uk-coffee-machine-gift-for-partner-non-coffee-drinker",
+      "from": null,
+      "to": "idea",
+      "by": "idea"
+    },
+    {
+      "itemId": "breville-builtin-grinder-wont-grind-fine-enough",
+      "from": "briefed",
+      "to": "drafted",
+      "by": "writer"
+    },
+    {
+      "itemId": "breville-builtin-grinder-wont-grind-fine-enough",
+      "from": "drafted",
+      "to": "passed",
+      "by": "post-judge"
+    },
+    {
+      "itemId": "breville-builtin-grinder-wont-grind-fine-enough",
+      "from": "passed",
+      "to": "briefed",
+      "by": "human:revise"
+    },
+    {
+      "itemId": "breville-builtin-grinder-wont-grind-fine-enough",
+      "from": "briefed",
+      "to": "blocked",
+      "by": "writer"
+    },
+    {
+      "itemId": "breville-builtin-grinder-wont-grind-fine-enough",
+      "from": "blocked",
+      "to": "briefed",
+      "by": "human:resume"
+    }
+  ],
+  "focus": []
+}

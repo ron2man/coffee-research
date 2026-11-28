@@ -1,0 +1,48 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-11-21",
+  "ticks": 2,
+  "agents": {
+    "critic": {
+      "runs": 1,
+      "failed": 0,
+      "minutes": 0.9,
+      "costUsd": 0.23
+    },
+    "idea-judge": {
+      "runs": 4,
+      "failed": 0,
+      "minutes": 3.6,
+      "costUsd": 1.36
+    }
+  },
+  "failures": [],
+  "runnerUnavailable": 0,
+  "transitions": [
+    {
+      "itemId": "breville-builtin-grinder-wont-grind-fine-enough",
+      "from": "idea",
+      "to": "idea_approved",
+      "by": "idea-judge"
+    },
+    {
+      "itemId": "sage-bambino-descale-cycle-fails-tank-empty",
+      "from": "idea",
+      "to": "rejected",
+      "by": "idea-judge"
+    },
+    {
+      "itemId": "uk-hard-water-espresso-machine-water-and-descale",
+      "from": "idea",
+      "to": "rejected",
+      "by": "idea-judge"
+    },
+    {
+      "itemId": "df64-worn-burrs-cant-reach-espresso",
+      "from": "idea",
+      "to": "rejected",
+      "by": "idea-judge"
+    }
+  ],
+  "focus": []
+}

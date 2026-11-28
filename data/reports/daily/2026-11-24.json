@@ -1,0 +1,90 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-11-24",
+  "ticks": 10,
+  "agents": {
+    "research": {
+      "runs": 2,
+      "failed": 0,
+      "minutes": 19.2,
+      "costUsd": 4.36
+    },
+    "angle": {
+      "runs": 2,
+      "failed": 0,
+      "minutes": 3.2,
+      "costUsd": 1.11
+    },
+    "toolsmith": {
+      "runs": 1,
+      "failed": 0,
+      "minutes": 0.7,
+      "costUsd": 0.47
+    },
+    "writer": {
+      "runs": 2,
+      "failed": 0,
+      "minutes": 2.8,
+      "costUsd": 1.35
+    },
+    "post-judge": {
+      "runs": 2,
+      "failed": 0,
+      "minutes": 1.6,
+      "costUsd": 0.76
+    }
+  },
+  "failures": [],
+  "runnerUnavailable": 0,
+  "transitions": [
+    {
+      "itemId": "standalone-grinder-for-barista-express-pro",
+      "from": "idea_approved",
+      "to": "researched",
+      "by": "research"
+    },
+    {
+      "itemId": "standalone-grinder-for-barista-express-pro",
+      "from": "researched",
+      "to": "briefed",
+      "by": "angle"
+    },
+    {
+      "itemId": "standalone-grinder-for-barista-express-pro",
+      "from": "briefed",
+      "to": "drafted",
+      "by": "writer"
+    },
+    {
+      "itemId": "standalone-grinder-for-barista-express-pro",
+      "from": "drafted",
+      "to": "briefed",
+      "by": "post-judge"
+    },
+    {
+      "itemId": "standalone-grinder-for-barista-express-pro",
+      "from": "briefed",
+      "to": "drafted",
+      "by": "writer"
+    },
+    {
+      "itemId": "standalone-grinder-for-barista-express-pro",
+      "from": "drafted",
+      "to": "passed",
+      "by": "post-judge"
+    },
+    {
+      "itemId": "barista-express-pro-clean-descale-routine",
+      "from": "idea_approved",
+      "to": "researched",
+      "by": "research"
+    },
+    {
+      "itemId": "barista-express-pro-clean-descale-routine",
+      "from": "researched",
+      "to": "briefed",
+      "by": "angle"
+    }
+  ],
+  "focus": []
+}

@@ -1,0 +1,117 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-11-25",
+  "ticks": 13,
+  "agents": {
+    "toolsmith": {
+      "runs": 2,
+      "failed": 0,
+      "minutes": 1.6,
+      "costUsd": 1.02
+    },
+    "writer": {
+      "runs": 3,
+      "failed": 1,
+      "minutes": 3.9,
+      "costUsd": 1.87
+    },
+    "post-judge": {
+      "runs": 2,
+      "failed": 0,
+      "minutes": 1.4,
+      "costUsd": 0.67
+    },
+    "research": {
+      "runs": 2,
+      "failed": 1,
+      "minutes": 52.8,
+      "costUsd": 1.72
+    },
+    "angle": {
+      "runs": 1,
+      "failed": 0,
+      "minutes": 1.5,
+      "costUsd": 0.68
+    },
+    "idea": {
+      "runs": 1,
+      "failed": 0,
+      "minutes": 5.3,
+      "costUsd": 1.4
+    },
+    "idea-judge": {
+      "runs": 1,
+      "failed": 0,
+      "minutes": 0.7,
+      "costUsd": 0.24
+    }
+  },
+  "failures": [
+    {
+      "at": "2026-11-25T04:49:09.286Z",
+      "workflow": "agent:writer",
+      "agent": "writer",
+      "itemId": "barista-express-pro-clean-descale-routine",
+      "error": "quality checks failed: barista-express-pro-clean-descale-routine \"The manuals give no trigger or reset for the light and no sh\": claim barista-express/light-trigger-and-reset is unknown, not supported; barista-express-pro-clean-descale-routine \"The manuals give no trigger or reset for the light and "
+    },
+    {
+      "at": "2026-11-25T20:57:12.581Z",
+      "workflow": "agent:research",
+      "agent": "research",
+      "itemId": "barista-express-pro-sour-bitter-what-to-change-first",
+      "error": "claude -p timed out after 30 minutes"
+    }
+  ],
+  "runnerUnavailable": 0,
+  "transitions": [
+    {
+      "itemId": "barista-express-pro-clean-descale-routine",
+      "from": "briefed",
+      "to": "drafted",
+      "by": "writer"
+    },
+    {
+      "itemId": "barista-express-pro-clean-descale-routine",
+      "from": "drafted",
+      "to": "passed",
+      "by": "post-judge"
+    },
+    {
+      "itemId": "upgrade-from-barista-express-worth-it",
+      "from": "idea_approved",
+      "to": "researched",
+      "by": "research"
+    },
+    {
+      "itemId": "upgrade-from-barista-express-worth-it",
+      "from": "researched",
+      "to": "briefed",
+      "by": "angle"
+    },
+    {
+      "itemId": "upgrade-from-barista-express-worth-it",
+      "from": "briefed",
+      "to": "drafted",
+      "by": "writer"
+    },
+    {
+      "itemId": "upgrade-from-barista-express-worth-it",
+      "from": "drafted",
+      "to": "passed",
+      "by": "post-judge"
+    },
+    {
+      "itemId": "barista-express-pro-sour-bitter-what-to-change-first",
+      "from": null,
+      "to": "idea",
+      "by": "idea"
+    },
+    {
+      "itemId": "barista-express-pro-sour-bitter-what-to-change-first",
+      "from": "idea",
+      "to": "idea_approved",
+      "by": "idea-judge"
+    }
+  ],
+  "focus": []
+}

@@ -1,0 +1,128 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-11-27",
+  "ticks": 11,
+  "agents": {
+    "research": {
+      "runs": 2,
+      "failed": 0,
+      "minutes": 15.8,
+      "costUsd": 3.77
+    },
+    "angle": {
+      "runs": 2,
+      "failed": 0,
+      "minutes": 3,
+      "costUsd": 1.24
+    },
+    "toolsmith": {
+      "runs": 2,
+      "failed": 1,
+      "minutes": 2.7,
+      "costUsd": 1.28
+    },
+    "writer": {
+      "runs": 1,
+      "failed": 0,
+      "minutes": 1.7,
+      "costUsd": 0.81
+    },
+    "post-judge": {
+      "runs": 1,
+      "failed": 0,
+      "minutes": 1.1,
+      "costUsd": 0.52
+    },
+    "idea": {
+      "runs": 1,
+      "failed": 0,
+      "minutes": 6,
+      "costUsd": 1.61
+    },
+    "idea-judge": {
+      "runs": 1,
+      "failed": 0,
+      "minutes": 0.4,
+      "costUsd": 0.17
+    }
+  },
+  "failures": [
+    {
+      "at": "2026-11-27T06:03:19.737Z",
+      "workflow": "agent:toolsmith",
+      "agent": "toolsmith",
+      "itemId": "barista-express-pro-sour-bitter-what-to-change-first",
+      "error": "tool barista-fast-shot-next-step: /questions/0/options/0/1 must NOT have more than 80 characters; /questions/0/options/1/1 must NOT have more than 80 characters; /questions/0/options/2/1 must NOT have more than 80 characters"
+    }
+  ],
+  "runnerUnavailable": 0,
+  "transitions": [
+    {
+      "itemId": "barista-express-pro-sour-bitter-what-to-change-first",
+      "from": "idea_approved",
+      "to": "researched",
+      "by": "research"
+    },
+    {
+      "itemId": "barista-express-pro-sour-bitter-what-to-change-first",
+      "from": "researched",
+      "to": "briefed",
+      "by": "angle"
+    },
+    {
+      "itemId": "barista-express-pro-sour-bitter-what-to-change-first",
+      "from": "briefed",
+      "to": "drafted",
+      "by": "writer"
+    },
+    {
+      "itemId": "barista-express-pro-sour-bitter-what-to-change-first",
+      "from": "drafted",
+      "to": "passed",
+      "by": "post-judge"
+    },
+    {
+      "itemId": "barista-pro-stops-after-seconds-three-beeps",
+      "from": null,
+      "to": "idea",
+      "by": "idea"
+    },
+    {
+      "itemId": "barista-pro-stops-after-seconds-three-beeps",
+      "from": "idea",
+      "to": "idea_approved",
+      "by": "idea-judge"
+    },
+    {
+      "itemId": "barista-pro-stops-after-seconds-three-beeps",
+      "from": "idea_approved",
+      "to": "researched",
+      "by": "research"
+    },
+    {
+      "itemId": "barista-express-pro-clean-descale-routine",
+      "from": null,
+      "to": "published",
+      "by": "publish-sync"
+    },
+    {
+      "itemId": "barista-express-pro-sour-bitter-what-to-change-first",
+      "from": null,
+      "to": "published",
+      "by": "publish-sync"
+    },
+    {
+      "itemId": "breville-builtin-grinder-wont-grind-fine-enough",
+      "from": null,
+      "to": "published",
+      "by": "publish-sync"
+    },
+    {
+      "itemId": "barista-pro-stops-after-seconds-three-beeps",
+      "from": "researched",
+      "to": "briefed",
+      "by": "angle"
+    }
+  ],
+  "focus": []
+}

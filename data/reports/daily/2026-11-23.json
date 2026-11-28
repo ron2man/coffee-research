@@ -1,0 +1,134 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-11-23",
+  "ticks": 11,
+  "agents": {
+    "writer": {
+      "runs": 2,
+      "failed": 0,
+      "minutes": 2.8,
+      "costUsd": 1.33
+    },
+    "idea": {
+      "runs": 6,
+      "failed": 1,
+      "minutes": 77.7,
+      "costUsd": 7.23
+    },
+    "post-judge": {
+      "runs": 2,
+      "failed": 0,
+      "minutes": 1.5,
+      "costUsd": 0.75
+    },
+    "toolsmith": {
+      "runs": 1,
+      "failed": 0,
+      "minutes": 0.9,
+      "costUsd": 0.47
+    },
+    "idea-judge": {
+      "runs": 6,
+      "failed": 0,
+      "minutes": 6.6,
+      "costUsd": 2.58
+    }
+  },
+  "failures": [
+    {
+      "at": "2026-11-23T07:50:55.175Z",
+      "workflow": "agent:idea",
+      "agent": "idea",
+      "itemId": null,
+      "error": "claude -p timed out after 30 minutes"
+    }
+  ],
+  "runnerUnavailable": 0,
+  "transitions": [
+    {
+      "itemId": "breville-builtin-grinder-wont-grind-fine-enough",
+      "from": "briefed",
+      "to": "drafted",
+      "by": "writer"
+    },
+    {
+      "itemId": "breville-builtin-grinder-wont-grind-fine-enough",
+      "from": "drafted",
+      "to": "briefed",
+      "by": "post-judge"
+    },
+    {
+      "itemId": "breville-builtin-grinder-wont-grind-fine-enough",
+      "from": "briefed",
+      "to": "drafted",
+      "by": "writer"
+    },
+    {
+      "itemId": "breville-builtin-grinder-wont-grind-fine-enough",
+      "from": "drafted",
+      "to": "passed",
+      "by": "post-judge"
+    },
+    {
+      "itemId": "standalone-grinder-for-barista-express-pro",
+      "from": null,
+      "to": "idea",
+      "by": "idea"
+    },
+    {
+      "itemId": "upgrade-from-barista-express-worth-it",
+      "from": null,
+      "to": "idea",
+      "by": "idea"
+    },
+    {
+      "itemId": "barista-express-pro-clean-descale-routine",
+      "from": null,
+      "to": "idea",
+      "by": "idea"
+    },
+    {
+      "itemId": "barista-express-pro-steam-wand-microfoam",
+      "from": null,
+      "to": "idea",
+      "by": "idea"
+    },
+    {
+      "itemId": "standalone-grinder-for-barista-express-pro",
+      "from": "idea",
+      "to": "idea_approved",
+      "by": "idea-judge"
+    },
+    {
+      "itemId": "barista-express-pro-clean-descale-routine",
+      "from": "idea",
+      "to": "idea_approved",
+      "by": "idea-judge"
+    },
+    {
+      "itemId": "upgrade-from-barista-express-worth-it",
+      "from": "idea",
+      "to": "idea_approved",
+      "by": "idea-judge"
+    },
+    {
+      "itemId": "barista-express-pro-steam-wand-microfoam",
+      "from": "idea",
+      "to": "rejected",
+      "by": "idea-judge"
+    },
+    {
+      "itemId": "uk-nespresso-to-beans-bean-to-cup-or-espresso-machine",
+      "from": "idea",
+      "to": "rejected",
+      "by": "idea-judge"
+    },
+    {
+      "itemId": "uk-coffee-machine-gift-for-partner-non-coffee-drinker",
+      "from": "idea",
+      "to": "rejected",
+      "by": "idea-judge"
+    }
+  ],
+  "focus": []
+}

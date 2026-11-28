@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-11-26",
+  "ticks": 32,
+  "agents": {
+    "research": {
+      "runs": 1,
+      "failed": 1,
+      "minutes": 46.3,
+      "costUsd": 0
+    },
+    "critic": {
+      "runs": 6,
+      "failed": 0,
+      "minutes": 6.9,
+      "costUsd": 3.42
+    }
+  },
+  "failures": [
+    {
+      "at": "2026-11-26T07:15:59.676Z",
+      "workflow": "agent:research",
+      "agent": "research",
+      "itemId": "barista-express-pro-sour-bitter-what-to-change-first",
+      "error": "claude -p timed out after 30 minutes"
+    }
+  ],
+  "runnerUnavailable": 0,
+  "transitions": [
+    {
+      "itemId": "barista-express-pro-sour-bitter-what-to-change-first",
+      "from": "idea_approved",
+      "to": "blocked",
+      "by": "research"
+    },
+    {
+      "itemId": "barista-express-pro-sour-bitter-what-to-change-first",
+      "from": "blocked",
+      "to": "idea_approved",
+      "by": "human:resume"
+    }
+  ],
+  "focus": []
+}
