@@ -219,3 +219,7 @@ The project lead set the goal: one guide a day, built around equipment, with "my
 - Demand queries were capped at 60 in product order, so only the first two or three focus products were ever searched. They now take turns per product and market.
 - The first weekly report (`npm run report -- week`) showed that three of the four demand sources never ran: no `TAVILY_API_KEY`, `SERPER_API_KEY` or `YOUTUBE_API_KEY` on the scheduler's machine. Ideas came from autocomplete and the agent's own searches only. Set the keys when moving the scheduler.
 - Open: the probe measures how many problem searches exist, not volume. Search Console data (once the site has impressions) would be the better demand signal; plug it in when it exists (principle 8). Cards and catalog ids that don't match (`sage-dual-boiler` vs `breville-dual-boiler`) leave a product out of the candidates; a card id rename or an alias would fix it.
+
+### 2026-11-28 · Secrets from Bitwarden Secrets Manager
+- `ops/tick.sh` starts the tick through `bws run` when `~/.config/yourcoffeesetup/bws` holds a machine account token and a project id. Nothing else changes: the engine still reads plain environment variables, and the env file stays as a fallback when `bws` or Bitwarden isn't available. Only `bws` sees the token. Tested with stand-ins for `bws` and `node`: no file, good token, refused token, no binary.
+- Not in Bitwarden: the Claude CLI's own sign-in (and never an `ANTHROPIC_API_KEY`, which the runner strips) and the SSH key for pushing.
