@@ -12,6 +12,8 @@ import { addSeed } from '../engine/state/seeds.mjs';
 import { addHumanNote, applyProposal, rejectProposal } from '../engine/feedback/cli.mjs';
 import { LockedError, isStale, lockPath, withLock } from '../engine/scheduler/lock.mjs';
 import { commitInternal, syncMain } from '../engine/scheduler/git.mjs';
+import { focusAction } from '../engine/focus/cli.mjs';
+import { defaultNicheId, loadNiche } from '../engine/state/niche.mjs';
 
 const by = () => process.env.USER ?? userInfo().username;
 const required = (value, label) => {
@@ -60,6 +62,8 @@ const ACTIONS = {
     written: [addSeed(root, { text: required(text, 'Seed'), note: note ?? '', by: by() })],
     message: 'Seed added. The idea agent looks into it at the next tick.',
   }),
+  'focus-undo': (root) => focusAction(root, loadNiche(defaultNicheId(root), root), 'undo'),
+  'focus-allow': (root, { productId }) => focusAction(root, loadNiche(defaultNicheId(root), root), 'allow', { productId: required(productId, 'Product') }),
   'apply-proposal': (root, { proposalId }) => ({
     written: applyProposal(root, required(proposalId, 'Proposal'), { by: by() }),
     message: 'Prompt change applied. The agent uses it from its next run.',
@@ -86,7 +90,7 @@ export async function runAction(root, name, payload = {}, { commit = true } = {}
         throw error instanceof ActionError ? error : new ActionError(error.message);
       }
       const written = result.written.filter(Boolean);
-      if (commitAllowed) commitInternal(root, written, `dashboard(${name}): ${payload.itemId ?? payload.proposalId ?? 'seed'}`);
+      if (commitAllowed) commitInternal(root, written, `dashboard(${name}): ${payload.itemId ?? payload.proposalId ?? payload.productId ?? (name.startsWith('focus') ? 'focus' : 'seed')}`);
       return { ok: true, message: result.message, written, committed: commitAllowed, ...(result.prUrl ? { prUrl: result.prUrl } : {}) };
     }, { label: `dashboard ${name}` });
   } catch (error) {

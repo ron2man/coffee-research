@@ -66,7 +66,13 @@
       "accessories that actually help",
       "when to replace the machine or add a grinder",
       "getting a drink right (milk, ratios, beans for this machine)"
-    ]
+    ],
+    "rotation": {
+      "maxActive": 3,
+      "coveredAfterGuides": 6,
+      "reviewEveryDays": 7,
+      "categories": ["machines", "grinders"]
+    }
   },
   "catalog": {
     "repo": "git@github.com:ron2man/coffee-catalog.git",

@@ -29,14 +29,17 @@ export function demandQueries(niche, { cards, seeds = [] }) {
   const suffixes = niche.demand?.querySuffixes ?? [''];
   const prefixes = niche.demand?.queryPrefixes ?? [];
   const max = niche.demand?.maxQueries ?? 24;
+  // One list per focus product, then taken in turns, so the cap leaves every product its share
+  // (the first products used to fill it on their own).
+  const perProduct = (niche.focus?.products ?? []).map((productId) => {
+    // Each phrasing in every market before the next phrasing, so a cut list still covers all markets.
+    // Question openings ("why is my <product>") make autocomplete complete the problems people type.
+    const phrasings = [...suffixes.map((suffix) => (name) => `${name}${suffix}`), ...prefixes.map((prefix) => (name) => `${prefix.trim()} ${name}`)];
+    return phrasings.flatMap((phrase) => niche.markets.map((market) => ({ market: market.id, q: phrase(productName(cards, market, productId).toLowerCase()), source: `focus:${productId}` })));
+  });
   const queries = [];
-  for (const productId of niche.focus?.products ?? []) {
-    for (const market of niche.markets) {
-      const name = productName(cards, market, productId).toLowerCase();
-      for (const suffix of suffixes) queries.push({ market: market.id, q: `${name}${suffix}`, source: `focus:${productId}` });
-      // Question openings ("why is my <product>"): autocomplete then completes the problems people type.
-      for (const prefix of prefixes) queries.push({ market: market.id, q: `${prefix.trim()} ${name}`, source: `focus:${productId}` });
-    }
+  for (let i = 0; perProduct.some((list) => i < list.length); i += 1) {
+    for (const list of perProduct) if (i < list.length) queries.push(list[i]);
   }
   for (const seed of seeds) {
     const text = seed.text.split(/[?.!(]/)[0].trim();
