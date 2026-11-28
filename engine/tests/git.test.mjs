@@ -61,7 +61,7 @@ test('a tick commits only the files it wrote and pushes them to main', async (t)
   writeFileSync(join(root, 'unrelated.txt'), 'a human is editing this');
   git('add', 'unrelated.txt'); // staged by someone else: must not ride along
 
-  syncMain(root);
+  assert.equal(syncMain(root), false, 'nothing new on the remote: the tick runs as loaded');
   const result = await tick({ root, runner: fakeRunner({ research }) });
   assert.deepEqual([...new Set(result.changedFiles)].sort(), ['data/items/sour-shots.json', 'data/research/sour-shots.json']);
   const sha = commitInternal(root, result.changedFiles, commitMessage(result));
@@ -112,7 +112,7 @@ test('a push rejected because main moved is rebased and retried', async (t) => {
   writeFileSync(join(root, 'local.json'), '{}\n');
   git('add', 'local.json');
   git('commit', '-qm', 'Unpushed tick commit');
-  syncMain(root);
+  assert.equal(syncMain(root), true, 'new commits came in: the tick restarts with the new code');
   assert.equal(git('log', '-1', '--format=%s'), 'Unpushed tick commit');
   assert.equal(git('rev-parse', 'HEAD~1'), sha);
 });

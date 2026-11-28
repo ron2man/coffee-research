@@ -93,17 +93,21 @@ function rebaseOnto(root, remote, branch) {
   throw new Error(`Could not rebase local ${branch} onto ${remote}/${branch}; resolve by hand, then rerun the tick. ${failed.message}`);
 }
 
-/** Refuse to run unless the checkout is on the main branch; then sync with the remote. */
+/**
+ * Refuse to run unless the checkout is on the main branch; then sync with the remote.
+ * Returns true when the sync brought in commits (the running code may now be out of date).
+ */
 export function syncMain(root, { remote = policy.remote, branch = policy.mainBranch } = {}) {
   const current = git(root, ['symbolic-ref', '--short', 'HEAD']);
   if (current !== branch) throw new Error(`Scheduler commits run only on ${branch} (checkout is on ${current})`);
   const status = remoteStatus(root, { remote, branch });
   if (status.unknown) throw new Error(`Cannot reach ${remote}/${branch} to sync before committing: ${status.reason}`);
-  if (status.behind === 0) return;
+  if (status.behind === 0) return false;
   assertNoClash(root, remote, branch);
   // Fast-forward normally; if an earlier push failed and someone pushed since, rebase instead.
   if (status.ahead === 0) git(root, ['merge', '--ff-only', '--quiet', `${remote}/${branch}`]);
   else rebaseOnto(root, remote, branch);
+  return true;
 }
 
 /**

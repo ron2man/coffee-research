@@ -9,6 +9,7 @@
 // Only one tick runs per checkout at a time (.backoffice/tick.lock).
 // --ignore-schedule: run a scheduled agent even if its interval has not passed (manual reruns).
 // Rejected agent output is kept in .backoffice/rejected/ for inspection.
+import { spawnSync } from 'node:child_process';
 import { existsSync, readFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { parseArgs } from 'node:util';
@@ -583,10 +584,14 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
     });
     const root = values.root ? resolve(values.root) : repoRoot;
     const commit = values.commit && !values['dry-run'];
+    // Set on the process a tick restarts after a sync: it runs under its parent's lock.
+    const reloaded = process.env.TICK_RELOADED === '1';
     const run = async () => {
       // Never run agents on a stale checkout: --commit syncs first; a plain tick refuses if behind.
       let freshness = null;
-      if (commit) syncMain(root);
+      // This process loaded the engine before the sync. If the sync brought new commits (a merged
+      // check, a fixed prompt), run the tick again in a fresh process so the new code does the work.
+      if (commit && syncMain(root) && !reloaded) return { reload: true };
       else if (values['dry-run']) freshness = remoteStatus(root);
       else freshness = assertFresh(root);
       const result = await tick({ root, dryRun: values['dry-run'], nicheId: values.niche, lock: false, ignoreSchedule: values['ignore-schedule'] });
@@ -606,7 +611,7 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
       return result;
     };
     let result;
-    if (values['dry-run']) result = await run();
+    if (values['dry-run'] || reloaded) result = await run();
     else {
       // The lock covers sync, tick and commit, so two scheduled runs never interleave.
       let release;
@@ -619,12 +624,18 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
       }
       try {
         result = await run();
+        if (result.reload) {
+          const child = spawnSync(process.execPath, process.argv.slice(1), { stdio: 'inherit', env: { ...process.env, TICK_RELOADED: '1' } });
+          process.exitCode = child.status ?? 1;
+        }
       } finally {
         release();
       }
     }
-    console.log(JSON.stringify(result, null, 2));
-    if (result.error) process.exitCode = 1;
+    if (!result.reload) {
+      console.log(JSON.stringify(result, null, 2));
+      if (result.error) process.exitCode = 1;
+    }
   } catch (error) {
     console.error(error.message);
     process.exitCode = 1;
