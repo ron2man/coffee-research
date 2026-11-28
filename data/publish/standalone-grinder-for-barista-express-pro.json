@@ -1,0 +1,10 @@
+{
+  "itemId": "standalone-grinder-for-barista-express-pro",
+  "slug": "grinder-for-barista-express-and-pro",
+  "status": "open",
+  "branch": "publish/grinder-for-barista-express-and-pro",
+  "sha": "4012bc9939c9b3302cd6a6e4b73500907c078010",
+  "prUrl": "https://github.com/ron2man/coffee-research/pull/19",
+  "requestedBy": "scheduler (passed the judge)",
+  "at": "2026-11-28T04:06:16.258Z"
+}

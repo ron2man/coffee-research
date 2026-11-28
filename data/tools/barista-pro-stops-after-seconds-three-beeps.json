@@ -1,0 +1,220 @@
+{
+  "tools": [
+    {
+      "id": "barista-pro-cutout-troubleshooter",
+      "title": "Barista Pro stops after a few seconds and beeps: your next step",
+      "questions": [
+        {
+          "key": "test",
+          "text": "With no portafilter fitted, run hot water, then press 1 CUP into a cup. What happens?",
+          "options": [
+            [
+              "runs",
+              "Both run normally (hot water runs about 60 seconds)"
+            ],
+            [
+              "stops",
+              "Hot water or 1 CUP stops after a few seconds with beeps"
+            ],
+            [
+              "dead",
+              "The machine is on but won't do anything"
+            ]
+          ]
+        },
+        {
+          "key": "tank",
+          "text": "Is the water tank pushed down until it locks, and filled above MIN?",
+          "options": [
+            [
+              "no",
+              "No, or I'm not sure"
+            ],
+            [
+              "yes",
+              "Yes, and it still cuts out"
+            ]
+          ]
+        },
+        {
+          "key": "filter",
+          "text": "Have you repeated the hot-water test with the water filter taken out?",
+          "options": [
+            [
+              "notyet",
+              "Not yet"
+            ],
+            [
+              "fixed",
+              "Yes, and then it ran normally"
+            ],
+            [
+              "still",
+              "Yes, and it still cut out"
+            ],
+            [
+              "none",
+              "I don't use a water filter"
+            ]
+          ]
+        },
+        {
+          "key": "descale",
+          "text": "Have you run the on-screen DESCALE cycle since this started?",
+          "options": [
+            [
+              "notyet",
+              "Not yet"
+            ],
+            [
+              "still",
+              "Yes, and it still cuts out"
+            ]
+          ]
+        },
+        {
+          "key": "reset",
+          "text": "Have you tried RESET DEFAULTS from the menu?",
+          "options": [
+            [
+              "notyet",
+              "Not yet"
+            ],
+            [
+              "still",
+              "Yes, and it still cuts out"
+            ]
+          ]
+        },
+        {
+          "key": "cover",
+          "text": "Where is your machine on cover?",
+          "options": [
+            [
+              "return",
+              "Brand new, still inside the return window"
+            ],
+            [
+              "in",
+              "Under warranty"
+            ],
+            [
+              "unsure",
+              "Not sure"
+            ],
+            [
+              "out",
+              "Out of warranty"
+            ]
+          ]
+        }
+      ],
+      "results": {
+        "dial-in": {
+          "title": "Keep your machine: it's the puck, not the machine",
+          "text": "Water flows normally, so the water path is fine. The booklet's causes for a shot that won't flow are a grind that's too fine, too much coffee, tamping too hard or a blocked basket. Grind a few steps coarser, check the dose, and clear the basket holes with the cleaning-tool pin."
+        },
+        "cool-down": {
+          "title": "Let it cool: this looks like the thermal cut-out",
+          "text": "Switch it off, unplug it and let it cool for 30 to 60 minutes. That's the booklet's fix for a machine that is on but has stopped working. If it still won't run after that, contact Breville or Sage support."
+        },
+        "tank": {
+          "title": "Seat the tank and fill it above MIN",
+          "text": "Push the tank down until it locks, then fill it above MIN. The booklet says an empty or unseated tank stops the water and can make the pump run loudly with nothing coming out. Then run the hot-water test again."
+        },
+        "filter-test": {
+          "title": "Run the hot-water test without the water filter",
+          "text": "Take the filter out of the tank and run hot water again with no portafilter fitted. If it now runs the full 60 seconds, the filter was the problem. Soak a new filter in cold water for 5 minutes before you fit it."
+        },
+        "new-filter": {
+          "title": "Keep your machine: replace the water filter",
+          "text": "The filter was the problem. Soak a new one in cold water for 5 minutes before fitting it. Breville's booklet says to replace it every 2 months and Sage's guide every 3, and more often if your water is hard. A new filter is the only thing you need to buy."
+        },
+        "descale": {
+          "title": "Run the DESCALE cycle",
+          "text": "Take the filter out and run the on-screen DESCALE cycle, then its rinse. The booklet gives scale as a cause of no water flow and no steam. If the machine runs normally afterwards, keep it and descale whenever the alert shows."
+        },
+        "reset": {
+          "title": "Try RESET DEFAULTS, then test again",
+          "text": "Press MENU, choose RESET DEFAULTS, then run the hot-water test again. It's free and harmless, but it only resets your grind, dose, temperature and shot-volume settings, so don't expect much from it."
+        },
+        "return": {
+          "title": "Return or exchange it",
+          "text": "On a brand-new machine still inside its return window, take it back rather than keep troubleshooting. The booklet doesn't cover this fault. Owners and one repairer link it to the flow meter or its wiring, and that isn't something to fix at home."
+        },
+        "claim": {
+          "title": "Stop here and contact Breville or Sage support",
+          "text": "Don't open the machine: repairs by unauthorised parties can cost you the claim. Contact Breville or Sage support through their support page, not the store. Have the batch code from the sticker under or on the back of the machine and your receipt ready. If you're not sure you're covered, they can tell you."
+        },
+        "repair-or-replace": {
+          "title": "Get a written quote, then decide on repair or replace",
+          "text": "Owners and one repairer point to the flow meter or its wiring. Don't open it yourself. Get a written quote and ask for a genuine part, because the repairer warns against generic copies. Compare the quote with the cost of a new machine. One owner's repair failed again about seven months later, so a high quote favours replacing."
+        }
+      },
+      "rules": [
+        {
+          "when": {
+            "test": "runs"
+          },
+          "result": "dial-in"
+        },
+        {
+          "when": {
+            "test": "dead"
+          },
+          "result": "cool-down"
+        },
+        {
+          "when": {
+            "tank": "no"
+          },
+          "result": "tank"
+        },
+        {
+          "when": {
+            "filter": "fixed"
+          },
+          "result": "new-filter"
+        },
+        {
+          "when": {
+            "filter": "notyet"
+          },
+          "result": "filter-test"
+        },
+        {
+          "when": {
+            "descale": "notyet"
+          },
+          "result": "descale"
+        },
+        {
+          "when": {
+            "reset": "notyet"
+          },
+          "result": "reset"
+        },
+        {
+          "when": {
+            "cover": "return"
+          },
+          "result": "return"
+        },
+        {
+          "when": {
+            "cover": "in"
+          },
+          "result": "claim"
+        },
+        {
+          "when": {
+            "cover": "unsure"
+          },
+          "result": "claim"
+        }
+      ],
+      "default": "repair-or-replace"
+    }
+  ],
+  "skipped": []
+}
