@@ -53,9 +53,12 @@
   "focus": {
     "products": [
       "barista-express",
-      "barista-pro"
+      "barista-pro",
+      "sage-bambino",
+      "bambino-plus",
+      "breville-smart-grinder-pro"
     ],
-    "why": "The best-selling home espresso machines with a built-in grinder: a large owner base with recurring problems and real upgrade decisions. The site builds this cluster first, then adds machines and grinders one at a time.",
+    "why": "The best-selling home espresso machines with a built-in grinder: a large owner base with recurring problems and real upgrade decisions. The site built this cluster first. Next (2026-11-28): the Bambino and Bambino Plus, the other best-selling entry machines, and the Smart Grinder Pro, the grinder their owners most often add. Keep adding machines and grinders one at a time.",
     "angles": [
       "fixing a problem (sour, bitter, fast, slow, no pressure, grinder)",
       "maintenance and cleaning",
