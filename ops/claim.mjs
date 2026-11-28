@@ -1,6 +1,7 @@
 // Make this checkout the scheduler: a fresh machine id, written into the committed schedule state
 // and pushed to main. The old scheduler's next tick pulls it and stops running (it says why in its
 // log). Uninstall the job there too, so it stops trying.
+import { spawnSync } from 'node:child_process';
 import { join } from 'node:path';
 import { machineIdentity, withScheduler } from '../engine/scheduler/host.mjs';
 import { SCHEDULE_PATH, readSchedule } from '../engine/scheduler/tick.mjs';
@@ -10,6 +11,8 @@ import { commitInternal, syncMain } from '../engine/scheduler/git.mjs';
 
 export async function claimScheduler(root, { now = new Date(), commit = true } = {}) {
   return withLock(root, async () => {
+    // Start from the committed state: a claim that failed half-way may have left the file changed.
+    if (commit) spawnSync('git', ['checkout', '--', SCHEDULE_PATH], { cwd: root });
     if (commit) syncMain(root);
     const before = readSchedule(root).scheduler ?? null;
     const identity = machineIdentity(root, { fresh: true, now });

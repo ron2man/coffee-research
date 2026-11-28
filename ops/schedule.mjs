@@ -181,6 +181,8 @@ export function doctor({ exec = run, env = process.env, home = homedir() } = {})
   const dirty = out('git', ['status', '--porcelain', '--untracked-files=no']).stdout?.trim();
   add('No local edits', !dirty, dirty ? `${dirty.split('\n').length} changed files` : 'clean', 'The scheduler clone is never edited by hand: git checkout -- . (after saving anything you need)');
   add('Dependencies installed', existsSync(join(root, 'node_modules', 'ajv')), existsSync(join(root, 'node_modules')) ? 'node_modules present' : 'missing', 'npm install');
+  const who = ['user.name', 'user.email'].map((key) => out('git', ['config', key]).stdout?.trim()).filter(Boolean);
+  add('Git knows who commits', who.length === 2, who.length === 2 ? who.join(' <') + '>' : 'user.name or user.email not set', 'In this clone: git config user.name "Your name (scheduler)" && git config user.email "you@example.com"');
   const push = out('git', ['push', '--dry-run', '--quiet', 'origin', 'main'], { env: { ...env, GIT_TERMINAL_PROMPT: '0', GIT_SSH_COMMAND: 'ssh -o BatchMode=yes' } });
   add('Git can push to main without a prompt', push.status === 0, push.status === 0 ? 'ok' : push.stderr.trim().split('\n').at(-1), 'Add an SSH key with push access to the repository (ssh-keygen, then add it on GitHub) and load it without a passphrase prompt.');
   const catalog = JSON.parse(readFileSync(join(root, 'niches', 'coffee', 'niche.json'), 'utf8')).catalog?.repo;
