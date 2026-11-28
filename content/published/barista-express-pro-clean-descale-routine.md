@@ -11,6 +11,7 @@ relatedQueries: ["barista express clean light stays on","barista express flashin
 publishedAt: "2026-11-25"
 updatedAt: "2026-11-25"
 productIds: ["barista-express","barista-pro"]
+setup: {"symptom":["maintenance-light"]}
 offerIds: []
 tools: ["barista-maintenance-alert-key","grind-fault-tree"]
 claimsFile: "content/published/barista-express-pro-clean-descale-routine.claims.json"

@@ -82,6 +82,10 @@ builds only. GA4 is configured inside the container, not in the site code.
 - `site/public/assets/site.js` pushes custom events as `{ event: '<name>', params: { … } }`:
   `affiliate_click` (`page_id, product_id, seller, market, position, tool_state`), `tool_complete`
   (`tool_id, result, page_id`), `scroll_depth` (`percent, page_id`).
+- `site/public/assets/finder.js` (setup finder, home page) pushes `setup_answer` (`question, answer`),
+  `setup_skip` (`question`) and `setup_fold` (`folded`: yes/no). After merging, re-import
+  `ops/gtm/container.json` (step below) and register `question`, `answer` and `folded` as
+  event-scoped custom dimensions, or GA4 drops them.
 
 ### GTM container setup (one-time)
 
@@ -103,8 +107,9 @@ in step with `site/public/assets/site.js` when events or parameters change.
    `DLV - params.market`, `DLV - params.position`, `DLV - params.tool_state`,
    `DLV - params.tool_id`, `DLV - params.result`, `DLV - params.percent`, `DLV - params.page_id`
    (key = the part after `DLV - `). Market homes push no `page_id`; only guides do.
-3. **Triggers** (Custom Event): `affiliate_click`, `tool_complete`, `scroll_depth`. Or one trigger
-   with event name regex `^(affiliate_click|tool_complete|scroll_depth)$`.
+3. **Triggers** (Custom Event): `affiliate_click`, `tool_complete`, `scroll_depth`, `setup_answer`,
+   `setup_skip`, `setup_fold`. Or one trigger with event name regex
+   `^(affiliate_click|tool_complete|scroll_depth|setup_answer|setup_skip|setup_fold)$`.
 4. **Tag: GA4 Event** per trigger, Measurement ID = the same `G-…`, Event name = `{{Event}}`, and
    event parameters mapped from the `DLV - params.*` variables above.
 5. Preview in GTM Tag Assistant against `https://yourcoffeesetup.com`, then **Submit / Publish**.

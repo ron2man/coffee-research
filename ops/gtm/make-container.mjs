@@ -7,10 +7,14 @@ const MEASUREMENT_ID = 'G-0K16L41GKQ';
 const ids = { accountId: '0', containerId: '0' };
 const fingerprint = String(Date.UTC(2026, 10, 22));
 
-// Event name -> GA4 event parameters (all read from dataLayer `params.*`), as pushed by site.js.
+// Event name -> GA4 event parameters (all read from dataLayer `params.*`), as pushed by site.js and finder.js.
 const events = {
   affiliate_click: ['product_id', 'seller', 'market', 'position', 'tool_state', 'page_id'],
   tool_complete: ['tool_id', 'result', 'page_id'],
+  // Setup finder on the home page (finder.js).
+  setup_answer: ['question', 'answer', 'page_id'],
+  setup_skip: ['question', 'page_id'],
+  setup_fold: ['folded', 'page_id'],
   scroll_depth: ['percent', 'page_id'],
 };
 

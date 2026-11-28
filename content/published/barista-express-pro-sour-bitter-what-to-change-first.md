@@ -11,6 +11,7 @@ relatedQueries: ["barista express shots too fast","barista express pressure gaug
 publishedAt: "2026-11-27"
 updatedAt: "2026-11-27"
 productIds: ["barista-express","barista-pro"]
+setup: {"symptom":["fast-sour"]}
 offerIds: []
 tools: ["barista-fast-shot-next-step","grind-fault-tree","barista-standalone-grinder-picker"]
 claimsFile: "content/published/barista-express-pro-sour-bitter-what-to-change-first.claims.json"

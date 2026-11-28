@@ -1,0 +1,37 @@
+{
+  "description": "Setup finder on the home page: one optional question at a time. Answers form a profile that guide lists filter (use: filter) or sort (use: rank) by. Guides say which setups they fit in their frontmatter `setup` (and, for questions with tagFrom: productIds, from their productIds). Labels may use {{product:id}} tokens; they resolve per market.",
+  "questions": [
+    {
+      "key": "brew", "text": "What do you make coffee with?", "use": "filter",
+      "options": [["espresso", "An espresso machine"], ["b2c", "A bean-to-cup machine"], ["capsule", "A capsule machine"], ["none", "Nothing yet, I’m shopping"]]
+    },
+    {
+      "key": "model", "text": "Which espresso machine?", "use": "filter", "tagFrom": "productIds", "showIf": { "brew": ["espresso"] },
+      "options": [["barista-express", "{{product:barista-express}}"], ["barista-pro", "{{product:barista-pro}}"], ["bambino", "Bambino or Bambino Plus"], ["other", "Another machine"]]
+    },
+    {
+      "key": "pods", "text": "Which capsule system?", "use": "filter", "showIf": { "brew": ["capsule"] },
+      "options": [["nespresso-original", "Nespresso Original"], ["nespresso-vertuo", "Nespresso Vertuo"], ["dolce-gusto", "Dolce Gusto"], ["other", "Another system"]]
+    },
+    {
+      "key": "grinder", "text": "Do you grind your own beans?", "use": "filter", "showIf": { "model": ["bambino", "other"] },
+      "options": [["separate", "Yes, with a separate grinder"], ["preground", "I buy pre-ground"], ["thinking", "Not yet, thinking about one"]]
+    },
+    {
+      "key": "beans", "text": "What beans do you like?", "use": "rank", "showIf": { "brew": ["espresso", "b2c", "none"] },
+      "options": [["light", "Light and fruity"], ["medium", "Medium and balanced"], ["dark", "Dark and chocolatey"], ["unsure", "No idea yet"]]
+    },
+    {
+      "key": "drink", "text": "What do you drink most?", "use": "rank",
+      "options": [["straight", "Espresso, straight"], ["milk", "Milk drinks"], ["both", "Both"]]
+    },
+    {
+      "key": "goal", "text": "What brings you here today?", "use": "rank",
+      "options": [["problem", "Something isn’t right"], ["upgrade", "Thinking of upgrading"], ["better", "I want better coffee"], ["looking", "Just looking"]]
+    },
+    {
+      "key": "symptom", "text": "What’s going on?", "use": "rank", "showIf": { "goal": ["problem"], "brew": ["espresso"] },
+      "options": [["fast-sour", "Shots run fast and sour"], ["maintenance-light", "The clean or descale light is on"], ["grinder-too-coarse", "Grinder won’t go any finer"], ["other", "Something else"]]
+    }
+  ]
+}

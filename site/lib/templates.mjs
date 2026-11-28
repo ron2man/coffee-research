@@ -2,6 +2,7 @@
 // The Astro pages in src/ wrap these; the page shell (head, nav, footer) is src/layouts/Base.astro.
 import { escape, inline, parseMarkdown } from './markdown.mjs';
 import { formatPrice, offersFor } from './offers.mjs';
+import { localizeFinder } from './finder.mjs';
 import { productName as engineProductName, resolveTokens as engineResolveTokens } from '../../engine/state/tokens.mjs';
 import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
@@ -82,14 +83,22 @@ function dateLabel(post, market) {
 const byDate = (a, b) => (b.updatedAt ?? '').localeCompare(a.updatedAt ?? '');
 
 /** Compact guide rows: tag, title, one-line summary, date. */
-export function guideRows({ site, market, posts, showTag = true }) {
+/**
+ * Rows of guides. With `finder` (the setup finder's questions) the list can filter and sort itself
+ * by a reader's setup (public/assets/finder.js): each row carries its guide's tags, and the list
+ * says which questions filter and which sort. The list knows nothing else about the finder.
+ */
+export function guideRows({ site, market, posts, showTag = true, finder = null }) {
   if (!posts.length) return '<p class="empty">No guides here yet.</p>';
   const tag = (post) => {
     const label = showTag ? escape(navLabel({ label: categoryLabel(site, post.category) ?? post.type })) : '';
     const badge = STATUS_BADGE[post.status] ? (label ? ' · preview' : 'Preview') : '';
     return label || badge ? `<span class="gr-tag">${label}${badge}</span>` : '';
   };
-  return `<ol class="guide-rows${showTag ? '' : ' no-tag'}">${posts.map((source) => localize(source, site, market)).map((post) => `<li><a href="${postPath(market, post.slug)}">
+  const keys = (use) => (finder?.questions ?? []).filter((q) => q.use === use).map((q) => q.key).join(' ');
+  const listAttrs = finder ? ` data-setup-list data-filter="${keys('filter')}" data-rank="${keys('rank')}"` : '';
+  const rowAttrs = (post) => (finder ? ` data-setup="${escape(JSON.stringify(post.setupTags ?? {}))}"` : '');
+  return `<ol class="guide-rows${showTag ? '' : ' no-tag'}"${listAttrs}>${posts.map((source) => localize(source, site, market)).map((post) => `<li${rowAttrs(post)}><a href="${postPath(market, post.slug)}">
 ${tag(post)}
 <span class="gr-main"><span class="gr-title">${escape(post.title)}</span><span class="gr-summary">${escape(post.description)}</span></span>
 <span class="gr-date">${dateLabel(post, market)}</span>
@@ -343,35 +352,33 @@ ${relatedSection}
 </article>`;
 }
 
+// Line drawing for the home hero: group head, portafilter, the shot (red) and a cup. Decorative.
+const HERO_ART = '<svg aria-hidden="true" viewBox="0 0 420 360" width="420" height="360" fill="none" stroke="#111" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" class="hero-art" focusable="false"> <rect x="40" y="18" width="340" height="56" rx="6"/> <circle cx="86" cy="46" r="13"/><path d="M86 46l7-7"/> <path d="M318 34h34M318 58h34"/> <path d="M168 74h84l-8 34h-68z"/> <path d="M150 108h120v26a14 14 0 0 1-14 14h-92a14 14 0 0 1-14-14z"/> <path d="M270 120l118 10" stroke-width="10"/> <path d="M196 148v14M224 148v14"/> <path d="M196 172v62M224 172v62" stroke="#d92b22" stroke-dasharray="10 12"/> <path d="M140 246h140v34a40 40 0 0 1-40 40h-60a40 40 0 0 1-40-40z"/> <path d="M280 262h14a20 20 0 0 1 0 40h-18"/> <path d="M100 338h220"/> </svg>';
+
 export function homePage({ site, market, posts }) {
   // Superseded drafts stay reachable by URL in previews but are left off the home lists.
   const local = posts.filter((p) => p.markets.includes(market.id) && !p.supersededBy);
-  const kicker = (post) => `${escape(post.type)}${STATUS_BADGE[post.status] ? ' · preview' : ''}`;
-  const [first, ...rest] = local;
-  // Resolve {{product:…}} tokens for this market, as guideRows does for the list below.
-  const lead = first ? localize(first, site, market) : null;
-  const feature = lead ? `<div class="feature">
-<div class="feature-main">
-<p class="kicker">${kicker(lead)}</p>
-<h2 class="feature-title"><a href="${postPath(market, lead.slug)}">${escape(lead.title)}</a></h2>
-</div>
-<div class="feature-side">
-<p class="feature-answer">${escape(lead.description)}</p>
-<a class="feature-link" href="${postPath(market, lead.slug)}">Read the answer<span class="sr-only">: ${escape(lead.title)}</span></a>
-</div>
-</div>
-${mockPhoto(site.mock?.home ?? postPhoto(site, lead.slug), 'feature-photo')}` : '<p class="empty">No guides for this market yet.</p>';
-  const latest = rest.sort(byDate).slice(0, 8);
+  const list = [...local].sort(byDate).slice(0, 12);
+  // The setup finder and the guide list below share only the reader's answers (finder.js).
+  const finder = site.finder ? localizeFinder(site.finder, site, market) : null;
+  const finderMount = finder ? `<div class="finder" data-finder hidden><script type="application/json" class="finder-data">${JSON.stringify(finder).replace(/</g, '\\u003c')}</script></div>` : '';
   // One category is already the nav link; tiles help once there are two to choose from.
   const tiles = site.categories.length < 2 ? '' : site.categories.map((c) => `<a class="tile" href="/${market.locale}/${c.id}/"><span class="tile-title">${escape(navLabel(c))}</span><span class="tile-count">${c.count} guides</span></a>`).join('');
   return `<section class="wrap" id="guides" aria-labelledby="guides-title">
 <div class="hero">
+<div class="hero-text">
 <h1 class="intro" id="guides-title">Straight answers for home&nbsp;espresso.</h1>
 <p class="intro-sub">Fix it, upgrade it, or keep it. Including when to buy nothing.</p>
 </div>
-${feature}
-${latest.length ? `<div class="section-head"><h2 class="section-title">Latest guides</h2><a href="/${market.locale}/guides/">All guides</a></div>
-${guideRows({ site, market, posts: latest })}` : ''}
+${HERO_ART}
+</div>
+${finderMount}
+</section>
+<section class="wrap guide-list" aria-labelledby="list-title">
+<div class="section-head"><h2 class="section-title" id="list-title">Guides <span class="list-count" data-list-count></span></h2><button type="button" class="link-button list-toggle" data-list-toggle hidden></button></div>
+${list.length ? guideRows({ site, market, posts: list, finder }) : '<p class="empty">No guides for this market yet.</p>'}
+<p class="list-empty" data-list-empty hidden>Nothing for your setup yet: we write guides machine by machine.</p>
+<p class="list-more"><a href="/${market.locale}/guides/">All guides</a></p>
 </section>
 ${tiles ? `<section class="wrap categories" aria-labelledby="cat-title">
 <div class="section-head"><h2 class="section-title" id="cat-title">Browse by category</h2></div>
@@ -404,7 +411,8 @@ export function privacyPage({ site, market, updated }) {
 <h2>Hosting (Cloudflare)</h2>
 <p>The site is served by Cloudflare, which handles each request (including your IP address) to deliver and protect the site. Cloudflare Web Analytics also measures how fast pages load; it sets no cookies.</p>
 <h2>Stored in your browser</h2>
-<p>Two choices are kept in your browser’s local storage and never sent to us: <code>market</code> (whether you chose the US or UK site) and <code>analytics-consent</code> (your answer in the cookie banner). Clearing your browser’s site data removes them.</p>
+<p>A few choices are kept in your browser’s local storage and never sent to us: <code>market</code> (whether you chose the US or UK site), <code>analytics-consent</code> (your answer in the cookie banner) and <code>setup</code> (your answers in “Your setup” on the home page, so guide lists can show what fits your machine). Clearing your browser’s site data removes them.</p>
+<p>If analytics is on, we count which setup questions are answered or skipped and which answers are chosen, to learn what to write next. Your answers are not linked to your name or email.</p>
 <h2>Links to sellers</h2>
 <p>Some links go to shops and may earn us a commission. When you follow one, the shop and its affiliate network may set their own cookies under their own privacy policies.</p>
 <h2>Email</h2>
