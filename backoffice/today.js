@@ -18,6 +18,7 @@ function render(d) {
     <div><span class="muted">Last tick</span><strong>${ago(s.lastLog?.startedAt ?? s.lastRun?.timestamp)}</strong></div>
     <div><span class="muted">Last agent run</span><strong>${esc(s.lastRun?.agent ?? '–')} ${s.lastRun ? `<small class="${s.lastRun.status === 'failed' ? 'bad' : 'ok'}">${esc(s.lastRun.status)}</small>` : ''}</strong></div>
     <div><span class="muted">Next tick will run</span><strong>${next}</strong></div>
+    <div><span class="muted">Runs on</span><strong>${esc(s.owner?.name ?? 'not claimed yet')}</strong></div>
   </div>
   <div class="actions"><button type="button" id="run-tick" ${s.running ? 'disabled' : ''}>${s.running ? 'Tick running…' : 'Run next tick now'}</button>
   <span class="muted">${s.running ? 'Started ' + ago(s.running.startedAt) + '. The page refreshes every 10 seconds.' : 'Runs the next job right away instead of waiting for the hourly slot.'}</span></div>${s.lastLog ? `<details><summary>Last tick log</summary><pre>${esc(s.lastLog.tail)}</pre></details>` : '<p class="muted">No tick log in this checkout. Point the dashboard at the scheduler clone with BACKOFFICE_ROOT.</p>'}`;

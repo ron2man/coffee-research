@@ -18,6 +18,8 @@ import { titleProblems } from '../engine/feedback/checks.mjs';
 import { publishProblems, REQUESTS_DIR } from '../engine/publish/publish.mjs';
 import { listSeeds } from '../engine/state/seeds.mjs';
 import { focusSummary } from '../engine/focus/cli.mjs';
+import { MACHINE_PATH } from '../engine/scheduler/host.mjs';
+import { readSchedule } from '../engine/scheduler/tick.mjs';
 
 const hourMs = 3_600_000;
 
@@ -129,13 +131,19 @@ export async function todayData(root) {
     inbox.push({ kind: 'Dashboard', title: 'Not reading the scheduler’s folder', reason: `No tick log in ${root}, so statuses may be out of date. Start the dashboard with BACKOFFICE_ROOT pointing at the scheduler's clone, or run git pull here.`, commands: ['git pull', 'BACKOFFICE_ROOT=~/Projects/coffee-research-bot npm run dashboard'] });
   }
 
+  // Which checkout is the scheduler (engine/scheduler/host.mjs).
+  const owner = readSchedule(root).scheduler ?? null;
+  const here = existsSync(join(root, MACHINE_PATH)) ? (() => { try { return readJson(join(root, MACHINE_PATH)); } catch { return null; } })() : null;
+  if (owner && here && owner.id !== here.id) {
+    inbox.push({ kind: 'Scheduler problem', title: `This checkout is not the scheduler: ${owner.name} is`, reason: `Ticks here do nothing. If ${owner.name} is the right machine, uninstall the job here and open the dashboard there.`, commands: ['npm run schedule -- uninstall', 'npm run schedule -- claim'] });
+  }
   const lockFile = lockPath(root);
   const holder = existsSync(lockFile) ? (() => { try { return JSON.parse(readFileSync(lockFile, 'utf8')); } catch { return null; } })() : null;
   const running = holder && !isStale(holder, { host: holder.host }) ? holder : null;
   const lastRun = runs.filter((r) => !r.runnerUnavailable).at(-1) ?? null;
   const log = lastTickLog(root);
   if (!running && log && now - Date.parse(log.modifiedAt) > 3 * hourMs) {
-    inbox.push({ kind: 'Scheduler idle', title: `No tick for ${Math.round((now - Date.parse(log.modifiedAt)) / hourMs)} hours`, reason: 'The Mac may be asleep, or the job is not installed in this checkout.', commands: ['npm run schedule -- status', 'npm run schedule -- logs'] });
+    inbox.push({ kind: 'Scheduler idle', title: `No tick for ${Math.round((now - Date.parse(log.modifiedAt)) / hourMs)} hours`, reason: 'The machine may be asleep or off, or the job is not installed in this checkout.', commands: ['npm run schedule -- status', 'npm run schedule -- logs'] });
   }
 
   let next = null;
@@ -162,7 +170,7 @@ export async function todayData(root) {
     root,
     generatedAt: new Date(now).toISOString(),
     inbox: inbox.sort((a, b) => String(b.at ?? '').localeCompare(String(a.at ?? ''))),
-    scheduler: { running, lastRun, lastLog: log, next },
+    scheduler: { running, lastRun, lastLog: log, next, owner },
     pipeline,
     feedback,
     proposals: proposals.slice(-10).reverse().map(({ id, agent, status, summary, at }) => ({ id, agent, status, summary, at })),

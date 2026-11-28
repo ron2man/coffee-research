@@ -227,3 +227,9 @@ The project lead set the goal: one guide a day, built around equipment, with "my
 
 ### 2026-11-28 · SerpApi for People also ask
 - The key saved as `SERPER_API_KEY` was a SerpApi key (serpapi.com), a different service from Serper (serper.dev), hence HTTP 403. SerpApi is now a provider too (`SERPAPI_API_KEY`): People also ask uses the first of `demand.peopleAlsoAsk.providers` with a key and budget, and SerpApi is the last fallback for community search. Its free plan renews monthly (250 searches), unlike Serper's one-time credits; budget 230.
+
+### 2026-11-28 · Ready to move the scheduler to Linux
+- `npm run schedule` installs a systemd user timer on Linux (same slots as launchd, `Persistent=true`, oneshot so ticks never overlap; units checked with `systemd-analyze verify` and the slots with `systemd-analyze calendar`). Lingering has to be turned on once with sudo; `install` says so when it's off.
+- Only one checkout ticks: the committed schedule state names it, each checkout has its own id in `.backoffice/machine.json`, and a tick elsewhere stops with the reason. `claim` moves it with a fresh id. The first tick after this ships claims the job for the Mac.
+- `npm run schedule -- doctor` checks Node, branch, local edits, dependencies, push without a prompt, catalog access, Claude subscription sign-in, `gh` sign-in and Bitwarden secrets, each with its fix.
+- Not tested on a real systemd user session here (the container has none): the first install on the NUC is the real test.

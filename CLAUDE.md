@@ -18,7 +18,7 @@ This repo is being rebuilt per [rebuild-spec.md](rebuild-spec.md). It's an auton
 - `knowledge/<category>/<product>.md`: product cards (evidence layer, schemaVersion 1, see `knowledge/README.md`).
 - `data/`: agent artifacts (`ideas/`, `idea-scores/`, `research/`, `briefs/`, `reviews/`, …). `content/drafts/`: writer output. `content/archive/`: drafts and decisions from the removed legacy pipeline (Bambino grinder guide is the quality reference).
 - `backoffice/`: loopback dashboard. `site/`: the Astro website for yourcoffeesetup.com (`src/` pages and layout, `lib/` data layer and HTML components, `public/assets/`); deploy, GA4 and Search Console setup in `docs/deploy.md`.  Tools live in `content/tools/<id>.json`. The home page's setup finder is `content/finder.json` (questions; guides fit setups through their `productIds` and an optional `setup` frontmatter field, see `site/lib/finder.mjs`). Guide drawings: `site/illustrations.json` + `site/public/assets/illustrations/` (picked by frontmatter `image`, setup tags, then category; see `site/lib/illustrations.mjs`).
-- `ops/`: `tick.sh` and the launchd installer (`npm run schedule`). See `docs/operations.md`.
+- `ops/`: `tick.sh` and the scheduler installer (`npm run schedule`: launchd on macOS, a systemd user timer on Linux; `doctor` checks a machine, `claim` makes a checkout the only scheduler). See `docs/operations.md`.
 
 ## Commands
 
@@ -36,7 +36,7 @@ npm run feedback -- list | add <agent> "note"   # feedback per agent
 npm run prompt -- list | show|apply|reject <id> # prompt proposals from the tuner
 npm run site:preview                       # preview site on http://127.0.0.1:4321 (mock prices; restart to pick up content changes)
 npm run site:build:production              # what the live site builds (published posts only)
-npm run schedule -- install|status|logs    # hourly launchd job (run in the scheduler's own clone)
+npm run schedule -- doctor|claim|install|status|logs   # the scheduler job (run in the scheduler's own clone)
 node backoffice/server.mjs                 # dashboard
 ```
 
