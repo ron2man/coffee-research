@@ -50,6 +50,7 @@ test('doctor names what is missing and how to fix it', () => {
   const exec = (cmd, args) => {
     if (cmd === 'git' && args[0] === 'symbolic-ref') return { status: 0, stdout: 'main\n' };
     if (cmd === 'git' && args[0] === 'status') return { status: 0, stdout: '' };
+    if (cmd === 'git' && args[0] === 'config') return { status: 1, stdout: '' };
     if (cmd === 'git' && args[0] === 'push') return { status: 128, stdout: '', stderr: 'git@github.com: Permission denied (publickey).' };
     if (cmd === 'git' && args[0] === 'ls-remote') return { status: 0, stdout: 'abc HEAD' };
     if (cmd === 'claude') return { status: 0, stdout: JSON.stringify({ authMethod: 'claude.ai' }) };
@@ -60,6 +61,8 @@ test('doctor names what is missing and how to fix it', () => {
   const by = Object.fromEntries(checks.map((c) => [c.name, c]));
   assert.equal(by['Checkout on main'].ok, true);
   assert.equal(by['Claude CLI signed in with the subscription'].ok, true);
+  assert.equal(by['Git knows who commits'].ok, false);
+  assert.match(by['Git knows who commits'].fix, /git config user\.name/);
   assert.equal(by['Git can push to main without a prompt'].ok, false);
   assert.match(by['Git can push to main without a prompt'].detail, /publickey/);
   assert.equal(by['GitHub CLI signed in (opens publishing pull requests)'].ok, false);

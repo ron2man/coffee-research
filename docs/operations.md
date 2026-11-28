@@ -192,10 +192,11 @@ npm run schedule -- claim      # make this checkout the scheduler (commits and p
 On the new machine:
 
 ```sh
-# 1. Tools: Node 22+, git, Claude Code, GitHub CLI, bws
+# 1. Tools: Node 22+, git, curl, Claude Code, GitHub CLI, bws
+sudo apt install -y curl gh                # Ubuntu/Debian; apt rather than snap
 node -v                                   # 22 or newer
 curl -fsSL https://claude.ai/install.sh | bash && claude auth login    # the subscription account, never an API key
-# GitHub CLI: https://cli.github.com (apt on Ubuntu/Debian), then:
+echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc              # if `claude` isn't found afterwards
 gh auth login
 curl -fsSL https://bws.bitwarden.com/install | sh
 
@@ -209,9 +210,10 @@ read -rs -p "BWS token: " T && echo
 printf 'BWS_ACCESS_TOKEN=%s\nBWS_PROJECT_ID=<project id>\n' "$T" > ~/.config/yourcoffeesetup/bws
 chmod 600 ~/.config/yourcoffeesetup/bws; unset T
 
-# 4. The scheduler's own clone
+# 4. The scheduler's own clone, with a name for its commits
 git clone git@github.com:ron2man/coffee-research.git ~/coffee-research-bot
 cd ~/coffee-research-bot && npm install
+git config user.name "Your name (scheduler)" && git config user.email "you@example.com"
 npm run schedule -- doctor                # fix everything it lists before going on
 ```
 
