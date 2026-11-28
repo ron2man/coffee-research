@@ -43,3 +43,13 @@ export async function shareImagePng({ title, kicker = 'Guide', brand = ['Your', 
 }
 
 export const sharePath = (market, slug) => `/og/${market.locale}/${slug}.png`;
+
+// A guide drawing (public/assets/illustrations/<id>.svg, 240×180) centred on its paper tile.
+export const ILLUSTRATION_PNG_SIZE = { width: 1200, height: 900 };
+export function illustrationPng(id) {
+  const drawing = readFileSync(here(`../public/assets/illustrations/${id}.svg`), 'utf8')
+    .replace(/^<svg[^>]*>/, '<svg x="120" y="90" width="960" height="720" viewBox="0 0 240 180" fill="none" stroke="#111" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">');
+  const { width, height } = ILLUSTRATION_PNG_SIZE;
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}"><rect width="${width}" height="${height}" fill="#f5f2ec"/>${drawing}</svg>`;
+  return new Resvg(svg, { fitTo: { mode: 'width', value: width } }).render().asPng();
+}

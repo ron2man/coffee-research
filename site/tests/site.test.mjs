@@ -53,10 +53,13 @@ test('preview builds never load GTM and block crawlers', () => {
   assert.match(read('robots.txt'), /Disallow: \//);
 });
 
-test('preview build shows credited mock photos on guides', () => {
+test('guides show their drawing beside the title, labelled as an illustration, not a mock photo', () => {
   const page = build('preview').read('en-us/guides/which-grinder-for-bambino/index.html');
-  assert.match(page, /src="\/assets\/mock\/[a-z-]+\.jpg"/);
-  assert.match(page, /Photo: [^<]+ on Unsplash\. Mock image for the preview\./);
+  const figure = page.match(/<figure class="post-art">[\s\S]*?<\/figure>/)?.[0];
+  assert.ok(figure, 'the guide has its drawing');
+  assert.match(figure, /<img src="\/assets\/illustrations\/grinder\.svg\?v=[0-9a-f]{10}" alt="Line drawing of [^"]+"/);
+  assert.match(figure, /<figcaption>Illustration\. /);
+  assert.doesNotMatch(page, /Mock image for the preview/, 'the drawing replaces the mock photo');
 });
 
 test('sidebar pick shows the same product and price as the PriceBox', () => {
@@ -116,7 +119,7 @@ test('home: the setup finder speaks each market\'s product names, and the guide 
     const model = finder.questions.find((q) => q.key === 'model');
     assert.ok(model.options.some(([, label]) => label === `${brand} Barista Express`), `${locale}: ${brand} Barista Express`);
     assert.doesNotMatch(json, new RegExp(`\\{\\{|${other} Barista`), `${locale}: tokens resolved, no other market's brand`);
-    const list = home.match(/<ol class="guide-rows" data-setup-list data-filter="([^"]*)" data-rank="([^"]*)">([\s\S]*?)<\/ol>/);
+    const list = home.match(/<ol class="guide-rows(?: has-art)?" data-setup-list data-filter="([^"]*)" data-rank="([^"]*)">([\s\S]*?)<\/ol>/);
     assert.ok(list, `${locale}: the guide list is a setup list`);
     assert.deepEqual(list[1].split(' '), finder.questions.filter((q) => q.use === 'filter').map((q) => q.key));
     const rows = [...list[3].matchAll(/<li data-setup="([^"]*)">/g)].map((m) => JSON.parse(m[1].replace(/&quot;/g, '"')));
@@ -213,12 +216,12 @@ test('asset URLs carry a content hash, and assets have one year-long Cache-Contr
 test('page polish: prices line only with a pick, no category tag on its own page, one category means no tiles', () => {
   const prod = build('production');
   const guide = readdirSync(join(repoRoot, 'content/published')).find((f) => f.endsWith('.md')).slice(0, -3);
-  const head = prod.read(`en-gb/guides/${guide}/index.html`).match(/<div class="post-head-side">[\s\S]*?<\/div>/)[0];
+  const head = prod.read(`en-gb/guides/${guide}/index.html`).match(/<header class="wrap post-head[^"]*">[\s\S]*?<\/header>/)[0];
   if (!/jump-pick/.test(head)) assert.doesNotMatch(head, /Prices for the/, 'no prices promised on a guide without offers');
   const withPick = build('preview').read('en-gb/guides/which-grinder-for-bambino/index.html');
   assert.match(withPick, /Prices for the UK<\/p>/, 'a guide with a pick still says which market its prices are for');
   const category = prod.read('en-gb/machines/index.html');
-  assert.match(category, /<ol class="guide-rows no-tag">/);
+  assert.match(category, /<ol class="guide-rows no-tag(?: has-art)?">/);
   assert.doesNotMatch(category, /class="gr-tag">Machines/);
   const home = prod.read('en-gb/index.html');
   if (!/class="tile"/.test(home)) assert.doesNotMatch(home, /Browse by category/);
@@ -252,7 +255,9 @@ test('each guide has its own share image per market, with the title for that mar
     const title = html.match(/<h1>([^<]+)<\/h1>/)[1];
     assert.ok(html.includes(`<meta property="og:image:alt" content="${title}">`), 'alt is the guide title');
     const article = [...html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)].map((m) => JSON.parse(m[1])).find((d) => d['@type'] === 'Article');
-    assert.deepEqual(article.image, [`https://yourcoffeesetup.com/og/${locale}/${guide}.png`]);
+    assert.equal(article.image[0], `https://yourcoffeesetup.com/og/${locale}/${guide}.png`, 'the share card first');
+    const drawing = article.image[1]?.match(/^https:\/\/yourcoffeesetup\.com\/(og\/illustration\/[a-z-]+\.png)$/)?.[1];
+    assert.ok(drawing && has(drawing), 'then the guide drawing as a PNG, built');
   }
   assert.notDeepEqual(readFileSync(join(build('production').outDir, `og/en-gb/${guide}.png`)), readFileSync(join(build('production').outDir, `og/en-us/${guide}.png`)), 'markets differ when product names do');
 });

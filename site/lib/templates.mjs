@@ -3,6 +3,7 @@
 import { escape, inline, parseMarkdown } from './markdown.mjs';
 import { formatPrice, offersFor } from './offers.mjs';
 import { localizeFinder } from './finder.mjs';
+import { ILLUSTRATION_SIZE, illustrationPath } from './illustrations.mjs';
 import { productName as engineProductName, resolveTokens as engineResolveTokens } from '../../engine/state/tokens.mjs';
 import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
@@ -98,8 +99,11 @@ export function guideRows({ site, market, posts, showTag = true, finder = null }
   const keys = (use) => (finder?.questions ?? []).filter((q) => q.use === use).map((q) => q.key).join(' ');
   const listAttrs = finder ? ` data-setup-list data-filter="${keys('filter')}" data-rank="${keys('rank')}"` : '';
   const rowAttrs = (post) => (finder ? ` data-setup="${escape(JSON.stringify(post.setupTags ?? {}))}"` : '');
-  return `<ol class="guide-rows${showTag ? '' : ' no-tag'}"${listAttrs}>${posts.map((source) => localize(source, site, market)).map((post) => `<li${rowAttrs(post)}><a href="${postPath(market, post.slug)}">
-${tag(post)}
+  // The guide's drawing as a thumbnail. Decorative here (the title says what the guide is).
+  const art = (post) => (post.illustration ? `<span class="gr-art"><img src="${assetUrl(illustrationPath(post.illustration.id))}" alt="" width="${ILLUSTRATION_SIZE.width}" height="${ILLUSTRATION_SIZE.height}" loading="lazy" decoding="async"></span>` : '');
+  const withArt = posts.some((p) => p.illustration);
+  return `<ol class="guide-rows${showTag ? '' : ' no-tag'}${withArt ? ' has-art' : ''}"${listAttrs}>${posts.map((source) => localize(source, site, market)).map((post) => `<li${rowAttrs(post)}><a href="${postPath(market, post.slug)}">
+${art(post)}${tag(post)}
 <span class="gr-main"><span class="gr-title">${escape(post.title)}</span><span class="gr-summary">${escape(post.description)}</span></span>
 <span class="gr-date">${dateLabel(post, market)}</span>
 </a></li>`).join('')}</ol>`;
@@ -284,13 +288,17 @@ export function siteStructuredData({ site, siteUrl, market }) {
   }) + jsonLd({ '@context': 'https://schema.org', ...organization(site, siteUrl), email: 'hello@yourcoffeesetup.com' });
 }
 
+/** Where the guide's drawing is rendered as a PNG for search engines (src/pages/og/illustration/). */
+export const illustrationPngPath = (id) => `/og/illustration/${id}.png`;
+
 /** Article + BreadcrumbList structured data. No author person: the site does not claim one. */
 export function postStructuredData({ site, market, post, siteUrl, crumbs }) {
   const url = `${siteUrl}${postPath(market, post.slug)}`;
   const org = organization(site, siteUrl);
   const article = {
     '@context': 'https://schema.org', '@type': 'Article', headline: post.title, description: post.description,
-    image: [`${siteUrl}/og/${market.locale}/${post.slug}.png`], // rendered by src/pages/og/
+    // Rendered by src/pages/og/: the share card (1200×630) and the guide's drawing (1200×900).
+    image: [`${siteUrl}/og/${market.locale}/${post.slug}.png`, ...(post.illustration ? [`${siteUrl}${illustrationPngPath(post.illustration.id)}`] : [])],
     inLanguage: `${market.language}-${market.id}`, mainEntityOfPage: url, url, author: org, publisher: org,
     ...(post.publishedAt ? { datePublished: post.publishedAt } : {}),
     ...(post.updatedAt ? { dateModified: post.updatedAt } : {}),
@@ -323,23 +331,35 @@ export function postPage({ site, market, post: source, offers, now, preview, pos
   const notesFirst = placed ? '' : topNotes;
   const crumbs = breadcrumbItems({ site, market, post });
   const breadcrumbNav = `<nav class="breadcrumbs" aria-label="Breadcrumb"><ol>${crumbs.map((c, i) => (i === crumbs.length - 1 ? `<li aria-current="page">${escape(c.name)}</li>` : `<li><a href="${c.path}">${escape(c.name)}</a></li>`)).join('')}</ol></nav>`;
+  const summary = `<p class="post-summary">${escape(post.description)}</p>
+<p class="meta">${(updated + (pickId ? `Prices for the ${escape(shortLabel(market))}` : '')).replace(/ · $/, '')}</p>
+${pickId ? `<a class="jump-pick" href="#buy-${escape(pickId)}">Jump to the pick</a>` : ''}`;
+  // The guide's drawing, labelled as one: it never stands in for a photo of something we did.
+  const art = post.illustration;
+  const figure = art ? `<figure class="post-art"><div class="post-art-tile"><img src="${assetUrl(illustrationPath(art.id))}" alt="${escape(art.alt)}" width="${ILLUSTRATION_SIZE.width}" height="${ILLUSTRATION_SIZE.height}" fetchpriority="high"></div><figcaption>Illustration. ${escape(art.caption)}</figcaption></figure>` : '';
   const related = relatedPosts({ post: source, posts, market });
   const relatedSection = related.length ? `<section class="wrap related" aria-labelledby="related-title"><h2 id="related-title">Related guides</h2>${guideRows({ site, market, posts: related })}</section>` : '';
   return `<article class="post">
 ${postStructuredData({ site, market, post, siteUrl, crumbs })}
-<header class="wrap post-head">
+${figure ? `<header class="wrap post-head has-art">
+<div class="post-head-main">
+${breadcrumbNav}
+<p class="kicker">${badge}${escape(post.type)}</p>
+<h1>${escape(post.title)}</h1>
+${summary}
+</div>
+${figure}
+</header>` : `<header class="wrap post-head">
 <div class="post-head-main">
 ${breadcrumbNav}
 <p class="kicker">${badge}${escape(post.type)}</p>
 <h1>${escape(post.title)}</h1>
 </div>
 <div class="post-head-side">
-<p class="post-summary">${escape(post.description)}</p>
-<p class="meta">${(updated + (pickId ? `Prices for the ${escape(shortLabel(market))}` : '')).replace(/ · $/, '')}</p>
-${pickId ? `<a class="jump-pick" href="#buy-${escape(pickId)}">Jump to the pick</a>` : ''}
+${summary}
 </div>
 </header>
-${mockPhoto(postPhoto(site, post.slug), 'wrap post-photo')}
+${mockPhoto(postPhoto(site, post.slug), 'wrap post-photo')}`}
 <div class="wrap post-layout">
 <div class="post-main">
 ${notesFirst}

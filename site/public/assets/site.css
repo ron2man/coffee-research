@@ -7,7 +7,7 @@
 }
 :root {
   --bg: #ffffff; --fg: #111111; --mute: #5c5c58; --line: #e3e3e0; --surface: #f2f2f0;
-  --acc: #d92b22; --acc-text: #c4251d; --acc-on-dark: #ff8a80; --ink-2: #3f3f3c;
+  --acc: #d92b22; --acc-text: #c4251d; --paper: #f5f2ec; --acc-on-dark: #ff8a80; --ink-2: #3f3f3c;
   --sans: "Schibsted Grotesk", "Helvetica Neue", Helvetica, Arial, sans-serif;
   color-scheme: light;
 }
@@ -90,6 +90,13 @@ figcaption, .photo-credit { margin-top: .5rem; font-size: 13px; color: var(--mut
 .gr-tag { font-size: 13px; font-weight: 700; color: var(--acc-text); }
 .guide-rows.no-tag a { grid-template-columns: minmax(0, 1fr) 7rem; }
 .guide-rows.no-tag .gr-tag { grid-column: 1 / -1; }
+.guide-rows.has-art a { grid-template-columns: 12.5rem minmax(0, 1fr) 7rem; grid-template-rows: 1fr auto auto 1fr; grid-template-areas: "art . date" "art tag date" "art main date" "art . date"; column-gap: 1.75rem; align-items: center; padding: 1.25rem 0; }
+.guide-rows.has-art .gr-art { grid-area: art; }
+.guide-rows.has-art .gr-tag { grid-area: tag; }
+.guide-rows.has-art .gr-main { grid-area: main; }
+.guide-rows.has-art .gr-date { grid-area: date; }
+.gr-art { display: flex; align-items: center; justify-content: center; aspect-ratio: 4 / 3; background: var(--paper); }
+.gr-art img { display: block; width: 84%; height: auto; }
 .gr-title { display: block; font-size: 1.2rem; font-weight: 700; line-height: 1.25; letter-spacing: -.01em; }
 .guide-rows a:hover .gr-title { text-decoration: underline; text-decoration-color: var(--acc); }
 .gr-summary { display: block; margin-top: .2rem; font-size: 15px; color: var(--ink-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -117,6 +124,14 @@ figcaption, .photo-credit { margin-top: .5rem; font-size: 13px; color: var(--mut
 .post h1 { margin: .6rem 0 0; font: 800 clamp(2.2rem, 4.4vw, 3.3rem)/1.02 var(--sans); letter-spacing: -.04em; max-width: 18ch; }
 .post-summary { margin: 0; font-size: 1.1rem; line-height: 1.5; }
 .post-head-side .meta { margin-top: .6rem; }
+/* Guide drawing beside the title (labelled "Illustration." in its caption) */
+.post-head.has-art { align-items: center; gap: 2rem 3.5rem; }
+.post-head.has-art .post-summary { margin-top: 1.1rem; max-width: 44ch; font-size: 1.2rem; }
+.post-head.has-art .meta { margin-top: .6rem; }
+.post-art { flex: 1 1 20rem; min-width: 0; max-width: 28rem; margin: 0; }
+.post-art-tile { display: flex; align-items: center; justify-content: center; aspect-ratio: 4 / 3; background: var(--paper); }
+.post-art img { display: block; width: 80%; height: auto; }
+.post-art figcaption { margin-top: .5rem; font-size: 13px; line-height: 1.4; color: var(--ink-2); }
 .jump-pick { display: inline-flex; align-items: center; min-height: 44px; margin-top: 1rem; padding: 0 1.1rem; background: var(--fg); color: var(--bg); text-decoration: none; font-weight: 700; border-radius: 2px; }
 .jump-pick:hover { background: var(--acc); color: #fff; }
 .post-layout { display: grid; grid-template-columns: minmax(0, 40rem) minmax(15rem, 19rem); justify-content: space-between; column-gap: 4rem; margin-top: 2rem; }
@@ -250,6 +265,10 @@ th { font-weight: 700; }
   .guide-rows a { grid-template-columns: minmax(0, 1fr); }
   .gr-date { text-align: left; order: -1; }
   .gr-summary { white-space: normal; }
+  .guide-rows.has-art a { grid-template-columns: 6.5rem minmax(0, 1fr); grid-template-rows: auto auto auto; grid-template-areas: "art date" "art tag" "art main"; column-gap: 1rem; align-items: start; padding: 1rem 0; }
+  .post-art { max-width: none; flex-basis: 100%; }
+  .post-art-tile { aspect-ratio: 16 / 9; }
+  .post-art img { width: 55%; }
 }
 
 /* Breadcrumbs and related guides (internal links) */
