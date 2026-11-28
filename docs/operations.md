@@ -75,7 +75,7 @@ The target is one guide a day: about 6 agent runs per guide (research, angle, to
 
 - Install the job every 20 minutes while you're working toward that pace: `npm run schedule -- install --interval-minutes 20`. A tick with nothing due uses nothing.
 - **Daily budget:** a tick doesn't start an agent once 12 agent runs happened in the last 24 hours (each is about 8% of a usage window). Change it with `TICK_MAX_RUNS_PER_DAY` in `~/.config/yourcoffeesetup/env`.
-- The critic and tuner run only when the pipeline has nothing else to do; the idea agent runs when fewer than 4 ideas are waiting (seeds bring it forward).
+- The critic and tuner run only when the pipeline has nothing else to do. The idea agent runs when fewer than 4 ideas are waiting, at most every 6 hours (seeds bring it forward). Demand data is collected once a day: later idea runs that day reuse it, so they spend no search API budget, unless the focus products or the open seeds changed since.
 
 ## Focus: which products ideas start from
 

@@ -50,6 +50,31 @@ export function demandQueries(niche, { cards, seeds = [] }) {
   return queries.filter((x) => !seen.has(`${x.market}:${x.q}`) && seen.add(`${x.market}:${x.q}`)).slice(0, max);
 }
 
+/**
+ * Today's earlier collection, if it still fits: the same day, every focus product and every open
+ * seed among its queries. The idea agent can run several times a day; demand data barely changes
+ * within a day, and each collection spends search API budget, so later runs reuse it.
+ * Returns { path, data } or null.
+ */
+export function reusableDemand(root, niche, { seeds = [], today = new Date().toISOString().slice(0, 10) } = {}) {
+  const dir = join(root, 'data', 'demand');
+  if (!existsSync(dir)) return null;
+  for (const file of readdirSync(dir).filter((n) => n.endsWith('.json')).sort().reverse()) {
+    let data;
+    try {
+      data = JSON.parse(readFileSync(join(dir, file), 'utf8'));
+    } catch {
+      continue;
+    }
+    if (data.date !== today) continue;
+    const sources = new Set((data.queries ?? []).map((q) => q.source));
+    const covers = (niche.focus?.products ?? []).every((id) => sources.has(`focus:${id}`))
+      && seeds.every((seed) => sources.has(`seed:${seed.id}`) || !isAscii(seed.text.split(/[?.!(]/)[0].trim()));
+    return covers ? { path: `data/demand/${file}`, data } : null; // only the latest of today counts
+  }
+  return null;
+}
+
 /** Take `count` items from `list`, starting at an offset that moves every day, so runs cover different combinations over time. */
 export function rotate(list, count, today) {
   if (!list.length || count <= 0) return [];

@@ -13,7 +13,7 @@
     "max": 4
   },
   "schedule": {
-    "minIntervalHours": 24
+    "minIntervalHours": 6
   },
   "runner": {
     "type": "claude",

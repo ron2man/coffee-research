@@ -27,7 +27,7 @@ import { libraryCatalog } from '../library/library.mjs';
 import { catalogListing, syncCatalog } from '../catalog/catalog.mjs';
 import { processPublishQueue, syncPublished } from '../publish/publish.mjs';
 import { autoPullRequests } from '../publish/autopr.mjs';
-import { autocomplete, collectDemand, demandUsage } from '../demand/collect.mjs';
+import { autocomplete, collectDemand, demandUsage, reusableDemand } from '../demand/collect.mjs';
 import { initialFocus, readFocus, reviewDue, reviewFocus, withFocus, writeFocus } from '../focus/focus.mjs';
 import { writeDailyDigests } from '../report/report.mjs';
 import { machineIdentity, schedulerCheck, withScheduler } from './host.mjs';
@@ -479,11 +479,19 @@ export async function tick({ root = repoRoot, runner, now = new Date(), nicheId,
   const collector = demandCollector === undefined ? (runner ? null : collectDemand) : demandCollector;
   let demandSignals = null;
   if (agent.acceptsSeeds && collector) {
-    const { cards } = loadCardsSync(join(root, 'knowledge'), categoryIds(niche));
-    demandSignals = await collector(niche, { cards, seeds: openSeeds(root), usage: demandUsage(root) });
-    const path = `data/demand/${new Date().toISOString().replace(/[:.]/g, '-')}.json`;
-    writeJsonAtomic(join(root, path), demandSignals);
-    written.push(path);
+    // Once a day: a later run the same day reuses that collection (no search budget spent) unless
+    // the focus or the open seeds changed since.
+    const reuse = reusableDemand(root, niche, { seeds: openSeeds(root), today: now.toISOString().slice(0, 10) });
+    if (reuse) {
+      demandSignals = reuse.data;
+      summary.demandReused = reuse.path;
+    } else {
+      const { cards } = loadCardsSync(join(root, 'knowledge'), categoryIds(niche));
+      demandSignals = await collector(niche, { cards, seeds: openSeeds(root), usage: demandUsage(root) });
+      const path = `data/demand/${new Date().toISOString().replace(/[:.]/g, '-')}.json`;
+      writeJsonAtomic(join(root, path), demandSignals);
+      written.push(path);
+    }
   }
 
   const started = Date.now();
