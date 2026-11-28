@@ -58,6 +58,7 @@ production does, including `_headers`).
 ## Assets and share image
 
 - `/assets/*` is cached for a year (`site/public/_headers`). Every asset URL in the HTML carries a content hash (`?v=…`, `assetUrl` in `site/lib/templates.mjs`), so a changed file gets a new URL. Fonts keep fixed names; rename the file to change one.
+- Each guide has its own share image per market (`/og/<locale>/<slug>.png`, title with that market's product names), drawn at build time by `site/lib/og.mjs` (satori + resvg, fonts in `site/og/fonts/`: static 400 and 800 instances of the site's variable font, OFL). Other pages use the default image.
 - The default share image and the logo are rendered from `site/og/default.html` and `site/public/assets/icon.svg` by `python3 site/og/render.py` (Playwright for Python; set `CHROME` to a Chrome binary if Playwright has no browser). Commit the PNGs it writes.
 
 ## Analytics: GTM and GA4

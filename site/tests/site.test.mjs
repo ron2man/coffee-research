@@ -216,6 +216,70 @@ test('page polish: prices line only with a pick, no category tag on its own page
   if (!/class="tile"/.test(home)) assert.doesNotMatch(home, /Browse by category/);
 });
 
+test('security headers and manifest: HSTS, a report-only CSP that allows what the pages load', () => {
+  const { read, has } = build('production');
+  const headers = read('_headers');
+  const block = headers.match(/^\/\*\n((?: {2}.+\n)+)/m)[1];
+  assert.ok(block.split('\n').filter(Boolean).every((l) => /^ {2}[A-Za-z-]+: /.test(l)), 'every line in the /* block is a header');
+  assert.match(block, /Strict-Transport-Security: max-age=31536000\n/);
+  const csp = block.match(/Content-Security-Policy-Report-Only: (.+)/)[1];
+  const home = read('en-us/index.html');
+  for (const [, src] of home.matchAll(/<script[^>]* src="(https:\/\/[^/"]+)/g)) assert.ok(csp.includes(src), `CSP script-src allows ${src}`);
+  assert.match(csp, /script-src [^;]*'unsafe-inline'/, 'the GTM bootstrap is inline');
+  assert.doesNotMatch(home, / style="/, 'no inline styles, so style-src can stay self');
+  assert.match(home, /<link rel="manifest" href="\/manifest\.webmanifest">/);
+  const manifest = JSON.parse(read('manifest.webmanifest'));
+  for (const icon of manifest.icons) assert.ok(has(icon.src.slice(1)), `manifest icon ${icon.src} is built`);
+});
+
+test('each guide has its own share image per market, with the title for that market', () => {
+  const { read, has } = build('production');
+  const guide = readdirSync(join(repoRoot, 'content/published')).find((f) => f.endsWith('.md')).slice(0, -3);
+  const og = (locale) => read(`${locale}/guides/${guide}/index.html`).match(/<meta property="og:image" content="https:\/\/yourcoffeesetup\.com([^"]+)">/)[1];
+  assert.equal(og('en-gb'), `/og/en-gb/${guide}.png`);
+  assert.equal(og('en-us'), `/og/en-us/${guide}.png`);
+  for (const locale of ['en-gb', 'en-us']) {
+    assert.ok(has(`og/${locale}/${guide}.png`), `${locale} image is built`);
+    const html = read(`${locale}/guides/${guide}/index.html`);
+    const title = html.match(/<h1>([^<]+)<\/h1>/)[1];
+    assert.ok(html.includes(`<meta property="og:image:alt" content="${title}">`), 'alt is the guide title');
+    const article = [...html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)].map((m) => JSON.parse(m[1])).find((d) => d['@type'] === 'Article');
+    assert.deepEqual(article.image, [`https://yourcoffeesetup.com/og/${locale}/${guide}.png`]);
+  }
+  assert.notDeepEqual(readFileSync(join(build('production').outDir, `og/en-gb/${guide}.png`)), readFileSync(join(build('production').outDir, `og/en-us/${guide}.png`)), 'markets differ when product names do');
+});
+
+test('privacy page: in every market, linked from the footer and the banner, and lists every key the scripts store', () => {
+  const { read, has } = build('production');
+  const page = read('en-gb/privacy/index.html');
+  assert.ok(has('en-us/privacy/index.html'));
+  const home = read('en-gb/index.html');
+  assert.match(home.match(/<footer[\s\S]*<\/footer>/)[0], /href="\/en-gb\/privacy\/"/, 'footer link');
+  assert.match(home.match(/<section class="consent"[\s\S]*?<\/section>/)[0], /href="\/en-gb\/privacy\/"/, 'banner link');
+  const scripts = ['site.js', 'consent.js'].map((f) => readFileSync(join(repoRoot, 'site/public/assets', f), 'utf8')).join('\n')
+    + readFileSync(join(repoRoot, 'site/src/components/Analytics.astro'), 'utf8');
+  const keys = new Set([...scripts.matchAll(/(?:KEY = |getItem\()'([a-z-]+)'/g)].map((m) => m[1]));
+  assert.ok(keys.size >= 2, `found the storage keys: ${[...keys]}`);
+  for (const key of keys) assert.match(page, new RegExp(`<code>${key}</code>`), `privacy page lists localStorage "${key}"`);
+  assert.match(page, /Cookie settings/);
+  assert.match(page, /14 months/);
+  assert.match(readFileSync(join(repoRoot, 'docs/deploy.md'), 'utf8'), /Data retention: 14 months/, 'same retention as the GA4 property');
+});
+
+test('a renamed guide: new address built, old one not, and a 301 for both markets', () => {
+  const { read, has } = build('production');
+  const aliases = JSON.parse(readFileSync(join(repoRoot, 'content/guide-aliases.json'), 'utf8')).aliases;
+  const redirects = read('_redirects');
+  for (const [old, now] of Object.entries(aliases)) {
+    if (!has(`en-us/guides/${now}/index.html`)) continue; // aliases for drafts that never went live need no redirect
+    assert.ok(!has(`en-us/guides/${old}/index.html`), `${old} is no longer built`);
+    assert.ok(redirects.includes(`/:locale/guides/${old}/ /:locale/guides/${now}/ 301`), `301 from ${old}`);
+    assert.ok(redirects.includes(`/:locale/guides/${old} /:locale/guides/${now}/ 301`), `301 from ${old} without the slash`);
+  }
+  assert.match(read('sitemap-0.xml'), /barista-express-pro-grinder-too-fast-at-setting-1/);
+  assert.doesNotMatch(read('sitemap-0.xml'), /breville-builtin-grinder/);
+});
+
 test('consent banner: production pages with GTM carry it hidden, previews do not', () => {
   const home = build('production').read('en-gb/index.html');
   assert.match(home, /<section class="consent" id="consent" aria-label="Cookie choice" hidden>/);

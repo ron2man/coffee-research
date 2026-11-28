@@ -1,7 +1,7 @@
 ---
 title: "Shots still fast at grind setting 1? Fix the built-in grinder first"
 seoTitle: "Built-in grinder too fast at setting 1? What to fix first"
-slug: "breville-builtin-grinder-wont-grind-fine-enough"
+slug: "barista-express-pro-grinder-too-fast-at-setting-1"
 description: "{{product:barista-express}} or {{product:barista-pro}} still fast at setting 1? Check beans, basket, dose and burrs in order before you buy a grinder."
 market: "US"
 language: "en"
@@ -13,7 +13,7 @@ updatedAt: "2026-11-23"
 productIds: ["barista-express","barista-pro"]
 offerIds: []
 tools: ["grind-fault-tree"]
-claimsFile: "content/published/breville-builtin-grinder-wont-grind-fine-enough.claims.json"
+claimsFile: "content/published/barista-express-pro-grinder-too-fast-at-setting-1.claims.json"
 disclosure: true
 ---
 

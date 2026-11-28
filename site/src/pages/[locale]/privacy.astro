@@ -1,0 +1,16 @@
+---
+import Base from '../../layouts/Base.astro';
+import { site } from '../../data/load.mjs';
+
+export async function getStaticPaths() {
+  const { data } = await site();
+  return data.markets.map((market) => ({ params: { locale: market.locale }, props: { market } }));
+}
+const { market } = Astro.props;
+const { data, t } = await site();
+// Date of the last change to what this page says; update it with the text.
+const updated = '27 Nov 2026';
+---
+<Base title={`Privacy | ${data.site.name}`} description="What this site measures, what it stores in your browser, and how to change your cookie choice." path={`/${market.locale}/privacy/`} market={market}>
+  <Fragment set:html={t.privacyPage({ site: data.site, market, updated })} />
+</Base>

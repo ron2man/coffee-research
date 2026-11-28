@@ -15,6 +15,9 @@ function findRepoRoot(start = process.cwd()) {
 const root = findRepoRoot();
 const load = (file) => import(/* @vite-ignore */ pathToFileURL(join(root, 'site', 'lib', file)).href);
 
+/** The share-image renderer (site/lib/og.mjs), loaded only by the pages that draw images. */
+export const shareImages = () => load('og.mjs');
+
 /** { data, t }: the build's site data (loaded once) and the template functions. */
 export async function site() {
   const [{ siteData, SITE_URL }, t] = await Promise.all([load('site-data.mjs'), load('templates.mjs')]);

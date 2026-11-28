@@ -258,6 +258,7 @@ th { font-weight: 700; }
 .consent[hidden], .link-button[hidden] { display: none; }
 .consent-inner { display: flex; flex-wrap: wrap; gap: 1rem 2rem; align-items: center; }
 .consent-text { flex: 1 1 28rem; margin: 0; font-size: 15px; line-height: 1.5; }
+.consent-text a { color: #fff; }
 .consent-actions { display: flex; gap: .75rem; }
 .consent-actions button { min-height: 44px; min-width: 7.5rem; padding: 0 1.1rem; border: 2px solid #fff; border-radius: 2px; background: #fff; color: var(--fg); font: 700 15px/1 var(--sans); cursor: pointer; }
 .consent-actions button:hover { background: var(--fg); color: #fff; }

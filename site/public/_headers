@@ -1,9 +1,17 @@
 # Response headers for the Worker's static assets (Workers Static Assets _headers).
+# Strict-Transport-Security: HTTPS only for a year; no includeSubDomains or preload until every
+# subdomain is known to be HTTPS.
+# Content-Security-Policy-Report-Only: browsers log what the policy would block (DevTools console)
+# without blocking it. Sources: GTM and GA4 (production), Cloudflare Web Analytics (injected at the
+# edge). 'unsafe-inline' is for the GTM bootstrap, whose page data differs per page. Enforce it
+# (rename the header) once a week of browsing shows no reports.
 /*
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: camera=(), microphone=(), geolocation=()
   X-Frame-Options: DENY
+  Strict-Transport-Security: max-age=31536000
+  Content-Security-Policy-Report-Only: default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://static.cloudflareinsights.com; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com https://cloudflareinsights.com; img-src 'self' data: https://*.google-analytics.com https://www.googletagmanager.com; style-src 'self'; font-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'
 
 # Every asset URL in the HTML carries a content hash (?v=, assetUrl in site/lib/templates.mjs), and
 # fonts keep fixed names, so all assets can be cached for a year. One rule only: two matching rules

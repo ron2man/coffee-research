@@ -281,7 +281,7 @@ export function postStructuredData({ site, market, post, siteUrl, crumbs }) {
   const org = organization(site, siteUrl);
   const article = {
     '@context': 'https://schema.org', '@type': 'Article', headline: post.title, description: post.description,
-    image: [`${siteUrl}${SHARE_IMAGE.src}`],
+    image: [`${siteUrl}/og/${market.locale}/${post.slug}.png`], // rendered by src/pages/og/
     inLanguage: `${market.language}-${market.id}`, mainEntityOfPage: url, url, author: org, publisher: org,
     ...(post.publishedAt ? { datePublished: post.publishedAt } : {}),
     ...(post.updatedAt ? { dateModified: post.updatedAt } : {}),
@@ -386,6 +386,33 @@ ${tiles ? `<section class="wrap categories" aria-labelledby="cat-title">
 <div class="band-gap"></div>`;
 }
 
+/**
+ * Privacy notice: what the site actually collects and stores. Keep it in step with Analytics.astro,
+ * consent.js and site.js; a test checks that every localStorage key the scripts use is listed here.
+ */
+export function privacyPage({ site, market, updated }) {
+  return `<article class="post wrap-narrow">
+<h1>Privacy</h1>
+<div class="prose">
+<p class="lead">${escape(site.name)} has no accounts, no forms and no ads. We measure how the site is used, with your choice where the law asks for it, and nothing else.</p>
+<h2>Analytics (Google Analytics)</h2>
+<p>We use Google Analytics 4, loaded through Google Tag Manager, to count visits and see which guides and checks help. It records the pages you view, your market (US or UK site), and a few events: finishing a guide’s check, how far you scroll, and clicks on links to sellers.</p>
+<p>In the UK, the EEA and Switzerland, analytics cookies are off until you choose <strong>Accept</strong> in the cookie banner. Until then, Google receives only cookieless signals that it uses to estimate visits. Elsewhere they are on by default. Wherever you are, <strong>Cookie settings</strong> at the bottom of every page lets you accept or reject. If you accept, Google Analytics sets the <code>_ga</code> cookies. Analytics data is kept for 14 months.</p>
+<h2>Hosting (Cloudflare)</h2>
+<p>The site is served by Cloudflare, which handles each request (including your IP address) to deliver and protect the site. Cloudflare Web Analytics also measures how fast pages load; it sets no cookies.</p>
+<h2>Stored in your browser</h2>
+<p>Two choices are kept in your browser’s local storage and never sent to us: <code>market</code> (whether you chose the US or UK site) and <code>analytics-consent</code> (your answer in the cookie banner). Clearing your browser’s site data removes them.</p>
+<h2>Links to sellers</h2>
+<p>Some links go to shops and may earn us a commission. When you follow one, the shop and its affiliate network may set their own cookies under their own privacy policies.</p>
+<h2>Email</h2>
+<p>If you write to <a href="mailto:hello@yourcoffeesetup.com">hello@yourcoffeesetup.com</a>, we use your address only to reply.</p>
+<h2>Your choices and questions</h2>
+<p>To ask what we hold about you, or to have it deleted, write to the address above. You can also complain to your data protection authority (in the UK, the Information Commissioner’s Office).</p>
+<p class="meta">Updated ${escape(updated)}</p>
+</div>
+</article>`;
+}
+
 export function howWeWorkPage({ site, market }) {
   return `<article class="post wrap-narrow">
 <h1>How we work</h1>
@@ -395,6 +422,8 @@ export function howWeWorkPage({ site, market }) {
 <p>We start from people: questions in owner forums and communities, gaps in the answers that rank today, and changes in the market. Not from a list of products to sell.</p>
 <h2>What we check</h2>
 <p>Every fact about a product traces back to a source we keep on file: manufacturer manuals and spec pages first, then published tests, then owner reports, each labelled for what it can prove. When sources disagree, we say so.</p>
+<h2>Who does the work</h2>
+<p>AI agents do the research and write the drafts: they find reader questions, read the manuals and tests behind each answer, and write the guide and its interactive checks. Automatic checks reject a draft whose facts don’t trace to a source on file, that claims testing nobody did, or that only reads right in one country. A person can stop any guide before it goes live, and changes to the site itself are reviewed by a person.</p>
 <h2>What we don’t do</h2>
 <p>We don’t claim to have tested products. When a guide includes a measurement or a photo of our own, it names who took it and when.</p>
 <h2>Buying, or not</h2>

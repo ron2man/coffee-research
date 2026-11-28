@@ -76,6 +76,7 @@ const siteLd = !market || isHome ? t.siteStructuredData({ site: siteInfo, siteUr
 <link rel="stylesheet" href={t.assetUrl('/assets/site.css')}>
 <link rel="icon" href={t.assetUrl('/assets/icon.svg')} type="image/svg+xml">
 <link rel="apple-touch-icon" href={t.LOGO.src}>
+<link rel="manifest" href="/manifest.webmanifest">
 {siteLd && <Fragment set:html={siteLd} />}
 {gtm && <Analytics id={gtm} market={market?.id} pageId={pageId} />}
 </head>
@@ -103,14 +104,14 @@ const siteLd = !market || isHome ? t.siteStructuredData({ site: siteInfo, siteUr
 <footer class="foot">
   <div class="wrap">
     {disclosure && <p class="disclosure">{disclosure}</p>}
-    <p class="foot-links"><span class="brand-inline">{siteInfo.name}</span> <a href={`/${market.locale}/how-we-work/`}>How we work</a> <a href={`/${market.locale}/how-we-work/#disclosure`}>Disclosure</a> {hasGuides && <a href={`/${market.locale}/guides/`}>All guides</a>} <a href="mailto:hello@yourcoffeesetup.com">hello@yourcoffeesetup.com</a>{gtm && <button type="button" class="link-button" id="consent-settings" hidden>Cookie settings</button>}</p>
+    <p class="foot-links"><span class="brand-inline">{siteInfo.name}</span> <a href={`/${market.locale}/how-we-work/`}>How we work</a> <a href={`/${market.locale}/how-we-work/#disclosure`}>Disclosure</a> <a href={`/${market.locale}/privacy/`}>Privacy</a> {hasGuides && <a href={`/${market.locale}/guides/`}>All guides</a>} <a href="mailto:hello@yourcoffeesetup.com">hello@yourcoffeesetup.com</a>{gtm && <button type="button" class="link-button" id="consent-settings" hidden>Cookie settings</button>}</p>
   </div>
 </footer>
 )}
 {gtm && (
 <section class="consent" id="consent" aria-label="Cookie choice" hidden>
   <div class="wrap consent-inner">
-    <p class="consent-text">Can we use analytics cookies? Google Analytics would count visits and show us which guides help. No ads, and nothing is sold. You can change this any time under Cookie settings at the bottom of the page.</p>
+    <p class="consent-text">Can we use analytics cookies? Google Analytics would count visits and show us which guides help. No ads, and nothing is sold. You can change this any time under Cookie settings at the bottom of the page. <a href={`/${market?.locale ?? markets[0].locale}/privacy/`}>Privacy</a></p>
     <div class="consent-actions">
       <button type="button" id="consent-accept">Accept</button>
       <button type="button" id="consent-reject">Reject</button>

@@ -9,7 +9,10 @@ export async function getStaticPaths() {
 }
 const { market, post } = Astro.props;
 const { data, t, SITE_URL } = await site();
+const local = t.localize(post, data.site, market);
+// This guide's own share image (src/pages/og/), with its title for this market.
+const image = { src: `/og/${market.locale}/${post.slug}.png`, alt: local.title, width: 1200, height: 630 };
 ---
-<Base title={t.pageTitle(t.localize(post, data.site, market), data.site.name)} description={t.localize(post, data.site, market).description} path={`/${market.locale}/guides/${post.slug}/`} market={market} pageId={post.slug}>
+<Base title={t.pageTitle(t.localize(post, data.site, market), data.site.name)} description={local.description} path={`/${market.locale}/guides/${post.slug}/`} market={market} pageId={post.slug} image={image}>
   <Fragment set:html={t.postPage({ site: data.site, market, post, offers: data.offers, now: data.now, preview: data.preview, posts: data.posts, siteUrl: SITE_URL })} />
 </Base>

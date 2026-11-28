@@ -1,0 +1,4 @@
+# Guides whose slug changed: the old address answers with a 301 to the new one (Workers Static
+# Assets _redirects). Keep a line here for as long as the old address may be linked or indexed.
+/:locale/guides/breville-builtin-grinder-wont-grind-fine-enough/ /:locale/guides/barista-express-pro-grinder-too-fast-at-setting-1/ 301
+/:locale/guides/breville-builtin-grinder-wont-grind-fine-enough /:locale/guides/barista-express-pro-grinder-too-fast-at-setting-1/ 301
