@@ -11,6 +11,7 @@ relatedQueries: ["barista express shots too fast on setting 1","barista pro grin
 publishedAt: "2026-11-23"
 updatedAt: "2026-11-23"
 productIds: ["barista-express","barista-pro"]
+setup: {"symptom":["grinder-too-coarse","fast-sour"]}
 offerIds: []
 tools: ["grind-fault-tree"]
 claimsFile: "content/published/barista-express-pro-grinder-too-fast-at-setting-1.claims.json"

@@ -53,10 +53,10 @@ test('preview builds never load GTM and block crawlers', () => {
   assert.match(read('robots.txt'), /Disallow: \//);
 });
 
-test('preview build shows credited mock photos', () => {
-  const home = build('preview').read('en-us/index.html');
-  assert.match(home, /src="\/assets\/mock\/home-hero\.jpg"/);
-  assert.match(home, /Photo: Nathan Dumlao on Unsplash\. Mock image for the preview\./);
+test('preview build shows credited mock photos on guides', () => {
+  const page = build('preview').read('en-us/guides/which-grinder-for-bambino/index.html');
+  assert.match(page, /src="\/assets\/mock\/[a-z-]+\.jpg"/);
+  assert.match(page, /Photo: [^<]+ on Unsplash\. Mock image for the preview\./);
 });
 
 test('sidebar pick shows the same product and price as the PriceBox', () => {
@@ -105,13 +105,22 @@ test('no built page shows an unresolved token or "<Brand> the <Model>"', () => {
   }
 });
 
-test('home feature resolves product names for each market', () => {
-  const { read } = build('preview');
-  for (const [locale, brand] of [['en-us', 'Breville'], ['en-gb', 'Sage']]) {
-    const feature = read(`${locale}/index.html`).match(/<div class="feature">[\s\S]*?<\/div>\s*<\/div>/)?.[0] ?? '';
-    assert.ok(feature, `${locale}: home has a feature`);
-    assert.doesNotMatch(feature, /\{\{/);
-    if (/Barista Express/.test(feature)) assert.match(feature, new RegExp(`${brand} Barista Express`));
+test('home: the setup finder speaks each market\'s product names, and the guide list carries tags', () => {
+  const { read } = build('production');
+  for (const [locale, brand, other] of [['en-us', 'Breville', 'Sage'], ['en-gb', 'Sage', 'Breville']]) {
+    const home = read(`${locale}/index.html`);
+    const json = home.match(/<script type="application\/json" class="finder-data">([\s\S]*?)<\/script>/)?.[1];
+    assert.ok(json, `${locale}: finder data`);
+    assert.match(home, /<div class="finder" data-finder hidden>/, 'hidden until finder.js runs');
+    const finder = JSON.parse(json);
+    const model = finder.questions.find((q) => q.key === 'model');
+    assert.ok(model.options.some(([, label]) => label === `${brand} Barista Express`), `${locale}: ${brand} Barista Express`);
+    assert.doesNotMatch(json, new RegExp(`\\{\\{|${other} Barista`), `${locale}: tokens resolved, no other market's brand`);
+    const list = home.match(/<ol class="guide-rows" data-setup-list data-filter="([^"]*)" data-rank="([^"]*)">([\s\S]*?)<\/ol>/);
+    assert.ok(list, `${locale}: the guide list is a setup list`);
+    assert.deepEqual(list[1].split(' '), finder.questions.filter((q) => q.use === 'filter').map((q) => q.key));
+    const rows = [...list[3].matchAll(/<li data-setup="([^"]*)">/g)].map((m) => JSON.parse(m[1].replace(/&quot;/g, '"')));
+    assert.ok(rows.length > 0 && rows.every((tags) => tags.brew && tags.model), 'rows carry tags derived from productIds');
   }
 });
 
@@ -212,7 +221,6 @@ test('page polish: prices line only with a pick, no category tag on its own page
   assert.match(category, /<ol class="guide-rows no-tag">/);
   assert.doesNotMatch(category, /class="gr-tag">Machines/);
   const home = prod.read('en-gb/index.html');
-  assert.match(home, /Read the answer<span class="sr-only">: [^<]+<\/span><\/a>/, 'the link names its guide for screen readers');
   if (!/class="tile"/.test(home)) assert.doesNotMatch(home, /Browse by category/);
 });
 
@@ -256,7 +264,7 @@ test('privacy page: in every market, linked from the footer and the banner, and 
   const home = read('en-gb/index.html');
   assert.match(home.match(/<footer[\s\S]*<\/footer>/)[0], /href="\/en-gb\/privacy\/"/, 'footer link');
   assert.match(home.match(/<section class="consent"[\s\S]*?<\/section>/)[0], /href="\/en-gb\/privacy\/"/, 'banner link');
-  const scripts = ['site.js', 'consent.js'].map((f) => readFileSync(join(repoRoot, 'site/public/assets', f), 'utf8')).join('\n')
+  const scripts = readdirSync(join(repoRoot, 'site/public/assets')).filter((f) => f.endsWith('.js')).map((f) => readFileSync(join(repoRoot, 'site/public/assets', f), 'utf8')).join('\n')
     + readFileSync(join(repoRoot, 'site/src/components/Analytics.astro'), 'utf8');
   const keys = new Set([...scripts.matchAll(/(?:KEY = |getItem\()'([a-z-]+)'/g)].map((m) => m[1]));
   assert.ok(keys.size >= 2, `found the storage keys: ${[...keys]}`);
@@ -278,6 +286,16 @@ test('a renamed guide: new address built, old one not, and a 301 for both market
   }
   assert.match(read('sitemap-0.xml'), /barista-express-pro-grinder-too-fast-at-setting-1/);
   assert.doesNotMatch(read('sitemap-0.xml'), /breville-builtin-grinder/);
+});
+
+test('home hero: one headline without the market, then a quieter line (as on the share image)', () => {
+  const { read } = build('production');
+  for (const locale of ['en-us', 'en-gb']) {
+    const hero = read(`${locale}/index.html`).match(/<div class="hero">[\s\S]*?<\/div>/)?.[0] ?? '';
+    assert.match(hero, /<h1 class="intro" id="guides-title">Straight answers for home&nbsp;espresso\.<\/h1>/, locale);
+    assert.match(hero, /<p class="intro-sub">Fix it, upgrade it, or keep it\. Including when to buy nothing\.<\/p>/, locale);
+  }
+  assert.match(read('en-gb/index.html'), /<title>[^<]*in the UK<\/title>/, 'the market stays in the page title for search');
 });
 
 test('consent banner: production pages with GTM carry it hidden, previews do not', () => {

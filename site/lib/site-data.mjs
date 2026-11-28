@@ -2,6 +2,7 @@
 // offers, tools). Two modes:
 //   preview     drafts, the quality reference and archived drafts (badged), mock offers and photos, noindex
 //   production  content/published only, real data/offers, disclosure from niche.json or the footer placeholder
+import { finderProblems, guideTags, loadFinder } from './finder.mjs';
 import { existsSync, readFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -56,6 +57,12 @@ export function loadSiteData({ root = repoRoot, mode = siteMode(), now = Date.no
   for (const post of posts) post.markets = markets.map((m) => m.id);
   for (const post of posts) post.category = post.category ?? cards.get(post.productIds[0])?.card?.category ?? null;
 
+  // Setup finder: its questions, and each guide's tags for the lists that filter by them.
+  const finder = loadFinder(root);
+  const finderErrors = finderProblems(finder, posts);
+  if (finderErrors.length) throw new Error(`Setup finder or guide setup tags are invalid:\n${finderErrors.join('\n')}`);
+  for (const post of posts) post.setupTags = guideTags(post, finder);
+
   // Disclosure: one generic placeholder in the footer of every page unless niche.json has a
   // market-specific text. It never blocks a build (decision 2026-11-27).
   const disclosure = (market) => niche.disclosures?.[market.id] || DEFAULT_DISCLOSURE;
@@ -68,7 +75,7 @@ export function loadSiteData({ root = repoRoot, mode = siteMode(), now = Date.no
 
   const categories = categoryCounts(niche.categories ?? [], posts);
   const site = {
-    name: niche.name, markets, cards, tools: loadTools(root), disclosure, categories,
+    name: niche.name, markets, cards, tools: loadTools(root), disclosure, categories, finder,
     allCategories: niche.categories ?? [], mock: preview ? loadMock() : null, pages: new Set(),
     guideAliases: guideAliases(root),
   };
