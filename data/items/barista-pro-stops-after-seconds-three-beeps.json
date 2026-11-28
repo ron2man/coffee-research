@@ -3,17 +3,18 @@
   "id": "barista-pro-stops-after-seconds-three-beeps",
   "type": "new-post",
   "niche": "coffee",
-  "status": "briefed",
+  "status": "drafted",
   "attempts": 0,
   "revisions": 0,
   "createdAt": "2026-11-27T11:20:26.781Z",
-  "updatedAt": "2026-11-28T04:06:15.424Z",
+  "updatedAt": "2026-11-28T15:37:34.947Z",
   "artifacts": {
     "idea": "data/ideas/barista-pro-stops-after-seconds-three-beeps.json",
     "idea-judge": "data/idea-scores/barista-pro-stops-after-seconds-three-beeps.json",
     "research": "data/research/barista-pro-stops-after-seconds-three-beeps.json",
     "angle": "data/briefs/barista-pro-stops-after-seconds-three-beeps.json",
-    "toolsmith": "data/tools/barista-pro-stops-after-seconds-three-beeps.json"
+    "toolsmith": "data/tools/barista-pro-stops-after-seconds-three-beeps.json",
+    "writer": "content/drafts/barista-pro-stops-after-seconds-three-beeps.json"
   },
   "history": [
     {
@@ -43,6 +44,13 @@
       "to": "briefed",
       "by": "angle",
       "reason": "There is a distinct contribution here, and it rests on supported claims. The free hot-water test (hot water should run for 60 seconds) separates a water-path fault from a puck problem. After that comes a short, ordered list of free checks taken from the booklet. Then a stopping rule: don't open the machine, claim the warranty, or get a quote if it's out of warranty. None of the top pages give this. JustAnswer blames the pump or a sensor, the repair shop says \"send it to us\", and the forum threads end without a fix. The repair-or-replace rule has to stay qualitative, because we have no US or UK repair cost and no confirmed warranty length. The post improves if a human reads Breville's client-side support article (ka0QU000002ZkrdYAC) in a browser, but it doesn't depend on it."
+    },
+    {
+      "at": "2026-11-28T15:37:34.947Z",
+      "from": "briefed",
+      "to": "drafted",
+      "by": "writer",
+      "reason": "The post follows the brief. It opens with a split test using hot water and 1 CUP with no portafilter fitted. Then come the free checks in the manual's order: tank, water filter, descale, RESET DEFAULTS, and the thermal cool-down for a machine that has stopped altogether. The stop rule says not to open the machine: claim the warranty, or if it's out of warranty, get a written quote for a genuine part and weigh it against a replacement, with no numbers. I placed the barista-pro-cutout-troubleshooter tool near the top. Every product fact comes from supported barista-pro claims, and I added purge-group-head-preheat to back the 1 CUP test with no portafilter. The things the brief listed to leave out are left out: the steam timeout, the support article's contents, part numbers and prices, the warranty length, and what the beeps mean. Support is named with the {{brand:barista-pro}} token, the filter interval is written as one edition of the manual against the other, and the body has no external inline links. offerIds is empty. The brief only gives a dont-buy touchpoint, which is the reader's own machine, and the one purchase the post mentions (a replacement water filter for the Barista Pro tank) has no knowledge card yet. The catalog has breville-claroswiss-water-filter with no card. If it is researched, it could be added as an offer for the filter branch."
     }
   ]
 }
