@@ -5,5 +5,10 @@
       "lastRunAt": "2026-11-28T15:55:19.759Z",
       "outcome": "completed"
     }
+  },
+  "scheduler": {
+    "id": "a2d28012-5dfb-474a-b79a-9318394a8f14",
+    "name": "Rons-MacBook-Pro.local",
+    "since": "2026-11-28T19:05:17.364Z"
   }
 }
