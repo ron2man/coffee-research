@@ -1,0 +1,49 @@
+{
+  "$comment": "Line drawings for guides (site/public/assets/illustrations/<id>.svg, 240x180, black 4px stroke, one red accent). A guide gets its frontmatter `image` if it has one, else the first drawing (in this order, so list narrower ones first) whose `match` fits its setup-finder tags, else its category's drawing. New drawings are design work: add the SVG and an entry here.",
+  "illustrations": {
+    "panel-light": {
+      "alt": "Line drawing of a machine's control panel with one light lit up in red.",
+      "caption": "The light on your panel tells you which cycle it wants.",
+      "match": {
+        "symptom": [
+          "maintenance-light"
+        ]
+      }
+    },
+    "grind-dial": {
+      "alt": "Line drawing of a grind dial turned towards fine, with the pointer and the end of the scale in red, and two coffee beans.",
+      "caption": "Setting 1 is not the end of the range: the inner burr moves it.",
+      "match": {
+        "symptom": [
+          "grinder-too-coarse"
+        ]
+      }
+    },
+    "fast-sour-shot": {
+      "alt": "Line drawing of an espresso shot running fast in two thin red streams, with a stopwatch beside the cup.",
+      "caption": "A fast shot is an under-extracted shot, whatever it tastes like.",
+      "match": {
+        "symptom": [
+          "fast-sour"
+        ]
+      }
+    },
+    "espresso-machine": {
+      "alt": "Line drawing of an espresso machine's group head and portafilter pouring a red shot into a cup.",
+      "caption": "Home espresso, one change at a time."
+    },
+    "grinder": {
+      "alt": "Line drawing of a burr grinder with beans in the hopper, its dial pointer in red and grounds falling into a cup.",
+      "caption": "The grinder decides more of the shot than the machine does."
+    },
+    "tamper-and-scale": {
+      "alt": "Line drawing of a tamper next to a cup on a coffee scale with a red reading.",
+      "caption": "Small tools that make the shot repeatable."
+    }
+  },
+  "categories": {
+    "machines": "espresso-machine",
+    "grinders": "grinder",
+    "accessories": "tamper-and-scale"
+  }
+}

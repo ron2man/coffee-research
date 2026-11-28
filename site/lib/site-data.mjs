@@ -3,6 +3,7 @@
 //   preview     drafts, the quality reference and archived drafts (badged), mock offers and photos, noindex
 //   production  content/published only, real data/offers, disclosure from niche.json or the footer placeholder
 import { finderProblems, guideTags, loadFinder } from './finder.mjs';
+import { guideIllustration, illustrationProblems, loadIllustrations } from './illustrations.mjs';
 import { existsSync, readFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -62,6 +63,11 @@ export function loadSiteData({ root = repoRoot, mode = siteMode(), now = Date.no
   const finderErrors = finderProblems(finder, posts);
   if (finderErrors.length) throw new Error(`Setup finder or guide setup tags are invalid:\n${finderErrors.join('\n')}`);
   for (const post of posts) post.setupTags = guideTags(post, finder);
+  // Each guide's line drawing (site/illustrations.json), picked by its setup tags or category.
+  const illustrations = loadIllustrations(siteDir);
+  const illustrationErrors = illustrationProblems(illustrations, posts, { siteDir });
+  if (illustrationErrors.length) throw new Error(`Guide illustrations are invalid:\n${illustrationErrors.join('\n')}`);
+  for (const post of posts) post.illustration = guideIllustration(post, post.setupTags, illustrations);
 
   // Disclosure: one generic placeholder in the footer of every page unless niche.json has a
   // market-specific text. It never blocks a build (decision 2026-11-27).

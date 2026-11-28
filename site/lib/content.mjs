@@ -34,6 +34,8 @@ function fromMarkdown(root, dir, name, status) {
     offerIds: data.offerIds ?? data.productIds ?? [],
     tools: data.tools ?? [],
     setup: data.setup && typeof data.setup === 'object' ? data.setup : undefined,
+    // Its illustration, when not the one its setup tags or category give it (site/lib/illustrations.mjs).
+    image: data.image,
     publishedAt: data.publishedAt ?? null,
     updatedAt: data.updatedAt ?? data.publishedAt ?? null,
     disclosure: data.disclosure !== false,
