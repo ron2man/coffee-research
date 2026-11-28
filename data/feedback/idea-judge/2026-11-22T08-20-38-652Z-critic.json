@@ -57,7 +57,7 @@
       "suggestion": "Keep checking whether several cards trace back to one source, and treat them as one signal."
     }
   ],
-  "addressedBy": null,
+  "addressedBy": "idea-judge-2026-11-28T16-22-46-591Z",
   "summary": "This is a solid batch. All three signals I opened (the Singletrack Barista Pro thread, the Singletrack Bambino thread and Lemmy post 46736915) are what the judge said they were. The three rejections are well argued and say what would change the decision. The one weak spot is the idea it advanced. Its demand score leaned on unnamed search results, and its evidenceFeasibility score assumed Breville manuals cover the upper-burr adjustment without anyone opening one. Research then stalled at needs_human because the manuals couldn't be read. The main fix is to make the judge open at least one primary evidence source before scoring evidenceFeasibility 4 or higher, and to name every URL behind a demand score.",
   "keep": [
     "Rejection reasons say what new evidence would justify re-scoring (e.g. 'Re-score it once there are independent UK signals, such as coffeeforums.co.uk \"do I need a descale\" threads'; 'Find posts where owners actually ask \"drift or wear?\"').",

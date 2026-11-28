@@ -1,7 +1,7 @@
 {
   "id": "idea-judge-2026-11-28T16-22-46-591Z",
   "agent": "idea-judge",
-  "status": "open",
+  "status": "applied",
   "at": "2026-11-28T16:22:46.591Z",
   "summary": "Tighten the idea judge's evidence checks: evidenceFeasibility 4–5 needs a primary source the judge actually opened, demandEvidence counts only opened signals named by URL and date (a single site counts as one source, market is checked), each card gets its own competition search, and rejections say when an idea cleared the bar but lost to the cap. The tool and site notes for this niche go in a new niche-guidance file.",
   "changes": [
@@ -23,5 +23,7 @@
     "2026-11-26T16-03-53-298Z-critic"
   ],
   "notAddressed": [],
-  "niche": "coffee"
+  "niche": "coffee",
+  "appliedAt": "2026-11-28T18:41:55.602Z",
+  "appliedBy": "root"
 }

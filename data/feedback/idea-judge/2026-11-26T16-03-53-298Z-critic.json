@@ -84,7 +84,7 @@
       "suggestion": "Keep reasons short and use single quotes inside reason text to avoid escaping errors."
     }
   ],
-  "addressedBy": null,
+  "addressedBy": "idea-judge-2026-11-28T16-22-46-591Z",
   "summary": "The judge reads signals well. I opened three OzBargain threads (899121, 955798, 916284) and each one says what the judge claimed, and the steam-wand rejection correctly spotted a misdescribed signal. Last critic's main findings haven't been addressed and showed up again in this batch: evidenceFeasibility scores of 4–5 claim 'the manuals document' something without any manual being opened, and demand scores still lean on unnamed 'several threads'. The fix that matters most is to require an opened primary source before evidenceFeasibility ≥ 4, and to count only named, opened signals from independent sites toward demandEvidence.",
   "keep": [
     "Reading a signal's intent rather than its topic: the steam-wand rejection correctly found that node/969872 is a Sunbeam owner asking whether to buy, with the complaint in one reply.",
