@@ -8,14 +8,25 @@ Initial research covers the Breville US brushed stainless steel SKU.
   "id": "bambino-plus",
   "name": "Bambino Plus",
   "category": "machines",
-  "updatedAt": "2026-11-21",
+  "updatedAt": "2026-11-28",
   "variants": [
     {
       "id": "bes500bss1bus1",
       "sku": "BES500BSS1BUS1",
       "markets": [
         "US"
-      ]
+      ],
+      "name": "Breville Bambino Plus",
+      "brand": "Breville"
+    },
+    {
+      "id": "ses500bss4guk1",
+      "sku": "SES500BSS4GUK1",
+      "markets": [
+        "GB"
+      ],
+      "name": "Sage Bambino Plus",
+      "brand": "Sage"
     }
   ],
   "sources": [

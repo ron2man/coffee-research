@@ -8,21 +8,25 @@ UK brushed stainless steel variant.
   "id": "sage-bambino",
   "name": "Sage Bambino",
   "category": "machines",
-  "updatedAt": "2026-11-21",
+  "updatedAt": "2026-11-28",
   "variants": [
     {
       "id": "ses450bss4guk1",
       "sku": "SES450BSS4GUK1",
       "markets": [
         "GB"
-      ]
+      ],
+      "name": "Sage Bambino",
+      "brand": "Sage"
     },
     {
       "id": "bes450bss1bus1",
       "markets": [
         "US"
       ],
-      "sku": "BES450BSS1BUS1"
+      "sku": "BES450BSS1BUS1",
+      "name": "Breville Bambino",
+      "brand": "Breville"
     }
   ],
   "sources": [
